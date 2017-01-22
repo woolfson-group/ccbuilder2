@@ -4,3 +4,7 @@ RUN dpkg -i pandoc-1.19.1-1-amd64.deb
 RUN pip install pypandoc
 RUN pip install isambard
 RUN pip install Flask
+COPY . /app
+WORKDIR /app
+ENTRYPOINT ["python"]
+CMD ["run.py"]
