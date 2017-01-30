@@ -1,6 +1,8 @@
-web:
-  build: ./ccbmk2
-  ports:
-    - "5000:5000"
-  volumes:
-    - ./code
+version: '2'
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
