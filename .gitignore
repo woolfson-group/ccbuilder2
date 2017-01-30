@@ -93,3 +93,6 @@ ENV/
 
 # Instance specific files
 instance/
+
+# Elm
+elm-stuff/
