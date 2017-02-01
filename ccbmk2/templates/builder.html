@@ -3,8 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>CCBuilder Mk.2 | Build</title>
+    <script type="text/javascript" src="{{ url_for('static', filename='builder.js') }}"></script>
 </head>
 <body>
-    <div><p>Hello from the builder!</p></div>
 </body>
+<div id="main"></div>
+<script type="text/javascript">
+    var node = document.getElementById('main');
+    var app = Elm.Builder.embed(node);
+</script>
 </html>
