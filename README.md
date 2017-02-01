@@ -2,6 +2,9 @@
 
 ## Notes
 
-* `docker build -t ccbmk2 .`
-* `docker run -d -p 5000:5000 ccbmk2`
-* `docker kill $(docker ps -q)`
+* `docker-compose up`
+* Could I use a type to define the field and then have a single update message for all of the input fields?
+
+## TODO
+
+* Add validation for input parameters
