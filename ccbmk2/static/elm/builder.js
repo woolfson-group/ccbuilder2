@@ -12416,8 +12416,97 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
-var _user$project$Builder$parameterInput = function (_p0) {
-	var _p1 = _p0;
+var _user$project$Builder$isNotNaN = function (_p0) {
+	return !_elm_lang$core$Basics$isNaN(_p0);
+};
+var _user$project$Builder$verifyPhiCA = function (phica) {
+	return _user$project$Builder$isNotNaN(phica) ? _elm_lang$core$Maybe$Just(phica) : _elm_lang$core$Maybe$Nothing;
+};
+var _user$project$Builder$verifyPitch = function (pitch) {
+	return ((_elm_lang$core$Native_Utils.cmp(pitch, 0) > 0) && _user$project$Builder$isNotNaN(pitch)) ? _elm_lang$core$Maybe$Just(pitch) : _elm_lang$core$Maybe$Nothing;
+};
+var _user$project$Builder$verifyRadius = function (radius) {
+	return ((_elm_lang$core$Native_Utils.cmp(radius, 0) > 0) && _user$project$Builder$isNotNaN(radius)) ? _elm_lang$core$Maybe$Just(radius) : _elm_lang$core$Maybe$Nothing;
+};
+var _user$project$Builder$verifyOligomerState = function (os) {
+	return ((_elm_lang$core$Native_Utils.cmp(os, 0) > 0) && _user$project$Builder$isNotNaN(
+		_elm_lang$core$Basics$toFloat(os))) ? _elm_lang$core$Maybe$Just(os) : _elm_lang$core$Maybe$Nothing;
+};
+var _user$project$Builder$editParameterValue = F3(
+	function (parameters, field, newValue) {
+		var _p1 = field;
+		switch (_p1.ctor) {
+			case 'OligomerState':
+				var maybeOS = A2(
+					_elm_lang$core$Maybe$andThen,
+					_user$project$Builder$verifyOligomerState,
+					_elm_lang$core$Result$toMaybe(
+						_elm_lang$core$String$toInt(newValue)));
+				return _elm_lang$core$Native_Utils.update(
+					parameters,
+					{oligomerState: maybeOS});
+			case 'Radius':
+				var maybeRadius = A2(
+					_elm_lang$core$Maybe$andThen,
+					_user$project$Builder$verifyRadius,
+					_elm_lang$core$Result$toMaybe(
+						_elm_lang$core$String$toFloat(newValue)));
+				return _elm_lang$core$Native_Utils.update(
+					parameters,
+					{radius: maybeRadius});
+			case 'Pitch':
+				var maybePitch = A2(
+					_elm_lang$core$Maybe$andThen,
+					_user$project$Builder$verifyPitch,
+					_elm_lang$core$Result$toMaybe(
+						_elm_lang$core$String$toFloat(newValue)));
+				return _elm_lang$core$Native_Utils.update(
+					parameters,
+					{pitch: maybePitch});
+			case 'InterfaceAngle':
+				var maybePhiCA = A2(
+					_elm_lang$core$Maybe$andThen,
+					_user$project$Builder$verifyPhiCA,
+					_elm_lang$core$Result$toMaybe(
+						_elm_lang$core$String$toFloat(newValue)));
+				return _elm_lang$core$Native_Utils.update(
+					parameters,
+					{phica: maybePhiCA});
+			default:
+				return _elm_lang$core$Native_Utils.update(
+					parameters,
+					{
+						sequence: _elm_lang$core$Maybe$Just(newValue)
+					});
+		}
+	});
+var _user$project$Builder$update = F2(
+	function (msg, model) {
+		var _p2 = msg;
+		var newParameters = A3(_user$project$Builder$editParameterValue, model.parameters, _p2._0, _p2._1);
+		return A2(
+			_elm_lang$core$Platform_Cmd_ops['!'],
+			_elm_lang$core$Native_Utils.update(
+				model,
+				{parameters: newParameters}),
+			{ctor: '[]'});
+	});
+var _user$project$Builder$Model = function (a) {
+	return {parameters: a};
+};
+var _user$project$Builder$emptyModel = _user$project$Builder$Model(
+	{oligomerState: _elm_lang$core$Maybe$Nothing, radius: _elm_lang$core$Maybe$Nothing, pitch: _elm_lang$core$Maybe$Nothing, phica: _elm_lang$core$Maybe$Nothing, sequence: _elm_lang$core$Maybe$Nothing});
+var _user$project$Builder$init = {ctor: '_Tuple2', _0: _user$project$Builder$emptyModel, _1: _elm_lang$core$Platform_Cmd$none};
+var _user$project$Builder$Parameters = F5(
+	function (a, b, c, d, e) {
+		return {oligomerState: a, radius: b, pitch: c, phica: d, sequence: e};
+	});
+var _user$project$Builder$EditParameter = F2(
+	function (a, b) {
+		return {ctor: 'EditParameter', _0: a, _1: b};
+	});
+var _user$project$Builder$parameterInput = function (_p3) {
+	var _p4 = _p3;
 	return A2(
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
@@ -12430,10 +12519,11 @@ var _user$project$Builder$parameterInput = function (_p0) {
 					_0: _elm_lang$html$Html_Attributes$type_('text'),
 					_1: {
 						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$placeholder(_p1._0),
+						_0: _elm_lang$html$Html_Attributes$placeholder(_p4._0),
 						_1: {
 							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onInput(_p1._1),
+							_0: _elm_lang$html$Html_Events$onInput(
+								_user$project$Builder$EditParameter(_p4._1)),
 							_1: {ctor: '[]'}
 						}
 					}
@@ -12442,82 +12532,11 @@ var _user$project$Builder$parameterInput = function (_p0) {
 			_1: {ctor: '[]'}
 		});
 };
-var _user$project$Builder$update = F2(
-	function (msg, model) {
-		var _p2 = msg;
-		switch (_p2.ctor) {
-			case 'OligomerState':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							oligomerState: _elm_lang$core$Result$toMaybe(
-								_elm_lang$core$String$toInt(_p2._0))
-						}),
-					{ctor: '[]'});
-			case 'Radius':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							radius: _elm_lang$core$Result$toMaybe(
-								_elm_lang$core$String$toFloat(_p2._0))
-						}),
-					{ctor: '[]'});
-			case 'Pitch':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							pitch: _elm_lang$core$Result$toMaybe(
-								_elm_lang$core$String$toFloat(_p2._0))
-						}),
-					{ctor: '[]'});
-			case 'InterfaceAngle':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							phica: _elm_lang$core$Result$toMaybe(
-								_elm_lang$core$String$toFloat(_p2._0))
-						}),
-					{ctor: '[]'});
-			default:
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							sequence: _elm_lang$core$Maybe$Just(_p2._0)
-						}),
-					{ctor: '[]'});
-		}
-	});
-var _user$project$Builder$emptyModel = {oligomerState: _elm_lang$core$Maybe$Nothing, radius: _elm_lang$core$Maybe$Nothing, pitch: _elm_lang$core$Maybe$Nothing, phica: _elm_lang$core$Maybe$Nothing, sequence: _elm_lang$core$Maybe$Nothing};
-var _user$project$Builder$init = {ctor: '_Tuple2', _0: _user$project$Builder$emptyModel, _1: _elm_lang$core$Platform_Cmd$none};
-var _user$project$Builder$Model = F5(
-	function (a, b, c, d, e) {
-		return {oligomerState: a, radius: b, pitch: c, phica: d, sequence: e};
-	});
-var _user$project$Builder$Sequence = function (a) {
-	return {ctor: 'Sequence', _0: a};
-};
-var _user$project$Builder$InterfaceAngle = function (a) {
-	return {ctor: 'InterfaceAngle', _0: a};
-};
-var _user$project$Builder$Pitch = function (a) {
-	return {ctor: 'Pitch', _0: a};
-};
-var _user$project$Builder$Radius = function (a) {
-	return {ctor: 'Radius', _0: a};
-};
-var _user$project$Builder$OligomerState = function (a) {
-	return {ctor: 'OligomerState', _0: a};
-};
+var _user$project$Builder$Sequence = {ctor: 'Sequence'};
+var _user$project$Builder$InterfaceAngle = {ctor: 'InterfaceAngle'};
+var _user$project$Builder$Pitch = {ctor: 'Pitch'};
+var _user$project$Builder$Radius = {ctor: 'Radius'};
+var _user$project$Builder$OligomerState = {ctor: 'OligomerState'};
 var _user$project$Builder$parameterDetails = {
 	ctor: '::',
 	_0: {ctor: '_Tuple2', _0: 'Oligomer State', _1: _user$project$Builder$OligomerState},
@@ -12550,7 +12569,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 		init: _user$project$Builder$init,
 		view: _user$project$Builder$view,
 		update: _user$project$Builder$update,
-		subscriptions: function (_p3) {
+		subscriptions: function (_p5) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();
@@ -12558,7 +12577,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"message":"Builder.Msg","aliases":{},"unions":{"Builder.Msg":{"tags":{"Sequence":["String"],"OligomerState":["String"],"Pitch":["String"],"InterfaceAngle":["String"],"Radius":["String"]},"args":[]}}},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"message":"Builder.Msg","aliases":{},"unions":{"Builder.Field":{"tags":{"Sequence":[],"OligomerState":[],"Pitch":[],"InterfaceAngle":[],"Radius":[]},"args":[]},"Builder.Msg":{"tags":{"EditParameter":["Builder.Field","String"]},"args":[]}}},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

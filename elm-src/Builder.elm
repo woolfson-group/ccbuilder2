@@ -24,6 +24,10 @@ init = ( emptyModel, Cmd.none )
 
 
 type alias Model =
+    { parameters : Parameters
+    }
+
+type alias Parameters =
     { oligomerState : Maybe Int
     , radius : Maybe Float
     , pitch : Maybe Float
@@ -33,7 +37,7 @@ type alias Model =
 
 
 emptyModel : Model
-emptyModel =
+emptyModel = Model
     { oligomerState = Nothing
     , radius = Nothing
     , pitch = Nothing
@@ -46,31 +50,87 @@ emptyModel =
 
 
 type Msg
-    = OligomerState String
-    | Radius String
-    | Pitch String
-    | InterfaceAngle String
-    | Sequence String
+    = EditParameter Field String
+
+type Field
+    = OligomerState
+    | Radius
+    | Pitch
+    | InterfaceAngle
+    | Sequence
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        OligomerState n ->
-            { model | oligomerState = Result.toMaybe ( String.toInt n ) } ! []
-        
-        Radius r ->
-            { model | radius = Result.toMaybe ( String.toFloat r ) } ! []
-        
-        Pitch p ->
-            { model | pitch = Result.toMaybe ( String.toFloat p ) } ! []
-        
-        InterfaceAngle f ->
-            { model | phica = Result.toMaybe ( String.toFloat f ) } ! []
-        
-        Sequence seq ->
-            { model | sequence = Just seq } ! []
+        EditParameter field newValue ->
+            let
+                newParameters = editParameterValue model.parameters field newValue
+            in
+                { model | parameters = newParameters } ! []
 
+
+editParameterValue : Parameters -> Field -> String -> Parameters
+editParameterValue parameters field newValue =
+    case field of
+        OligomerState ->
+            let
+                maybeOS =
+                    String.toInt newValue
+                    |> Result.toMaybe
+                    |> Maybe.andThen verifyOligomerState
+            in
+                { parameters | oligomerState = maybeOS }
+        
+        Radius ->
+            let
+                maybeRadius =
+                    String.toFloat newValue
+                    |> Result.toMaybe
+                    |> Maybe.andThen verifyRadius
+            in
+                { parameters | radius = maybeRadius }
+        
+        Pitch ->
+            let
+                maybePitch =
+                    String.toFloat newValue
+                    |> Result.toMaybe
+                    |> Maybe.andThen verifyPitch
+            in
+                { parameters | pitch = maybePitch }
+        
+        InterfaceAngle ->
+            let
+                maybePhiCA =
+                    String.toFloat newValue
+                    |> Result.toMaybe
+                    |> Maybe.andThen verifyPhiCA
+            in
+                { parameters | phica = maybePhiCA }
+        
+        Sequence ->
+            { parameters | sequence = Just newValue }
+
+
+verifyOligomerState : Int -> Maybe Int
+verifyOligomerState os = if (os > 0) && (isNotNaN <| toFloat os) then Just os else Nothing
+
+
+verifyRadius : Float -> Maybe Float
+verifyRadius radius = if (radius > 0) && (isNotNaN radius) then Just radius else Nothing
+
+
+verifyPitch : Float -> Maybe Float
+verifyPitch pitch = if (pitch > 0) && (isNotNaN pitch) then Just pitch else Nothing
+
+
+verifyPhiCA : Float -> Maybe Float
+verifyPhiCA phica = if isNotNaN phica then Just phica else Nothing
+
+
+isNotNaN : Float -> Bool
+isNotNaN = not << isNaN
 
 -- View
 
@@ -81,13 +141,13 @@ view model =
         ( List.map parameterInput parameterDetails )
 
 
-parameterInput : ( String, ( String -> Msg) ) -> Html Msg
-parameterInput ( placeHolderText, msg ) =
+parameterInput : ( String, Field ) -> Html Msg
+parameterInput ( placeHolderText, field ) =
     div []
-        [ input [ type_ "text", placeholder placeHolderText, onInput msg ] []
+        [ input [ type_ "text", placeholder placeHolderText, onInput ( EditParameter field ) ] []
         ]
 
-parameterDetails : List ( String, ( String -> Msg) )
+parameterDetails : List ( String, Field )
 parameterDetails =
     [ ( "Oligomer State", OligomerState )
     , ( "Radius", Radius )

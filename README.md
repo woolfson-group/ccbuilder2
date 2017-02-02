@@ -8,3 +8,4 @@
 ## TODO
 
 * Add validation for input parameters
+* Change model to have a parameters dictionary
