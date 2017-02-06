@@ -12419,6 +12419,97 @@ var _elm_lang$html$Html_Events$Options = F2(
 var _user$project$Builder$isNotNaN = function (_p0) {
 	return !_elm_lang$core$Basics$isNaN(_p0);
 };
+var _user$project$Builder$isAllowedSeqChar = function ($char) {
+	var allowed = {
+		ctor: '::',
+		_0: _elm_lang$core$Native_Utils.chr('A'),
+		_1: {
+			ctor: '::',
+			_0: _elm_lang$core$Native_Utils.chr('C'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$core$Native_Utils.chr('D'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$core$Native_Utils.chr('E'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Native_Utils.chr('F'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Native_Utils.chr('G'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$core$Native_Utils.chr('H'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$core$Native_Utils.chr('I'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$core$Native_Utils.chr('K'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$core$Native_Utils.chr('L'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$core$Native_Utils.chr('M'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$core$Native_Utils.chr('N'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$core$Native_Utils.chr('P'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$core$Native_Utils.chr('Q'),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$core$Native_Utils.chr('R'),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$core$Native_Utils.chr('S'),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$core$Native_Utils.chr('T'),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$core$Native_Utils.chr('V'),
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$core$Native_Utils.chr('W'),
+																				_1: {
+																					ctor: '::',
+																					_0: _elm_lang$core$Native_Utils.chr('Y'),
+																					_1: {ctor: '[]'}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	};
+	return A2(_elm_lang$core$List$member, $char, allowed);
+};
+var _user$project$Builder$verifySequence = function (sequence) {
+	var allValidChars = A2(
+		_elm_lang$core$List$all,
+		_user$project$Builder$isAllowedSeqChar,
+		_elm_lang$core$String$toList(sequence));
+	return allValidChars ? _elm_lang$core$Maybe$Just(sequence) : _elm_lang$core$Maybe$Nothing;
+};
 var _user$project$Builder$verifyPhiCA = function (phica) {
 	return _user$project$Builder$isNotNaN(phica) ? _elm_lang$core$Maybe$Just(phica) : _elm_lang$core$Maybe$Nothing;
 };
@@ -12476,7 +12567,8 @@ var _user$project$Builder$editParameterValue = F3(
 				return _elm_lang$core$Native_Utils.update(
 					parameters,
 					{
-						sequence: _elm_lang$core$Maybe$Just(newValue)
+						sequence: _user$project$Builder$verifySequence(
+							_elm_lang$core$String$toUpper(newValue))
 					});
 		}
 	});

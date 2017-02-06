@@ -110,7 +110,7 @@ editParameterValue parameters field newValue =
                 { parameters | phica = maybePhiCA }
         
         Sequence ->
-            { parameters | sequence = Just newValue }
+            { parameters | sequence = String.toUpper newValue |> verifySequence }
 
 
 verifyOligomerState : Int -> Maybe Int
@@ -128,6 +128,28 @@ verifyPitch pitch = if (pitch > 0) && (isNotNaN pitch) then Just pitch else Noth
 verifyPhiCA : Float -> Maybe Float
 verifyPhiCA phica = if isNotNaN phica then Just phica else Nothing
 
+
+verifySequence : String -> Maybe String
+verifySequence sequence =
+    let
+        allValidChars =
+            String.toList sequence
+            |> List.all isAllowedSeqChar
+    in
+        if allValidChars then Just sequence else Nothing        
+
+
+isAllowedSeqChar : Char -> Bool
+isAllowedSeqChar char =
+    let
+        allowed =
+            [ 'A', 'C', 'D', 'E', 'F'
+            , 'G', 'H', 'I', 'K', 'L'
+            , 'M', 'N', 'P', 'Q', 'R'
+            , 'S', 'T', 'V', 'W', 'Y'
+            ]
+    in
+        List.member char allowed
 
 isNotNaN : Float -> Bool
 isNotNaN = not << isNaN
