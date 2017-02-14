@@ -7,5 +7,4 @@
 
 ## TODO
 
-* Add validation for input parameters
-* Change model to have a parameters dictionary
+* Convert `Dict.update` functions to be like the radius one

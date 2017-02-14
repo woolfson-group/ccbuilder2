@@ -1,5 +1,6 @@
 module Builder exposing (..)
 
+import Dict
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -17,7 +18,7 @@ main =
 
 
 init : ( Model, Cmd Msg )
-init = ( emptyModel, Cmd.none )
+init = ( Model Dict.empty, Cmd.none )
 
 
 -- Model
@@ -27,110 +28,102 @@ type alias Model =
     { parameters : Parameters
     }
 
-type alias Parameters =
-    { oligomerState : Maybe Int
-    , radius : Maybe Float
-    , pitch : Maybe Float
-    , phica : Maybe Float
-    , sequence : Maybe String
-    }
+type alias Parameters = Dict.Dict ParameterLabel Parameter
+
+type alias ParameterLabel = String
+
+type Parameter
+    = OligomerState (Maybe Int)
+    | Radius (Maybe Float)
+    | Pitch (Maybe Float)
+    | PhiCA (Maybe Float)
+    | Sequence (Maybe String)
 
 
-emptyModel : Model
-emptyModel = Model
-    { oligomerState = Nothing
-    , radius = Nothing
-    , pitch = Nothing
-    , phica = Nothing
-    , sequence = Nothing
-    }
-
-
--- update
+-- Update
 
 
 type Msg
-    = EditParameter Field String
-
-type Field
-    = OligomerState
-    | Radius
-    | Pitch
-    | InterfaceAngle
-    | Sequence
+    = EditParameter ParameterLabel String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        EditParameter field newValue ->
+        EditParameter parameterLabel newValue ->
             let
-                newParameters = editParameterValue model.parameters field newValue
+                newParameters = editParameterValue model.parameters parameterLabel newValue
             in
                 { model | parameters = newParameters } ! []
 
 
-editParameterValue : Parameters -> Field -> String -> Parameters
-editParameterValue parameters field newValue =
-    case field of
-        OligomerState ->
+editParameterValue : Parameters -> ParameterLabel -> String -> Parameters
+editParameterValue parameters parameterLabel newValue =
+    case parameterLabel of
+        "Oligomer State" ->
             let
-                maybeOS =
+                validatedOS =
                     String.toInt newValue
                     |> Result.toMaybe
-                    |> Maybe.andThen verifyOligomerState
+                    |> Maybe.andThen validateOligomerState
+                    |> OligomerState
+                    |> May
             in
-                { parameters | oligomerState = maybeOS }
+                Dict.update parameterLabel validatedOS parameters
         
-        Radius ->
+        "Radius" ->
             let
                 maybeRadius =
                     String.toFloat newValue
                     |> Result.toMaybe
-                    |> Maybe.andThen verifyRadius
             in
-                { parameters | radius = maybeRadius }
+                Dict.update parameterLabel (validateRadius maybeRadius) parameters
         
-        Pitch ->
+        "Pitch" ->
             let
-                maybePitch =
+                validatedPitch =
                     String.toFloat newValue
                     |> Result.toMaybe
-                    |> Maybe.andThen verifyPitch
+                    |> Maybe.andThen validatePitch
+                    |> Pitch
             in
-                { parameters | pitch = maybePitch }
+                Dict.update parameterLabel validatedPitch parameters
         
-        InterfaceAngle ->
+        "Interface Angle" ->
             let
-                maybePhiCA =
+                varifiedPhiCA =
                     String.toFloat newValue
                     |> Result.toMaybe
-                    |> Maybe.andThen verifyPhiCA
+                    |> Maybe.andThen validatePhiCA
+                    |> PhiCA
             in
-                { parameters | phica = maybePhiCA }
+                Dict.update parameterLabel varifiedPhiCA parameters
         
-        Sequence ->
-            { parameters | sequence = String.toUpper newValue |> verifySequence }
+        "Sequence" ->
+            Dict.update parameterLabel (Sequence <| validateSequence newValue) parameters
 
 
-verifyOligomerState : Int -> Maybe Int
-verifyOligomerState os = if (os > 0) && (isNotNaN <| toFloat os) then Just os else Nothing
+validateOligomerState : Maybe Int -> Maybe OligomerState
+validateOligomerState os = 
+            if (os > 0) && (isNotNaN <| toFloat os) then 
+                Just (OligomerState os)
+            else Nothing
 
 
-verifyRadius : Float -> Maybe Float
-verifyRadius radius = if (radius > 0) && (isNotNaN radius) then Just radius else Nothing
+validateRadius : Float -> Maybe Float
+validateRadius radius = if (radius > 0) && (isNotNaN radius) then Just radius else Nothing
 
 
-verifyPitch : Float -> Maybe Float
-verifyPitch pitch = if (pitch > 0) && (isNotNaN pitch) then Just pitch else Nothing
+validatePitch : Float -> Maybe Float
+validatePitch pitch = if (pitch > 0) && (isNotNaN pitch) then Just pitch else Nothing
 
 
-verifyPhiCA : Float -> Maybe Float
-verifyPhiCA phica = if isNotNaN phica then Just phica else Nothing
+validatePhiCA : Float -> Maybe Float
+validatePhiCA phica = if isNotNaN phica then Just phica else Nothing
 
 
-verifySequence : String -> Maybe String
-verifySequence sequence =
+validateSequence : String -> Maybe String
+validateSequence sequence =
     let
         allValidChars =
             String.toList sequence
@@ -160,20 +153,26 @@ isNotNaN = not << isNaN
 view : Model -> Html Msg
 view model =
     div []
-        ( List.map parameterInput parameterDetails )
+        ( List.map parameterInput allParameters )
 
 
-parameterInput : ( String, Field ) -> Html Msg
-parameterInput ( placeHolderText, field ) =
+parameterInput : ParameterLabel -> Html Msg
+parameterInput parameterLabel =
     div []
-        [ input [ type_ "text", placeholder placeHolderText, onInput ( EditParameter field ) ] []
+        [ input 
+            [ type_ "text"
+            , placeholder parameterLabel
+            , onInput ( EditParameter parameterLabel )
+            ]
+            []
         ]
 
-parameterDetails : List ( String, Field )
-parameterDetails =
-    [ ( "Oligomer State", OligomerState )
-    , ( "Radius", Radius )
-    , ( "Pitch", Pitch )
-    , ( "Interface Angle", InterfaceAngle )
-    , ( "Sequence", Sequence )
+
+allParameters : List String
+allParameters =
+    [ "Oligomer State"
+    , "Radius"
+    , "Pitch"
+    , "Interface Angle"
+    , "Sequence"
     ]
