@@ -18,7 +18,9 @@ main =
 
 
 init : ( Model, Cmd Msg )
-init = ( emptyModel, Cmd.none )
+init =
+    ( emptyModel, Cmd.none )
+
 
 
 -- Model
@@ -28,9 +30,14 @@ type alias Model =
     { parameters : Parameters
     }
 
-type alias Parameters = Dict.Dict ParameterLabel Parameter
 
-type alias ParameterLabel = String
+type alias Parameters =
+    Dict.Dict ParameterLabel Parameter
+
+
+type alias ParameterLabel =
+    String
+
 
 type Parameter
     = OligomerState (Maybe Int)
@@ -39,16 +46,18 @@ type Parameter
     | PhiCA (Maybe Float)
     | Sequence (Maybe String)
 
+
 emptyModel : Model
 emptyModel =
     Dict.fromList
-        [ ("Oligomer State", OligomerState Nothing)
-        , ("Radius", Radius Nothing)
-        , ("Pitch", Pitch Nothing)
-        , ("Interface Angle", PhiCA Nothing)
-        , ("Sequence", Sequence Nothing)
+        [ ( "Oligomer State", OligomerState Nothing )
+        , ( "Radius", Radius Nothing )
+        , ( "Pitch", Pitch Nothing )
+        , ( "Interface Angle", PhiCA Nothing )
+        , ( "Sequence", Sequence Nothing )
         ]
-    |> Model
+        |> Model
+
 
 
 -- Update
@@ -63,7 +72,8 @@ update msg model =
     case msg of
         EditParameter parameterLabel newValue ->
             let
-                newParameters = editParameterValue model.parameters parameterLabel newValue
+                newParameters =
+                    editParameterValue model.parameters parameterLabel newValue
             in
                 { model | parameters = newParameters } ! []
 
@@ -75,63 +85,79 @@ editParameterValue parameters parameterLabel newValue =
             let
                 postValOS =
                     String.toInt newValue
-                    |> Result.toMaybe
-                    |> Maybe.andThen validateOligomerState
-                    |> OligomerState
+                        |> Result.toMaybe
+                        |> Maybe.andThen validateOligomerState
+                        |> OligomerState
             in
                 Dict.insert parameterLabel postValOS parameters
-        
+
         "Radius" ->
             let
                 postValRadius =
                     String.toFloat newValue
-                    |> Result.toMaybe
-                    |> Maybe.andThen validateRadius
-                    |> Radius
+                        |> Result.toMaybe
+                        |> Maybe.andThen validateRadius
+                        |> Radius
             in
                 Dict.insert parameterLabel postValRadius parameters
-        
+
         "Pitch" ->
             let
                 postValPitch =
                     String.toFloat newValue
-                    |> Result.toMaybe
-                    |> Maybe.andThen validatePitch
-                    |> Pitch
+                        |> Result.toMaybe
+                        |> Maybe.andThen validatePitch
+                        |> Pitch
             in
                 Dict.insert parameterLabel postValPitch parameters
-        
+
         "Interface Angle" ->
             let
                 postValPhiCA =
                     String.toFloat newValue
-                    |> Result.toMaybe
-                    |> Maybe.andThen validatePhiCA
-                    |> PhiCA
+                        |> Result.toMaybe
+                        |> Maybe.andThen validatePhiCA
+                        |> PhiCA
             in
                 Dict.insert parameterLabel postValPhiCA parameters
-        
+
         "Sequence" ->
             Dict.insert parameterLabel (validateSequence newValue |> Sequence) parameters
-        
-        _ -> parameters
+
+        _ ->
+            parameters
 
 
 validateOligomerState : Int -> Maybe Int
-validateOligomerState os = 
-            if (os > 0) && (isNotNaN <| toFloat os) then Just os else Nothing
+validateOligomerState os =
+    if (os > 0) && (isNotNaN <| toFloat os) then
+        Just os
+    else
+        Nothing
 
 
 validateRadius : Float -> Maybe Float
-validateRadius radius = if (radius > 0) && (isNotNaN radius) then Just radius else Nothing
+validateRadius radius =
+    if (radius > 0) && (isNotNaN radius) then
+        Just radius
+    else
+        Nothing
 
 
 validatePitch : Float -> Maybe Float
-validatePitch pitch = if (pitch > 0) && (isNotNaN pitch) then Just pitch else Nothing
+validatePitch pitch =
+    if (pitch > 0) && (isNotNaN pitch) then
+        Just pitch
+    else
+        Nothing
 
 
 validatePhiCA : Float -> Maybe Float
-validatePhiCA phica = if isNotNaN phica then Just phica else Nothing
+validatePhiCA phica =
+    if isNotNaN phica then
+        Just phica
+    else
+        Nothing
 
 
 validateSequence : String -> Maybe String
@@ -139,26 +165,49 @@ validateSequence sequence =
     let
         allValidChars =
             String.toUpper sequence
-            |> String.toList
-            |> List.all isAllowedSeqChar
+                |> String.toList
+                |> List.all isAllowedSeqChar
     in
-        if allValidChars && (String.length sequence > 0) then Just sequence else Nothing        
+        if allValidChars && (String.length sequence > 0) then
+            Just sequence
+        else
+            Nothing
 
 
 isAllowedSeqChar : Char -> Bool
 isAllowedSeqChar char =
     let
         allowed =
-            [ 'A', 'C', 'D', 'E', 'F'
-            , 'G', 'H', 'I', 'K', 'L'
-            , 'M', 'N', 'P', 'Q', 'R'
-            , 'S', 'T', 'V', 'W', 'Y'
+            [ 'A'
+            , 'C'
+            , 'D'
+            , 'E'
+            , 'F'
+            , 'G'
+            , 'H'
+            , 'I'
+            , 'K'
+            , 'L'
+            , 'M'
+            , 'N'
+            , 'P'
+            , 'Q'
+            , 'R'
+            , 'S'
+            , 'T'
+            , 'V'
+            , 'W'
+            , 'Y'
             ]
     in
         List.member char allowed
 
+
 isNotNaN : Float -> Bool
-isNotNaN = not << isNaN
+isNotNaN =
+    not << isNaN
+
+
 
 -- View
 
@@ -166,16 +215,16 @@ isNotNaN = not << isNaN
 view : Model -> Html Msg
 view model =
     div []
-        ( List.map parameterInput allParameters )
+        (List.map parameterInput allParameters)
 
 
 parameterInput : ParameterLabel -> Html Msg
 parameterInput parameterLabel =
     div []
-        [ input 
+        [ input
             [ type_ "text"
             , placeholder parameterLabel
-            , onInput ( EditParameter parameterLabel )
+            , onInput (EditParameter parameterLabel)
             ]
             []
         ]
