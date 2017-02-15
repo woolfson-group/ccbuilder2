@@ -18,7 +18,7 @@ main =
 
 
 init : ( Model, Cmd Msg )
-init = ( Model Dict.empty, Cmd.none )
+init = ( emptyModel, Cmd.none )
 
 
 -- Model
@@ -38,6 +38,17 @@ type Parameter
     | Pitch (Maybe Float)
     | PhiCA (Maybe Float)
     | Sequence (Maybe String)
+
+emptyModel : Model
+emptyModel =
+    Dict.fromList
+        [ ("Oligomer State", OligomerState Nothing)
+        , ("Radius", Radius Nothing)
+        , ("Pitch", Pitch Nothing)
+        , ("Interface Angle", PhiCA Nothing)
+        , ("Sequence", Sequence Nothing)
+        ]
+    |> Model
 
 
 -- Update
@@ -62,52 +73,53 @@ editParameterValue parameters parameterLabel newValue =
     case parameterLabel of
         "Oligomer State" ->
             let
-                validatedOS =
+                postValOS =
                     String.toInt newValue
                     |> Result.toMaybe
                     |> Maybe.andThen validateOligomerState
                     |> OligomerState
-                    |> May
             in
-                Dict.update parameterLabel validatedOS parameters
+                Dict.insert parameterLabel postValOS parameters
         
         "Radius" ->
             let
-                maybeRadius =
+                postValRadius =
                     String.toFloat newValue
                     |> Result.toMaybe
+                    |> Maybe.andThen validateRadius
+                    |> Radius
             in
-                Dict.update parameterLabel (validateRadius maybeRadius) parameters
+                Dict.insert parameterLabel postValRadius parameters
         
         "Pitch" ->
             let
-                validatedPitch =
+                postValPitch =
                     String.toFloat newValue
                     |> Result.toMaybe
                     |> Maybe.andThen validatePitch
                     |> Pitch
             in
-                Dict.update parameterLabel validatedPitch parameters
+                Dict.insert parameterLabel postValPitch parameters
         
         "Interface Angle" ->
             let
-                varifiedPhiCA =
+                postValPhiCA =
                     String.toFloat newValue
                     |> Result.toMaybe
                     |> Maybe.andThen validatePhiCA
                     |> PhiCA
             in
-                Dict.update parameterLabel varifiedPhiCA parameters
+                Dict.insert parameterLabel postValPhiCA parameters
         
         "Sequence" ->
-            Dict.update parameterLabel (Sequence <| validateSequence newValue) parameters
+            Dict.insert parameterLabel (validateSequence newValue |> Sequence) parameters
+        
+        _ -> parameters
 
 
-validateOligomerState : Maybe Int -> Maybe OligomerState
+validateOligomerState : Int -> Maybe Int
 validateOligomerState os = 
-            if (os > 0) && (isNotNaN <| toFloat os) then 
-                Just (OligomerState os)
-            else Nothing
+            if (os > 0) && (isNotNaN <| toFloat os) then Just os else Nothing
 
 
 validateRadius : Float -> Maybe Float
@@ -126,10 +138,11 @@ validateSequence : String -> Maybe String
 validateSequence sequence =
     let
         allValidChars =
-            String.toList sequence
+            String.toUpper sequence
+            |> String.toList
             |> List.all isAllowedSeqChar
     in
-        if allValidChars then Just sequence else Nothing        
+        if allValidChars && (String.length sequence > 0) then Just sequence else Nothing        
 
 
 isAllowedSeqChar : Char -> Bool

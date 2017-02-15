@@ -12416,6 +12416,27 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
+var _user$project$Builder$allParameters = {
+	ctor: '::',
+	_0: 'Oligomer State',
+	_1: {
+		ctor: '::',
+		_0: 'Radius',
+		_1: {
+			ctor: '::',
+			_0: 'Pitch',
+			_1: {
+				ctor: '::',
+				_0: 'Interface Angle',
+				_1: {
+					ctor: '::',
+					_0: 'Sequence',
+					_1: {ctor: '[]'}
+				}
+			}
+		}
+	}
+};
 var _user$project$Builder$isNotNaN = function (_p0) {
 	return !_elm_lang$core$Basics$isNaN(_p0);
 };
@@ -12503,73 +12524,136 @@ var _user$project$Builder$isAllowedSeqChar = function ($char) {
 	};
 	return A2(_elm_lang$core$List$member, $char, allowed);
 };
-var _user$project$Builder$verifySequence = function (sequence) {
+var _user$project$Builder$validateSequence = function (sequence) {
 	var allValidChars = A2(
 		_elm_lang$core$List$all,
 		_user$project$Builder$isAllowedSeqChar,
-		_elm_lang$core$String$toList(sequence));
-	return allValidChars ? _elm_lang$core$Maybe$Just(sequence) : _elm_lang$core$Maybe$Nothing;
+		_elm_lang$core$String$toList(
+			_elm_lang$core$String$toUpper(sequence)));
+	return (allValidChars && (_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$String$length(sequence),
+		0) > 0)) ? _elm_lang$core$Maybe$Just(sequence) : _elm_lang$core$Maybe$Nothing;
 };
-var _user$project$Builder$verifyPhiCA = function (phica) {
+var _user$project$Builder$validatePhiCA = function (phica) {
 	return _user$project$Builder$isNotNaN(phica) ? _elm_lang$core$Maybe$Just(phica) : _elm_lang$core$Maybe$Nothing;
 };
-var _user$project$Builder$verifyPitch = function (pitch) {
+var _user$project$Builder$validatePitch = function (pitch) {
 	return ((_elm_lang$core$Native_Utils.cmp(pitch, 0) > 0) && _user$project$Builder$isNotNaN(pitch)) ? _elm_lang$core$Maybe$Just(pitch) : _elm_lang$core$Maybe$Nothing;
 };
-var _user$project$Builder$verifyRadius = function (radius) {
+var _user$project$Builder$validateRadius = function (radius) {
 	return ((_elm_lang$core$Native_Utils.cmp(radius, 0) > 0) && _user$project$Builder$isNotNaN(radius)) ? _elm_lang$core$Maybe$Just(radius) : _elm_lang$core$Maybe$Nothing;
 };
-var _user$project$Builder$verifyOligomerState = function (os) {
+var _user$project$Builder$validateOligomerState = function (os) {
 	return ((_elm_lang$core$Native_Utils.cmp(os, 0) > 0) && _user$project$Builder$isNotNaN(
 		_elm_lang$core$Basics$toFloat(os))) ? _elm_lang$core$Maybe$Just(os) : _elm_lang$core$Maybe$Nothing;
 };
+var _user$project$Builder$Model = function (a) {
+	return {parameters: a};
+};
+var _user$project$Builder$Sequence = function (a) {
+	return {ctor: 'Sequence', _0: a};
+};
+var _user$project$Builder$PhiCA = function (a) {
+	return {ctor: 'PhiCA', _0: a};
+};
+var _user$project$Builder$Pitch = function (a) {
+	return {ctor: 'Pitch', _0: a};
+};
+var _user$project$Builder$Radius = function (a) {
+	return {ctor: 'Radius', _0: a};
+};
+var _user$project$Builder$OligomerState = function (a) {
+	return {ctor: 'OligomerState', _0: a};
+};
+var _user$project$Builder$emptyModel = _user$project$Builder$Model(
+	_elm_lang$core$Dict$fromList(
+		{
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: 'Oligomer State',
+				_1: _user$project$Builder$OligomerState(_elm_lang$core$Maybe$Nothing)
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'Radius',
+					_1: _user$project$Builder$Radius(_elm_lang$core$Maybe$Nothing)
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'Pitch',
+						_1: _user$project$Builder$Pitch(_elm_lang$core$Maybe$Nothing)
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'Interface Angle',
+							_1: _user$project$Builder$PhiCA(_elm_lang$core$Maybe$Nothing)
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'Sequence',
+								_1: _user$project$Builder$Sequence(_elm_lang$core$Maybe$Nothing)
+							},
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		}));
+var _user$project$Builder$init = {ctor: '_Tuple2', _0: _user$project$Builder$emptyModel, _1: _elm_lang$core$Platform_Cmd$none};
 var _user$project$Builder$editParameterValue = F3(
-	function (parameters, field, newValue) {
-		var _p1 = field;
-		switch (_p1.ctor) {
-			case 'OligomerState':
-				var maybeOS = A2(
-					_elm_lang$core$Maybe$andThen,
-					_user$project$Builder$verifyOligomerState,
-					_elm_lang$core$Result$toMaybe(
-						_elm_lang$core$String$toInt(newValue)));
-				return _elm_lang$core$Native_Utils.update(
-					parameters,
-					{oligomerState: maybeOS});
+	function (parameters, parameterLabel, newValue) {
+		var _p1 = parameterLabel;
+		switch (_p1) {
+			case 'Oligomer State':
+				var postValOS = _user$project$Builder$OligomerState(
+					A2(
+						_elm_lang$core$Maybe$andThen,
+						_user$project$Builder$validateOligomerState,
+						_elm_lang$core$Result$toMaybe(
+							_elm_lang$core$String$toInt(newValue))));
+				return A3(_elm_lang$core$Dict$insert, parameterLabel, postValOS, parameters);
 			case 'Radius':
-				var maybeRadius = A2(
-					_elm_lang$core$Maybe$andThen,
-					_user$project$Builder$verifyRadius,
-					_elm_lang$core$Result$toMaybe(
-						_elm_lang$core$String$toFloat(newValue)));
-				return _elm_lang$core$Native_Utils.update(
-					parameters,
-					{radius: maybeRadius});
+				var postValRadius = _user$project$Builder$Radius(
+					A2(
+						_elm_lang$core$Maybe$andThen,
+						_user$project$Builder$validateRadius,
+						_elm_lang$core$Result$toMaybe(
+							_elm_lang$core$String$toFloat(newValue))));
+				return A3(_elm_lang$core$Dict$insert, parameterLabel, postValRadius, parameters);
 			case 'Pitch':
-				var maybePitch = A2(
-					_elm_lang$core$Maybe$andThen,
-					_user$project$Builder$verifyPitch,
-					_elm_lang$core$Result$toMaybe(
-						_elm_lang$core$String$toFloat(newValue)));
-				return _elm_lang$core$Native_Utils.update(
-					parameters,
-					{pitch: maybePitch});
-			case 'InterfaceAngle':
-				var maybePhiCA = A2(
-					_elm_lang$core$Maybe$andThen,
-					_user$project$Builder$verifyPhiCA,
-					_elm_lang$core$Result$toMaybe(
-						_elm_lang$core$String$toFloat(newValue)));
-				return _elm_lang$core$Native_Utils.update(
-					parameters,
-					{phica: maybePhiCA});
+				var postValPitch = _user$project$Builder$Pitch(
+					A2(
+						_elm_lang$core$Maybe$andThen,
+						_user$project$Builder$validatePitch,
+						_elm_lang$core$Result$toMaybe(
+							_elm_lang$core$String$toFloat(newValue))));
+				return A3(_elm_lang$core$Dict$insert, parameterLabel, postValPitch, parameters);
+			case 'Interface Angle':
+				var postValPhiCA = _user$project$Builder$PhiCA(
+					A2(
+						_elm_lang$core$Maybe$andThen,
+						_user$project$Builder$validatePhiCA,
+						_elm_lang$core$Result$toMaybe(
+							_elm_lang$core$String$toFloat(newValue))));
+				return A3(_elm_lang$core$Dict$insert, parameterLabel, postValPhiCA, parameters);
+			case 'Sequence':
+				return A3(
+					_elm_lang$core$Dict$insert,
+					parameterLabel,
+					_user$project$Builder$Sequence(
+						_user$project$Builder$validateSequence(newValue)),
+					parameters);
 			default:
-				return _elm_lang$core$Native_Utils.update(
-					parameters,
-					{
-						sequence: _user$project$Builder$verifySequence(
-							_elm_lang$core$String$toUpper(newValue))
-					});
+				return parameters;
 		}
 	});
 var _user$project$Builder$update = F2(
@@ -12583,22 +12667,11 @@ var _user$project$Builder$update = F2(
 				{parameters: newParameters}),
 			{ctor: '[]'});
 	});
-var _user$project$Builder$Model = function (a) {
-	return {parameters: a};
-};
-var _user$project$Builder$emptyModel = _user$project$Builder$Model(
-	{oligomerState: _elm_lang$core$Maybe$Nothing, radius: _elm_lang$core$Maybe$Nothing, pitch: _elm_lang$core$Maybe$Nothing, phica: _elm_lang$core$Maybe$Nothing, sequence: _elm_lang$core$Maybe$Nothing});
-var _user$project$Builder$init = {ctor: '_Tuple2', _0: _user$project$Builder$emptyModel, _1: _elm_lang$core$Platform_Cmd$none};
-var _user$project$Builder$Parameters = F5(
-	function (a, b, c, d, e) {
-		return {oligomerState: a, radius: b, pitch: c, phica: d, sequence: e};
-	});
 var _user$project$Builder$EditParameter = F2(
 	function (a, b) {
 		return {ctor: 'EditParameter', _0: a, _1: b};
 	});
-var _user$project$Builder$parameterInput = function (_p3) {
-	var _p4 = _p3;
+var _user$project$Builder$parameterInput = function (parameterLabel) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
@@ -12611,11 +12684,11 @@ var _user$project$Builder$parameterInput = function (_p3) {
 					_0: _elm_lang$html$Html_Attributes$type_('text'),
 					_1: {
 						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$placeholder(_p4._0),
+						_0: _elm_lang$html$Html_Attributes$placeholder(parameterLabel),
 						_1: {
 							ctor: '::',
 							_0: _elm_lang$html$Html_Events$onInput(
-								_user$project$Builder$EditParameter(_p4._1)),
+								_user$project$Builder$EditParameter(parameterLabel)),
 							_1: {ctor: '[]'}
 						}
 					}
@@ -12624,44 +12697,18 @@ var _user$project$Builder$parameterInput = function (_p3) {
 			_1: {ctor: '[]'}
 		});
 };
-var _user$project$Builder$Sequence = {ctor: 'Sequence'};
-var _user$project$Builder$InterfaceAngle = {ctor: 'InterfaceAngle'};
-var _user$project$Builder$Pitch = {ctor: 'Pitch'};
-var _user$project$Builder$Radius = {ctor: 'Radius'};
-var _user$project$Builder$OligomerState = {ctor: 'OligomerState'};
-var _user$project$Builder$parameterDetails = {
-	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'Oligomer State', _1: _user$project$Builder$OligomerState},
-	_1: {
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'Radius', _1: _user$project$Builder$Radius},
-		_1: {
-			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'Pitch', _1: _user$project$Builder$Pitch},
-			_1: {
-				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 'Interface Angle', _1: _user$project$Builder$InterfaceAngle},
-				_1: {
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'Sequence', _1: _user$project$Builder$Sequence},
-					_1: {ctor: '[]'}
-				}
-			}
-		}
-	}
-};
 var _user$project$Builder$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
-		A2(_elm_lang$core$List$map, _user$project$Builder$parameterInput, _user$project$Builder$parameterDetails));
+		A2(_elm_lang$core$List$map, _user$project$Builder$parameterInput, _user$project$Builder$allParameters));
 };
 var _user$project$Builder$main = _elm_lang$html$Html$program(
 	{
 		init: _user$project$Builder$init,
 		view: _user$project$Builder$view,
 		update: _user$project$Builder$update,
-		subscriptions: function (_p5) {
+		subscriptions: function (_p3) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();
@@ -12669,7 +12716,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"message":"Builder.Msg","aliases":{},"unions":{"Builder.Field":{"tags":{"Sequence":[],"OligomerState":[],"Pitch":[],"InterfaceAngle":[],"Radius":[]},"args":[]},"Builder.Msg":{"tags":{"EditParameter":["Builder.Field","String"]},"args":[]}}},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Builder.Msg":{"args":[],"tags":{"EditParameter":["Builder.ParameterLabel","String"]}}},"aliases":{"Builder.ParameterLabel":{"args":[],"type":"String"}},"message":"Builder.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])
