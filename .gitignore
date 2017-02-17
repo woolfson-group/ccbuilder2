@@ -96,3 +96,9 @@ instance/
 
 # Elm
 elm-stuff/
+
+# Mac Stuff
+.DS_Store
+
+# VS Code
+.vscode
