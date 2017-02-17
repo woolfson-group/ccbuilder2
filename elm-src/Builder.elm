@@ -1,10 +1,17 @@
 module Builder exposing (..)
 
-import Dict
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import String
+import Http
+import Json.Decode
+import Json.Encode
+import ParameterValidation exposing (allParametersValid, editParameterValue)
+import Types
+    exposing
+        ( ParameterRecord
+        , Parameter(..)
+        )
 
 
 main : Program Never Model Msg
@@ -27,36 +34,19 @@ init =
 
 
 type alias Model =
-    { parameters : Parameters
+    { parameters : ParameterRecord
+    , pdbFile : Maybe String
     }
-
-
-type alias Parameters =
-    Dict.Dict ParameterLabel Parameter
-
-
-type alias ParameterLabel =
-    String
-
-
-type Parameter
-    = OligomerState (Maybe Int)
-    | Radius (Maybe Float)
-    | Pitch (Maybe Float)
-    | PhiCA (Maybe Float)
-    | Sequence (Maybe String)
 
 
 emptyModel : Model
 emptyModel =
-    Dict.fromList
-        [ ( "Oligomer State", OligomerState Nothing )
-        , ( "Radius", Radius Nothing )
-        , ( "Pitch", Pitch Nothing )
-        , ( "Interface Angle", PhiCA Nothing )
-        , ( "Sequence", Sequence Nothing )
-        ]
-        |> Model
+    Model emptyParameters Nothing
+
+
+emptyParameters : ParameterRecord
+emptyParameters =
+    ParameterRecord Nothing Nothing Nothing Nothing Nothing
 
 
 
@@ -64,148 +54,45 @@ emptyModel =
 
 
 type Msg
-    = EditParameter ParameterLabel String
+    = EditParameter Parameter String
+    | Build
+    | ProcessModel (Result Http.Error String)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        EditParameter parameterLabel newValue ->
-            let
-                newParameters =
-                    editParameterValue model.parameters parameterLabel newValue
-            in
-                { model | parameters = newParameters } ! []
+        EditParameter parameter newValue ->
+            { model | parameters = editParameterValue model.parameters parameter newValue } ! []
+
+        Build ->
+            ( model, sendBuildCmd model.parameters )
+
+        ProcessModel (Ok pdbFile) ->
+            { model | pdbFile = Just pdbFile } ! []
+
+        ProcessModel (Err _) ->
+            model ! []
 
 
-editParameterValue : Parameters -> ParameterLabel -> String -> Parameters
-editParameterValue parameters parameterLabel newValue =
-    case parameterLabel of
-        "Oligomer State" ->
-            let
-                postValOS =
-                    String.toInt newValue
-                        |> Result.toMaybe
-                        |> Maybe.andThen validateOligomerState
-                        |> OligomerState
-            in
-                Dict.insert parameterLabel postValOS parameters
-
-        "Radius" ->
-            let
-                postValRadius =
-                    String.toFloat newValue
-                        |> Result.toMaybe
-                        |> Maybe.andThen validateRadius
-                        |> Radius
-            in
-                Dict.insert parameterLabel postValRadius parameters
-
-        "Pitch" ->
-            let
-                postValPitch =
-                    String.toFloat newValue
-                        |> Result.toMaybe
-                        |> Maybe.andThen validatePitch
-                        |> Pitch
-            in
-                Dict.insert parameterLabel postValPitch parameters
-
-        "Interface Angle" ->
-            let
-                postValPhiCA =
-                    String.toFloat newValue
-                        |> Result.toMaybe
-                        |> Maybe.andThen validatePhiCA
-                        |> PhiCA
-            in
-                Dict.insert parameterLabel postValPhiCA parameters
-
-        "Sequence" ->
-            Dict.insert parameterLabel (validateSequence newValue |> Sequence) parameters
-
-        _ ->
-            parameters
+sendBuildCmd : ParameterRecord -> Cmd Msg
+sendBuildCmd parameters =
+    Http.send ProcessModel <|
+        Http.post
+            "/builder/build_model"
+            (Http.jsonBody <| parametersJson parameters)
+            Json.Decode.string
 
 
-validateOligomerState : Int -> Maybe Int
-validateOligomerState os =
-    if (os > 0) && (isNotNaN <| toFloat os) then
-        Just os
-    else
-        Nothing
-
-
-validateRadius : Float -> Maybe Float
-validateRadius radius =
-    if (radius > 0) && (isNotNaN radius) then
-        Just radius
-    else
-        Nothing
-
-
-validatePitch : Float -> Maybe Float
-validatePitch pitch =
-    if (pitch > 0) && (isNotNaN pitch) then
-        Just pitch
-    else
-        Nothing
-
-
-validatePhiCA : Float -> Maybe Float
-validatePhiCA phica =
-    if isNotNaN phica then
-        Just phica
-    else
-        Nothing
-
-
-validateSequence : String -> Maybe String
-validateSequence sequence =
-    let
-        allValidChars =
-            String.toUpper sequence
-                |> String.toList
-                |> List.all isAllowedSeqChar
-    in
-        if allValidChars && (String.length sequence > 0) then
-            Just sequence
-        else
-            Nothing
-
-
-isAllowedSeqChar : Char -> Bool
-isAllowedSeqChar char =
-    let
-        allowed =
-            [ 'A'
-            , 'C'
-            , 'D'
-            , 'E'
-            , 'F'
-            , 'G'
-            , 'H'
-            , 'I'
-            , 'K'
-            , 'L'
-            , 'M'
-            , 'N'
-            , 'P'
-            , 'Q'
-            , 'R'
-            , 'S'
-            , 'T'
-            , 'V'
-            , 'W'
-            , 'Y'
-            ]
-    in
-        List.member char allowed
-
-
-isNotNaN : Float -> Bool
-isNotNaN =
-    not << isNaN
+parametersJson : ParameterRecord -> Json.Encode.Value
+parametersJson parameters =
+    Json.Encode.object
+        [ ( "Oligomer State", parameters.oligomerState |> Maybe.withDefault 0 |> Json.Encode.int )
+        , ( "Radius", parameters.radius |> Maybe.withDefault 0 |> Json.Encode.float )
+        , ( "Pitch", parameters.pitch |> Maybe.withDefault 0 |> Json.Encode.float )
+        , ( "Interface Angle", parameters.phiCA |> Maybe.withDefault 0 |> Json.Encode.float )
+        , ( "Sequence", parameters.sequence |> Maybe.withDefault "" |> Json.Encode.string )
+        ]
 
 
 
@@ -215,26 +102,44 @@ isNotNaN =
 view : Model -> Html Msg
 view model =
     div []
-        (List.map parameterInput allParameters)
-
-
-parameterInput : ParameterLabel -> Html Msg
-parameterInput parameterLabel =
-    div []
-        [ input
-            [ type_ "text"
-            , placeholder parameterLabel
-            , onInput (EditParameter parameterLabel)
-            ]
-            []
+        [ parameterInputForm model
         ]
 
 
-allParameters : List String
+parameterInputForm : Model -> Html Msg
+parameterInputForm model =
+    List.map parameterInput allParameters
+        |> flip (List.append) ([ parameterSubmit model.parameters ])
+        |> Html.div []
+
+
+parameterInput : ( String, Parameter ) -> Html Msg
+parameterInput ( parameterLabel, parameter ) =
+    input
+        [ type_ "text"
+        , name parameterLabel
+        , placeholder parameterLabel
+        , onInput (EditParameter parameter)
+        ]
+        []
+
+
+parameterSubmit : ParameterRecord -> Html Msg
+parameterSubmit parameters =
+    input
+        [ type_ "submit"
+        , value "Submit"
+        , onClick Build
+        , disabled (allParametersValid parameters)
+        ]
+        []
+
+
+allParameters : List ( String, Parameter )
 allParameters =
-    [ "Oligomer State"
-    , "Radius"
-    , "Pitch"
-    , "Interface Angle"
-    , "Sequence"
+    [ ( "Oligomer State", OligomerState )
+    , ( "Radius", Radius )
+    , ( "Pitch", Pitch )
+    , ( "Interface Angle", PhiCA )
+    , ( "Sequence", Sequence )
     ]
