@@ -5,6 +5,7 @@ import sys
 from flask import jsonify, render_template, request
 
 from ccbmk2 import app
+from ccbmk2.model_building import build_coiled_coil
 
 BUILD = "build_model"
 
@@ -23,5 +24,6 @@ def builder():
 @app.route('/builder/<cmd>', methods=['POST'])
 def process_builder_command(cmd=None):
     if cmd == BUILD:
-        print(request.json, file=sys.stderr)
+        seqs = build_coiled_coil(request.json)
+        print(seqs, file=sys.stderr)
     return jsonify("Building")
