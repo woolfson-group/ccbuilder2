@@ -16,7 +16,7 @@
         "path":""
     },
     "scwrl":{
-        "path":"/app/dependencies_for_isambard/scwrl/Scwrl4",
+        "path":"/app/dependencies_for_isambard/scwrl4/Scwrl4",
         "rigid_rotamer_model":false
     }
 }

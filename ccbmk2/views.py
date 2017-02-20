@@ -24,6 +24,7 @@ def builder():
 @app.route('/builder/<cmd>', methods=['POST'])
 def process_builder_command(cmd=None):
     if cmd == BUILD:
+        print(request.json, file=sys.stderr)
         seqs = build_coiled_coil(request.json)
-        print(seqs, file=sys.stderr)
+        print("sequence = ", seqs, file=sys.stderr)
     return jsonify("Building")

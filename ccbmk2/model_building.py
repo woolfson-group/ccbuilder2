@@ -18,10 +18,10 @@ def build_coiled_coil(parameter_dict):
         Model of a coiled coil, built by ISAMBARD.
     """
     coiled_coil = isambard.specifications.CoiledCoil.from_parameters(
-        parameter_dict['Oligomer State'],
-        len(parameter_dict['Sequence']),
-        parameter_dict['Radius'],
-        parameter_dict['Pitch'],
-        parameter_dict['Interface Angle'])
-    coiled_coil.pack_new_sequences(parameter_dict['Sequence'])
+        2,
+        28,
+        5.1,
+        180,
+        16)
+    coiled_coil.pack_new_sequences(['LKAIAQELKAIAQELKAIAQELKAIAQE'] * 2)
     return coiled_coil.sequences

@@ -6,6 +6,6 @@ RUN pip install isambard
 RUN pip install Flask
 COPY . /app
 WORKDIR /app
-COPY ./tools/.isambard_settings /root/
+COPY ./dependencies_for_isambard/.isambard_settings /root/
 ENTRYPOINT ["python"]
 CMD ["run.py"]
