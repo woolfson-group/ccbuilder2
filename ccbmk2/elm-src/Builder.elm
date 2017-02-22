@@ -36,12 +36,13 @@ init =
 type alias Model =
     { parameters : ParameterRecord
     , pdbFile : Maybe String
+    , building : Bool
     }
 
 
 emptyModel : Model
 emptyModel =
-    Model emptyParameters Nothing
+    Model emptyParameters Nothing False
 
 
 emptyParameters : ParameterRecord
@@ -66,13 +67,13 @@ update msg model =
             { model | parameters = editParameterValue model.parameters parameter newValue } ! []
 
         Build ->
-            ( model, sendBuildCmd model.parameters )
+            ( { model | building = True }, sendBuildCmd model.parameters )
 
         ProcessModel (Ok pdbFile) ->
-            { model | pdbFile = Just pdbFile } ! []
+            { model | pdbFile = Just pdbFile, building = False } ! []
 
         ProcessModel (Err _) ->
-            model ! []
+            { model | building = False } ! []
 
 
 sendBuildCmd : ParameterRecord -> Cmd Msg
@@ -103,6 +104,7 @@ view : Model -> Html Msg
 view model =
     div []
         [ parameterInputForm model
+        , buildingStatus model
         ]
 
 
@@ -143,3 +145,11 @@ allParameters =
     , ( "Interface Angle", PhiCA )
     , ( "Sequence", Sequence )
     ]
+
+
+buildingStatus : Model -> Html msg
+buildingStatus model =
+    if model.building then
+        div [] [ text "Building..." ]
+    else
+        div [] [ text "Ready!" ]

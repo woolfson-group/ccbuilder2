@@ -13194,6 +13194,23 @@ var _user$project$ParameterValidation$allParametersValid = function (_p2) {
 		});
 };
 
+var _user$project$Builder$buildingStatus = function (model) {
+	return model.building ? A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text('Building...'),
+			_1: {ctor: '[]'}
+		}) : A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text('Ready!'),
+			_1: {ctor: '[]'}
+		});
+};
 var _user$project$Builder$allParameters = {
 	ctor: '::',
 	_0: {ctor: '_Tuple2', _0: 'Oligomer State', _1: _user$project$Types$OligomerState},
@@ -13265,11 +13282,11 @@ var _user$project$Builder$parametersJson = function (parameters) {
 		});
 };
 var _user$project$Builder$emptyParameters = A5(_user$project$Types$ParameterRecord, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing);
-var _user$project$Builder$Model = F2(
-	function (a, b) {
-		return {parameters: a, pdbFile: b};
+var _user$project$Builder$Model = F3(
+	function (a, b, c) {
+		return {parameters: a, pdbFile: b, building: c};
 	});
-var _user$project$Builder$emptyModel = A2(_user$project$Builder$Model, _user$project$Builder$emptyParameters, _elm_lang$core$Maybe$Nothing);
+var _user$project$Builder$emptyModel = A3(_user$project$Builder$Model, _user$project$Builder$emptyParameters, _elm_lang$core$Maybe$Nothing, false);
 var _user$project$Builder$init = {ctor: '_Tuple2', _0: _user$project$Builder$emptyModel, _1: _elm_lang$core$Platform_Cmd$none};
 var _user$project$Builder$ProcessModel = function (a) {
 	return {ctor: 'ProcessModel', _0: a};
@@ -13301,7 +13318,9 @@ var _user$project$Builder$update = F2(
 			case 'Build':
 				return {
 					ctor: '_Tuple2',
-					_0: model,
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{building: true}),
 					_1: _user$project$Builder$sendBuildCmd(model.parameters)
 				};
 			default:
@@ -13311,13 +13330,16 @@ var _user$project$Builder$update = F2(
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								pdbFile: _elm_lang$core$Maybe$Just(_p0._0._0)
+								pdbFile: _elm_lang$core$Maybe$Just(_p0._0._0),
+								building: false
 							}),
 						{ctor: '[]'});
 				} else {
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
-						model,
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{building: false}),
 						{ctor: '[]'});
 				}
 		}
@@ -13396,7 +13418,11 @@ var _user$project$Builder$view = function (model) {
 		{
 			ctor: '::',
 			_0: _user$project$Builder$parameterInputForm(model),
-			_1: {ctor: '[]'}
+			_1: {
+				ctor: '::',
+				_0: _user$project$Builder$buildingStatus(model),
+				_1: {ctor: '[]'}
+			}
 		});
 };
 var _user$project$Builder$main = _elm_lang$html$Html$program(
