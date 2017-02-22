@@ -1,1 +1,1 @@
-elm-make ./elm-src/Builder.elm --output=./ccbmk2/static/elm/builder.js --debug
+elm-make .ccbmk2/elm-src/Builder.elm --output=./ccbmk2/static/elm/builder.js --debug
