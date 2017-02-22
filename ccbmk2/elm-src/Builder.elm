@@ -105,6 +105,7 @@ view model =
     div []
         [ parameterInputForm model
         , buildingStatus model
+        , showPdbFile model
         ]
 
 
@@ -153,3 +154,12 @@ buildingStatus model =
         div [] [ text "Building..." ]
     else
         div [] [ text "Ready!" ]
+
+
+showPdbFile : Model -> Html msg
+showPdbFile model =
+    case model.pdbFile of
+        Just pdbFile ->
+            div [] [ text pdbFile ]
+        Nothing ->
+            div [] [ text "Enter parameters and build model." ]

@@ -23,5 +23,5 @@ def build_coiled_coil(parameter_dict):
         parameter_dict['Radius'],
         parameter_dict['Pitch'],
         parameter_dict['Interface Angle'])
-    coiled_coil.pack_new_sequences([parameter_dict['Sequence']] * 2)
-    return coiled_coil.sequences
+    coiled_coil.pack_new_sequences([parameter_dict['Sequence']] * parameter_dict['Oligomer State'])
+    return coiled_coil.pdb

@@ -13194,6 +13194,28 @@ var _user$project$ParameterValidation$allParametersValid = function (_p2) {
 		});
 };
 
+var _user$project$Builder$showPdbFile = function (model) {
+	var _p0 = model.pdbFile;
+	if (_p0.ctor === 'Just') {
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(_p0._0),
+				_1: {ctor: '[]'}
+			});
+	} else {
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text('Enter parameters and build model.'),
+				_1: {ctor: '[]'}
+			});
+	}
+};
 var _user$project$Builder$buildingStatus = function (model) {
 	return model.building ? A2(
 		_elm_lang$html$Html$div,
@@ -13304,15 +13326,15 @@ var _user$project$Builder$sendBuildCmd = function (parameters) {
 };
 var _user$project$Builder$update = F2(
 	function (msg, model) {
-		var _p0 = msg;
-		switch (_p0.ctor) {
+		var _p1 = msg;
+		switch (_p1.ctor) {
 			case 'EditParameter':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parameters: A3(_user$project$ParameterValidation$editParameterValue, model.parameters, _p0._0, _p0._1)
+							parameters: A3(_user$project$ParameterValidation$editParameterValue, model.parameters, _p1._0, _p1._1)
 						}),
 					{ctor: '[]'});
 			case 'Build':
@@ -13324,13 +13346,13 @@ var _user$project$Builder$update = F2(
 					_1: _user$project$Builder$sendBuildCmd(model.parameters)
 				};
 			default:
-				if (_p0._0.ctor === 'Ok') {
+				if (_p1._0.ctor === 'Ok') {
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								pdbFile: _elm_lang$core$Maybe$Just(_p0._0._0),
+								pdbFile: _elm_lang$core$Maybe$Just(_p1._0._0),
 								building: false
 							}),
 						{ctor: '[]'});
@@ -13372,9 +13394,9 @@ var _user$project$Builder$EditParameter = F2(
 	function (a, b) {
 		return {ctor: 'EditParameter', _0: a, _1: b};
 	});
-var _user$project$Builder$parameterInput = function (_p1) {
-	var _p2 = _p1;
-	var _p3 = _p2._0;
+var _user$project$Builder$parameterInput = function (_p2) {
+	var _p3 = _p2;
+	var _p4 = _p3._0;
 	return A2(
 		_elm_lang$html$Html$input,
 		{
@@ -13382,14 +13404,14 @@ var _user$project$Builder$parameterInput = function (_p1) {
 			_0: _elm_lang$html$Html_Attributes$type_('text'),
 			_1: {
 				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$name(_p3),
+				_0: _elm_lang$html$Html_Attributes$name(_p4),
 				_1: {
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$placeholder(_p3),
+					_0: _elm_lang$html$Html_Attributes$placeholder(_p4),
 					_1: {
 						ctor: '::',
 						_0: _elm_lang$html$Html_Events$onInput(
-							_user$project$Builder$EditParameter(_p2._1)),
+							_user$project$Builder$EditParameter(_p3._1)),
 						_1: {ctor: '[]'}
 					}
 				}
@@ -13421,7 +13443,11 @@ var _user$project$Builder$view = function (model) {
 			_1: {
 				ctor: '::',
 				_0: _user$project$Builder$buildingStatus(model),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: _user$project$Builder$showPdbFile(model),
+					_1: {ctor: '[]'}
+				}
 			}
 		});
 };
@@ -13430,7 +13456,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 		init: _user$project$Builder$init,
 		view: _user$project$Builder$view,
 		update: _user$project$Builder$update,
-		subscriptions: function (_p4) {
+		subscriptions: function (_p5) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();
@@ -13438,7 +13464,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Builder.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error String"],"Build":[],"EditParameter":["Types.Parameter","String"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"}},"message":"Builder.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"message":"Builder.Msg","aliases":{"Http.Response":{"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }","args":["body"]}},"unions":{"Dict.NColor":{"tags":{"Black":[],"BBlack":[],"Red":[],"NBlack":[]},"args":[]},"Result.Result":{"tags":{"Err":["error"],"Ok":["value"]},"args":["error","value"]},"Http.Error":{"tags":{"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"],"BadUrl":["String"],"NetworkError":[]},"args":[]},"Types.Parameter":{"tags":{"Sequence":[],"OligomerState":[],"Pitch":[],"Radius":[],"PhiCA":[]},"args":[]},"Dict.LeafColor":{"tags":{"LBlack":[],"LBBlack":[]},"args":[]},"Builder.Msg":{"tags":{"EditParameter":["Types.Parameter","String"],"ProcessModel":["Result.Result Http.Error String"],"Build":[]},"args":[]},"Dict.Dict":{"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]},"args":["k","v"]}}},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])
