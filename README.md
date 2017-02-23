@@ -11,6 +11,10 @@
 * Coolors
     * https://coolors.co/e6e8e6-ced0ce-9fb8ad-475841-3f403f
 
+## Style Guide
+
+* All CSS that manipulates the *position* of elements should be defined in Elm, all formating (fonts, colours) should be defined in the style sheet.
+
 ## TODO
 
 * Add examples
