@@ -111,10 +111,16 @@ parametersJson parameters =
 
 view : Model -> Html Msg
 view model =
-    div []
+    div [ id "viewer" ]
+        [ commandPanel model
+        , buildingStatusPanel model
+        ]
+
+
+commandPanel : Model -> Html Msg
+commandPanel model =
+    div [ class "overlay-panel", id "command-panel" ]
         [ parameterInputForm model
-        , buildingStatus model
-        , div [ id "viewer" ] []
         ]
 
 
@@ -127,13 +133,16 @@ parameterInputForm model =
 
 parameterInput : ( String, Parameter ) -> Html Msg
 parameterInput ( parameterLabel, parameter ) =
-    input
-        [ type_ "text"
-        , name parameterLabel
-        , placeholder parameterLabel
-        , onInput (EditParameter parameter)
+    div [ class "input-parameter" ]
+        [ text parameterLabel
+        , br [] []
+        , input
+            [ type_ "text"
+            , name parameterLabel
+            , placeholder parameterLabel
+            , onInput (EditParameter parameter)
+            ] []
         ]
-        []
 
 
 parameterSubmit : ParameterRecord -> Html Msg
@@ -157,9 +166,15 @@ allParameters =
     ]
 
 
-buildingStatus : Model -> Html msg
-buildingStatus model =
-    if model.building then
-        div [] [ text "Building..." ]
-    else
-        div [] [ text "Ready!" ]
+buildingStatusPanel : Model -> Html msg
+buildingStatusPanel model =
+    let
+        commonAttr = [ class "overlay-panel", id "building-status-panel" ]
+    in
+        if model.building then
+            div commonAttr
+                [ text "Building..."
+                , img [ src "static/css/infinity.gif", width 80, height 80 ] []
+                ]
+        else
+            div (hidden True :: commonAttr) []

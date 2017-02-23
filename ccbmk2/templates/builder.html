@@ -5,7 +5,9 @@
     <title>CCBuilder Mk.2 | Build</title>
     <script type="text/javascript" src="{{ url_for('static', filename='elm/builder.js') }}"></script>
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <script type='text/javascript' src="{{ url_for('static', filename='bio-pv.min.js') }}"></script>
+    <script type='text/javascript' src="{{ url_for('static', filename='javascript/bio-pv.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
 <body>
 </body>
@@ -19,8 +21,8 @@
     app.ports.initialiseViewer.subscribe(
         function () {
             var options = {
-                width: 600,
-                height: 600,
+                width: 'auto',
+                height: 'auto',
                 antialias: true,
                 quality : 'medium'
             };
@@ -31,9 +33,10 @@
 
     app.ports.showStructure.subscribe(
         function (pdbString) {
-            viewer.rm('structure');
+            viewer.clear();
             var structure = pv.io.pdb(pdbString);
             viewer.ballsAndSticks('structure', structure);
+            viewer.cartoon('structure', structure, { color: pv.color.byChain() });
             viewer.centerOn(structure);
         }
     );

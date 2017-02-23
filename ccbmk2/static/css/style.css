@@ -1,0 +1,38 @@
+.input-parameter {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.overlay-panel {
+    font-family: 'Roboto', sans-serif;
+    color: #3F403F;
+    position: absolute;
+    z-index: 1;
+    background: #CED0CE;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+#command-panel {
+    top: 10px;
+    left: 10px;
+}
+
+#building-status-panel {
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    width: 80px;
+    height: 80px;
+    margin-top: -40px;
+    margin-left: -40px;
+}
+
+#viewer {
+    position: fixed;
+    bottom: 0px;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    left: 0px;
+}
