@@ -8,6 +8,8 @@
     * Rebuild the images using `docker build -t ccbmk2 .`
     * Delete the old `docker-compose` image using `docker-compose rm`
 * `docker exec -i -t ccmbmk2_web_1 /bin/bash`
+* Coolors
+    * https://coolors.co/e6e8e6-ced0ce-9fb8ad-475841-3f403f
 
 ## TODO
 
