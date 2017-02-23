@@ -50,6 +50,7 @@ emptyParameters =
     ParameterRecord Nothing Nothing Nothing Nothing Nothing
 
 
+
 -- Ports
 
 
@@ -111,38 +112,95 @@ parametersJson parameters =
 
 view : Model -> Html Msg
 view model =
-    div [ id "viewer" ]
+    div [ id "viewer", viewerStyle ]
         [ commandPanel model
         , buildingStatusPanel model
         ]
 
 
+viewerStyle : Html.Attribute msg
+viewerStyle =
+    style
+        [ ( "position", "fixed" )
+        , ( "bottom", "0px" )
+        , ( "top", "0px" )
+        , ( "left", "0px" )
+        , ( "right", "0px" )
+        ]
+
+
 commandPanel : Model -> Html Msg
 commandPanel model =
-    div [ class "overlay-panel", id "command-panel" ]
-        [ parameterInputForm model
+    div [ class "overlay-panel", id "command-panel", commandPanelStyle ]
+        [ h2 [] [ text "Parameters" ]
+        , parameterInputForm model
+        ]
+
+
+commandPanelStyle : Html.Attribute msg
+commandPanelStyle =
+    style
+        [ ( "top", "10px" )
+        , ( "left", "10px" )
         ]
 
 
 parameterInputForm : Model -> Html Msg
 parameterInputForm model =
     List.map parameterInput allParameters
-        |> flip (List.append) ([ parameterSubmit model.parameters ])
+        |> flip (List.append)
+            ([ sequenceInput ( "Sequence", Sequence ), parameterSubmit model.parameters ])
         |> Html.div []
 
 
 parameterInput : ( String, Parameter ) -> Html Msg
 parameterInput ( parameterLabel, parameter ) =
-    div [ class "input-parameter" ]
+    div [ class "parameter-input" ]
         [ text parameterLabel
         , br [] []
         , input
             [ type_ "text"
             , name parameterLabel
+            , class "parameter-input-box"
+            , parameterInputId parameterLabel
             , placeholder parameterLabel
             , onInput (EditParameter parameter)
-            ] []
+            , inputStyle
+            ]
+            []
         ]
+
+
+sequenceInput : ( String, Parameter ) -> Html Msg
+sequenceInput ( parameterLabel, parameter ) =
+    div [ class "parameter-input" ]
+        [ text parameterLabel
+        , br [] []
+        , textarea
+            [ name parameterLabel
+            , class "parameter-input-box"
+            , parameterInputId parameterLabel
+            , rows 3
+            , cols 30
+            , inputStyle
+            , placeholder parameterLabel
+            , onInput (EditParameter parameter)
+            ]
+            []
+        ]
+
+
+inputStyle : Html.Attribute msg
+inputStyle = style [ ( "width", "100%" ) ]
+
+
+parameterInputId : String -> Html.Attribute msg
+parameterInputId parameterLabel =
+    String.toLower parameterLabel
+        |> String.split " "
+        |> String.join "-"
+        |> String.append "input-box-"
+        |> id
 
 
 parameterSubmit : ParameterRecord -> Html Msg
@@ -162,14 +220,14 @@ allParameters =
     , ( "Radius", Radius )
     , ( "Pitch", Pitch )
     , ( "Interface Angle", PhiCA )
-    , ( "Sequence", Sequence )
     ]
 
 
 buildingStatusPanel : Model -> Html msg
 buildingStatusPanel model =
     let
-        commonAttr = [ class "overlay-panel", id "building-status-panel" ]
+        commonAttr =
+            [ class "overlay-panel", id "building-status-panel", buildingStatusStyle ]
     in
         if model.building then
             div commonAttr
@@ -178,3 +236,13 @@ buildingStatusPanel model =
                 ]
         else
             div (hidden True :: commonAttr) []
+
+
+buildingStatusStyle : Html.Attribute msg
+buildingStatusStyle =
+    style
+        [ ( "top", "50%" )
+        , ( "left", "50%" )
+        , ( "width", "80px" )
+        , ( "height", "80px" )
+        ]
