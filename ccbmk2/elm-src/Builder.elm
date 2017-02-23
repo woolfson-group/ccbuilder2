@@ -1,4 +1,4 @@
-module Builder exposing (..)
+port module Builder exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -26,7 +26,7 @@ main =
 
 init : ( Model, Cmd Msg )
 init =
-    ( emptyModel, Cmd.none )
+    ( emptyModel, initialiseViewer () )
 
 
 
@@ -50,6 +50,15 @@ emptyParameters =
     ParameterRecord Nothing Nothing Nothing Nothing Nothing
 
 
+-- Ports
+
+
+port initialiseViewer : () -> Cmd msg
+
+
+port showStructure : String -> Cmd msg
+
+
 
 -- Update
 
@@ -70,7 +79,7 @@ update msg model =
             ( { model | building = True }, sendBuildCmd model.parameters )
 
         ProcessModel (Ok pdbFile) ->
-            { model | pdbFile = Just pdbFile, building = False } ! []
+            { model | pdbFile = Just pdbFile, building = False } ! [ showStructure pdbFile ]
 
         ProcessModel (Err _) ->
             { model | building = False } ! []
@@ -105,7 +114,7 @@ view model =
     div []
         [ parameterInputForm model
         , buildingStatus model
-        , showPdbFile model
+        , div [ id "viewer" ] []
         ]
 
 
@@ -154,12 +163,3 @@ buildingStatus model =
         div [] [ text "Building..." ]
     else
         div [] [ text "Ready!" ]
-
-
-showPdbFile : Model -> Html msg
-showPdbFile model =
-    case model.pdbFile of
-        Just pdbFile ->
-            div [] [ text pdbFile ]
-        Nothing ->
-            div [] [ text "Enter parameters and build model." ]
