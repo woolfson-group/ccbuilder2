@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>CCBuilder Mk.2 | Build</title>
     <script type="text/javascript" src="{{ url_for('static', filename='elm/builder.js') }}"></script>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <script type='text/javascript' src="{{ url_for('static', filename='bio-pv.min.js') }}"></script>
 </head>
 <body>
 </body>
@@ -11,5 +13,29 @@
 <script type="text/javascript">
     var node = document.getElementById('main');
     var app = Elm.Builder.embed(node);
+    var viewer;
+
+    // Elm handles the initialisation of the viewer to ensure the DOM element is available
+    app.ports.initialiseViewer.subscribe(
+        function () {
+            var options = {
+            width: 600,
+            height: 600,
+            antialias: true,
+            quality : 'medium'
+            };
+            // insert the viewer under the Dom element with id 'gl'.
+            viewer = pv.Viewer(document.getElementById('viewer'), options);
+        }
+    );
+
+    app.ports.showStructure.subscribe(
+        function (pdbString) {
+            viewer.rm('structure');
+            var structure = pv.io.pdb(pdbString);
+            viewer.ballsAndSticks('structure', structure);
+            viewer.centerOn(structure);
+        }
+    );
 </script>
 </html>
