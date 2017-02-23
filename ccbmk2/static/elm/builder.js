@@ -13194,24 +13194,76 @@ var _user$project$ParameterValidation$allParametersValid = function (_p2) {
 		});
 };
 
-var _user$project$Builder$buildingStatusStyle = _elm_lang$html$Html_Attributes$style(
-	{
+var _user$project$Builder$buildingStatusStyling = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'top', _1: '50%'},
+	_1: {
 		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'top', _1: '50%'},
+		_0: {ctor: '_Tuple2', _0: 'left', _1: '50%'},
 		_1: {
 			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'left', _1: '50%'},
+			_0: {ctor: '_Tuple2', _0: 'width', _1: '80px'},
 			_1: {
 				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 'width', _1: '80px'},
-				_1: {
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'height', _1: '80px'},
-					_1: {ctor: '[]'}
-				}
+				_0: {ctor: '_Tuple2', _0: 'height', _1: '80px'},
+				_1: {ctor: '[]'}
 			}
 		}
-	});
+	}
+};
+var _user$project$Builder$allParameters = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'Oligomer State', _1: _user$project$Types$OligomerState},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'Radius', _1: _user$project$Types$Radius},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'Pitch', _1: _user$project$Types$Pitch},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'Interface Angle', _1: _user$project$Types$PhiCA},
+				_1: {ctor: '[]'}
+			}
+		}
+	}
+};
+var _user$project$Builder$parameterInputId = function (parameterLabel) {
+	return _elm_lang$html$Html_Attributes$id(
+		A2(
+			_elm_lang$core$String$append,
+			'input-box-',
+			A2(
+				_elm_lang$core$String$join,
+				'-',
+				A2(
+					_elm_lang$core$String$split,
+					' ',
+					_elm_lang$core$String$toLower(parameterLabel)))));
+};
+var _user$project$Builder$inputStyling = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
+	_1: {ctor: '[]'}
+};
+var _user$project$Builder$commandPanelStyling = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'top', _1: '6%'},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'left', _1: '2%'},
+		_1: {ctor: '[]'}
+	}
+};
+var _user$project$Builder$panelStyling = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'z-index', _1: '1'},
+		_1: {ctor: '[]'}
+	}
+};
 var _user$project$Builder$buildingStatusPanel = function (model) {
 	var commonAttr = {
 		ctor: '::',
@@ -13221,7 +13273,8 @@ var _user$project$Builder$buildingStatusPanel = function (model) {
 			_0: _elm_lang$html$Html_Attributes$id('building-status-panel'),
 			_1: {
 				ctor: '::',
-				_0: _user$project$Builder$buildingStatusStyle,
+				_0: _elm_lang$html$Html_Attributes$style(
+					A2(_elm_lang$core$Basics_ops['++'], _user$project$Builder$buildingStatusStyling, _user$project$Builder$panelStyling)),
 				_1: {ctor: '[]'}
 			}
 		}
@@ -13261,74 +13314,79 @@ var _user$project$Builder$buildingStatusPanel = function (model) {
 		},
 		{ctor: '[]'});
 };
-var _user$project$Builder$allParameters = {
+var _user$project$Builder$headerStyling = {
 	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'Oligomer State', _1: _user$project$Types$OligomerState},
+	_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
 	_1: {
 		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'Radius', _1: _user$project$Types$Radius},
+		_0: {ctor: '_Tuple2', _0: 'line-height', _1: '50px'},
 		_1: {
 			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'Pitch', _1: _user$project$Types$Pitch},
+			_0: {ctor: '_Tuple2', _0: 'top', _1: '0%'},
 			_1: {
 				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 'Interface Angle', _1: _user$project$Types$PhiCA},
-				_1: {ctor: '[]'}
+				_0: {ctor: '_Tuple2', _0: 'left', _1: '0%'},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
+					_1: {ctor: '[]'}
+				}
 			}
 		}
 	}
 };
-var _user$project$Builder$parameterInputId = function (parameterLabel) {
-	return _elm_lang$html$Html_Attributes$id(
-		A2(
-			_elm_lang$core$String$append,
-			'input-box-',
-			A2(
-				_elm_lang$core$String$join,
-				'-',
-				A2(
-					_elm_lang$core$String$split,
-					' ',
-					_elm_lang$core$String$toLower(parameterLabel)))));
-};
-var _user$project$Builder$inputStyle = _elm_lang$html$Html_Attributes$style(
+var _user$project$Builder$siteHeader = A2(
+	_elm_lang$html$Html$div,
 	{
 		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
-		_1: {ctor: '[]'}
-	});
-var _user$project$Builder$commandPanelStyle = _elm_lang$html$Html_Attributes$style(
-	{
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'top', _1: '10px'},
+		_0: _elm_lang$html$Html_Attributes$id('app-header'),
 		_1: {
 			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'left', _1: '10px'},
+			_0: _elm_lang$html$Html_Attributes$style(
+				A2(_elm_lang$core$Basics_ops['++'], _user$project$Builder$headerStyling, _user$project$Builder$panelStyling)),
 			_1: {ctor: '[]'}
 		}
-	});
-var _user$project$Builder$viewerStyle = _elm_lang$html$Html_Attributes$style(
+	},
 	{
 		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'position', _1: 'fixed'},
+		_0: A2(
+			_elm_lang$html$Html$header,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h1,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('CCBuilder Mk.2: Get wrect son!'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}),
+		_1: {ctor: '[]'}
+	});
+var _user$project$Builder$viewerStyling = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'position', _1: 'fixed'},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'bottom', _1: '0px'},
 		_1: {
 			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'bottom', _1: '0px'},
+			_0: {ctor: '_Tuple2', _0: 'top', _1: '0px'},
 			_1: {
 				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 'top', _1: '0px'},
+				_0: {ctor: '_Tuple2', _0: 'left', _1: '0px'},
 				_1: {
 					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'left', _1: '0px'},
-					_1: {
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'right', _1: '0px'},
-						_1: {ctor: '[]'}
-					}
+					_0: {ctor: '_Tuple2', _0: 'right', _1: '0px'},
+					_1: {ctor: '[]'}
 				}
 			}
 		}
-	});
+	}
+};
 var _user$project$Builder$parametersJson = function (parameters) {
 	return _elm_lang$core$Json_Encode$object(
 		{
@@ -13533,7 +13591,7 @@ var _user$project$Builder$parameterInput = function (_p2) {
 													_user$project$Builder$EditParameter(_p3._1)),
 												_1: {
 													ctor: '::',
-													_0: _user$project$Builder$inputStyle,
+													_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$inputStyling),
 													_1: {ctor: '[]'}
 												}
 											}
@@ -13588,7 +13646,7 @@ var _user$project$Builder$sequenceInput = function (_p5) {
 											_0: _elm_lang$html$Html_Attributes$cols(30),
 											_1: {
 												ctor: '::',
-												_0: _user$project$Builder$inputStyle,
+												_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$inputStyling),
 												_1: {
 													ctor: '::',
 													_0: _elm_lang$html$Html_Attributes$placeholder(_p7),
@@ -13641,7 +13699,8 @@ var _user$project$Builder$commandPanel = function (model) {
 				_0: _elm_lang$html$Html_Attributes$id('command-panel'),
 				_1: {
 					ctor: '::',
-					_0: _user$project$Builder$commandPanelStyle,
+					_0: _elm_lang$html$Html_Attributes$style(
+						A2(_elm_lang$core$Basics_ops['++'], _user$project$Builder$panelStyling, _user$project$Builder$commandPanelStyling)),
 					_1: {ctor: '[]'}
 				}
 			}
@@ -13671,17 +13730,21 @@ var _user$project$Builder$view = function (model) {
 			_0: _elm_lang$html$Html_Attributes$id('viewer'),
 			_1: {
 				ctor: '::',
-				_0: _user$project$Builder$viewerStyle,
+				_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$viewerStyling),
 				_1: {ctor: '[]'}
 			}
 		},
 		{
 			ctor: '::',
-			_0: _user$project$Builder$commandPanel(model),
+			_0: _user$project$Builder$siteHeader,
 			_1: {
 				ctor: '::',
-				_0: _user$project$Builder$buildingStatusPanel(model),
-				_1: {ctor: '[]'}
+				_0: _user$project$Builder$commandPanel(model),
+				_1: {
+					ctor: '::',
+					_0: _user$project$Builder$buildingStatusPanel(model),
+					_1: {ctor: '[]'}
+				}
 			}
 		});
 };

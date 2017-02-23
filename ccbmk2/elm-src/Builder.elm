@@ -109,40 +109,63 @@ parametersJson parameters =
 
 -- View
 
+type alias Styling = List (String, String)
+
 
 view : Model -> Html Msg
 view model =
-    div [ id "viewer", viewerStyle ]
-        [ commandPanel model
+    div [ id "viewer", style viewerStyling ]
+        [ siteHeader
+        , commandPanel model
         , buildingStatusPanel model
         ]
 
 
-viewerStyle : Html.Attribute msg
-viewerStyle =
-    style
-        [ ( "position", "fixed" )
-        , ( "bottom", "0px" )
-        , ( "top", "0px" )
-        , ( "left", "0px" )
-        , ( "right", "0px" )
-        ]
+viewerStyling : Styling
+viewerStyling =
+    [ ( "position", "fixed" )
+    , ( "bottom", "0px" )
+    , ( "top", "0px" )
+    , ( "left", "0px" )
+    , ( "right", "0px" )
+    ]
+
+
+siteHeader : Html msg
+siteHeader =
+    div [ id "app-header", style <| headerStyling ++ panelStyling ] 
+        [ header [] [ h1 [] [ text "CCBuilder Mk.2: Get wrect son!" ] ] ]
+
+
+headerStyling : Styling
+headerStyling =
+    [ ( "position", "absolute" )
+    , ( "line-height", "50px" )
+    , ( "top", "0%" )
+    , ( "left", "0%" )
+    , ( "width", "100%" )
+    ]
+
+panelStyling : Styling
+panelStyling =
+    [ ( "position", "absolute" )
+    , ( "z-index", "1" )
+    ]
 
 
 commandPanel : Model -> Html Msg
 commandPanel model =
-    div [ class "overlay-panel", id "command-panel", commandPanelStyle ]
+    div [ class "overlay-panel", id "command-panel", style <| panelStyling ++ commandPanelStyling ]
         [ h2 [] [ text "Parameters" ]
         , parameterInputForm model
         ]
 
 
-commandPanelStyle : Html.Attribute msg
-commandPanelStyle =
-    style
-        [ ( "top", "10px" )
-        , ( "left", "10px" )
-        ]
+commandPanelStyling : Styling
+commandPanelStyling =
+    [ ( "top", "6%" )
+    , ( "left", "2%" )
+    ]
 
 
 parameterInputForm : Model -> Html Msg
@@ -165,7 +188,7 @@ parameterInput ( parameterLabel, parameter ) =
             , parameterInputId parameterLabel
             , placeholder parameterLabel
             , onInput (EditParameter parameter)
-            , inputStyle
+            , style inputStyling
             ]
             []
         ]
@@ -182,7 +205,7 @@ sequenceInput ( parameterLabel, parameter ) =
             , parameterInputId parameterLabel
             , rows 3
             , cols 30
-            , inputStyle
+            , style inputStyling
             , placeholder parameterLabel
             , onInput (EditParameter parameter)
             ]
@@ -190,8 +213,9 @@ sequenceInput ( parameterLabel, parameter ) =
         ]
 
 
-inputStyle : Html.Attribute msg
-inputStyle = style [ ( "width", "100%" ) ]
+inputStyling : Styling
+inputStyling =
+    [ ( "width", "100%" ) ]
 
 
 parameterInputId : String -> Html.Attribute msg
@@ -227,7 +251,8 @@ buildingStatusPanel : Model -> Html msg
 buildingStatusPanel model =
     let
         commonAttr =
-            [ class "overlay-panel", id "building-status-panel", buildingStatusStyle ]
+            [ class "overlay-panel", id "building-status-panel"
+            , style <| buildingStatusStyling ++ panelStyling ]
     in
         if model.building then
             div commonAttr
@@ -238,11 +263,10 @@ buildingStatusPanel model =
             div (hidden True :: commonAttr) []
 
 
-buildingStatusStyle : Html.Attribute msg
-buildingStatusStyle =
-    style
-        [ ( "top", "50%" )
-        , ( "left", "50%" )
-        , ( "width", "80px" )
-        , ( "height", "80px" )
-        ]
+buildingStatusStyling : Styling
+buildingStatusStyling =
+    [ ( "top", "50%" )
+    , ( "left", "50%" )
+    , ( "width", "80px" )
+    , ( "height", "80px" )
+    ]
