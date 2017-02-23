@@ -11,4 +11,9 @@
 
 ## TODO
 
-* Convert `Dict.update` functions to be like the radius one
+* Add examples
+* Add information overlay
+    * Contains scoring information
+    * Has tab with history of models built
+* Add stats logging with MongoDB
+* Independent chains and antiparallels
