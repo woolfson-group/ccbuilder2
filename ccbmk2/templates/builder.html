@@ -19,10 +19,10 @@
     app.ports.initialiseViewer.subscribe(
         function () {
             var options = {
-            width: 600,
-            height: 600,
-            antialias: true,
-            quality : 'medium'
+                width: 600,
+                height: 600,
+                antialias: true,
+                quality : 'medium'
             };
             // insert the viewer under the Dom element with id 'gl'.
             viewer = pv.Viewer(document.getElementById('viewer'), options);
