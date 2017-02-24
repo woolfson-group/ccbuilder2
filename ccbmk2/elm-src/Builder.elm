@@ -6,7 +6,7 @@ import Html.Events exposing (..)
 import Http
 import Json.Decode
 import Json.Encode
-import ParameterValidation exposing (allParametersValid, editParameterValue)
+import ParameterValidation exposing (allParametersValid, editParameterValue, currentParameterValues)
 import Types
     exposing
         ( ParameterRecord
@@ -141,7 +141,7 @@ viewerStyling =
 siteHeader : Html msg
 siteHeader =
     div [ id "app-header", style <| headerStyling ++ panelStyling ]
-        [ header [] [ h1 [] [ text "CCBuilder Mk.2: Get wrect son!" ] ] ]
+        [ header [] [ h1 [] [ text "CCBuilder Mk.2" ] ] ]
 
 
 headerStyling : Styling
@@ -182,23 +182,29 @@ commandPanelStyling =
 
 parameterInputForm : Model -> Html Msg
 parameterInputForm model =
-    List.map parameterInput allParameters
+    let
+        (_, _, _, _, cSeq) = currentParameterValues model.parameters
+    in
+    List.map parameterInput ( allParameters model.parameters )
         |> flip (List.append)
-            ([ sequenceInput ( "Sequence", Sequence ), parameterSubmit model.parameters ])
+            ([ sequenceInput ( "Sequence", Sequence, cSeq ), parameterSubmit model.parameters ])
         |> Html.div []
 
 
-allParameters : List ( String, Parameter )
-allParameters =
-    [ ( "Oligomer State", OligomerState )
-    , ( "Radius", Radius )
-    , ( "Pitch", Pitch )
-    , ( "Interface Angle", PhiCA )
-    ]
+allParameters : ParameterRecord -> List ( String, Parameter, String )
+allParameters parameters =
+    let
+        ( cOS, cRad, cPit, cPhi, _ ) = currentParameterValues parameters
+    in
+        [ ( "Oligomer State", OligomerState, cOS )
+        , ( "Radius", Radius, cRad )
+        , ( "Pitch", Pitch, cPit )
+        , ( "Interface Angle", PhiCA, cPhi )
+        ]
 
 
-parameterInput : ( String, Parameter ) -> Html Msg
-parameterInput ( parameterLabel, parameter ) =
+parameterInput : ( String, Parameter, String ) -> Html Msg
+parameterInput ( parameterLabel, parameter, currentParameter ) =
     div [ class "parameter-input" ]
         [ text parameterLabel
         , br [] []
@@ -210,13 +216,14 @@ parameterInput ( parameterLabel, parameter ) =
             , placeholder parameterLabel
             , onInput (EditParameter parameter)
             , style inputStyling
+            , value currentParameter
             ]
             []
         ]
 
 
-sequenceInput : ( String, Parameter ) -> Html Msg
-sequenceInput ( parameterLabel, parameter ) =
+sequenceInput : ( String, Parameter, String ) -> Html Msg
+sequenceInput ( parameterLabel, parameter, currentParameter ) =
     div [ class "parameter-input" ]
         [ text parameterLabel
         , br [] []
@@ -229,6 +236,7 @@ sequenceInput ( parameterLabel, parameter ) =
             , style inputStyling
             , placeholder parameterLabel
             , onInput (EditParameter parameter)
+            , value currentParameter
             ]
             []
         ]
@@ -292,7 +300,7 @@ examplesPanel =
 
 examplesPanelStyling : Styling
 examplesPanelStyling =
-    [ ( "top", "50%" )
+    [ ( "bottom", "2%" )
     , ( "left", "2%" )
     ]
 

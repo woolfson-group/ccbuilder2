@@ -1,4 +1,4 @@
-module ParameterValidation exposing (allParametersValid, editParameterValue)
+module ParameterValidation exposing (allParametersValid, editParameterValue, currentParameterValues)
 
 import String
 import Types
@@ -6,6 +6,26 @@ import Types
         ( ParameterRecord
         , Parameter(..)
         )
+
+
+currentParameterValues : ParameterRecord ->  (String, String, String, String, String)
+currentParameterValues { oligomerState, radius, pitch, phiCA, sequence } =
+    let
+        seq = Maybe.withDefault "" sequence
+    in
+        ( maybeValueToString oligomerState
+        , maybeValueToString radius
+        , maybeValueToString pitch
+        , maybeValueToString phiCA
+        , seq
+        )
+
+
+maybeValueToString : Maybe number -> String
+maybeValueToString mVal =
+    case mVal of
+        Just val -> toString val
+        Nothing -> ""
 
 
 allParametersValid : ParameterRecord -> Bool

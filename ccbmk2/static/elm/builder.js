@@ -13193,6 +13193,26 @@ var _user$project$ParameterValidation$allParametersValid = function (_p2) {
 			}
 		});
 };
+var _user$project$ParameterValidation$maybeValueToString = function (mVal) {
+	var _p4 = mVal;
+	if (_p4.ctor === 'Just') {
+		return _elm_lang$core$Basics$toString(_p4._0);
+	} else {
+		return '';
+	}
+};
+var _user$project$ParameterValidation$currentParameterValues = function (_p5) {
+	var _p6 = _p5;
+	var seq = A2(_elm_lang$core$Maybe$withDefault, '', _p6.sequence);
+	return {
+		ctor: '_Tuple5',
+		_0: _user$project$ParameterValidation$maybeValueToString(_p6.oligomerState),
+		_1: _user$project$ParameterValidation$maybeValueToString(_p6.radius),
+		_2: _user$project$ParameterValidation$maybeValueToString(_p6.pitch),
+		_3: _user$project$ParameterValidation$maybeValueToString(_p6.phiCA),
+		_4: seq
+	};
+};
 
 var _user$project$Builder$buildingStatusStyling = {
 	ctor: '::',
@@ -13239,7 +13259,7 @@ var _user$project$Builder$exampleButtonStyling = {
 };
 var _user$project$Builder$examplesPanelStyling = {
 	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'top', _1: '50%'},
+	_0: {ctor: '_Tuple2', _0: 'bottom', _1: '2%'},
 	_1: {
 		ctor: '::',
 		_0: {ctor: '_Tuple2', _0: 'left', _1: '2%'},
@@ -13264,22 +13284,29 @@ var _user$project$Builder$inputStyling = {
 	_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
 	_1: {ctor: '[]'}
 };
-var _user$project$Builder$allParameters = {
-	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'Oligomer State', _1: _user$project$Types$OligomerState},
-	_1: {
+var _user$project$Builder$allParameters = function (parameters) {
+	var _p0 = _user$project$ParameterValidation$currentParameterValues(parameters);
+	var cOS = _p0._0;
+	var cRad = _p0._1;
+	var cPit = _p0._2;
+	var cPhi = _p0._3;
+	return {
 		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'Radius', _1: _user$project$Types$Radius},
+		_0: {ctor: '_Tuple3', _0: 'Oligomer State', _1: _user$project$Types$OligomerState, _2: cOS},
 		_1: {
 			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'Pitch', _1: _user$project$Types$Pitch},
+			_0: {ctor: '_Tuple3', _0: 'Radius', _1: _user$project$Types$Radius, _2: cRad},
 			_1: {
 				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 'Interface Angle', _1: _user$project$Types$PhiCA},
-				_1: {ctor: '[]'}
+				_0: {ctor: '_Tuple3', _0: 'Pitch', _1: _user$project$Types$Pitch, _2: cPit},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple3', _0: 'Interface Angle', _1: _user$project$Types$PhiCA, _2: cPhi},
+					_1: {ctor: '[]'}
+				}
 			}
 		}
-	}
+	};
 };
 var _user$project$Builder$commandPanelStyling = {
 	ctor: '::',
@@ -13394,7 +13421,7 @@ var _user$project$Builder$siteHeader = A2(
 					{ctor: '[]'},
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html$text('CCBuilder Mk.2: Get wrect son!'),
+						_0: _elm_lang$html$Html$text('CCBuilder Mk.2'),
 						_1: {ctor: '[]'}
 					}),
 				_1: {ctor: '[]'}
@@ -13626,15 +13653,15 @@ var _user$project$Builder$sendBuildCmd = function (parameters) {
 };
 var _user$project$Builder$update = F2(
 	function (msg, model) {
-		var _p0 = msg;
-		switch (_p0.ctor) {
+		var _p1 = msg;
+		switch (_p1.ctor) {
 			case 'EditParameter':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parameters: A3(_user$project$ParameterValidation$editParameterValue, model.parameters, _p0._0, _p0._1)
+							parameters: A3(_user$project$ParameterValidation$editParameterValue, model.parameters, _p1._0, _p1._1)
 						}),
 					{ctor: '[]'});
 			case 'Build':
@@ -13646,19 +13673,19 @@ var _user$project$Builder$update = F2(
 					_1: _user$project$Builder$sendBuildCmd(model.parameters)
 				};
 			case 'ProcessModel':
-				if (_p0._0.ctor === 'Ok') {
-					var _p1 = _p0._0._0;
+				if (_p1._0.ctor === 'Ok') {
+					var _p2 = _p1._0._0;
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								pdbFile: _elm_lang$core$Maybe$Just(_p1),
+								pdbFile: _elm_lang$core$Maybe$Just(_p2),
 								building: false
 							}),
 						{
 							ctor: '::',
-							_0: _user$project$Builder$showStructure(_p1),
+							_0: _user$project$Builder$showStructure(_p2),
 							_1: {ctor: '[]'}
 						});
 				} else {
@@ -13674,7 +13701,7 @@ var _user$project$Builder$update = F2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{parameters: _p0._0}),
+						{parameters: _p1._0}),
 					{ctor: '[]'});
 		}
 	});
@@ -13706,9 +13733,9 @@ var _user$project$Builder$EditParameter = F2(
 	function (a, b) {
 		return {ctor: 'EditParameter', _0: a, _1: b};
 	});
-var _user$project$Builder$parameterInput = function (_p2) {
-	var _p3 = _p2;
-	var _p4 = _p3._0;
+var _user$project$Builder$parameterInput = function (_p3) {
+	var _p4 = _p3;
+	var _p5 = _p4._0;
 	return A2(
 		_elm_lang$html$Html$div,
 		{
@@ -13718,7 +13745,7 @@ var _user$project$Builder$parameterInput = function (_p2) {
 		},
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html$text(_p4),
+			_0: _elm_lang$html$Html$text(_p5),
 			_1: {
 				ctor: '::',
 				_0: A2(
@@ -13734,85 +13761,26 @@ var _user$project$Builder$parameterInput = function (_p2) {
 							_0: _elm_lang$html$Html_Attributes$type_('text'),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$name(_p4),
+								_0: _elm_lang$html$Html_Attributes$name(_p5),
 								_1: {
 									ctor: '::',
 									_0: _elm_lang$html$Html_Attributes$class('parameter-input-box'),
 									_1: {
 										ctor: '::',
-										_0: _user$project$Builder$parameterInputId(_p4),
+										_0: _user$project$Builder$parameterInputId(_p5),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$placeholder(_p4),
+											_0: _elm_lang$html$Html_Attributes$placeholder(_p5),
 											_1: {
 												ctor: '::',
 												_0: _elm_lang$html$Html_Events$onInput(
-													_user$project$Builder$EditParameter(_p3._1)),
+													_user$project$Builder$EditParameter(_p4._1)),
 												_1: {
 													ctor: '::',
 													_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$inputStyling),
-													_1: {ctor: '[]'}
-												}
-											}
-										}
-									}
-								}
-							}
-						},
-						{ctor: '[]'}),
-					_1: {ctor: '[]'}
-				}
-			}
-		});
-};
-var _user$project$Builder$sequenceInput = function (_p5) {
-	var _p6 = _p5;
-	var _p7 = _p6._0;
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('parameter-input'),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(_p7),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$br,
-					{ctor: '[]'},
-					{ctor: '[]'}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$textarea,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$name(_p7),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('parameter-input-box'),
-								_1: {
-									ctor: '::',
-									_0: _user$project$Builder$parameterInputId(_p7),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$rows(3),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$cols(30),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$inputStyling),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$placeholder(_p7),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html_Events$onInput(
-															_user$project$Builder$EditParameter(_p6._1)),
+														_0: _elm_lang$html$Html_Attributes$value(_p4._2),
 														_1: {ctor: '[]'}
 													}
 												}
@@ -13828,7 +13796,76 @@ var _user$project$Builder$sequenceInput = function (_p5) {
 			}
 		});
 };
+var _user$project$Builder$sequenceInput = function (_p6) {
+	var _p7 = _p6;
+	var _p8 = _p7._0;
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('parameter-input'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(_p8),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$br,
+					{ctor: '[]'},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$textarea,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$name(_p8),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('parameter-input-box'),
+								_1: {
+									ctor: '::',
+									_0: _user$project$Builder$parameterInputId(_p8),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$rows(3),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$cols(30),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$inputStyling),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$placeholder(_p8),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onInput(
+															_user$project$Builder$EditParameter(_p7._1)),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$value(_p7._2),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+};
 var _user$project$Builder$parameterInputForm = function (model) {
+	var _p9 = _user$project$ParameterValidation$currentParameterValues(model.parameters);
+	var cSeq = _p9._4;
 	return A2(
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
@@ -13838,14 +13875,17 @@ var _user$project$Builder$parameterInputForm = function (model) {
 			{
 				ctor: '::',
 				_0: _user$project$Builder$sequenceInput(
-					{ctor: '_Tuple2', _0: 'Sequence', _1: _user$project$Types$Sequence}),
+					{ctor: '_Tuple3', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: cSeq}),
 				_1: {
 					ctor: '::',
 					_0: _user$project$Builder$parameterSubmit(model.parameters),
 					_1: {ctor: '[]'}
 				}
 			},
-			A2(_elm_lang$core$List$map, _user$project$Builder$parameterInput, _user$project$Builder$allParameters)));
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$Builder$parameterInput,
+				_user$project$Builder$allParameters(model.parameters))));
 };
 var _user$project$Builder$commandPanel = function (model) {
 	return A2(
@@ -13916,7 +13956,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 		init: _user$project$Builder$init,
 		view: _user$project$Builder$view,
 		update: _user$project$Builder$update,
-		subscriptions: function (_p8) {
+		subscriptions: function (_p10) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();
