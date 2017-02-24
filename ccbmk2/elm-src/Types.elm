@@ -10,6 +10,15 @@ type alias ParameterRecord =
     }
 
 
+type alias InputValues =
+    { oligomerState : String
+    , radius : String
+    , pitch : String
+    , phiCA : String
+    , sequence : String
+    }
+
+
 type Parameter
     = OligomerState
     | Radius

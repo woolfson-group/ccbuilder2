@@ -6,10 +6,12 @@ import Html.Events exposing (..)
 import Http
 import Json.Decode
 import Json.Encode
-import ParameterValidation exposing (allParametersValid, editParameterValue, currentParameterValues)
+import ParameterValidation exposing (allParametersValid, editParameterValue)
+import Task
 import Types
     exposing
         ( ParameterRecord
+        , InputValues
         , Parameter(..)
         )
 
@@ -35,6 +37,7 @@ init =
 
 type alias Model =
     { parameters : ParameterRecord
+    , currentInput : InputValues
     , pdbFile : Maybe String
     , building : Bool
     }
@@ -42,12 +45,17 @@ type alias Model =
 
 emptyModel : Model
 emptyModel =
-    Model emptyParameters Nothing False
+    Model emptyParameters emptyInput Nothing False
 
 
 emptyParameters : ParameterRecord
 emptyParameters =
     ParameterRecord Nothing Nothing Nothing Nothing Nothing
+
+
+emptyInput : InputValues
+emptyInput =
+    InputValues "" "" "" "" ""
 
 
 
@@ -75,7 +83,10 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         EditParameter parameter newValue ->
-            { model | parameters = editParameterValue model.parameters parameter newValue } ! []
+            let
+                ( p, i ) = editParameterValue model.parameters model.currentInput parameter newValue
+            in
+                { model | parameters = p, currentInput = i } ! []
 
         Build ->
             ( { model | building = True }, sendBuildCmd model.parameters )
@@ -87,7 +98,11 @@ update msg model =
             { model | building = False } ! []
 
         Example parameters ->
-            { model | parameters = parameters } ! []
+            let
+                newInputValues = parametersToInput parameters
+            in
+                { model | parameters = parameters, currentInput = newInputValues } !
+                    [ Task.perform identity ( Task.succeed Build ) ]
 
 
 sendBuildCmd : ParameterRecord -> Cmd Msg
@@ -108,6 +123,24 @@ parametersJson parameters =
         , ( "Interface Angle", parameters.phiCA |> Maybe.withDefault 0 |> Json.Encode.float )
         , ( "Sequence", parameters.sequence |> Maybe.withDefault "" |> Json.Encode.string )
         ]
+
+parametersToInput : ParameterRecord -> InputValues
+parametersToInput parameters =
+    let
+        os = maybeNumberToString parameters.oligomerState
+        rad = maybeNumberToString parameters.radius
+        pit = maybeNumberToString parameters.pitch
+        phi = maybeNumberToString parameters.phiCA
+        seq = Maybe.withDefault "" parameters.sequence
+    in
+        InputValues os rad pit phi seq
+
+
+maybeNumberToString : Maybe number -> String
+maybeNumberToString mNum =
+    case mNum of
+        Just num -> toString num
+        Nothing -> ""
 
 
 
@@ -182,25 +215,19 @@ commandPanelStyling =
 
 parameterInputForm : Model -> Html Msg
 parameterInputForm model =
-    let
-        (_, _, _, _, cSeq) = currentParameterValues model.parameters
-    in
-    List.map parameterInput ( allParameters model.parameters )
+    List.map parameterInput ( allParameters model.currentInput )
         |> flip (List.append)
-            ([ sequenceInput ( "Sequence", Sequence, cSeq ), parameterSubmit model.parameters ])
+            ([ sequenceInput ( "Sequence", Sequence, model.currentInput.sequence ), parameterSubmit model.parameters ])
         |> Html.div []
 
 
-allParameters : ParameterRecord -> List ( String, Parameter, String )
-allParameters parameters =
-    let
-        ( cOS, cRad, cPit, cPhi, _ ) = currentParameterValues parameters
-    in
-        [ ( "Oligomer State", OligomerState, cOS )
-        , ( "Radius", Radius, cRad )
-        , ( "Pitch", Pitch, cPit )
-        , ( "Interface Angle", PhiCA, cPhi )
-        ]
+allParameters : InputValues -> List ( String, Parameter, String )
+allParameters currentInput =
+    [ ( "Oligomer State", OligomerState, currentInput.oligomerState )
+    , ( "Radius", Radius, currentInput.radius )
+    , ( "Pitch", Pitch, currentInput.pitch )
+    , ( "Interface Angle", PhiCA, currentInput.phiCA )
+    ]
 
 
 parameterInput : ( String, Parameter, String ) -> Html Msg

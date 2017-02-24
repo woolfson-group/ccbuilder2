@@ -12996,6 +12996,10 @@ var _user$project$Types$ParameterRecord = F5(
 	function (a, b, c, d, e) {
 		return {oligomerState: a, radius: b, pitch: c, phiCA: d, sequence: e};
 	});
+var _user$project$Types$InputValues = F5(
+	function (a, b, c, d, e) {
+		return {oligomerState: a, radius: b, pitch: c, phiCA: d, sequence: e};
+	});
 var _user$project$Types$Sequence = {ctor: 'Sequence'};
 var _user$project$Types$PhiCA = {ctor: 'PhiCA'};
 var _user$project$Types$Pitch = {ctor: 'Pitch'};
@@ -13113,52 +13117,72 @@ var _user$project$ParameterValidation$validateOligomerState = function (os) {
 	return ((_elm_lang$core$Native_Utils.cmp(os, 0) > 0) && _user$project$ParameterValidation$isNotNaN(
 		_elm_lang$core$Basics$toFloat(os))) ? _elm_lang$core$Maybe$Just(os) : _elm_lang$core$Maybe$Nothing;
 };
-var _user$project$ParameterValidation$editParameterValue = F3(
-	function (parameters, parameter, newValue) {
+var _user$project$ParameterValidation$editParameterValue = F4(
+	function (parameters, currentInput, parameter, newValue) {
 		var _p1 = parameter;
 		switch (_p1.ctor) {
 			case 'OligomerState':
+				var newInput = _elm_lang$core$Native_Utils.update(
+					currentInput,
+					{oligomerState: newValue});
 				var postValOS = A2(
 					_elm_lang$core$Maybe$andThen,
 					_user$project$ParameterValidation$validateOligomerState,
 					_elm_lang$core$Result$toMaybe(
 						_elm_lang$core$String$toInt(newValue)));
-				return _elm_lang$core$Native_Utils.update(
+				var newParameters = _elm_lang$core$Native_Utils.update(
 					parameters,
 					{oligomerState: postValOS});
+				return {ctor: '_Tuple2', _0: newParameters, _1: newInput};
 			case 'Radius':
+				var newInput = _elm_lang$core$Native_Utils.update(
+					currentInput,
+					{radius: newValue});
 				var postValRadius = A2(
 					_elm_lang$core$Maybe$andThen,
 					_user$project$ParameterValidation$validateRadius,
 					_elm_lang$core$Result$toMaybe(
 						_elm_lang$core$String$toFloat(newValue)));
-				return _elm_lang$core$Native_Utils.update(
+				var newParameters = _elm_lang$core$Native_Utils.update(
 					parameters,
 					{radius: postValRadius});
+				return {ctor: '_Tuple2', _0: newParameters, _1: newInput};
 			case 'Pitch':
+				var newInput = _elm_lang$core$Native_Utils.update(
+					currentInput,
+					{pitch: newValue});
 				var postValPitch = A2(
 					_elm_lang$core$Maybe$andThen,
 					_user$project$ParameterValidation$validatePitch,
 					_elm_lang$core$Result$toMaybe(
 						_elm_lang$core$String$toFloat(newValue)));
-				return _elm_lang$core$Native_Utils.update(
+				var newParameters = _elm_lang$core$Native_Utils.update(
 					parameters,
 					{pitch: postValPitch});
+				return {ctor: '_Tuple2', _0: newParameters, _1: newInput};
 			case 'PhiCA':
+				var newInput = _elm_lang$core$Native_Utils.update(
+					currentInput,
+					{phiCA: newValue});
 				var postValPhiCA = A2(
 					_elm_lang$core$Maybe$andThen,
 					_user$project$ParameterValidation$validatePhiCA,
 					_elm_lang$core$Result$toMaybe(
 						_elm_lang$core$String$toFloat(newValue)));
-				return _elm_lang$core$Native_Utils.update(
+				var newParameters = _elm_lang$core$Native_Utils.update(
 					parameters,
 					{phiCA: postValPhiCA});
+				return {ctor: '_Tuple2', _0: newParameters, _1: newInput};
 			default:
-				return _elm_lang$core$Native_Utils.update(
+				var newInput = _elm_lang$core$Native_Utils.update(
+					currentInput,
+					{sequence: newValue});
+				var newParameters = _elm_lang$core$Native_Utils.update(
 					parameters,
 					{
 						sequence: _user$project$ParameterValidation$validateSequence(newValue)
 					});
+				return {ctor: '_Tuple2', _0: newParameters, _1: newInput};
 		}
 	});
 var _user$project$ParameterValidation$allParametersValid = function (_p2) {
@@ -13192,26 +13216,6 @@ var _user$project$ParameterValidation$allParametersValid = function (_p2) {
 				}
 			}
 		});
-};
-var _user$project$ParameterValidation$maybeValueToString = function (mVal) {
-	var _p4 = mVal;
-	if (_p4.ctor === 'Just') {
-		return _elm_lang$core$Basics$toString(_p4._0);
-	} else {
-		return '';
-	}
-};
-var _user$project$ParameterValidation$currentParameterValues = function (_p5) {
-	var _p6 = _p5;
-	var seq = A2(_elm_lang$core$Maybe$withDefault, '', _p6.sequence);
-	return {
-		ctor: '_Tuple5',
-		_0: _user$project$ParameterValidation$maybeValueToString(_p6.oligomerState),
-		_1: _user$project$ParameterValidation$maybeValueToString(_p6.radius),
-		_2: _user$project$ParameterValidation$maybeValueToString(_p6.pitch),
-		_3: _user$project$ParameterValidation$maybeValueToString(_p6.phiCA),
-		_4: seq
-	};
 };
 
 var _user$project$Builder$buildingStatusStyling = {
@@ -13284,24 +13288,19 @@ var _user$project$Builder$inputStyling = {
 	_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
 	_1: {ctor: '[]'}
 };
-var _user$project$Builder$allParameters = function (parameters) {
-	var _p0 = _user$project$ParameterValidation$currentParameterValues(parameters);
-	var cOS = _p0._0;
-	var cRad = _p0._1;
-	var cPit = _p0._2;
-	var cPhi = _p0._3;
+var _user$project$Builder$allParameters = function (currentInput) {
 	return {
 		ctor: '::',
-		_0: {ctor: '_Tuple3', _0: 'Oligomer State', _1: _user$project$Types$OligomerState, _2: cOS},
+		_0: {ctor: '_Tuple3', _0: 'Oligomer State', _1: _user$project$Types$OligomerState, _2: currentInput.oligomerState},
 		_1: {
 			ctor: '::',
-			_0: {ctor: '_Tuple3', _0: 'Radius', _1: _user$project$Types$Radius, _2: cRad},
+			_0: {ctor: '_Tuple3', _0: 'Radius', _1: _user$project$Types$Radius, _2: currentInput.radius},
 			_1: {
 				ctor: '::',
-				_0: {ctor: '_Tuple3', _0: 'Pitch', _1: _user$project$Types$Pitch, _2: cPit},
+				_0: {ctor: '_Tuple3', _0: 'Pitch', _1: _user$project$Types$Pitch, _2: currentInput.pitch},
 				_1: {
 					ctor: '::',
-					_0: {ctor: '_Tuple3', _0: 'Interface Angle', _1: _user$project$Types$PhiCA, _2: cPhi},
+					_0: {ctor: '_Tuple3', _0: 'Interface Angle', _1: _user$project$Types$PhiCA, _2: currentInput.phiCA},
 					_1: {ctor: '[]'}
 				}
 			}
@@ -13449,6 +13448,22 @@ var _user$project$Builder$viewerStyling = {
 		}
 	}
 };
+var _user$project$Builder$maybeNumberToString = function (mNum) {
+	var _p0 = mNum;
+	if (_p0.ctor === 'Just') {
+		return _elm_lang$core$Basics$toString(_p0._0);
+	} else {
+		return '';
+	}
+};
+var _user$project$Builder$parametersToInput = function (parameters) {
+	var seq = A2(_elm_lang$core$Maybe$withDefault, '', parameters.sequence);
+	var phi = _user$project$Builder$maybeNumberToString(parameters.phiCA);
+	var pit = _user$project$Builder$maybeNumberToString(parameters.pitch);
+	var rad = _user$project$Builder$maybeNumberToString(parameters.radius);
+	var os = _user$project$Builder$maybeNumberToString(parameters.oligomerState);
+	return A5(_user$project$Types$InputValues, os, rad, pit, phi, seq);
+};
 var _user$project$Builder$parametersJson = function (parameters) {
 	return _elm_lang$core$Json_Encode$object(
 		{
@@ -13498,6 +13513,7 @@ var _user$project$Builder$parametersJson = function (parameters) {
 			}
 		});
 };
+var _user$project$Builder$emptyInput = A5(_user$project$Types$InputValues, '', '', '', '', '');
 var _user$project$Builder$emptyParameters = A5(_user$project$Types$ParameterRecord, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing);
 var _user$project$Builder$initialiseViewer = _elm_lang$core$Native_Platform.outgoingPort(
 	'initialiseViewer',
@@ -13509,11 +13525,11 @@ var _user$project$Builder$showStructure = _elm_lang$core$Native_Platform.outgoin
 	function (v) {
 		return v;
 	});
-var _user$project$Builder$Model = F3(
-	function (a, b, c) {
-		return {parameters: a, pdbFile: b, building: c};
+var _user$project$Builder$Model = F4(
+	function (a, b, c, d) {
+		return {parameters: a, currentInput: b, pdbFile: c, building: d};
 	});
-var _user$project$Builder$emptyModel = A3(_user$project$Builder$Model, _user$project$Builder$emptyParameters, _elm_lang$core$Maybe$Nothing, false);
+var _user$project$Builder$emptyModel = A4(_user$project$Builder$Model, _user$project$Builder$emptyParameters, _user$project$Builder$emptyInput, _elm_lang$core$Maybe$Nothing, false);
 var _user$project$Builder$init = {
 	ctor: '_Tuple2',
 	_0: _user$project$Builder$emptyModel,
@@ -13651,18 +13667,20 @@ var _user$project$Builder$sendBuildCmd = function (parameters) {
 				_user$project$Builder$parametersJson(parameters)),
 			_elm_lang$core$Json_Decode$string));
 };
+var _user$project$Builder$Build = {ctor: 'Build'};
 var _user$project$Builder$update = F2(
 	function (msg, model) {
 		var _p1 = msg;
 		switch (_p1.ctor) {
 			case 'EditParameter':
+				var _p2 = A4(_user$project$ParameterValidation$editParameterValue, model.parameters, model.currentInput, _p1._0, _p1._1);
+				var p = _p2._0;
+				var i = _p2._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{
-							parameters: A3(_user$project$ParameterValidation$editParameterValue, model.parameters, _p1._0, _p1._1)
-						}),
+						{parameters: p, currentInput: i}),
 					{ctor: '[]'});
 			case 'Build':
 				return {
@@ -13674,18 +13692,18 @@ var _user$project$Builder$update = F2(
 				};
 			case 'ProcessModel':
 				if (_p1._0.ctor === 'Ok') {
-					var _p2 = _p1._0._0;
+					var _p3 = _p1._0._0;
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								pdbFile: _elm_lang$core$Maybe$Just(_p2),
+								pdbFile: _elm_lang$core$Maybe$Just(_p3),
 								building: false
 							}),
 						{
 							ctor: '::',
-							_0: _user$project$Builder$showStructure(_p2),
+							_0: _user$project$Builder$showStructure(_p3),
 							_1: {ctor: '[]'}
 						});
 				} else {
@@ -13697,15 +13715,23 @@ var _user$project$Builder$update = F2(
 						{ctor: '[]'});
 				}
 			default:
+				var _p4 = _p1._0;
+				var newInputValues = _user$project$Builder$parametersToInput(_p4);
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{parameters: _p1._0}),
-					{ctor: '[]'});
+						{parameters: _p4, currentInput: newInputValues}),
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$core$Task$perform,
+							_elm_lang$core$Basics$identity,
+							_elm_lang$core$Task$succeed(_user$project$Builder$Build)),
+						_1: {ctor: '[]'}
+					});
 		}
 	});
-var _user$project$Builder$Build = {ctor: 'Build'};
 var _user$project$Builder$parameterSubmit = function (parameters) {
 	return A2(
 		_elm_lang$html$Html$input,
@@ -13733,9 +13759,9 @@ var _user$project$Builder$EditParameter = F2(
 	function (a, b) {
 		return {ctor: 'EditParameter', _0: a, _1: b};
 	});
-var _user$project$Builder$parameterInput = function (_p3) {
-	var _p4 = _p3;
-	var _p5 = _p4._0;
+var _user$project$Builder$parameterInput = function (_p5) {
+	var _p6 = _p5;
+	var _p7 = _p6._0;
 	return A2(
 		_elm_lang$html$Html$div,
 		{
@@ -13745,7 +13771,7 @@ var _user$project$Builder$parameterInput = function (_p3) {
 		},
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html$text(_p5),
+			_0: _elm_lang$html$Html$text(_p7),
 			_1: {
 				ctor: '::',
 				_0: A2(
@@ -13761,26 +13787,26 @@ var _user$project$Builder$parameterInput = function (_p3) {
 							_0: _elm_lang$html$Html_Attributes$type_('text'),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$name(_p5),
+								_0: _elm_lang$html$Html_Attributes$name(_p7),
 								_1: {
 									ctor: '::',
 									_0: _elm_lang$html$Html_Attributes$class('parameter-input-box'),
 									_1: {
 										ctor: '::',
-										_0: _user$project$Builder$parameterInputId(_p5),
+										_0: _user$project$Builder$parameterInputId(_p7),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$placeholder(_p5),
+											_0: _elm_lang$html$Html_Attributes$placeholder(_p7),
 											_1: {
 												ctor: '::',
 												_0: _elm_lang$html$Html_Events$onInput(
-													_user$project$Builder$EditParameter(_p4._1)),
+													_user$project$Builder$EditParameter(_p6._1)),
 												_1: {
 													ctor: '::',
 													_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$inputStyling),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$value(_p4._2),
+														_0: _elm_lang$html$Html_Attributes$value(_p6._2),
 														_1: {ctor: '[]'}
 													}
 												}
@@ -13796,9 +13822,9 @@ var _user$project$Builder$parameterInput = function (_p3) {
 			}
 		});
 };
-var _user$project$Builder$sequenceInput = function (_p6) {
-	var _p7 = _p6;
-	var _p8 = _p7._0;
+var _user$project$Builder$sequenceInput = function (_p8) {
+	var _p9 = _p8;
+	var _p10 = _p9._0;
 	return A2(
 		_elm_lang$html$Html$div,
 		{
@@ -13808,7 +13834,7 @@ var _user$project$Builder$sequenceInput = function (_p6) {
 		},
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html$text(_p8),
+			_0: _elm_lang$html$Html$text(_p10),
 			_1: {
 				ctor: '::',
 				_0: A2(
@@ -13821,13 +13847,13 @@ var _user$project$Builder$sequenceInput = function (_p6) {
 						_elm_lang$html$Html$textarea,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$name(_p8),
+							_0: _elm_lang$html$Html_Attributes$name(_p10),
 							_1: {
 								ctor: '::',
 								_0: _elm_lang$html$Html_Attributes$class('parameter-input-box'),
 								_1: {
 									ctor: '::',
-									_0: _user$project$Builder$parameterInputId(_p8),
+									_0: _user$project$Builder$parameterInputId(_p10),
 									_1: {
 										ctor: '::',
 										_0: _elm_lang$html$Html_Attributes$rows(3),
@@ -13839,14 +13865,14 @@ var _user$project$Builder$sequenceInput = function (_p6) {
 												_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$inputStyling),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$placeholder(_p8),
+													_0: _elm_lang$html$Html_Attributes$placeholder(_p10),
 													_1: {
 														ctor: '::',
 														_0: _elm_lang$html$Html_Events$onInput(
-															_user$project$Builder$EditParameter(_p7._1)),
+															_user$project$Builder$EditParameter(_p9._1)),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$value(_p7._2),
+															_0: _elm_lang$html$Html_Attributes$value(_p9._2),
 															_1: {ctor: '[]'}
 														}
 													}
@@ -13864,8 +13890,6 @@ var _user$project$Builder$sequenceInput = function (_p6) {
 		});
 };
 var _user$project$Builder$parameterInputForm = function (model) {
-	var _p9 = _user$project$ParameterValidation$currentParameterValues(model.parameters);
-	var cSeq = _p9._4;
 	return A2(
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
@@ -13875,7 +13899,7 @@ var _user$project$Builder$parameterInputForm = function (model) {
 			{
 				ctor: '::',
 				_0: _user$project$Builder$sequenceInput(
-					{ctor: '_Tuple3', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: cSeq}),
+					{ctor: '_Tuple3', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: model.currentInput.sequence}),
 				_1: {
 					ctor: '::',
 					_0: _user$project$Builder$parameterSubmit(model.parameters),
@@ -13885,7 +13909,7 @@ var _user$project$Builder$parameterInputForm = function (model) {
 			A2(
 				_elm_lang$core$List$map,
 				_user$project$Builder$parameterInput,
-				_user$project$Builder$allParameters(model.parameters))));
+				_user$project$Builder$allParameters(model.currentInput))));
 };
 var _user$project$Builder$commandPanel = function (model) {
 	return A2(
@@ -13956,7 +13980,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 		init: _user$project$Builder$init,
 		view: _user$project$Builder$view,
 		update: _user$project$Builder$update,
-		subscriptions: function (_p10) {
+		subscriptions: function (_p11) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();

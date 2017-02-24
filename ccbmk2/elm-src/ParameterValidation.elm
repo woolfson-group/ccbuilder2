@@ -1,31 +1,12 @@
-module ParameterValidation exposing (allParametersValid, editParameterValue, currentParameterValues)
+module ParameterValidation exposing (allParametersValid, editParameterValue)
 
 import String
 import Types
     exposing
         ( ParameterRecord
+        , InputValues
         , Parameter(..)
         )
-
-
-currentParameterValues : ParameterRecord ->  (String, String, String, String, String)
-currentParameterValues { oligomerState, radius, pitch, phiCA, sequence } =
-    let
-        seq = Maybe.withDefault "" sequence
-    in
-        ( maybeValueToString oligomerState
-        , maybeValueToString radius
-        , maybeValueToString pitch
-        , maybeValueToString phiCA
-        , seq
-        )
-
-
-maybeValueToString : Maybe number -> String
-maybeValueToString mVal =
-    case mVal of
-        Just val -> toString val
-        Nothing -> ""
 
 
 allParametersValid : ParameterRecord -> Bool
@@ -46,11 +27,11 @@ allParametersValid { oligomerState, radius, pitch, phiCA, sequence } =
         vSeq =
             sequence /= Nothing
     in
-    List.member False [ vOS, vRadius, vPitch, vPhiCA, vSeq ]
+        List.member False [ vOS, vRadius, vPitch, vPhiCA, vSeq ]
 
 
-editParameterValue : ParameterRecord -> Parameter -> String -> ParameterRecord
-editParameterValue parameters parameter newValue =
+editParameterValue : ParameterRecord -> InputValues -> Parameter -> String -> ( ParameterRecord, InputValues )
+editParameterValue parameters currentInput parameter newValue =
     case parameter of
         OligomerState ->
             let
@@ -58,8 +39,14 @@ editParameterValue parameters parameter newValue =
                     String.toInt newValue
                         |> Result.toMaybe
                         |> Maybe.andThen validateOligomerState
+
+                newParameters =
+                    { parameters | oligomerState = postValOS }
+
+                newInput =
+                    { currentInput | oligomerState = newValue }
             in
-                { parameters | oligomerState = postValOS }
+                ( newParameters, newInput )
 
         Radius ->
             let
@@ -67,8 +54,14 @@ editParameterValue parameters parameter newValue =
                     String.toFloat newValue
                         |> Result.toMaybe
                         |> Maybe.andThen validateRadius
+
+                newParameters =
+                    { parameters | radius = postValRadius }
+
+                newInput =
+                    { currentInput | radius = newValue }
             in
-                { parameters | radius = postValRadius }
+                ( newParameters, newInput )
 
         Pitch ->
             let
@@ -76,8 +69,14 @@ editParameterValue parameters parameter newValue =
                     String.toFloat newValue
                         |> Result.toMaybe
                         |> Maybe.andThen validatePitch
+
+                newParameters =
+                    { parameters | pitch = postValPitch }
+
+                newInput =
+                    { currentInput | pitch = newValue }
             in
-                { parameters | pitch = postValPitch }
+                ( newParameters, newInput )
 
         PhiCA ->
             let
@@ -85,11 +84,24 @@ editParameterValue parameters parameter newValue =
                     String.toFloat newValue
                         |> Result.toMaybe
                         |> Maybe.andThen validatePhiCA
+
+                newParameters =
+                    { parameters | phiCA = postValPhiCA }
+
+                newInput =
+                    { currentInput | phiCA = newValue }
             in
-                { parameters | phiCA = postValPhiCA }
+                ( newParameters, newInput )
 
         Sequence ->
-            { parameters | sequence = validateSequence newValue }
+            let
+                newParameters =
+                    { parameters | sequence = validateSequence newValue }
+
+                newInput =
+                    { currentInput | sequence = newValue }
+            in
+                ( newParameters, newInput )
 
 
 validateOligomerState : Int -> Maybe Int
