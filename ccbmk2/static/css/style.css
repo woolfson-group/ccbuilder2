@@ -1,4 +1,5 @@
 body {
+    color: #3F403F;
     margin: 0;
     padding: 0;
 }
@@ -24,7 +25,6 @@ h2 {
 
 .overlay-panel {
     font-family: 'Roboto', sans-serif;
-    color: white;
     background: #CED0CE;
     padding: 5px;
     border-radius: 5px;
