@@ -68,6 +68,7 @@ type Msg
     = EditParameter Parameter String
     | Build
     | ProcessModel (Result Http.Error String)
+    | Example ParameterRecord
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -84,6 +85,9 @@ update msg model =
 
         ProcessModel (Err _) ->
             { model | building = False } ! []
+
+        Example parameters ->
+            { model | parameters = parameters } ! []
 
 
 sendBuildCmd : ParameterRecord -> Cmd Msg
@@ -109,7 +113,9 @@ parametersJson parameters =
 
 -- View
 
-type alias Styling = List (String, String)
+
+type alias Styling =
+    List ( String, String )
 
 
 view : Model -> Html Msg
@@ -118,6 +124,7 @@ view model =
         [ siteHeader
         , commandPanel model
         , buildingStatusPanel model
+        , examplesPanel
         ]
 
 
@@ -133,7 +140,7 @@ viewerStyling =
 
 siteHeader : Html msg
 siteHeader =
-    div [ id "app-header", style <| headerStyling ++ panelStyling ] 
+    div [ id "app-header", style <| headerStyling ++ panelStyling ]
         [ header [] [ h1 [] [ text "CCBuilder Mk.2: Get wrect son!" ] ] ]
 
 
@@ -146,11 +153,16 @@ headerStyling =
     , ( "width", "100%" )
     ]
 
+
 panelStyling : Styling
 panelStyling =
     [ ( "position", "absolute" )
     , ( "z-index", "1" )
     ]
+
+
+
+-- Command Panel
 
 
 commandPanel : Model -> Html Msg
@@ -163,7 +175,7 @@ commandPanel model =
 
 commandPanelStyling : Styling
 commandPanelStyling =
-    [ ( "top", "6%" )
+    [ ( "top", "7%" )
     , ( "left", "2%" )
     ]
 
@@ -174,6 +186,15 @@ parameterInputForm model =
         |> flip (List.append)
             ([ sequenceInput ( "Sequence", Sequence ), parameterSubmit model.parameters ])
         |> Html.div []
+
+
+allParameters : List ( String, Parameter )
+allParameters =
+    [ ( "Oligomer State", OligomerState )
+    , ( "Radius", Radius )
+    , ( "Pitch", Pitch )
+    , ( "Interface Angle", PhiCA )
+    ]
 
 
 parameterInput : ( String, Parameter ) -> Html Msg
@@ -238,21 +259,92 @@ parameterSubmit parameters =
         []
 
 
-allParameters : List ( String, Parameter )
-allParameters =
-    [ ( "Oligomer State", OligomerState )
-    , ( "Radius", Radius )
-    , ( "Pitch", Pitch )
-    , ( "Interface Angle", PhiCA )
+
+-- Examples Panel
+
+
+examplesPanel : Html Msg
+examplesPanel =
+    div [ class "overlay-panel", id "examples-panel", style <| panelStyling ++ examplesPanelStyling ]
+        [ h2 [] [ text "Examples" ]
+        , button
+            [ class "example-button"
+            , style exampleButtonStyling
+            , onClick <| Example basisSetDimer
+            ]
+            [ text "Dimer" ]
+        , br [] []
+        , button
+            [ class "example-button"
+            , style exampleButtonStyling
+            , onClick <| Example basisSetTrimer
+            ]
+            [ text "Trimer" ]
+        , br [] []
+        , button
+            [ class "example-button"
+            , style exampleButtonStyling
+            , onClick <| Example basisSetTetramer
+            ]
+            [ text "Tetramer" ]
+        ]
+
+
+examplesPanelStyling : Styling
+examplesPanelStyling =
+    [ ( "top", "50%" )
+    , ( "left", "2%" )
     ]
+
+
+exampleButtonStyling : Styling
+exampleButtonStyling =
+    [ ( "width", "80%" )
+    ]
+
+
+basisSetDimer : ParameterRecord
+basisSetDimer =
+    { oligomerState = Just 2
+    , radius = Just 5.1
+    , pitch = Just 226
+    , phiCA = Just 26.4
+    , sequence = Just "EIAALKQEIAALKKENAALKWEIAALKQ"
+    }
+
+
+basisSetTrimer : ParameterRecord
+basisSetTrimer =
+    { oligomerState = Just 3
+    , radius = Just 6.3
+    , pitch = Just 194
+    , phiCA = Just 20.0
+    , sequence = Just "EIAAIKQEIAAIKKEIAAIKWEIAAIKQ"
+    }
+
+
+basisSetTetramer : ParameterRecord
+basisSetTetramer =
+    { oligomerState = Just 4
+    , radius = Just 6.8
+    , pitch = Just 213
+    , phiCA = Just 22.1
+    , sequence = Just "ELAAIKQELAAIKKELAAIKWELAAIKQ"
+    }
+
+
+
+-- Building Status
 
 
 buildingStatusPanel : Model -> Html msg
 buildingStatusPanel model =
     let
         commonAttr =
-            [ class "overlay-panel", id "building-status-panel"
-            , style <| buildingStatusStyling ++ panelStyling ]
+            [ class "overlay-panel"
+            , id "building-status-panel"
+            , style <| buildingStatusStyling ++ panelStyling
+            ]
     in
         if model.building then
             div commonAttr

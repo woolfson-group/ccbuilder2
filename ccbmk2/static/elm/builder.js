@@ -13211,21 +13211,39 @@ var _user$project$Builder$buildingStatusStyling = {
 		}
 	}
 };
-var _user$project$Builder$allParameters = {
+var _user$project$Builder$basisSetTetramer = {
+	oligomerState: _elm_lang$core$Maybe$Just(4),
+	radius: _elm_lang$core$Maybe$Just(6.8),
+	pitch: _elm_lang$core$Maybe$Just(213),
+	phiCA: _elm_lang$core$Maybe$Just(22.1),
+	sequence: _elm_lang$core$Maybe$Just('ELAAIKQELAAIKKELAAIKWELAAIKQ')
+};
+var _user$project$Builder$basisSetTrimer = {
+	oligomerState: _elm_lang$core$Maybe$Just(3),
+	radius: _elm_lang$core$Maybe$Just(6.3),
+	pitch: _elm_lang$core$Maybe$Just(194),
+	phiCA: _elm_lang$core$Maybe$Just(20.0),
+	sequence: _elm_lang$core$Maybe$Just('EIAAIKQEIAAIKKEIAAIKWEIAAIKQ')
+};
+var _user$project$Builder$basisSetDimer = {
+	oligomerState: _elm_lang$core$Maybe$Just(2),
+	radius: _elm_lang$core$Maybe$Just(5.1),
+	pitch: _elm_lang$core$Maybe$Just(226),
+	phiCA: _elm_lang$core$Maybe$Just(26.4),
+	sequence: _elm_lang$core$Maybe$Just('EIAALKQEIAALKKENAALKWEIAALKQ')
+};
+var _user$project$Builder$exampleButtonStyling = {
 	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'Oligomer State', _1: _user$project$Types$OligomerState},
+	_0: {ctor: '_Tuple2', _0: 'width', _1: '80%'},
+	_1: {ctor: '[]'}
+};
+var _user$project$Builder$examplesPanelStyling = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'top', _1: '50%'},
 	_1: {
 		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'Radius', _1: _user$project$Types$Radius},
-		_1: {
-			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'Pitch', _1: _user$project$Types$Pitch},
-			_1: {
-				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 'Interface Angle', _1: _user$project$Types$PhiCA},
-				_1: {ctor: '[]'}
-			}
-		}
+		_0: {ctor: '_Tuple2', _0: 'left', _1: '2%'},
+		_1: {ctor: '[]'}
 	}
 };
 var _user$project$Builder$parameterInputId = function (parameterLabel) {
@@ -13246,9 +13264,26 @@ var _user$project$Builder$inputStyling = {
 	_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
 	_1: {ctor: '[]'}
 };
+var _user$project$Builder$allParameters = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'Oligomer State', _1: _user$project$Types$OligomerState},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'Radius', _1: _user$project$Types$Radius},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'Pitch', _1: _user$project$Types$Pitch},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'Interface Angle', _1: _user$project$Types$PhiCA},
+				_1: {ctor: '[]'}
+			}
+		}
+	}
+};
 var _user$project$Builder$commandPanelStyling = {
 	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'top', _1: '6%'},
+	_0: {ctor: '_Tuple2', _0: 'top', _1: '7%'},
 	_1: {
 		ctor: '::',
 		_0: {ctor: '_Tuple2', _0: 'left', _1: '2%'},
@@ -13458,6 +13493,123 @@ var _user$project$Builder$init = {
 	_1: _user$project$Builder$initialiseViewer(
 		{ctor: '_Tuple0'})
 };
+var _user$project$Builder$Example = function (a) {
+	return {ctor: 'Example', _0: a};
+};
+var _user$project$Builder$examplesPanel = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('overlay-panel'),
+		_1: {
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$id('examples-panel'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$style(
+					A2(_elm_lang$core$Basics_ops['++'], _user$project$Builder$panelStyling, _user$project$Builder$examplesPanelStyling)),
+				_1: {ctor: '[]'}
+			}
+		}
+	},
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$h2,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text('Examples'),
+				_1: {ctor: '[]'}
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$button,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('example-button'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$exampleButtonStyling),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(
+								_user$project$Builder$Example(_user$project$Builder$basisSetDimer)),
+							_1: {ctor: '[]'}
+						}
+					}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Dimer'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$br,
+					{ctor: '[]'},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$button,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('example-button'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$exampleButtonStyling),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(
+										_user$project$Builder$Example(_user$project$Builder$basisSetTrimer)),
+									_1: {ctor: '[]'}
+								}
+							}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Trimer'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$br,
+							{ctor: '[]'},
+							{ctor: '[]'}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$button,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('example-button'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$exampleButtonStyling),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(
+												_user$project$Builder$Example(_user$project$Builder$basisSetTetramer)),
+											_1: {ctor: '[]'}
+										}
+									}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Tetramer'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		}
+	});
 var _user$project$Builder$ProcessModel = function (a) {
 	return {ctor: 'ProcessModel', _0: a};
 };
@@ -13493,7 +13645,7 @@ var _user$project$Builder$update = F2(
 						{building: true}),
 					_1: _user$project$Builder$sendBuildCmd(model.parameters)
 				};
-			default:
+			case 'ProcessModel':
 				if (_p0._0.ctor === 'Ok') {
 					var _p1 = _p0._0._0;
 					return A2(
@@ -13517,6 +13669,13 @@ var _user$project$Builder$update = F2(
 							{building: false}),
 						{ctor: '[]'});
 				}
+			default:
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{parameters: _p0._0}),
+					{ctor: '[]'});
 		}
 	});
 var _user$project$Builder$Build = {ctor: 'Build'};
@@ -13743,7 +13902,11 @@ var _user$project$Builder$view = function (model) {
 				_1: {
 					ctor: '::',
 					_0: _user$project$Builder$buildingStatusPanel(model),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: _user$project$Builder$examplesPanel,
+						_1: {ctor: '[]'}
+					}
 				}
 			}
 		});
@@ -13761,7 +13924,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Builder.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error String"],"Build":[],"EditParameter":["Types.Parameter","String"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"}},"message":"Builder.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Builder.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error String"],"Example":["Types.ParameterRecord"],"Build":[],"EditParameter":["Types.Parameter","String"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParameterRecord":{"args":[],"type":"{ oligomerState : Maybe.Maybe Int , radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String }"}},"message":"Builder.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

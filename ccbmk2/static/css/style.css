@@ -41,6 +41,10 @@ h2 {
     padding-right: 12px;
 }
 
+#examples-panel {
+    text-align: center;
+}
+
 #building-status-panel {
     text-align: center;
     margin-top: -40px;
