@@ -42,12 +42,13 @@ type alias Model =
     , pdbFile : Maybe String
     , score : Maybe Float
     , building : Bool
+    , modelHistory : List ParameterRecord
     }
 
 
 emptyModel : Model
 emptyModel =
-    Model emptyParameters emptyInput Nothing Nothing False
+    Model emptyParameters emptyInput Nothing Nothing False []
 
 
 emptyParameters : ParameterRecord
@@ -78,8 +79,8 @@ type Msg
     = EditParameter Parameter String
     | SetRegister String
     | Build
-    | ProcessModel (Result Http.Error ( String, Float) )
-    | Example ParameterRecord
+    | ProcessModel (Result Http.Error ( String, Float ))
+    | SetParametersAndBuild ParameterRecord
     | KeyMsg Keyboard.KeyCode
 
 
@@ -88,45 +89,72 @@ update msg model =
     case msg of
         EditParameter parameter newValue ->
             let
-                ( p, i ) = editParameterValue model.parameters model.currentInput parameter newValue
+                ( p, i ) =
+                    editParameterValue model.parameters model.currentInput parameter newValue
             in
                 { model | parameters = p, currentInput = i } ! []
-        
+
         SetRegister register ->
             let
-                oldParameters = model.parameters
-                newParameters = { oldParameters | register = register }
-                oldInput = model.currentInput
-                newInput = { oldInput | register = register }
+                oldParameters =
+                    model.parameters
+
+                newParameters =
+                    { oldParameters | register = register }
+
+                oldInput =
+                    model.currentInput
+
+                newInput =
+                    { oldInput | register = register }
             in
                 { model | parameters = newParameters, currentInput = newInput } ! []
 
         Build ->
             ( { model | building = True }, sendBuildCmd model.parameters )
 
-        ProcessModel (Ok (pdbFile, score)) ->
-            { model | pdbFile = Just pdbFile, score = Just score, building = False } !
-                [ showStructure pdbFile ]
+        ProcessModel (Ok ( pdbFile, score )) ->
+            let
+                oldHistory =
+                    if List.length model.modelHistory == 10 then
+                        List.take 9 model.modelHistory
+                    else
+                        model.modelHistory
+                modelHistory =
+                    model.parameters :: oldHistory
+            in
+                { model
+                    | pdbFile = Just pdbFile
+                    , score = Just score
+                    , building = False
+                    , modelHistory = modelHistory
+                }
+                    ! [ showStructure pdbFile ]
 
         ProcessModel (Err _) ->
             { model | building = False } ! []
 
-        Example parameters ->
+        SetParametersAndBuild parameters ->
             let
-                newInputValues = parametersToInput parameters
+                newInputValues =
+                    parametersToInput parameters
             in
-                { model | parameters = parameters, currentInput = newInputValues } !
-                    [ Task.perform identity ( Task.succeed Build ) ]
-        
+                if containsInvalidParameter parameters then
+                    model ! []
+                else
+                    { model | parameters = parameters, currentInput = newInputValues }
+                        ! [ Task.perform identity (Task.succeed Build) ]
+
         KeyMsg keyCode ->
             case keyCode of
                 13 ->
                     if containsInvalidParameter model.parameters then
                         model ! []
                     else
-                        model ! [ Task.perform identity ( Task.succeed Build ) ]
-                _ -> model ! []
-                
+                        model ! [ Task.perform identity (Task.succeed Build) ]
+
+                _ ->
+                    model ! []
 
 
 sendBuildCmd : ParameterRecord -> Cmd Msg
@@ -139,7 +167,8 @@ sendBuildCmd parameters =
 
 
 modellingResultsDecoder : Json.Decode.Decoder ( String, Float )
-modellingResultsDecoder = Json.Decode.map2 (,) (field "pdb" string) (field "score" float)
+modellingResultsDecoder =
+    Json.Decode.map2 (,) (field "pdb" string) (field "score" float)
 
 
 parametersJson : ParameterRecord -> Json.Encode.Value
@@ -153,15 +182,27 @@ parametersJson parameters =
         , ( "Register", parameters.register |> Json.Encode.string )
         ]
 
+
 parametersToInput : ParameterRecord -> InputValues
 parametersToInput parameters =
     let
-        os = maybeNumberToString parameters.oligomerState
-        rad = maybeNumberToString parameters.radius
-        pit = maybeNumberToString parameters.pitch
-        phi = maybeNumberToString parameters.phiCA
-        seq = Maybe.withDefault "" parameters.sequence
-        reg = parameters.register
+        os =
+            maybeNumberToString parameters.oligomerState
+
+        rad =
+            maybeNumberToString parameters.radius
+
+        pit =
+            maybeNumberToString parameters.pitch
+
+        phi =
+            maybeNumberToString parameters.phiCA
+
+        seq =
+            Maybe.withDefault "" parameters.sequence
+
+        reg =
+            parameters.register
     in
         InputValues os rad pit phi seq reg
 
@@ -169,14 +210,20 @@ parametersToInput parameters =
 maybeNumberToString : Maybe number -> String
 maybeNumberToString mNum =
     case mNum of
-        Just num -> toString num
-        Nothing -> ""
+        Just num ->
+            toString num
+
+        Nothing ->
+            ""
+
 
 
 -- Subscriptions
 
+
 subscriptions : Model -> Sub Msg
-subscriptions model = Keyboard.presses KeyMsg
+subscriptions model =
+    Keyboard.presses KeyMsg
 
 
 
@@ -195,6 +242,7 @@ view model =
         , buildingStatusPanel model
         , examplesPanel
         , modelInfoPanel model
+        , buildHistoryPanel model.modelHistory
         ]
 
 
@@ -252,11 +300,12 @@ commandPanelStyling =
 
 parameterInputForm : Model -> Html Msg
 parameterInputForm model =
-    List.map parameterInput ( allParameters model.currentInput )
+    List.map parameterInput (allParameters model.currentInput)
         |> flip (List.append)
-            [ sequenceInput 
+            [ sequenceInput
                 ( "Sequence", Sequence, model.currentInput.sequence, model.currentInput.register )
-            , parameterSubmit model.parameters ]
+            , parameterSubmit model.parameters
+            ]
         |> Html.div []
 
 
@@ -338,14 +387,15 @@ parameterSubmit parameters =
 
 registerSelection : String -> Html Msg
 registerSelection currentRegister =
-    select 
+    select
         [ value currentRegister, onInput SetRegister ]
-        ( List.map registerOption [ "a", "b", "c", "d", "e", "f", "g" ] )
+        (List.map registerOption [ "a", "b", "c", "d", "e", "f", "g" ])
 
 
 registerOption : String -> Html msg
 registerOption register =
     option [ value register ] [ text register ]
+
 
 
 -- Examples Panel
@@ -358,21 +408,21 @@ examplesPanel =
         , button
             [ class "example-button"
             , style exampleButtonStyling
-            , onClick <| Example basisSetDimer
+            , onClick <| SetParametersAndBuild basisSetDimer
             ]
             [ text "Dimer" ]
         , br [] []
         , button
             [ class "example-button"
             , style exampleButtonStyling
-            , onClick <| Example basisSetTrimer
+            , onClick <| SetParametersAndBuild basisSetTrimer
             ]
             [ text "Trimer" ]
         , br [] []
         , button
             [ class "example-button"
             , style exampleButtonStyling
-            , onClick <| Example basisSetTetramer
+            , onClick <| SetParametersAndBuild basisSetTetramer
             ]
             [ text "Tetramer" ]
         ]
@@ -424,13 +474,17 @@ basisSetTetramer =
     }
 
 
+
 -- Model Info
 
 
 modelInfoPanel : Model -> Html Msg
 modelInfoPanel model =
-    div [ class "overlay-panel", id "model-info-panel"
-        , style <| panelStyling ++ modelInfoPanelStyling ]
+    div
+        [ class "overlay-panel"
+        , id "model-info-panel"
+        , style <| panelStyling ++ modelInfoPanelStyling
+        ]
         [ h3 [] [ text "Model Information" ]
         , text "BUDE Energy"
         , br [] []
@@ -444,11 +498,12 @@ modelInfoPanel model =
 roundToXDecPlaces : Int -> Float -> Float
 roundToXDecPlaces precision num =
     let
-        scaling = 10 ^ precision |> toFloat
+        scaling =
+            10 ^ precision |> toFloat
     in
-        round ( num * scaling )
-        |> toFloat
-        |> flip (/) scaling
+        round (num * scaling)
+            |> toFloat
+            |> flip (/) scaling
 
 
 modelInfoPanelStyling : Styling
@@ -456,6 +511,52 @@ modelInfoPanelStyling =
     [ ( "bottom", "2%" )
     , ( "left", "2%" )
     ]
+
+
+
+-- Build History
+
+
+buildHistoryPanel : List ParameterRecord -> Html Msg
+buildHistoryPanel modelHistory =
+    div
+        [ class "overlay-panel"
+        , id "build-history-panel"
+        , style <| panelStyling ++ buildHistoryPanelStyling
+        ]
+        [ h3 [] [ text "Build History" ]
+        , table [] (List.map modelParametersAsRow modelHistory)
+        ]
+
+
+modelParametersAsRow : ParameterRecord -> Html Msg
+modelParametersAsRow parameters =
+    let
+        inputParameters = parametersToInput parameters
+    in
+        tr []
+            [ inputParameters.oligomerState |> makeParameterTh
+            , inputParameters.radius |> makeParameterTh
+            , inputParameters.pitch |> makeParameterTh
+            , inputParameters.phiCA |> makeParameterTh
+            , inputParameters.sequence |> makeParameterTh
+            , inputParameters.register |> makeParameterTh
+            ]
+
+
+makeParameterTh : String -> Html Msg
+makeParameterTh pString =
+    text pString
+    |> List.singleton
+    |> th []
+
+
+buildHistoryPanelStyling : Styling
+buildHistoryPanelStyling =
+    [ ( "top", "7%" )
+    , ( "right", "2%" )
+    ]
+
 
 
 -- Building Status
