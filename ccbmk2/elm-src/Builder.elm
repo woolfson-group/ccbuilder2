@@ -48,7 +48,7 @@ type alias Model =
 
 
 type alias PanelVisibility =
-    { commandPanel : Bool
+    { buildPanel : Bool
     }
 
 
@@ -186,7 +186,7 @@ update msg model =
 
                         newPanelVisibility =
                             { oldPanelVisibility
-                                | commandPanel = not oldPanelVisibility.commandPanel
+                                | buildPanel = not oldPanelVisibility.buildPanel
                             }
                     in
                         { model | panelVisibility = newPanelVisibility } ! []
@@ -289,7 +289,7 @@ overlayPanels model =
     let
         defaultDivs =
             [ siteHeader
-            , toggleCommandPanel
+            , toggleBuildPanel
             , buildingStatusPanel model
             , examplesPanel
             , modelInfoPanel model
@@ -297,7 +297,7 @@ overlayPanels model =
             ]
 
         optionalDivs =
-            [ ( model.panelVisibility.commandPanel, commandPanel model )
+            [ ( model.panelVisibility.buildPanel, buildPanel model )
             ]
 
         activeDivs =
@@ -338,16 +338,16 @@ panelStyling =
 -- Command Panel
 
 
-commandPanel : Model -> Html Msg
-commandPanel model =
-    div [ class "overlay-panel", id "command-panel", style <| panelStyling ++ commandPanelStyling ]
+buildPanel : Model -> Html Msg
+buildPanel model =
+    div [ class "overlay-panel", id "command-panel", style <| panelStyling ++ buildPanelStyling ]
         [ h3 [] [ text "Parameters" ]
         , parameterInputForm model
         ]
 
 
-commandPanelStyling : Styling
-commandPanelStyling =
+buildPanelStyling : Styling
+buildPanelStyling =
     [ ( "top", "7%" )
     , ( "left", "2%" )
     ]
@@ -453,19 +453,19 @@ registerOption register =
     option [ value register ] [ text register ]
 
 
-toggleCommandPanel : Html Msg
-toggleCommandPanel =
+toggleBuildPanel : Html Msg
+toggleBuildPanel =
     div
         [ class "overlay-panel panel-toggle"
         , id "toggle-command-panel"
-        , style <| toggleCommandPanelStyling
+        , style <| toggleBuildPanelStyling
         , onClick (TogglePanel BuildPanel)
         ]
         [ text "Build" ]
 
 
-toggleCommandPanelStyling : Styling
-toggleCommandPanelStyling =
+toggleBuildPanelStyling : Styling
+toggleBuildPanelStyling =
     [ ( "top", "7%" )
     , ( "left", "-15px" )
     , ( "z-index", "2" )
