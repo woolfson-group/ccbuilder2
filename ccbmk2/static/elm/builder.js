@@ -13556,6 +13556,9 @@ var _user$project$Builder$viewerStyling = {
 		}
 	}
 };
+var _user$project$Builder$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
 var _user$project$Builder$maybeNumberToString = function (mNum) {
 	var _p0 = mNum;
 	if (_p0.ctor === 'Just') {
@@ -14182,14 +14185,7 @@ var _user$project$Builder$view = function (model) {
 		});
 };
 var _user$project$Builder$main = _elm_lang$html$Html$program(
-	{
-		init: _user$project$Builder$init,
-		view: _user$project$Builder$view,
-		update: _user$project$Builder$update,
-		subscriptions: function (_p12) {
-			return _elm_lang$core$Platform_Sub$none;
-		}
-	})();
+	{init: _user$project$Builder$init, view: _user$project$Builder$view, update: _user$project$Builder$update, subscriptions: _user$project$Builder$subscriptions})();
 
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};

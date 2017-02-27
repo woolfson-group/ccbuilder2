@@ -22,7 +22,7 @@ main =
         { init = init
         , view = view
         , update = update
-        , subscriptions = (\_ -> Sub.none)
+        , subscriptions = subscriptions
         }
 
 
@@ -159,6 +159,12 @@ maybeNumberToString mNum =
     case mNum of
         Just num -> toString num
         Nothing -> ""
+
+
+-- Subscriptions
+
+subscriptions : Model -> Sub Msg
+subscriptions model = Sub.none
 
 
 
