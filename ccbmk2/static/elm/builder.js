@@ -13797,6 +13797,23 @@ var _user$project$Builder$examplesPanelStyling = {
 		_1: {ctor: '[]'}
 	}
 };
+var _user$project$Builder$toggleCommandPanelStyling = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'top', _1: '7%'},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'left', _1: '-15px'},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'z-index', _1: '2'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
+				_1: {ctor: '[]'}
+			}
+		}
+	}
+};
 var _user$project$Builder$registerOption = function (register) {
 	return A2(
 		_elm_lang$html$Html$option,
@@ -14151,24 +14168,58 @@ var _user$project$Builder$showStructure = _elm_lang$core$Native_Platform.outgoin
 	function (v) {
 		return v;
 	});
-var _user$project$Builder$Model = F6(
-	function (a, b, c, d, e, f) {
-		return {parameters: a, currentInput: b, pdbFile: c, score: d, building: e, modelHistory: f};
+var _user$project$Builder$Model = F7(
+	function (a, b, c, d, e, f, g) {
+		return {parameters: a, currentInput: b, pdbFile: c, score: d, building: e, modelHistory: f, panelVisibility: g};
 	});
-var _user$project$Builder$emptyModel = A6(
+var _user$project$Builder$PanelVisibility = function (a) {
+	return {commandPanel: a};
+};
+var _user$project$Builder$defaultVisibility = _user$project$Builder$PanelVisibility(true);
+var _user$project$Builder$emptyModel = A7(
 	_user$project$Builder$Model,
 	_user$project$Builder$emptyParameters,
 	_user$project$Builder$emptyInput,
 	_elm_lang$core$Maybe$Nothing,
 	_elm_lang$core$Maybe$Nothing,
 	false,
-	{ctor: '[]'});
+	{ctor: '[]'},
+	_user$project$Builder$defaultVisibility);
 var _user$project$Builder$init = {
 	ctor: '_Tuple2',
 	_0: _user$project$Builder$emptyModel,
 	_1: _user$project$Builder$initialiseViewer(
 		{ctor: '_Tuple0'})
 };
+var _user$project$Builder$BuildPanel = {ctor: 'BuildPanel'};
+var _user$project$Builder$TogglePanel = function (a) {
+	return {ctor: 'TogglePanel', _0: a};
+};
+var _user$project$Builder$toggleCommandPanel = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('overlay-panel panel-toggle'),
+		_1: {
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$id('toggle-command-panel'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$toggleCommandPanelStyling),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(
+						_user$project$Builder$TogglePanel(_user$project$Builder$BuildPanel)),
+					_1: {ctor: '[]'}
+				}
+			}
+		}
+	},
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html$text('Build'),
+		_1: {ctor: '[]'}
+	});
 var _user$project$Builder$KeyMsg = function (a) {
 	return {ctor: 'KeyMsg', _0: a};
 };
@@ -14494,7 +14545,7 @@ var _user$project$Builder$update = F2(
 							_elm_lang$core$Task$succeed(_user$project$Builder$Build)),
 						_1: {ctor: '[]'}
 					});
-			default:
+			case 'KeyMsg':
 				var _p6 = _p1._0;
 				if (_p6 === 13) {
 					return _user$project$ParameterValidation$containsInvalidParameter(model.parameters) ? A2(
@@ -14517,6 +14568,18 @@ var _user$project$Builder$update = F2(
 						model,
 						{ctor: '[]'});
 				}
+			default:
+				var _p7 = _p1._0;
+				var oldPanelVisibility = model.panelVisibility;
+				var newPanelVisibility = _elm_lang$core$Native_Utils.update(
+					oldPanelVisibility,
+					{commandPanel: !oldPanelVisibility.commandPanel});
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{panelVisibility: newPanelVisibility}),
+					{ctor: '[]'});
 		}
 	});
 var _user$project$Builder$parameterSubmit = function (parameters) {
@@ -14594,9 +14657,9 @@ var _user$project$Builder$EditParameter = F2(
 	function (a, b) {
 		return {ctor: 'EditParameter', _0: a, _1: b};
 	});
-var _user$project$Builder$parameterInput = function (_p7) {
-	var _p8 = _p7;
-	var _p9 = _p8._0;
+var _user$project$Builder$parameterInput = function (_p8) {
+	var _p9 = _p8;
+	var _p10 = _p9._0;
 	return A2(
 		_elm_lang$html$Html$div,
 		{
@@ -14606,7 +14669,7 @@ var _user$project$Builder$parameterInput = function (_p7) {
 		},
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html$text(_p9),
+			_0: _elm_lang$html$Html$text(_p10),
 			_1: {
 				ctor: '::',
 				_0: A2(
@@ -14622,26 +14685,26 @@ var _user$project$Builder$parameterInput = function (_p7) {
 							_0: _elm_lang$html$Html_Attributes$type_('text'),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$name(_p9),
+								_0: _elm_lang$html$Html_Attributes$name(_p10),
 								_1: {
 									ctor: '::',
 									_0: _elm_lang$html$Html_Attributes$class('parameter-input-box'),
 									_1: {
 										ctor: '::',
-										_0: _user$project$Builder$parameterInputId(_p9),
+										_0: _user$project$Builder$parameterInputId(_p10),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$placeholder(_p9),
+											_0: _elm_lang$html$Html_Attributes$placeholder(_p10),
 											_1: {
 												ctor: '::',
 												_0: _elm_lang$html$Html_Events$onInput(
-													_user$project$Builder$EditParameter(_p8._1)),
+													_user$project$Builder$EditParameter(_p9._1)),
 												_1: {
 													ctor: '::',
 													_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$inputStyling),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$value(_p8._2),
+														_0: _elm_lang$html$Html_Attributes$value(_p9._2),
 														_1: {ctor: '[]'}
 													}
 												}
@@ -14657,9 +14720,9 @@ var _user$project$Builder$parameterInput = function (_p7) {
 			}
 		});
 };
-var _user$project$Builder$sequenceInput = function (_p10) {
-	var _p11 = _p10;
-	var _p12 = _p11._0;
+var _user$project$Builder$sequenceInput = function (_p11) {
+	var _p12 = _p11;
+	var _p13 = _p12._0;
 	return A2(
 		_elm_lang$html$Html$div,
 		{
@@ -14669,13 +14732,13 @@ var _user$project$Builder$sequenceInput = function (_p10) {
 		},
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html$text(_p12),
+			_0: _elm_lang$html$Html$text(_p13),
 			_1: {
 				ctor: '::',
 				_0: _elm_lang$html$Html$text(' (Register: '),
 				_1: {
 					ctor: '::',
-					_0: _user$project$Builder$registerSelection(_p11._3),
+					_0: _user$project$Builder$registerSelection(_p12._3),
 					_1: {
 						ctor: '::',
 						_0: _elm_lang$html$Html$text(')'),
@@ -14691,13 +14754,13 @@ var _user$project$Builder$sequenceInput = function (_p10) {
 									_elm_lang$html$Html$textarea,
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$name(_p12),
+										_0: _elm_lang$html$Html_Attributes$name(_p13),
 										_1: {
 											ctor: '::',
 											_0: _elm_lang$html$Html_Attributes$class('parameter-input-box'),
 											_1: {
 												ctor: '::',
-												_0: _user$project$Builder$parameterInputId(_p12),
+												_0: _user$project$Builder$parameterInputId(_p13),
 												_1: {
 													ctor: '::',
 													_0: _elm_lang$html$Html_Attributes$rows(3),
@@ -14709,14 +14772,14 @@ var _user$project$Builder$sequenceInput = function (_p10) {
 															_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$inputStyling),
 															_1: {
 																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$placeholder(_p12),
+																_0: _elm_lang$html$Html_Attributes$placeholder(_p13),
 																_1: {
 																	ctor: '::',
 																	_0: _elm_lang$html$Html_Events$onInput(
-																		_user$project$Builder$EditParameter(_p11._1)),
+																		_user$project$Builder$EditParameter(_p12._1)),
 																	_1: {
 																		ctor: '::',
-																		_0: _elm_lang$html$Html_Attributes$value(_p11._2),
+																		_0: _elm_lang$html$Html_Attributes$value(_p12._2),
 																		_1: {ctor: '[]'}
 																	}
 																}
@@ -14807,6 +14870,59 @@ var _user$project$Builder$commandPanel = function (model) {
 			}
 		});
 };
+var _user$project$Builder$overlayPanels = function (model) {
+	var optionalDivs = {
+		ctor: '::',
+		_0: {
+			ctor: '_Tuple2',
+			_0: model.panelVisibility.commandPanel,
+			_1: _user$project$Builder$commandPanel(model)
+		},
+		_1: {ctor: '[]'}
+	};
+	var activeDivs = _elm_lang$core$Tuple$second(
+		_elm_lang$core$List$unzip(
+			A2(
+				_elm_lang$core$List$filter,
+				function (opt) {
+					return _elm_lang$core$Tuple$first(opt);
+				},
+				optionalDivs)));
+	var defaultDivs = {
+		ctor: '::',
+		_0: _user$project$Builder$siteHeader,
+		_1: {
+			ctor: '::',
+			_0: _user$project$Builder$toggleCommandPanel,
+			_1: {
+				ctor: '::',
+				_0: _user$project$Builder$buildingStatusPanel(model),
+				_1: {
+					ctor: '::',
+					_0: _user$project$Builder$examplesPanel,
+					_1: {
+						ctor: '::',
+						_0: _user$project$Builder$modelInfoPanel(model),
+						_1: {
+							ctor: '::',
+							_0: _user$project$Builder$buildHistoryPanel(model.modelHistory),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		}
+	};
+	var allDivs = A2(_elm_lang$core$Basics_ops['++'], defaultDivs, activeDivs);
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$id('overlay-panels'),
+			_1: {ctor: '[]'}
+		},
+		allDivs);
+};
 var _user$project$Builder$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -14821,28 +14937,8 @@ var _user$project$Builder$view = function (model) {
 		},
 		{
 			ctor: '::',
-			_0: _user$project$Builder$siteHeader,
-			_1: {
-				ctor: '::',
-				_0: _user$project$Builder$commandPanel(model),
-				_1: {
-					ctor: '::',
-					_0: _user$project$Builder$buildingStatusPanel(model),
-					_1: {
-						ctor: '::',
-						_0: _user$project$Builder$examplesPanel,
-						_1: {
-							ctor: '::',
-							_0: _user$project$Builder$modelInfoPanel(model),
-							_1: {
-								ctor: '::',
-								_0: _user$project$Builder$buildHistoryPanel(model.modelHistory),
-								_1: {ctor: '[]'}
-							}
-						}
-					}
-				}
-			}
+			_0: _user$project$Builder$overlayPanels(model),
+			_1: {ctor: '[]'}
 		});
 };
 var _user$project$Builder$main = _elm_lang$html$Html$program(
@@ -14851,7 +14947,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Builder.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error ( String, Float )"],"SetRegister":["String"],"Build":[],"Clear":[],"EditParameter":["Types.Parameter","String"],"SetParametersAndBuild":["Types.ParameterRecord"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ oligomerState : Maybe.Maybe Int , radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }"}},"message":"Builder.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Builder.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error ( String, Float )"],"TogglePanel":["Builder.Panel"],"SetRegister":["String"],"Build":[],"Clear":[],"EditParameter":["Types.Parameter","String"],"SetParametersAndBuild":["Types.ParameterRecord"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Builder.Panel":{"args":[],"tags":{"BuildPanel":[]}}},"aliases":{"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ oligomerState : Maybe.Maybe Int , radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }"}},"message":"Builder.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

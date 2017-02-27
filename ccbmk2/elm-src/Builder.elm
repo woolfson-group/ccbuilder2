@@ -43,12 +43,22 @@ type alias Model =
     , score : Maybe Float
     , building : Bool
     , modelHistory : List ParameterRecord
+    , panelVisibility : PanelVisibility
     }
+
+
+type alias PanelVisibility =
+    { commandPanel : Bool
+    }
+
+
+type Panel
+    = BuildPanel
 
 
 emptyModel : Model
 emptyModel =
-    Model emptyParameters emptyInput Nothing Nothing False []
+    Model emptyParameters emptyInput Nothing Nothing False [] defaultVisibility
 
 
 emptyParameters : ParameterRecord
@@ -59,6 +69,11 @@ emptyParameters =
 emptyInput : InputValues
 emptyInput =
     InputValues "" "" "" "" "" "a"
+
+
+defaultVisibility : PanelVisibility
+defaultVisibility =
+    PanelVisibility True
 
 
 
@@ -83,6 +98,7 @@ type Msg
     | Clear
     | SetParametersAndBuild ParameterRecord
     | KeyMsg Keyboard.KeyCode
+    | TogglePanel Panel
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -160,6 +176,20 @@ update msg model =
 
                 _ ->
                     model ! []
+
+        TogglePanel panel ->
+            case panel of
+                BuildPanel ->
+                    let
+                        oldPanelVisibility =
+                            model.panelVisibility
+
+                        newPanelVisibility =
+                            { oldPanelVisibility
+                                | commandPanel = not oldPanelVisibility.commandPanel
+                            }
+                    in
+                        { model | panelVisibility = newPanelVisibility } ! []
 
 
 sendBuildCmd : ParameterRecord -> Cmd Msg
@@ -241,14 +271,7 @@ type alias Styling =
 
 view : Model -> Html Msg
 view model =
-    div [ id "viewer", style viewerStyling ]
-        [ siteHeader
-        , commandPanel model
-        , buildingStatusPanel model
-        , examplesPanel
-        , modelInfoPanel model
-        , buildHistoryPanel model.modelHistory
-        ]
+    div [ id "viewer", style viewerStyling ] [ overlayPanels model ]
 
 
 viewerStyling : Styling
@@ -259,6 +282,33 @@ viewerStyling =
     , ( "left", "0px" )
     , ( "right", "0px" )
     ]
+
+
+overlayPanels : Model -> Html Msg
+overlayPanels model =
+    let
+        defaultDivs =
+            [ siteHeader
+            , toggleCommandPanel
+            , buildingStatusPanel model
+            , examplesPanel
+            , modelInfoPanel model
+            , buildHistoryPanel model.modelHistory
+            ]
+
+        optionalDivs =
+            [ ( model.panelVisibility.commandPanel, commandPanel model )
+            ]
+
+        activeDivs =
+            List.filter (\opt -> Tuple.first opt) optionalDivs
+                |> List.unzip
+                |> Tuple.second
+
+        allDivs =
+            defaultDivs ++ activeDivs
+    in
+        div [ id "overlay-panels" ] allDivs
 
 
 siteHeader : Html msg
@@ -403,6 +453,26 @@ registerOption register =
     option [ value register ] [ text register ]
 
 
+toggleCommandPanel : Html Msg
+toggleCommandPanel =
+    div
+        [ class "overlay-panel panel-toggle"
+        , id "toggle-command-panel"
+        , style <| toggleCommandPanelStyling
+        , onClick (TogglePanel BuildPanel)
+        ]
+        [ text "Build" ]
+
+
+toggleCommandPanelStyling : Styling
+toggleCommandPanelStyling =
+    [ ( "top", "7%" )
+    , ( "left", "-15px" )
+    , ( "z-index", "2" )
+    , ( "position", "absolute" )
+    ]
+
+
 
 -- Examples Panel
 
@@ -533,7 +603,8 @@ buildHistoryPanel modelHistory =
         [ h3 [] [ text "Build History" ]
         , table [ id "parameter-history-table" ]
             [ modelDetailTableHeader
-            , List.map modelParametersAsRow modelHistory |> tbody[] ]
+            , List.map modelParametersAsRow modelHistory |> tbody []
+            ]
         ]
 
 
@@ -541,12 +612,12 @@ modelDetailTableHeader : Html msg
 modelDetailTableHeader =
     thead []
         [ tr [ class "parameter-history-header" ]
-            [ th [ style [ ("width", "6em") ] ] [ text "Oligomer State" ]
-            , th [ style [ ("width", "6em") ] ] [ text "Radius" ]
-            , th [ style [ ("width", "6em") ] ] [ text "Pitch" ]
-            , th [ style [ ("width", "6em") ] ] [ text "Interface Angle" ]
+            [ th [ style [ ( "width", "6em" ) ] ] [ text "Oligomer State" ]
+            , th [ style [ ( "width", "6em" ) ] ] [ text "Radius" ]
+            , th [ style [ ( "width", "6em" ) ] ] [ text "Pitch" ]
+            , th [ style [ ( "width", "6em" ) ] ] [ text "Interface Angle" ]
             , th [] [ text "Sequence" ]
-            , th [ style [ ("width", "6em") ] ] [ text "Register" ]
+            , th [ style [ ( "width", "6em" ) ] ] [ text "Register" ]
             ]
         ]
 

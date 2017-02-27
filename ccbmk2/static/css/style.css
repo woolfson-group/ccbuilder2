@@ -18,6 +18,23 @@ table {
     border-collapse: collapse;
 }
 
+.overlay-panel {
+    font-family: 'Roboto', sans-serif;
+    background: #CED0CE;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 2px rgba(100,100,100,1);
+}
+
+.panel-toggle {
+    writing-mode: vertical-rl;
+    user-select: none;
+}
+
+.panel-toggle:hover {
+    cursor: default;
+}
+
 .parameter-input {
     padding-top: 5px;
     padding-bottom: 5px;
@@ -27,14 +44,6 @@ table {
     margin-top: 2px;
 }
 
-.overlay-panel {
-    font-family: 'Roboto', sans-serif;
-    background: #CED0CE;
-    padding: 5px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px 2px rgba(100,100,100,1);
-}
-
 .parameter-history-row {
     font-family: 'Source Code Pro', monospace;
 }
@@ -42,7 +51,7 @@ table {
 .parameter-history-row:hover {
     background-color: #9FB8AD;
     border-color: #9FB8AD;
-    cursor: pointer;
+    cursor: default;
 }
 
 #app-header {
