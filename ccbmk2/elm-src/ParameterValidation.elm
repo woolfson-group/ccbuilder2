@@ -1,4 +1,4 @@
-module ParameterValidation exposing (allParametersValid, editParameterValue)
+module ParameterValidation exposing (containsInvalidParameter, editParameterValue)
 
 import String
 import Types
@@ -9,8 +9,8 @@ import Types
         )
 
 
-allParametersValid : ParameterRecord -> Bool
-allParametersValid { oligomerState, radius, pitch, phiCA, sequence } =
+containsInvalidParameter : ParameterRecord -> Bool
+containsInvalidParameter { oligomerState, radius, pitch, phiCA, sequence } =
     let
         vOS =
             oligomerState /= Nothing

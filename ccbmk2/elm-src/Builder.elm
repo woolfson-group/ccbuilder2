@@ -6,7 +6,8 @@ import Html.Events exposing (..)
 import Http
 import Json.Decode exposing (field, string, float, decodeString)
 import Json.Encode
-import ParameterValidation exposing (allParametersValid, editParameterValue)
+import Keyboard
+import ParameterValidation exposing (containsInvalidParameter, editParameterValue)
 import Task
 import Types
     exposing
@@ -79,6 +80,7 @@ type Msg
     | Build
     | ProcessModel (Result Http.Error ( String, Float) )
     | Example ParameterRecord
+    | KeyMsg Keyboard.KeyCode
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -115,6 +117,16 @@ update msg model =
             in
                 { model | parameters = parameters, currentInput = newInputValues } !
                     [ Task.perform identity ( Task.succeed Build ) ]
+        
+        KeyMsg keyCode ->
+            case keyCode of
+                13 ->
+                    if containsInvalidParameter model.parameters then
+                        model ! []
+                    else
+                        model ! [ Task.perform identity ( Task.succeed Build ) ]
+                _ -> model ! []
+                
 
 
 sendBuildCmd : ParameterRecord -> Cmd Msg
@@ -164,7 +176,7 @@ maybeNumberToString mNum =
 -- Subscriptions
 
 subscriptions : Model -> Sub Msg
-subscriptions model = Sub.none
+subscriptions model = Keyboard.presses KeyMsg
 
 
 
@@ -319,7 +331,7 @@ parameterSubmit parameters =
         [ type_ "submit"
         , value "Submit"
         , onClick Build
-        , disabled (allParametersValid parameters)
+        , disabled (containsInvalidParameter parameters)
         ]
         []
 
