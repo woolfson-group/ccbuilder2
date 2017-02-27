@@ -176,6 +176,7 @@ view model =
         , commandPanel model
         , buildingStatusPanel model
         , examplesPanel
+        , modelInfoPanel model
         ]
 
 
@@ -219,7 +220,7 @@ panelStyling =
 commandPanel : Model -> Html Msg
 commandPanel model =
     div [ class "overlay-panel", id "command-panel", style <| panelStyling ++ commandPanelStyling ]
-        [ h2 [] [ text "Parameters" ]
+        [ h3 [] [ text "Parameters" ]
         , parameterInputForm model
         ]
 
@@ -335,7 +336,7 @@ registerOption register =
 examplesPanel : Html Msg
 examplesPanel =
     div [ class "overlay-panel", id "examples-panel", style <| panelStyling ++ examplesPanelStyling ]
-        [ h2 [] [ text "Examples" ]
+        [ h3 [] [ text "Examples" ]
         , button
             [ class "example-button"
             , style exampleButtonStyling
@@ -362,7 +363,7 @@ examplesPanel =
 examplesPanelStyling : Styling
 examplesPanelStyling =
     [ ( "top", "7%" )
-    , ( "left", "30%" )
+    , ( "left", "25%" )
     ]
 
 
@@ -404,6 +405,39 @@ basisSetTetramer =
     , register = "g"
     }
 
+
+-- Model Info
+
+
+modelInfoPanel : Model -> Html Msg
+modelInfoPanel model =
+    div [ class "overlay-panel", id "model-info-panel"
+        , style <| panelStyling ++ modelInfoPanelStyling ]
+        [ h3 [] [ text "Model Information" ]
+        , text "BUDE Energy"
+        , br [] []
+        , Maybe.map (roundToXDecPlaces 1) model.score
+            |> Maybe.map toString
+            |> Maybe.withDefault ""
+            |> \val -> input [ value val, readonly True ] []
+        ]
+
+
+roundToXDecPlaces : Int -> Float -> Float
+roundToXDecPlaces precision num =
+    let
+        scaling = 10 ^ precision |> toFloat
+    in
+        round ( num * scaling )
+        |> toFloat
+        |> flip (/) scaling
+
+
+modelInfoPanelStyling : Styling
+modelInfoPanelStyling =
+    [ ( "bottom", "2%" )
+    , ( "left", "2%" )
+    ]
 
 
 -- Building Status

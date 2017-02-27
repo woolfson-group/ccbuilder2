@@ -13235,6 +13235,29 @@ var _user$project$Builder$buildingStatusStyling = {
 		}
 	}
 };
+var _user$project$Builder$modelInfoPanelStyling = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'bottom', _1: '2%'},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'left', _1: '2%'},
+		_1: {ctor: '[]'}
+	}
+};
+var _user$project$Builder$roundToXDecPlaces = F2(
+	function (precision, num) {
+		var scaling = _elm_lang$core$Basics$toFloat(
+			Math.pow(10, precision));
+		return A3(
+			_elm_lang$core$Basics$flip,
+			F2(
+				function (x, y) {
+					return x / y;
+				}),
+			scaling,
+			_elm_lang$core$Basics$toFloat(
+				_elm_lang$core$Basics$round(num * scaling)));
+	});
 var _user$project$Builder$basisSetTetramer = {
 	oligomerState: _elm_lang$core$Maybe$Just(4),
 	radius: _elm_lang$core$Maybe$Just(6.8),
@@ -13341,6 +13364,74 @@ var _user$project$Builder$panelStyling = {
 		_0: {ctor: '_Tuple2', _0: 'z-index', _1: '1'},
 		_1: {ctor: '[]'}
 	}
+};
+var _user$project$Builder$modelInfoPanel = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('overlay-panel'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$id('model-info-panel'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$style(
+						A2(_elm_lang$core$Basics_ops['++'], _user$project$Builder$panelStyling, _user$project$Builder$modelInfoPanelStyling)),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h3,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Model Information'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text('BUDE Energy'),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$br,
+						{ctor: '[]'},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: function (val) {
+							return A2(
+								_elm_lang$html$Html$input,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$value(val),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$readonly(true),
+										_1: {ctor: '[]'}
+									}
+								},
+								{ctor: '[]'});
+						}(
+							A2(
+								_elm_lang$core$Maybe$withDefault,
+								'',
+								A2(
+									_elm_lang$core$Maybe$map,
+									_elm_lang$core$Basics$toString,
+									A2(
+										_elm_lang$core$Maybe$map,
+										_user$project$Builder$roundToXDecPlaces(1),
+										model.score)))),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		});
 };
 var _user$project$Builder$buildingStatusPanel = function (model) {
 	var commonAttr = {
@@ -13592,7 +13683,7 @@ var _user$project$Builder$examplesPanel = A2(
 	{
 		ctor: '::',
 		_0: A2(
-			_elm_lang$html$Html$h2,
+			_elm_lang$html$Html$h3,
 			{ctor: '[]'},
 			{
 				ctor: '::',
@@ -14042,7 +14133,7 @@ var _user$project$Builder$commandPanel = function (model) {
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$h2,
+				_elm_lang$html$Html$h3,
 				{ctor: '[]'},
 				{
 					ctor: '::',
@@ -14080,7 +14171,11 @@ var _user$project$Builder$view = function (model) {
 					_1: {
 						ctor: '::',
 						_0: _user$project$Builder$examplesPanel,
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: _user$project$Builder$modelInfoPanel(model),
+							_1: {ctor: '[]'}
+						}
 					}
 				}
 			}

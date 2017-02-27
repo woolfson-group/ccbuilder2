@@ -9,7 +9,7 @@ h1 {
     padding: 0 0 0 10px;
 }
 
-h2 {
+h2, h3 {
     margin-top: 2px;
     margin-bottom: 2px;
 }
