@@ -49,11 +49,13 @@ type alias Model =
 
 type alias PanelVisibility =
     { buildPanel : Bool
+    , examplesPanel : Bool
     }
 
 
 type Panel
     = BuildPanel
+    | ExamplesPanel
 
 
 emptyModel : Model
@@ -73,7 +75,7 @@ emptyInput =
 
 defaultVisibility : PanelVisibility
 defaultVisibility =
-    PanelVisibility True
+    PanelVisibility True False
 
 
 
@@ -178,18 +180,29 @@ update msg model =
                     model ! []
 
         TogglePanel panel ->
-            case panel of
-                BuildPanel ->
-                    let
-                        oldPanelVisibility =
-                            model.panelVisibility
-
-                        newPanelVisibility =
-                            { oldPanelVisibility
-                                | buildPanel = not oldPanelVisibility.buildPanel
-                            }
-                    in
-                        { model | panelVisibility = newPanelVisibility } ! []
+            let
+                oldPanelVisibility = model.panelVisibility
+            in
+                case panel of
+                    BuildPanel ->
+                        let
+                            newPanelVisibility =
+                                { oldPanelVisibility 
+                                    | buildPanel = not oldPanelVisibility.buildPanel
+                                    , examplesPanel = False
+                                }
+                        in
+                            { model | panelVisibility = newPanelVisibility } ! []
+                    
+                    ExamplesPanel ->
+                        let
+                            newPanelVisibility =
+                                { oldPanelVisibility 
+                                    | buildPanel = False
+                                    , examplesPanel = not oldPanelVisibility.examplesPanel
+                                }
+                        in
+                            { model | panelVisibility = newPanelVisibility } ! []
 
 
 sendBuildCmd : ParameterRecord -> Cmd Msg
@@ -289,15 +302,15 @@ overlayPanels model =
     let
         defaultDivs =
             [ siteHeader
-            , toggleBuildPanel
+            , toggles
             , buildingStatusPanel model
-            , examplesPanel
             , modelInfoPanel model
             , buildHistoryPanel model.modelHistory
             ]
 
         optionalDivs =
             [ ( model.panelVisibility.buildPanel, buildPanel model )
+            , ( model.panelVisibility.examplesPanel, examplesPanel)
             ]
 
         activeDivs =
@@ -331,6 +344,22 @@ panelStyling : Styling
 panelStyling =
     [ ( "position", "absolute" )
     , ( "z-index", "1" )
+    ]
+
+
+toggles : Html Msg
+toggles =
+    div [ id "toggles", style togglesStyling ]
+        [ toggleBuildPanel
+        , toggleExamplesPanel
+        ]
+
+togglesStyling : Styling
+togglesStyling =
+    [ ( "top", "7%" )
+    , ( "left", "-5px" )
+    , ( "z-index", "2" )
+    , ( "position", "absolute" )
     ]
 
 
@@ -458,19 +487,9 @@ toggleBuildPanel =
     div
         [ class "overlay-panel panel-toggle"
         , id "toggle-command-panel"
-        , style <| toggleBuildPanelStyling
         , onClick (TogglePanel BuildPanel)
         ]
         [ text "Build" ]
-
-
-toggleBuildPanelStyling : Styling
-toggleBuildPanelStyling =
-    [ ( "top", "7%" )
-    , ( "left", "-15px" )
-    , ( "z-index", "2" )
-    , ( "position", "absolute" )
-    ]
 
 
 
@@ -507,7 +526,7 @@ examplesPanel =
 examplesPanelStyling : Styling
 examplesPanelStyling =
     [ ( "top", "7%" )
-    , ( "left", "25%" )
+    , ( "left", "2%" )
     ]
 
 
@@ -548,6 +567,16 @@ basisSetTetramer =
     , sequence = Just "ELAAIKQELAAIKKELAAIKWELAAIKQ"
     , register = "g"
     }
+
+
+toggleExamplesPanel : Html Msg
+toggleExamplesPanel =
+    div
+        [ class "overlay-panel panel-toggle"
+        , id "toggle-examples-panel"
+        , onClick (TogglePanel ExamplesPanel)
+        ]
+        [ text "Examples" ]
 
 
 

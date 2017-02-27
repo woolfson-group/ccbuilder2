@@ -29,6 +29,7 @@ table {
 .panel-toggle {
     writing-mode: vertical-rl;
     user-select: none;
+    margin-bottom: 2px;
 }
 
 .panel-toggle:hover {
