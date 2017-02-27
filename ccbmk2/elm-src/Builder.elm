@@ -80,6 +80,7 @@ type Msg
     | SetRegister String
     | Build
     | ProcessModel (Result Http.Error ( String, Float ))
+    | Clear
     | SetParametersAndBuild ParameterRecord
     | KeyMsg Keyboard.KeyCode
 
@@ -120,6 +121,7 @@ update msg model =
                         List.take 9 model.modelHistory
                     else
                         model.modelHistory
+
                 modelHistory =
                     model.parameters :: oldHistory
             in
@@ -133,6 +135,9 @@ update msg model =
 
         ProcessModel (Err _) ->
             { model | building = False } ! []
+
+        Clear ->
+            { model | parameters = emptyParameters, currentInput = emptyInput } ! []
 
         SetParametersAndBuild parameters ->
             let
@@ -305,6 +310,7 @@ parameterInputForm model =
             [ sequenceInput
                 ( "Sequence", Sequence, model.currentInput.sequence, model.currentInput.register )
             , parameterSubmit model.parameters
+            , button [ onClick Clear ] [ text "Clear" ]
             ]
         |> Html.div []
 
@@ -525,16 +531,33 @@ buildHistoryPanel modelHistory =
         , style <| panelStyling ++ buildHistoryPanelStyling
         ]
         [ h3 [] [ text "Build History" ]
-        , table [] (List.map modelParametersAsRow modelHistory)
+        , table [ id "parameter-history-table" ]
+            [ modelDetailTableHeader
+            , List.map modelParametersAsRow modelHistory |> tbody[] ]
+        ]
+
+
+modelDetailTableHeader : Html msg
+modelDetailTableHeader =
+    thead []
+        [ tr [ class "parameter-history-header" ]
+            [ th [ style [ ("width", "6em") ] ] [ text "Oligomer State" ]
+            , th [ style [ ("width", "6em") ] ] [ text "Radius" ]
+            , th [ style [ ("width", "6em") ] ] [ text "Pitch" ]
+            , th [ style [ ("width", "6em") ] ] [ text "Interface Angle" ]
+            , th [] [ text "Sequence" ]
+            , th [ style [ ("width", "6em") ] ] [ text "Register" ]
+            ]
         ]
 
 
 modelParametersAsRow : ParameterRecord -> Html Msg
 modelParametersAsRow parameters =
     let
-        inputParameters = parametersToInput parameters
+        inputParameters =
+            parametersToInput parameters
     in
-        tr []
+        tr [ class "parameter-history-row", onClick (SetParametersAndBuild parameters) ]
             [ inputParameters.oligomerState |> makeParameterTh
             , inputParameters.radius |> makeParameterTh
             , inputParameters.pitch |> makeParameterTh
@@ -547,8 +570,8 @@ modelParametersAsRow parameters =
 makeParameterTh : String -> Html Msg
 makeParameterTh pString =
     text pString
-    |> List.singleton
-    |> th []
+        |> List.singleton
+        |> th []
 
 
 buildHistoryPanelStyling : Styling

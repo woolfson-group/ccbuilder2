@@ -14,6 +14,10 @@ h2, h3 {
     margin-bottom: 2px;
 }
 
+table {
+    border-collapse: collapse;
+}
+
 .parameter-input {
     padding-top: 5px;
     padding-bottom: 5px;
@@ -29,6 +33,16 @@ h2, h3 {
     padding: 5px;
     border-radius: 5px;
     box-shadow: 0 0 10px 2px rgba(100,100,100,1);
+}
+
+.parameter-history-row {
+    font-family: 'Source Code Pro', monospace;
+}
+
+.parameter-history-row:hover {
+    background-color: #9FB8AD;
+    border-color: #9FB8AD;
+    cursor: pointer;
 }
 
 #app-header {
@@ -55,4 +69,8 @@ h2, h3 {
 #input-box-sequence {
     font-family: 'Source Code Pro', monospace;
     resize: none;
+}
+
+#parameter-history-table {
+    font-size: 10pt;
 }
