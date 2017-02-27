@@ -17,8 +17,6 @@
 
 ## TODO
 
-* Add information overlay
-    * Contains scoring information
-    * Has tab with history of models built
+* Buttons to hide side panels
 * Add stats logging with MongoDB
 * Independent chains and antiparallels
