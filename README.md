@@ -17,7 +17,6 @@
 
 ## TODO
 
-* Add examples
 * Add information overlay
     * Contains scoring information
     * Has tab with history of models built

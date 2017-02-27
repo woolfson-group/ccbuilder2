@@ -12992,13 +12992,13 @@ var _elm_lang$http$Http$StringPart = F2(
 	});
 var _elm_lang$http$Http$stringPart = _elm_lang$http$Http$StringPart;
 
-var _user$project$Types$ParameterRecord = F5(
-	function (a, b, c, d, e) {
-		return {oligomerState: a, radius: b, pitch: c, phiCA: d, sequence: e};
+var _user$project$Types$ParameterRecord = F6(
+	function (a, b, c, d, e, f) {
+		return {oligomerState: a, radius: b, pitch: c, phiCA: d, sequence: e, register: f};
 	});
-var _user$project$Types$InputValues = F5(
-	function (a, b, c, d, e) {
-		return {oligomerState: a, radius: b, pitch: c, phiCA: d, sequence: e};
+var _user$project$Types$InputValues = F6(
+	function (a, b, c, d, e, f) {
+		return {oligomerState: a, radius: b, pitch: c, phiCA: d, sequence: e, register: f};
 	});
 var _user$project$Types$Sequence = {ctor: 'Sequence'};
 var _user$project$Types$PhiCA = {ctor: 'PhiCA'};
@@ -13240,21 +13240,24 @@ var _user$project$Builder$basisSetTetramer = {
 	radius: _elm_lang$core$Maybe$Just(6.8),
 	pitch: _elm_lang$core$Maybe$Just(213),
 	phiCA: _elm_lang$core$Maybe$Just(22.1),
-	sequence: _elm_lang$core$Maybe$Just('ELAAIKQELAAIKKELAAIKWELAAIKQ')
+	sequence: _elm_lang$core$Maybe$Just('ELAAIKQELAAIKKELAAIKWELAAIKQ'),
+	register: 'g'
 };
 var _user$project$Builder$basisSetTrimer = {
 	oligomerState: _elm_lang$core$Maybe$Just(3),
 	radius: _elm_lang$core$Maybe$Just(6.3),
 	pitch: _elm_lang$core$Maybe$Just(194),
 	phiCA: _elm_lang$core$Maybe$Just(20.0),
-	sequence: _elm_lang$core$Maybe$Just('EIAAIKQEIAAIKKEIAAIKWEIAAIKQ')
+	sequence: _elm_lang$core$Maybe$Just('EIAAIKQEIAAIKKEIAAIKWEIAAIKQ'),
+	register: 'g'
 };
 var _user$project$Builder$basisSetDimer = {
 	oligomerState: _elm_lang$core$Maybe$Just(2),
 	radius: _elm_lang$core$Maybe$Just(5.1),
 	pitch: _elm_lang$core$Maybe$Just(226),
 	phiCA: _elm_lang$core$Maybe$Just(26.4),
-	sequence: _elm_lang$core$Maybe$Just('EIAALKQEIAALKKENAALKWEIAALKQ')
+	sequence: _elm_lang$core$Maybe$Just('EIAALKQEIAALKKENAALKWEIAALKQ'),
+	register: 'g'
 };
 var _user$project$Builder$exampleButtonStyling = {
 	ctor: '::',
@@ -13263,12 +13266,26 @@ var _user$project$Builder$exampleButtonStyling = {
 };
 var _user$project$Builder$examplesPanelStyling = {
 	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'bottom', _1: '2%'},
+	_0: {ctor: '_Tuple2', _0: 'top', _1: '7%'},
 	_1: {
 		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'left', _1: '2%'},
+		_0: {ctor: '_Tuple2', _0: 'left', _1: '25%'},
 		_1: {ctor: '[]'}
 	}
+};
+var _user$project$Builder$registerOption = function (register) {
+	return A2(
+		_elm_lang$html$Html$option,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$value(register),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(register),
+			_1: {ctor: '[]'}
+		});
 };
 var _user$project$Builder$parameterInputId = function (parameterLabel) {
 	return _elm_lang$html$Html_Attributes$id(
@@ -13457,12 +13474,13 @@ var _user$project$Builder$maybeNumberToString = function (mNum) {
 	}
 };
 var _user$project$Builder$parametersToInput = function (parameters) {
+	var reg = parameters.register;
 	var seq = A2(_elm_lang$core$Maybe$withDefault, '', parameters.sequence);
 	var phi = _user$project$Builder$maybeNumberToString(parameters.phiCA);
 	var pit = _user$project$Builder$maybeNumberToString(parameters.pitch);
 	var rad = _user$project$Builder$maybeNumberToString(parameters.radius);
 	var os = _user$project$Builder$maybeNumberToString(parameters.oligomerState);
-	return A5(_user$project$Types$InputValues, os, rad, pit, phi, seq);
+	return A6(_user$project$Types$InputValues, os, rad, pit, phi, seq, reg);
 };
 var _user$project$Builder$parametersJson = function (parameters) {
 	return _elm_lang$core$Json_Encode$object(
@@ -13506,15 +13524,31 @@ var _user$project$Builder$parametersJson = function (parameters) {
 								_1: _elm_lang$core$Json_Encode$string(
 									A2(_elm_lang$core$Maybe$withDefault, '', parameters.sequence))
 							},
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'Register',
+									_1: _elm_lang$core$Json_Encode$string(parameters.register)
+								},
+								_1: {ctor: '[]'}
+							}
 						}
 					}
 				}
 			}
 		});
 };
-var _user$project$Builder$emptyInput = A5(_user$project$Types$InputValues, '', '', '', '', '');
-var _user$project$Builder$emptyParameters = A5(_user$project$Types$ParameterRecord, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing);
+var _user$project$Builder$modellingResultsDecoder = A3(
+	_elm_lang$core$Json_Decode$map2,
+	F2(
+		function (v0, v1) {
+			return {ctor: '_Tuple2', _0: v0, _1: v1};
+		}),
+	A2(_elm_lang$core$Json_Decode$field, 'pdb', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'score', _elm_lang$core$Json_Decode$float));
+var _user$project$Builder$emptyInput = A6(_user$project$Types$InputValues, '', '', '', '', '', 'a');
+var _user$project$Builder$emptyParameters = A6(_user$project$Types$ParameterRecord, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, 'a');
 var _user$project$Builder$initialiseViewer = _elm_lang$core$Native_Platform.outgoingPort(
 	'initialiseViewer',
 	function (v) {
@@ -13525,11 +13559,11 @@ var _user$project$Builder$showStructure = _elm_lang$core$Native_Platform.outgoin
 	function (v) {
 		return v;
 	});
-var _user$project$Builder$Model = F4(
-	function (a, b, c, d) {
-		return {parameters: a, currentInput: b, pdbFile: c, building: d};
+var _user$project$Builder$Model = F5(
+	function (a, b, c, d, e) {
+		return {parameters: a, currentInput: b, pdbFile: c, score: d, building: e};
 	});
-var _user$project$Builder$emptyModel = A4(_user$project$Builder$Model, _user$project$Builder$emptyParameters, _user$project$Builder$emptyInput, _elm_lang$core$Maybe$Nothing, false);
+var _user$project$Builder$emptyModel = A5(_user$project$Builder$Model, _user$project$Builder$emptyParameters, _user$project$Builder$emptyInput, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, false);
 var _user$project$Builder$init = {
 	ctor: '_Tuple2',
 	_0: _user$project$Builder$emptyModel,
@@ -13665,7 +13699,7 @@ var _user$project$Builder$sendBuildCmd = function (parameters) {
 			'/builder/build_model',
 			_elm_lang$http$Http$jsonBody(
 				_user$project$Builder$parametersJson(parameters)),
-			_elm_lang$core$Json_Decode$string));
+			_user$project$Builder$modellingResultsDecoder));
 };
 var _user$project$Builder$Build = {ctor: 'Build'};
 var _user$project$Builder$update = F2(
@@ -13682,6 +13716,22 @@ var _user$project$Builder$update = F2(
 						model,
 						{parameters: p, currentInput: i}),
 					{ctor: '[]'});
+			case 'SetRegister':
+				var _p3 = _p1._0;
+				var oldInput = model.currentInput;
+				var newInput = _elm_lang$core$Native_Utils.update(
+					oldInput,
+					{register: _p3});
+				var oldParameters = model.parameters;
+				var newParameters = _elm_lang$core$Native_Utils.update(
+					oldParameters,
+					{register: _p3});
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{parameters: newParameters, currentInput: newInput}),
+					{ctor: '[]'});
 			case 'Build':
 				return {
 					ctor: '_Tuple2',
@@ -13692,18 +13742,19 @@ var _user$project$Builder$update = F2(
 				};
 			case 'ProcessModel':
 				if (_p1._0.ctor === 'Ok') {
-					var _p3 = _p1._0._0;
+					var _p4 = _p1._0._0._0;
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								pdbFile: _elm_lang$core$Maybe$Just(_p3),
+								pdbFile: _elm_lang$core$Maybe$Just(_p4),
+								score: _elm_lang$core$Maybe$Just(_p1._0._0._1),
 								building: false
 							}),
 						{
 							ctor: '::',
-							_0: _user$project$Builder$showStructure(_p3),
+							_0: _user$project$Builder$showStructure(_p4),
 							_1: {ctor: '[]'}
 						});
 				} else {
@@ -13715,13 +13766,13 @@ var _user$project$Builder$update = F2(
 						{ctor: '[]'});
 				}
 			default:
-				var _p4 = _p1._0;
-				var newInputValues = _user$project$Builder$parametersToInput(_p4);
+				var _p5 = _p1._0;
+				var newInputValues = _user$project$Builder$parametersToInput(_p5);
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{parameters: _p4, currentInput: newInputValues}),
+						{parameters: _p5, currentInput: newInputValues}),
 					{
 						ctor: '::',
 						_0: A2(
@@ -13755,13 +13806,61 @@ var _user$project$Builder$parameterSubmit = function (parameters) {
 		},
 		{ctor: '[]'});
 };
+var _user$project$Builder$SetRegister = function (a) {
+	return {ctor: 'SetRegister', _0: a};
+};
+var _user$project$Builder$registerSelection = function (currentRegister) {
+	return A2(
+		_elm_lang$html$Html$select,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$value(currentRegister),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Events$onInput(_user$project$Builder$SetRegister),
+				_1: {ctor: '[]'}
+			}
+		},
+		A2(
+			_elm_lang$core$List$map,
+			_user$project$Builder$registerOption,
+			{
+				ctor: '::',
+				_0: 'a',
+				_1: {
+					ctor: '::',
+					_0: 'b',
+					_1: {
+						ctor: '::',
+						_0: 'c',
+						_1: {
+							ctor: '::',
+							_0: 'd',
+							_1: {
+								ctor: '::',
+								_0: 'e',
+								_1: {
+									ctor: '::',
+									_0: 'f',
+									_1: {
+										ctor: '::',
+										_0: 'g',
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				}
+			}));
+};
 var _user$project$Builder$EditParameter = F2(
 	function (a, b) {
 		return {ctor: 'EditParameter', _0: a, _1: b};
 	});
-var _user$project$Builder$parameterInput = function (_p5) {
-	var _p6 = _p5;
-	var _p7 = _p6._0;
+var _user$project$Builder$parameterInput = function (_p6) {
+	var _p7 = _p6;
+	var _p8 = _p7._0;
 	return A2(
 		_elm_lang$html$Html$div,
 		{
@@ -13771,7 +13870,7 @@ var _user$project$Builder$parameterInput = function (_p5) {
 		},
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html$text(_p7),
+			_0: _elm_lang$html$Html$text(_p8),
 			_1: {
 				ctor: '::',
 				_0: A2(
@@ -13787,26 +13886,26 @@ var _user$project$Builder$parameterInput = function (_p5) {
 							_0: _elm_lang$html$Html_Attributes$type_('text'),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$name(_p7),
+								_0: _elm_lang$html$Html_Attributes$name(_p8),
 								_1: {
 									ctor: '::',
 									_0: _elm_lang$html$Html_Attributes$class('parameter-input-box'),
 									_1: {
 										ctor: '::',
-										_0: _user$project$Builder$parameterInputId(_p7),
+										_0: _user$project$Builder$parameterInputId(_p8),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$placeholder(_p7),
+											_0: _elm_lang$html$Html_Attributes$placeholder(_p8),
 											_1: {
 												ctor: '::',
 												_0: _elm_lang$html$Html_Events$onInput(
-													_user$project$Builder$EditParameter(_p6._1)),
+													_user$project$Builder$EditParameter(_p7._1)),
 												_1: {
 													ctor: '::',
 													_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$inputStyling),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$value(_p6._2),
+														_0: _elm_lang$html$Html_Attributes$value(_p7._2),
 														_1: {ctor: '[]'}
 													}
 												}
@@ -13822,9 +13921,9 @@ var _user$project$Builder$parameterInput = function (_p5) {
 			}
 		});
 };
-var _user$project$Builder$sequenceInput = function (_p8) {
-	var _p9 = _p8;
-	var _p10 = _p9._0;
+var _user$project$Builder$sequenceInput = function (_p9) {
+	var _p10 = _p9;
+	var _p11 = _p10._0;
 	return A2(
 		_elm_lang$html$Html$div,
 		{
@@ -13834,57 +13933,69 @@ var _user$project$Builder$sequenceInput = function (_p8) {
 		},
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html$text(_p10),
+			_0: _elm_lang$html$Html$text(_p11),
 			_1: {
 				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$br,
-					{ctor: '[]'},
-					{ctor: '[]'}),
+				_0: _elm_lang$html$Html$text(' (Register: '),
 				_1: {
 					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$textarea,
-						{
+					_0: _user$project$Builder$registerSelection(_p10._3),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(')'),
+						_1: {
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$name(_p10),
+							_0: A2(
+								_elm_lang$html$Html$br,
+								{ctor: '[]'},
+								{ctor: '[]'}),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('parameter-input-box'),
-								_1: {
-									ctor: '::',
-									_0: _user$project$Builder$parameterInputId(_p10),
-									_1: {
+								_0: A2(
+									_elm_lang$html$Html$textarea,
+									{
 										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$rows(3),
+										_0: _elm_lang$html$Html_Attributes$name(_p11),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$cols(30),
+											_0: _elm_lang$html$Html_Attributes$class('parameter-input-box'),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$inputStyling),
+												_0: _user$project$Builder$parameterInputId(_p11),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$placeholder(_p10),
+													_0: _elm_lang$html$Html_Attributes$rows(3),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html_Events$onInput(
-															_user$project$Builder$EditParameter(_p9._1)),
+														_0: _elm_lang$html$Html_Attributes$cols(30),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$value(_p9._2),
-															_1: {ctor: '[]'}
+															_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$inputStyling),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$placeholder(_p11),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Events$onInput(
+																		_user$project$Builder$EditParameter(_p10._1)),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$html$Html_Attributes$value(_p10._2),
+																		_1: {ctor: '[]'}
+																	}
+																}
+															}
 														}
 													}
 												}
 											}
 										}
-									}
-								}
+									},
+									{ctor: '[]'}),
+								_1: {ctor: '[]'}
 							}
-						},
-						{ctor: '[]'}),
-					_1: {ctor: '[]'}
+						}
+					}
 				}
 			}
 		});
@@ -13899,7 +14010,7 @@ var _user$project$Builder$parameterInputForm = function (model) {
 			{
 				ctor: '::',
 				_0: _user$project$Builder$sequenceInput(
-					{ctor: '_Tuple3', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: model.currentInput.sequence}),
+					{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: model.currentInput.sequence, _3: model.currentInput.register}),
 				_1: {
 					ctor: '::',
 					_0: _user$project$Builder$parameterSubmit(model.parameters),
@@ -13980,7 +14091,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 		init: _user$project$Builder$init,
 		view: _user$project$Builder$view,
 		update: _user$project$Builder$update,
-		subscriptions: function (_p11) {
+		subscriptions: function (_p12) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();
@@ -13988,7 +14099,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Builder.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error String"],"Example":["Types.ParameterRecord"],"Build":[],"EditParameter":["Types.Parameter","String"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParameterRecord":{"args":[],"type":"{ oligomerState : Maybe.Maybe Int , radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String }"}},"message":"Builder.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Builder.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error ( String, Float )"],"Example":["Types.ParameterRecord"],"SetRegister":["String"],"Build":[],"EditParameter":["Types.Parameter","String"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParameterRecord":{"args":[],"type":"{ oligomerState : Maybe.Maybe Int , radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }"}},"message":"Builder.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

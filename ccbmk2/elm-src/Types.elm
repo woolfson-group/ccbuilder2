@@ -7,6 +7,7 @@ type alias ParameterRecord =
     , pitch : Maybe Float
     , phiCA : Maybe Float
     , sequence : Maybe String
+    , register : String
     }
 
 
@@ -16,6 +17,7 @@ type alias InputValues =
     , pitch : String
     , phiCA : String
     , sequence : String
+    , register : String
     }
 
 

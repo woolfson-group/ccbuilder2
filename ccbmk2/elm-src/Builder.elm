@@ -4,7 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Http
-import Json.Decode
+import Json.Decode exposing (field, string, float, decodeString)
 import Json.Encode
 import ParameterValidation exposing (allParametersValid, editParameterValue)
 import Task
@@ -39,23 +39,24 @@ type alias Model =
     { parameters : ParameterRecord
     , currentInput : InputValues
     , pdbFile : Maybe String
+    , score : Maybe Float
     , building : Bool
     }
 
 
 emptyModel : Model
 emptyModel =
-    Model emptyParameters emptyInput Nothing False
+    Model emptyParameters emptyInput Nothing Nothing False
 
 
 emptyParameters : ParameterRecord
 emptyParameters =
-    ParameterRecord Nothing Nothing Nothing Nothing Nothing
+    ParameterRecord Nothing Nothing Nothing Nothing Nothing "a"
 
 
 emptyInput : InputValues
 emptyInput =
-    InputValues "" "" "" "" ""
+    InputValues "" "" "" "" "" "a"
 
 
 
@@ -74,8 +75,9 @@ port showStructure : String -> Cmd msg
 
 type Msg
     = EditParameter Parameter String
+    | SetRegister String
     | Build
-    | ProcessModel (Result Http.Error String)
+    | ProcessModel (Result Http.Error ( String, Float) )
     | Example ParameterRecord
 
 
@@ -87,12 +89,22 @@ update msg model =
                 ( p, i ) = editParameterValue model.parameters model.currentInput parameter newValue
             in
                 { model | parameters = p, currentInput = i } ! []
+        
+        SetRegister register ->
+            let
+                oldParameters = model.parameters
+                newParameters = { oldParameters | register = register }
+                oldInput = model.currentInput
+                newInput = { oldInput | register = register }
+            in
+                { model | parameters = newParameters, currentInput = newInput } ! []
 
         Build ->
             ( { model | building = True }, sendBuildCmd model.parameters )
 
-        ProcessModel (Ok pdbFile) ->
-            { model | pdbFile = Just pdbFile, building = False } ! [ showStructure pdbFile ]
+        ProcessModel (Ok (pdbFile, score)) ->
+            { model | pdbFile = Just pdbFile, score = Just score, building = False } !
+                [ showStructure pdbFile ]
 
         ProcessModel (Err _) ->
             { model | building = False } ! []
@@ -111,7 +123,11 @@ sendBuildCmd parameters =
         Http.post
             "/builder/build_model"
             (Http.jsonBody <| parametersJson parameters)
-            Json.Decode.string
+            modellingResultsDecoder
+
+
+modellingResultsDecoder : Json.Decode.Decoder ( String, Float )
+modellingResultsDecoder = Json.Decode.map2 (,) (field "pdb" string) (field "score" float)
 
 
 parametersJson : ParameterRecord -> Json.Encode.Value
@@ -122,6 +138,7 @@ parametersJson parameters =
         , ( "Pitch", parameters.pitch |> Maybe.withDefault 0 |> Json.Encode.float )
         , ( "Interface Angle", parameters.phiCA |> Maybe.withDefault 0 |> Json.Encode.float )
         , ( "Sequence", parameters.sequence |> Maybe.withDefault "" |> Json.Encode.string )
+        , ( "Register", parameters.register |> Json.Encode.string )
         ]
 
 parametersToInput : ParameterRecord -> InputValues
@@ -132,8 +149,9 @@ parametersToInput parameters =
         pit = maybeNumberToString parameters.pitch
         phi = maybeNumberToString parameters.phiCA
         seq = Maybe.withDefault "" parameters.sequence
+        reg = parameters.register
     in
-        InputValues os rad pit phi seq
+        InputValues os rad pit phi seq reg
 
 
 maybeNumberToString : Maybe number -> String
@@ -217,7 +235,9 @@ parameterInputForm : Model -> Html Msg
 parameterInputForm model =
     List.map parameterInput ( allParameters model.currentInput )
         |> flip (List.append)
-            ([ sequenceInput ( "Sequence", Sequence, model.currentInput.sequence ), parameterSubmit model.parameters ])
+            [ sequenceInput 
+                ( "Sequence", Sequence, model.currentInput.sequence, model.currentInput.register )
+            , parameterSubmit model.parameters ]
         |> Html.div []
 
 
@@ -249,10 +269,13 @@ parameterInput ( parameterLabel, parameter, currentParameter ) =
         ]
 
 
-sequenceInput : ( String, Parameter, String ) -> Html Msg
-sequenceInput ( parameterLabel, parameter, currentParameter ) =
+sequenceInput : ( String, Parameter, String, String ) -> Html Msg
+sequenceInput ( parameterLabel, parameter, currentSequence, currentRegister ) =
     div [ class "parameter-input" ]
         [ text parameterLabel
+        , text " (Register: "
+        , registerSelection currentRegister
+        , text ")"
         , br [] []
         , textarea
             [ name parameterLabel
@@ -263,7 +286,7 @@ sequenceInput ( parameterLabel, parameter, currentParameter ) =
             , style inputStyling
             , placeholder parameterLabel
             , onInput (EditParameter parameter)
-            , value currentParameter
+            , value currentSequence
             ]
             []
         ]
@@ -293,6 +316,17 @@ parameterSubmit parameters =
         ]
         []
 
+
+registerSelection : String -> Html Msg
+registerSelection currentRegister =
+    select 
+        [ value currentRegister, onInput SetRegister ]
+        ( List.map registerOption [ "a", "b", "c", "d", "e", "f", "g" ] )
+
+
+registerOption : String -> Html msg
+registerOption register =
+    option [ value register ] [ text register ]
 
 
 -- Examples Panel
@@ -327,8 +361,8 @@ examplesPanel =
 
 examplesPanelStyling : Styling
 examplesPanelStyling =
-    [ ( "bottom", "2%" )
-    , ( "left", "2%" )
+    [ ( "top", "7%" )
+    , ( "left", "30%" )
     ]
 
 
@@ -345,6 +379,7 @@ basisSetDimer =
     , pitch = Just 226
     , phiCA = Just 26.4
     , sequence = Just "EIAALKQEIAALKKENAALKWEIAALKQ"
+    , register = "g"
     }
 
 
@@ -355,6 +390,7 @@ basisSetTrimer =
     , pitch = Just 194
     , phiCA = Just 20.0
     , sequence = Just "EIAAIKQEIAAIKKEIAAIKWEIAAIKQ"
+    , register = "g"
     }
 
 
@@ -365,6 +401,7 @@ basisSetTetramer =
     , pitch = Just 213
     , phiCA = Just 22.1
     , sequence = Just "ELAAIKQELAAIKKELAAIKWELAAIKQ"
+    , register = "g"
     }
 
 

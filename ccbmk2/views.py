@@ -25,5 +25,5 @@ def builder():
 def process_builder_command(cmd=None):
     """Processes commands passed to the builder module."""
     if cmd == BUILD:
-        pdb_file = build_coiled_coil(request.json)
-    return jsonify(pdb_file)
+        pdb_and_score = build_coiled_coil(request.json)
+    return jsonify(pdb_and_score)
