@@ -1,8 +1,10 @@
 module BuildPanel exposing (..)
 
+import BuilderCss exposing (CssClasses(..), CssIds(..), cssNamespace)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Html.CssHelpers
 import ParameterValidation exposing (containsInvalidParameter, editParameterValue)
 import Styling exposing (Styling, panelStyling)
 import Types
@@ -12,6 +14,10 @@ import Types
         , Parameter(..)
         , Panel(..)
         )
+
+
+{ class, classList, id } =
+    Html.CssHelpers.withNamespace cssNamespace
 
 
 type BuildPanelMsgs msg
@@ -44,7 +50,7 @@ config { edit, submit, clear, setRegister, toggle } =
 
 buildPanel : BuildPanelMsgs msg -> ParameterRecord -> InputValues -> Html msg
 buildPanel config parameters currentInput =
-    div [ class "overlay-panel", id "command-panel", style <| panelStyling ++ buildPanelStyling ]
+    div [ class [ OverlayPanel ], id [ Build ], style <| panelStyling ++ buildPanelStyling ]
         [ h3 [] [ text "Parameters" ]
         , parameterInputForm config parameters currentInput
         ]
@@ -88,14 +94,12 @@ parameterInput config ( parameterLabel, parameter, currentParameter ) =
         (BuildPanelMsgs { edit }) =
             config
     in
-        div [ class "parameter-input" ]
+        div [ class [ ParameterInput ] ]
             [ text parameterLabel
             , br [] []
             , input
                 [ type_ "text"
                 , name parameterLabel
-                , class "parameter-input-box"
-                , parameterInputId parameterLabel
                 , placeholder parameterLabel
                 , onInput (edit parameter)
                 , style inputStyling
@@ -111,7 +115,7 @@ sequenceInput config ( parameterLabel, parameter, currentSequence, currentRegist
         (BuildPanelMsgs { edit }) =
             config
     in
-        div [ class "parameter-input" ]
+        div [ class [ ParameterInput ] ]
             [ text parameterLabel
             , text " (Register: "
             , registerSelection config currentRegister
@@ -119,8 +123,6 @@ sequenceInput config ( parameterLabel, parameter, currentSequence, currentRegist
             , br [] []
             , textarea
                 [ name parameterLabel
-                , class "parameter-input-box"
-                , parameterInputId parameterLabel
                 , rows 3
                 , cols 30
                 , style inputStyling
@@ -135,15 +137,6 @@ sequenceInput config ( parameterLabel, parameter, currentSequence, currentRegist
 inputStyling : Styling
 inputStyling =
     [ ( "width", "100%" ) ]
-
-
-parameterInputId : String -> Html.Attribute msg
-parameterInputId parameterLabel =
-    String.toLower parameterLabel
-        |> String.split " "
-        |> String.join "-"
-        |> String.append "input-box-"
-        |> id
 
 
 parameterSubmit : BuildPanelMsgs msg -> ParameterRecord -> Html msg
@@ -172,8 +165,7 @@ registerOption register =
 toggleBuildPanel : BuildPanelMsgs msg -> Html msg
 toggleBuildPanel (BuildPanelMsgs { toggle }) =
     div
-        [ class "overlay-panel panel-toggle"
-        , id "toggle-command-panel"
+        [ class [ OverlayPanel, PanelToggle ]
         , onClick (toggle BuildPanel)
         ]
         [ text "Build" ]

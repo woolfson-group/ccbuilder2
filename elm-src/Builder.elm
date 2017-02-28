@@ -526,11 +526,11 @@ buildHistoryPanel : List ParameterRecord -> Html Msg
 buildHistoryPanel modelHistory =
     div
         [ class "overlay-panel"
-        , id "build-history-panel"
+        , id "parameter-history"
         , style <| panelStyling ++ buildHistoryPanelStyling
         ]
         [ h3 [] [ text "Build History" ]
-        , table [ id "parameter-history-table" ]
+        , table []
             [ modelDetailTableHeader
             , List.map modelParametersAsRow modelHistory |> tbody []
             ]
@@ -540,7 +540,7 @@ buildHistoryPanel modelHistory =
 modelDetailTableHeader : Html msg
 modelDetailTableHeader =
     thead []
-        [ tr [ class "parameter-history-header" ]
+        [ tr []
             [ th [ style [ ( "width", "6em" ) ] ] [ text "Oligomer State" ]
             , th [ style [ ( "width", "6em" ) ] ] [ text "Radius" ]
             , th [ style [ ( "width", "6em" ) ] ] [ text "Pitch" ]
@@ -557,7 +557,7 @@ modelParametersAsRow parameters =
         inputParameters =
             parametersToInput parameters
     in
-        tr [ class "parameter-history-row", onClick (SetParametersAndBuild parameters) ]
+        tr [ onClick (SetParametersAndBuild parameters) ]
             [ inputParameters.oligomerState |> makeParameterTh
             , inputParameters.radius |> makeParameterTh
             , inputParameters.pitch |> makeParameterTh
