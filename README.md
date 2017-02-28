@@ -18,5 +18,6 @@
 ## TODO
 
 * Buttons to hide side panels
+* Make a branch and refactor to remove CSS
 * Add stats logging with MongoDB
 * Independent chains and antiparallels
