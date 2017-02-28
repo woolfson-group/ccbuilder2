@@ -13364,6 +13364,9 @@ var _user$project$Types$PhiCA = {ctor: 'PhiCA'};
 var _user$project$Types$Pitch = {ctor: 'Pitch'};
 var _user$project$Types$Radius = {ctor: 'Radius'};
 var _user$project$Types$OligomerState = {ctor: 'OligomerState'};
+var _user$project$Types$BuildHistoryPanel = {ctor: 'BuildHistoryPanel'};
+var _user$project$Types$ExamplesPanel = {ctor: 'ExamplesPanel'};
+var _user$project$Types$BuildPanel = {ctor: 'BuildPanel'};
 
 var _user$project$ParameterValidation$isNotNaN = function (_p0) {
 	return !_elm_lang$core$Basics$isNaN(_p0);
@@ -13577,6 +13580,406 @@ var _user$project$ParameterValidation$containsInvalidParameter = function (_p2) 
 		});
 };
 
+var _user$project$Styling$panelStyling = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'z-index', _1: '1'},
+		_1: {ctor: '[]'}
+	}
+};
+
+var _user$project$BuildPanel$toggleBuildPanel = function (_p0) {
+	var _p1 = _p0;
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('overlay-panel panel-toggle'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$id('toggle-command-panel'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(
+						_p1._0.toggle(_user$project$Types$BuildPanel)),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text('Build'),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$BuildPanel$registerOption = function (register) {
+	return A2(
+		_elm_lang$html$Html$option,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$value(register),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(register),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$BuildPanel$registerSelection = F2(
+	function (_p2, currentRegister) {
+		var _p3 = _p2;
+		return A2(
+			_elm_lang$html$Html$select,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$value(currentRegister),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onInput(_p3._0.setRegister),
+					_1: {ctor: '[]'}
+				}
+			},
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$BuildPanel$registerOption,
+				{
+					ctor: '::',
+					_0: 'a',
+					_1: {
+						ctor: '::',
+						_0: 'b',
+						_1: {
+							ctor: '::',
+							_0: 'c',
+							_1: {
+								ctor: '::',
+								_0: 'd',
+								_1: {
+									ctor: '::',
+									_0: 'e',
+									_1: {
+										ctor: '::',
+										_0: 'f',
+										_1: {
+											ctor: '::',
+											_0: 'g',
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					}
+				}));
+	});
+var _user$project$BuildPanel$parameterSubmit = F2(
+	function (_p4, parameters) {
+		var _p5 = _p4;
+		return A2(
+			_elm_lang$html$Html$input,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$type_('submit'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$value('Submit'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onClick(_p5._0.submit),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$disabled(
+								_user$project$ParameterValidation$containsInvalidParameter(parameters)),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			},
+			{ctor: '[]'});
+	});
+var _user$project$BuildPanel$parameterInputId = function (parameterLabel) {
+	return _elm_lang$html$Html_Attributes$id(
+		A2(
+			_elm_lang$core$String$append,
+			'input-box-',
+			A2(
+				_elm_lang$core$String$join,
+				'-',
+				A2(
+					_elm_lang$core$String$split,
+					' ',
+					_elm_lang$core$String$toLower(parameterLabel)))));
+};
+var _user$project$BuildPanel$inputStyling = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
+	_1: {ctor: '[]'}
+};
+var _user$project$BuildPanel$sequenceInput = F2(
+	function (config, _p6) {
+		var _p7 = _p6;
+		var _p9 = _p7._0;
+		var _p8 = config;
+		var edit = _p8._0.edit;
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('parameter-input'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(_p9),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(' (Register: '),
+					_1: {
+						ctor: '::',
+						_0: A2(_user$project$BuildPanel$registerSelection, config, _p7._3),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(')'),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$br,
+									{ctor: '[]'},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$textarea,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$name(_p9),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('parameter-input-box'),
+												_1: {
+													ctor: '::',
+													_0: _user$project$BuildPanel$parameterInputId(_p9),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$rows(3),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$cols(30),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$style(_user$project$BuildPanel$inputStyling),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$placeholder(_p9),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$html$Html_Events$onInput(
+																			edit(_p7._1)),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$html$Html_Attributes$value(_p7._2),
+																			_1: {ctor: '[]'}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}
+			});
+	});
+var _user$project$BuildPanel$parameterInput = F2(
+	function (config, _p10) {
+		var _p11 = _p10;
+		var _p13 = _p11._0;
+		var _p12 = config;
+		var edit = _p12._0.edit;
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('parameter-input'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(_p13),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$br,
+						{ctor: '[]'},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$input,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$type_('text'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$name(_p13),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('parameter-input-box'),
+										_1: {
+											ctor: '::',
+											_0: _user$project$BuildPanel$parameterInputId(_p13),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$placeholder(_p13),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onInput(
+														edit(_p11._1)),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$style(_user$project$BuildPanel$inputStyling),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$value(_p11._2),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
+					}
+				}
+			});
+	});
+var _user$project$BuildPanel$allParameters = function (currentInput) {
+	return {
+		ctor: '::',
+		_0: {ctor: '_Tuple3', _0: 'Oligomer State', _1: _user$project$Types$OligomerState, _2: currentInput.oligomerState},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple3', _0: 'Radius', _1: _user$project$Types$Radius, _2: currentInput.radius},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple3', _0: 'Pitch', _1: _user$project$Types$Pitch, _2: currentInput.pitch},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple3', _0: 'Interface Angle', _1: _user$project$Types$PhiCA, _2: currentInput.phiCA},
+					_1: {ctor: '[]'}
+				}
+			}
+		}
+	};
+};
+var _user$project$BuildPanel$parameterInputForm = F3(
+	function (config, parameters, currentInput) {
+		var _p14 = config;
+		var clear = _p14._0.clear;
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			A3(
+				_elm_lang$core$Basics$flip,
+				_elm_lang$core$List$append,
+				{
+					ctor: '::',
+					_0: A2(
+						_user$project$BuildPanel$sequenceInput,
+						config,
+						{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: currentInput.sequence, _3: currentInput.register}),
+					_1: {
+						ctor: '::',
+						_0: A2(_user$project$BuildPanel$parameterSubmit, config, parameters),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$button,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(clear),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Clear'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				},
+				A2(
+					_elm_lang$core$List$map,
+					_user$project$BuildPanel$parameterInput(config),
+					_user$project$BuildPanel$allParameters(currentInput))));
+	});
+var _user$project$BuildPanel$buildPanelStyling = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'top', _1: '7%'},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'left', _1: '2%'},
+		_1: {ctor: '[]'}
+	}
+};
+var _user$project$BuildPanel$buildPanel = F3(
+	function (config, parameters, currentInput) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('overlay-panel'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$id('command-panel'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(
+							A2(_elm_lang$core$Basics_ops['++'], _user$project$Styling$panelStyling, _user$project$BuildPanel$buildPanelStyling)),
+						_1: {ctor: '[]'}
+					}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h3,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Parameters'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A3(_user$project$BuildPanel$parameterInputForm, config, parameters, currentInput),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _user$project$BuildPanel$BuildPanelMsgs = function (a) {
+	return {ctor: 'BuildPanelMsgs', _0: a};
+};
+var _user$project$BuildPanel$config = function (_p15) {
+	var _p16 = _p15;
+	return _user$project$BuildPanel$BuildPanelMsgs(
+		{edit: _p16.edit, submit: _p16.submit, clear: _p16.clear, setRegister: _p16.setRegister, toggle: _p16.toggle});
+};
+
 var _user$project$Builder$buildingStatusStyling = {
 	ctor: '::',
 	_0: {ctor: '_Tuple2', _0: 'top', _1: '50%'},
@@ -13593,6 +13996,56 @@ var _user$project$Builder$buildingStatusStyling = {
 			}
 		}
 	}
+};
+var _user$project$Builder$buildingStatusPanel = function (model) {
+	var commonAttr = {
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('overlay-panel'),
+		_1: {
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$id('building-status-panel'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$style(
+					A2(_elm_lang$core$Basics_ops['++'], _user$project$Builder$buildingStatusStyling, _user$project$Styling$panelStyling)),
+				_1: {ctor: '[]'}
+			}
+		}
+	};
+	return model.building ? A2(
+		_elm_lang$html$Html$div,
+		commonAttr,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text('Building...'),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$img,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$src('static/css/infinity.gif'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$width(80),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$height(80),
+								_1: {ctor: '[]'}
+							}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {ctor: '[]'}
+			}
+		}) : A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$hidden(true),
+			_1: commonAttr
+		},
+		{ctor: '[]'});
 };
 var _user$project$Builder$buildHistoryPanelStyling = {
 	ctor: '::',
@@ -13759,147 +14212,6 @@ var _user$project$Builder$roundToXDecPlaces = F2(
 			_elm_lang$core$Basics$toFloat(
 				_elm_lang$core$Basics$round(num * scaling)));
 	});
-var _user$project$Builder$basisSetTetramer = {
-	oligomerState: _elm_lang$core$Maybe$Just(4),
-	radius: _elm_lang$core$Maybe$Just(6.8),
-	pitch: _elm_lang$core$Maybe$Just(213),
-	phiCA: _elm_lang$core$Maybe$Just(22.1),
-	sequence: _elm_lang$core$Maybe$Just('ELAAIKQELAAIKKELAAIKWELAAIKQ'),
-	register: 'g'
-};
-var _user$project$Builder$basisSetTrimer = {
-	oligomerState: _elm_lang$core$Maybe$Just(3),
-	radius: _elm_lang$core$Maybe$Just(6.3),
-	pitch: _elm_lang$core$Maybe$Just(194),
-	phiCA: _elm_lang$core$Maybe$Just(20.0),
-	sequence: _elm_lang$core$Maybe$Just('EIAAIKQEIAAIKKEIAAIKWEIAAIKQ'),
-	register: 'g'
-};
-var _user$project$Builder$basisSetDimer = {
-	oligomerState: _elm_lang$core$Maybe$Just(2),
-	radius: _elm_lang$core$Maybe$Just(5.1),
-	pitch: _elm_lang$core$Maybe$Just(226),
-	phiCA: _elm_lang$core$Maybe$Just(26.4),
-	sequence: _elm_lang$core$Maybe$Just('EIAALKQEIAALKKENAALKWEIAALKQ'),
-	register: 'g'
-};
-var _user$project$Builder$exampleButtonStyling = {
-	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'width', _1: '80%'},
-	_1: {ctor: '[]'}
-};
-var _user$project$Builder$examplesPanelStyling = {
-	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'top', _1: '7%'},
-	_1: {
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'left', _1: '2%'},
-		_1: {ctor: '[]'}
-	}
-};
-var _user$project$Builder$registerOption = function (register) {
-	return A2(
-		_elm_lang$html$Html$option,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$value(register),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(register),
-			_1: {ctor: '[]'}
-		});
-};
-var _user$project$Builder$parameterInputId = function (parameterLabel) {
-	return _elm_lang$html$Html_Attributes$id(
-		A2(
-			_elm_lang$core$String$append,
-			'input-box-',
-			A2(
-				_elm_lang$core$String$join,
-				'-',
-				A2(
-					_elm_lang$core$String$split,
-					' ',
-					_elm_lang$core$String$toLower(parameterLabel)))));
-};
-var _user$project$Builder$inputStyling = {
-	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
-	_1: {ctor: '[]'}
-};
-var _user$project$Builder$allParameters = function (currentInput) {
-	return {
-		ctor: '::',
-		_0: {ctor: '_Tuple3', _0: 'Oligomer State', _1: _user$project$Types$OligomerState, _2: currentInput.oligomerState},
-		_1: {
-			ctor: '::',
-			_0: {ctor: '_Tuple3', _0: 'Radius', _1: _user$project$Types$Radius, _2: currentInput.radius},
-			_1: {
-				ctor: '::',
-				_0: {ctor: '_Tuple3', _0: 'Pitch', _1: _user$project$Types$Pitch, _2: currentInput.pitch},
-				_1: {
-					ctor: '::',
-					_0: {ctor: '_Tuple3', _0: 'Interface Angle', _1: _user$project$Types$PhiCA, _2: currentInput.phiCA},
-					_1: {ctor: '[]'}
-				}
-			}
-		}
-	};
-};
-var _user$project$Builder$buildPanelStyling = {
-	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'top', _1: '7%'},
-	_1: {
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'left', _1: '2%'},
-		_1: {ctor: '[]'}
-	}
-};
-var _user$project$Builder$topRightTogglesStyling = {
-	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'top', _1: '7%'},
-	_1: {
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'right', _1: '-5px'},
-		_1: {
-			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'z-index', _1: '2'},
-			_1: {
-				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
-				_1: {ctor: '[]'}
-			}
-		}
-	}
-};
-var _user$project$Builder$topLeftTogglesStyling = {
-	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'top', _1: '7%'},
-	_1: {
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'left', _1: '-5px'},
-		_1: {
-			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'z-index', _1: '2'},
-			_1: {
-				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
-				_1: {ctor: '[]'}
-			}
-		}
-	}
-};
-var _user$project$Builder$panelStyling = {
-	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
-	_1: {
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'z-index', _1: '1'},
-		_1: {ctor: '[]'}
-	}
-};
 var _user$project$Builder$modelInfoPanel = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -13912,7 +14224,7 @@ var _user$project$Builder$modelInfoPanel = function (model) {
 				_1: {
 					ctor: '::',
 					_0: _elm_lang$html$Html_Attributes$style(
-						A2(_elm_lang$core$Basics_ops['++'], _user$project$Builder$panelStyling, _user$project$Builder$modelInfoPanelStyling)),
+						A2(_elm_lang$core$Basics_ops['++'], _user$project$Styling$panelStyling, _user$project$Builder$modelInfoPanelStyling)),
 					_1: {ctor: '[]'}
 				}
 			}
@@ -13968,55 +14280,77 @@ var _user$project$Builder$modelInfoPanel = function (model) {
 			}
 		});
 };
-var _user$project$Builder$buildingStatusPanel = function (model) {
-	var commonAttr = {
+var _user$project$Builder$basisSetTetramer = {
+	oligomerState: _elm_lang$core$Maybe$Just(4),
+	radius: _elm_lang$core$Maybe$Just(6.8),
+	pitch: _elm_lang$core$Maybe$Just(213),
+	phiCA: _elm_lang$core$Maybe$Just(22.1),
+	sequence: _elm_lang$core$Maybe$Just('ELAAIKQELAAIKKELAAIKWELAAIKQ'),
+	register: 'g'
+};
+var _user$project$Builder$basisSetTrimer = {
+	oligomerState: _elm_lang$core$Maybe$Just(3),
+	radius: _elm_lang$core$Maybe$Just(6.3),
+	pitch: _elm_lang$core$Maybe$Just(194),
+	phiCA: _elm_lang$core$Maybe$Just(20.0),
+	sequence: _elm_lang$core$Maybe$Just('EIAAIKQEIAAIKKEIAAIKWEIAAIKQ'),
+	register: 'g'
+};
+var _user$project$Builder$basisSetDimer = {
+	oligomerState: _elm_lang$core$Maybe$Just(2),
+	radius: _elm_lang$core$Maybe$Just(5.1),
+	pitch: _elm_lang$core$Maybe$Just(226),
+	phiCA: _elm_lang$core$Maybe$Just(26.4),
+	sequence: _elm_lang$core$Maybe$Just('EIAALKQEIAALKKENAALKWEIAALKQ'),
+	register: 'g'
+};
+var _user$project$Builder$exampleButtonStyling = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'width', _1: '80%'},
+	_1: {ctor: '[]'}
+};
+var _user$project$Builder$examplesPanelStyling = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'top', _1: '7%'},
+	_1: {
 		ctor: '::',
-		_0: _elm_lang$html$Html_Attributes$class('overlay-panel'),
+		_0: {ctor: '_Tuple2', _0: 'left', _1: '2%'},
+		_1: {ctor: '[]'}
+	}
+};
+var _user$project$Builder$topRightTogglesStyling = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'top', _1: '7%'},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'right', _1: '-5px'},
 		_1: {
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$id('building-status-panel'),
+			_0: {ctor: '_Tuple2', _0: 'z-index', _1: '2'},
 			_1: {
 				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$style(
-					A2(_elm_lang$core$Basics_ops['++'], _user$project$Builder$buildingStatusStyling, _user$project$Builder$panelStyling)),
+				_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
 				_1: {ctor: '[]'}
 			}
 		}
-	};
-	return model.building ? A2(
-		_elm_lang$html$Html$div,
-		commonAttr,
-		{
+	}
+};
+var _user$project$Builder$topLeftTogglesStyling = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'top', _1: '7%'},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'left', _1: '-5px'},
+		_1: {
 			ctor: '::',
-			_0: _elm_lang$html$Html$text('Building...'),
+			_0: {ctor: '_Tuple2', _0: 'z-index', _1: '2'},
 			_1: {
 				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$img,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$src('static/css/infinity.gif'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$width(80),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$height(80),
-								_1: {ctor: '[]'}
-							}
-						}
-					},
-					{ctor: '[]'}),
+				_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
 				_1: {ctor: '[]'}
 			}
-		}) : A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$hidden(true),
-			_1: commonAttr
-		},
-		{ctor: '[]'});
+		}
+	}
 };
 var _user$project$Builder$headerStyling = {
 	ctor: '::',
@@ -14047,7 +14381,7 @@ var _user$project$Builder$siteHeader = A2(
 		_1: {
 			ctor: '::',
 			_0: _elm_lang$html$Html_Attributes$style(
-				A2(_elm_lang$core$Basics_ops['++'], _user$project$Builder$headerStyling, _user$project$Builder$panelStyling)),
+				A2(_elm_lang$core$Basics_ops['++'], _user$project$Builder$headerStyling, _user$project$Styling$panelStyling)),
 			_1: {ctor: '[]'}
 		}
 	},
@@ -14209,33 +14543,9 @@ var _user$project$Builder$init = {
 	_1: _user$project$Builder$initialiseViewer(
 		{ctor: '_Tuple0'})
 };
-var _user$project$Builder$BuildHistoryPanel = {ctor: 'BuildHistoryPanel'};
-var _user$project$Builder$ExamplesPanel = {ctor: 'ExamplesPanel'};
-var _user$project$Builder$BuildPanel = {ctor: 'BuildPanel'};
 var _user$project$Builder$TogglePanel = function (a) {
 	return {ctor: 'TogglePanel', _0: a};
 };
-var _user$project$Builder$toggleBuildPanel = A2(
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _elm_lang$html$Html_Attributes$class('overlay-panel panel-toggle'),
-		_1: {
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$id('toggle-command-panel'),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html_Events$onClick(
-					_user$project$Builder$TogglePanel(_user$project$Builder$BuildPanel)),
-				_1: {ctor: '[]'}
-			}
-		}
-	},
-	{
-		ctor: '::',
-		_0: _elm_lang$html$Html$text('Build'),
-		_1: {ctor: '[]'}
-	});
 var _user$project$Builder$toggleExamplesPanel = A2(
 	_elm_lang$html$Html$div,
 	{
@@ -14247,7 +14557,7 @@ var _user$project$Builder$toggleExamplesPanel = A2(
 			_1: {
 				ctor: '::',
 				_0: _elm_lang$html$Html_Events$onClick(
-					_user$project$Builder$TogglePanel(_user$project$Builder$ExamplesPanel)),
+					_user$project$Builder$TogglePanel(_user$project$Types$ExamplesPanel)),
 				_1: {ctor: '[]'}
 			}
 		}
@@ -14256,26 +14566,6 @@ var _user$project$Builder$toggleExamplesPanel = A2(
 		ctor: '::',
 		_0: _elm_lang$html$Html$text('Examples'),
 		_1: {ctor: '[]'}
-	});
-var _user$project$Builder$topLeftToggles = A2(
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _elm_lang$html$Html_Attributes$id('top-left-toggles'),
-		_1: {
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$topLeftTogglesStyling),
-			_1: {ctor: '[]'}
-		}
-	},
-	{
-		ctor: '::',
-		_0: _user$project$Builder$toggleBuildPanel,
-		_1: {
-			ctor: '::',
-			_0: _user$project$Builder$toggleExamplesPanel,
-			_1: {ctor: '[]'}
-		}
 	});
 var _user$project$Builder$toggleBuildHistoryPanel = A2(
 	_elm_lang$html$Html$div,
@@ -14288,7 +14578,7 @@ var _user$project$Builder$toggleBuildHistoryPanel = A2(
 			_1: {
 				ctor: '::',
 				_0: _elm_lang$html$Html_Events$onClick(
-					_user$project$Builder$TogglePanel(_user$project$Builder$BuildHistoryPanel)),
+					_user$project$Builder$TogglePanel(_user$project$Types$BuildHistoryPanel)),
 				_1: {ctor: '[]'}
 			}
 		}
@@ -14334,7 +14624,7 @@ var _user$project$Builder$examplesPanel = A2(
 			_1: {
 				ctor: '::',
 				_0: _elm_lang$html$Html_Attributes$style(
-					A2(_elm_lang$core$Basics_ops['++'], _user$project$Builder$panelStyling, _user$project$Builder$examplesPanelStyling)),
+					A2(_elm_lang$core$Basics_ops['++'], _user$project$Styling$panelStyling, _user$project$Builder$examplesPanelStyling)),
 				_1: {ctor: '[]'}
 			}
 		}
@@ -14489,7 +14779,7 @@ var _user$project$Builder$buildHistoryPanel = function (modelHistory) {
 				_1: {
 					ctor: '::',
 					_0: _elm_lang$html$Html_Attributes$style(
-						A2(_elm_lang$core$Basics_ops['++'], _user$project$Builder$panelStyling, _user$project$Builder$buildHistoryPanelStyling)),
+						A2(_elm_lang$core$Basics_ops['++'], _user$project$Styling$panelStyling, _user$project$Builder$buildHistoryPanelStyling)),
 					_1: {ctor: '[]'}
 				}
 			}
@@ -14699,301 +14989,42 @@ var _user$project$Builder$update = F2(
 				}
 		}
 	});
-var _user$project$Builder$parameterSubmit = function (parameters) {
-	return A2(
-		_elm_lang$html$Html$input,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$type_('submit'),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$value('Submit'),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$html$Html_Events$onClick(_user$project$Builder$Build),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$disabled(
-							_user$project$ParameterValidation$containsInvalidParameter(parameters)),
-						_1: {ctor: '[]'}
-					}
-				}
-			}
-		},
-		{ctor: '[]'});
-};
 var _user$project$Builder$SetRegister = function (a) {
 	return {ctor: 'SetRegister', _0: a};
-};
-var _user$project$Builder$registerSelection = function (currentRegister) {
-	return A2(
-		_elm_lang$html$Html$select,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$value(currentRegister),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html_Events$onInput(_user$project$Builder$SetRegister),
-				_1: {ctor: '[]'}
-			}
-		},
-		A2(
-			_elm_lang$core$List$map,
-			_user$project$Builder$registerOption,
-			{
-				ctor: '::',
-				_0: 'a',
-				_1: {
-					ctor: '::',
-					_0: 'b',
-					_1: {
-						ctor: '::',
-						_0: 'c',
-						_1: {
-							ctor: '::',
-							_0: 'd',
-							_1: {
-								ctor: '::',
-								_0: 'e',
-								_1: {
-									ctor: '::',
-									_0: 'f',
-									_1: {
-										ctor: '::',
-										_0: 'g',
-										_1: {ctor: '[]'}
-									}
-								}
-							}
-						}
-					}
-				}
-			}));
 };
 var _user$project$Builder$EditParameter = F2(
 	function (a, b) {
 		return {ctor: 'EditParameter', _0: a, _1: b};
 	});
-var _user$project$Builder$parameterInput = function (_p8) {
-	var _p9 = _p8;
-	var _p10 = _p9._0;
-	return A2(
-		_elm_lang$html$Html$div,
-		{
+var _user$project$Builder$buildConfig = _user$project$BuildPanel$config(
+	{edit: _user$project$Builder$EditParameter, submit: _user$project$Builder$Build, clear: _user$project$Builder$Clear, setRegister: _user$project$Builder$SetRegister, toggle: _user$project$Builder$TogglePanel});
+var _user$project$Builder$topLeftToggles = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$id('top-left-toggles'),
+		_1: {
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('parameter-input'),
+			_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$topLeftTogglesStyling),
 			_1: {ctor: '[]'}
-		},
-		{
+		}
+	},
+	{
+		ctor: '::',
+		_0: _user$project$BuildPanel$toggleBuildPanel(_user$project$Builder$buildConfig),
+		_1: {
 			ctor: '::',
-			_0: _elm_lang$html$Html$text(_p10),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$br,
-					{ctor: '[]'},
-					{ctor: '[]'}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$input,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$type_('text'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$name(_p10),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('parameter-input-box'),
-									_1: {
-										ctor: '::',
-										_0: _user$project$Builder$parameterInputId(_p10),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$placeholder(_p10),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html_Events$onInput(
-													_user$project$Builder$EditParameter(_p9._1)),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$inputStyling),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$value(_p9._2),
-														_1: {ctor: '[]'}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						},
-						{ctor: '[]'}),
-					_1: {ctor: '[]'}
-				}
-			}
-		});
-};
-var _user$project$Builder$sequenceInput = function (_p11) {
-	var _p12 = _p11;
-	var _p13 = _p12._0;
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('parameter-input'),
+			_0: _user$project$Builder$toggleExamplesPanel,
 			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(_p13),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(' (Register: '),
-				_1: {
-					ctor: '::',
-					_0: _user$project$Builder$registerSelection(_p12._3),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html$text(')'),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$br,
-								{ctor: '[]'},
-								{ctor: '[]'}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$textarea,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$name(_p13),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('parameter-input-box'),
-											_1: {
-												ctor: '::',
-												_0: _user$project$Builder$parameterInputId(_p13),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$rows(3),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$cols(30),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$inputStyling),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$placeholder(_p13),
-																_1: {
-																	ctor: '::',
-																	_0: _elm_lang$html$Html_Events$onInput(
-																		_user$project$Builder$EditParameter(_p12._1)),
-																	_1: {
-																		ctor: '::',
-																		_0: _elm_lang$html$Html_Attributes$value(_p12._2),
-																		_1: {ctor: '[]'}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									},
-									{ctor: '[]'}),
-								_1: {ctor: '[]'}
-							}
-						}
-					}
-				}
-			}
-		});
-};
-var _user$project$Builder$parameterInputForm = function (model) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{ctor: '[]'},
-		A3(
-			_elm_lang$core$Basics$flip,
-			_elm_lang$core$List$append,
-			{
-				ctor: '::',
-				_0: _user$project$Builder$sequenceInput(
-					{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: model.currentInput.sequence, _3: model.currentInput.register}),
-				_1: {
-					ctor: '::',
-					_0: _user$project$Builder$parameterSubmit(model.parameters),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$button,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onClick(_user$project$Builder$Clear),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('Clear'),
-								_1: {ctor: '[]'}
-							}),
-						_1: {ctor: '[]'}
-					}
-				}
-			},
-			A2(
-				_elm_lang$core$List$map,
-				_user$project$Builder$parameterInput,
-				_user$project$Builder$allParameters(model.currentInput))));
-};
-var _user$project$Builder$buildPanel = function (model) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('overlay-panel'),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$id('command-panel'),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$style(
-						A2(_elm_lang$core$Basics_ops['++'], _user$project$Builder$panelStyling, _user$project$Builder$buildPanelStyling)),
-					_1: {ctor: '[]'}
-				}
-			}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$h3,
-				{ctor: '[]'},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('Parameters'),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: _user$project$Builder$parameterInputForm(model),
-				_1: {ctor: '[]'}
-			}
-		});
-};
+		}
+	});
 var _user$project$Builder$overlayPanels = function (model) {
 	var optionalDivs = {
 		ctor: '::',
 		_0: {
 			ctor: '_Tuple2',
 			_0: model.panelVisibility.buildPanel,
-			_1: _user$project$Builder$buildPanel(model)
+			_1: A3(_user$project$BuildPanel$buildPanel, _user$project$Builder$buildConfig, model.parameters, model.currentInput)
 		},
 		_1: {
 			ctor: '::',
@@ -15072,7 +15103,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Builder.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error ( String, Float )"],"TogglePanel":["Builder.Panel"],"SetRegister":["String"],"Build":[],"Clear":[],"EditParameter":["Types.Parameter","String"],"SetParametersAndBuild":["Types.ParameterRecord"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Builder.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildHistoryPanel":[],"BuildPanel":[]}}},"aliases":{"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ oligomerState : Maybe.Maybe Int , radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }"}},"message":"Builder.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Builder.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error ( String, Float )"],"TogglePanel":["Types.Panel"],"SetRegister":["String"],"Build":[],"Clear":[],"EditParameter":["Types.Parameter","String"],"SetParametersAndBuild":["Types.ParameterRecord"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildHistoryPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ oligomerState : Maybe.Maybe Int , radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }"}},"message":"Builder.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])
