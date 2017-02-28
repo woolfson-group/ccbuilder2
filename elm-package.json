@@ -4,7 +4,8 @@
     "repository": "https://github.com/user/project.git",
     "license": "BSD3",
     "source-directories": [
-        "ccbmk2/elm-src"
+        "ccbmk2/elm-src",
+        "ccbmk2/elm-src/css"
     ],
     "exposed-modules": [],
     "dependencies": {
@@ -12,7 +13,8 @@
         "elm-lang/html": "2.0.0 <= v < 3.0.0",
         "elm-lang/http": "1.0.0 <= v < 2.0.0",
         "elm-lang/keyboard": "1.0.1 <= v < 2.0.0",
-        "elm-lang/window": "1.0.1 <= v < 2.0.0"
+        "elm-lang/window": "1.0.1 <= v < 2.0.0",
+        "rtfeldman/elm-css": "8.1.0 <= v < 9.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
 }
