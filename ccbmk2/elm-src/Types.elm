@@ -27,3 +27,9 @@ type Parameter
     | Pitch
     | PhiCA
     | Sequence
+
+
+type Panel
+    = BuildPanel
+    | ExamplesPanel
+    | BuildHistoryPanel

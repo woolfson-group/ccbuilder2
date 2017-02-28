@@ -17,7 +17,7 @@
 
 ## TODO
 
-* Buttons to hide side panels
+* Add `SetRegister` to `EditParameter` message
 * Make a branch and refactor to remove CSS
 * Add stats logging with MongoDB
 * Independent chains and antiparallels
