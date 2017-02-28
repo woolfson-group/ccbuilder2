@@ -1,24 +1,19 @@
 body {
-    overflow-x: auto;
-    min-width: 1280px;
+    color: #3f403f;
+    margin: 0px;
+    padding: 0px;
 }
 
-#Page {
-    background-color: rgb(200, 128, 64);
-    color: #CCFFFF;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    padding: 8px;
-    margin: 0;
+h1 {
+    margin: 0px;
+    padding-left: 10px;
 }
 
-.dreamwriterNavBar {
-    margin: 0;
-    padding: 0;
+h2, h3 {
+    margin-top: 2px;
+    margin-bottom: 2px;
 }
 
-.dreamwriterNavBar > li {
-    display: inline-block !important;
-    color: #ccffaa;
+table {
+    border-collapse: collapse;
 }
