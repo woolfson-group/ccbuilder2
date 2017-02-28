@@ -13857,7 +13857,24 @@ var _user$project$Builder$buildPanelStyling = {
 		_1: {ctor: '[]'}
 	}
 };
-var _user$project$Builder$togglesStyling = {
+var _user$project$Builder$topRightTogglesStyling = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'top', _1: '7%'},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'right', _1: '-5px'},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'z-index', _1: '2'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
+				_1: {ctor: '[]'}
+			}
+		}
+	}
+};
+var _user$project$Builder$topLeftTogglesStyling = {
 	ctor: '::',
 	_0: {ctor: '_Tuple2', _0: 'top', _1: '7%'},
 	_1: {
@@ -14172,11 +14189,11 @@ var _user$project$Builder$Model = F7(
 	function (a, b, c, d, e, f, g) {
 		return {parameters: a, currentInput: b, pdbFile: c, score: d, building: e, modelHistory: f, panelVisibility: g};
 	});
-var _user$project$Builder$PanelVisibility = F2(
-	function (a, b) {
-		return {buildPanel: a, examplesPanel: b};
+var _user$project$Builder$PanelVisibility = F3(
+	function (a, b, c) {
+		return {buildPanel: a, examplesPanel: b, buildHistoryPanel: c};
 	});
-var _user$project$Builder$defaultVisibility = A2(_user$project$Builder$PanelVisibility, true, false);
+var _user$project$Builder$defaultVisibility = A3(_user$project$Builder$PanelVisibility, true, false, false);
 var _user$project$Builder$emptyModel = A7(
 	_user$project$Builder$Model,
 	_user$project$Builder$emptyParameters,
@@ -14192,6 +14209,7 @@ var _user$project$Builder$init = {
 	_1: _user$project$Builder$initialiseViewer(
 		{ctor: '_Tuple0'})
 };
+var _user$project$Builder$BuildHistoryPanel = {ctor: 'BuildHistoryPanel'};
 var _user$project$Builder$ExamplesPanel = {ctor: 'ExamplesPanel'};
 var _user$project$Builder$BuildPanel = {ctor: 'BuildPanel'};
 var _user$project$Builder$TogglePanel = function (a) {
@@ -14239,14 +14257,14 @@ var _user$project$Builder$toggleExamplesPanel = A2(
 		_0: _elm_lang$html$Html$text('Examples'),
 		_1: {ctor: '[]'}
 	});
-var _user$project$Builder$toggles = A2(
+var _user$project$Builder$topLeftToggles = A2(
 	_elm_lang$html$Html$div,
 	{
 		ctor: '::',
-		_0: _elm_lang$html$Html_Attributes$id('toggles'),
+		_0: _elm_lang$html$Html_Attributes$id('top-left-toggles'),
 		_1: {
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$togglesStyling),
+			_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$topLeftTogglesStyling),
 			_1: {ctor: '[]'}
 		}
 	},
@@ -14258,6 +14276,43 @@ var _user$project$Builder$toggles = A2(
 			_0: _user$project$Builder$toggleExamplesPanel,
 			_1: {ctor: '[]'}
 		}
+	});
+var _user$project$Builder$toggleBuildHistoryPanel = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('overlay-panel panel-toggle'),
+		_1: {
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$id('toggle-build-history-panel'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Events$onClick(
+					_user$project$Builder$TogglePanel(_user$project$Builder$BuildHistoryPanel)),
+				_1: {ctor: '[]'}
+			}
+		}
+	},
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html$text('Build History'),
+		_1: {ctor: '[]'}
+	});
+var _user$project$Builder$topRightToggles = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$id('top-right-toggles'),
+		_1: {
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(_user$project$Builder$topRightTogglesStyling),
+			_1: {ctor: '[]'}
+		}
+	},
+	{
+		ctor: '::',
+		_0: _user$project$Builder$toggleBuildHistoryPanel,
+		_1: {ctor: '[]'}
 	});
 var _user$project$Builder$KeyMsg = function (a) {
 	return {ctor: 'KeyMsg', _0: a};
@@ -14610,26 +14665,37 @@ var _user$project$Builder$update = F2(
 			default:
 				var oldPanelVisibility = model.panelVisibility;
 				var _p7 = _p1._0;
-				if (_p7.ctor === 'BuildPanel') {
-					var newPanelVisibility = _elm_lang$core$Native_Utils.update(
-						oldPanelVisibility,
-						{buildPanel: !oldPanelVisibility.buildPanel, examplesPanel: false});
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{panelVisibility: newPanelVisibility}),
-						{ctor: '[]'});
-				} else {
-					var newPanelVisibility = _elm_lang$core$Native_Utils.update(
-						oldPanelVisibility,
-						{buildPanel: false, examplesPanel: !oldPanelVisibility.examplesPanel});
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{panelVisibility: newPanelVisibility}),
-						{ctor: '[]'});
+				switch (_p7.ctor) {
+					case 'BuildPanel':
+						var newPanelVisibility = _elm_lang$core$Native_Utils.update(
+							oldPanelVisibility,
+							{buildPanel: !oldPanelVisibility.buildPanel, examplesPanel: false});
+						return A2(
+							_elm_lang$core$Platform_Cmd_ops['!'],
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{panelVisibility: newPanelVisibility}),
+							{ctor: '[]'});
+					case 'ExamplesPanel':
+						var newPanelVisibility = _elm_lang$core$Native_Utils.update(
+							oldPanelVisibility,
+							{buildPanel: false, examplesPanel: !oldPanelVisibility.examplesPanel});
+						return A2(
+							_elm_lang$core$Platform_Cmd_ops['!'],
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{panelVisibility: newPanelVisibility}),
+							{ctor: '[]'});
+					default:
+						var newPanelVisibility = _elm_lang$core$Native_Utils.update(
+							oldPanelVisibility,
+							{buildHistoryPanel: !oldPanelVisibility.buildHistoryPanel});
+						return A2(
+							_elm_lang$core$Platform_Cmd_ops['!'],
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{panelVisibility: newPanelVisibility}),
+							{ctor: '[]'});
 				}
 		}
 	});
@@ -14932,7 +14998,15 @@ var _user$project$Builder$overlayPanels = function (model) {
 		_1: {
 			ctor: '::',
 			_0: {ctor: '_Tuple2', _0: model.panelVisibility.examplesPanel, _1: _user$project$Builder$examplesPanel},
-			_1: {ctor: '[]'}
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: model.panelVisibility.buildHistoryPanel,
+					_1: _user$project$Builder$buildHistoryPanel(model.modelHistory)
+				},
+				_1: {ctor: '[]'}
+			}
 		}
 	};
 	var activeDivs = _elm_lang$core$Tuple$second(
@@ -14948,16 +15022,16 @@ var _user$project$Builder$overlayPanels = function (model) {
 		_0: _user$project$Builder$siteHeader,
 		_1: {
 			ctor: '::',
-			_0: _user$project$Builder$toggles,
+			_0: _user$project$Builder$topLeftToggles,
 			_1: {
 				ctor: '::',
-				_0: _user$project$Builder$buildingStatusPanel(model),
+				_0: _user$project$Builder$topRightToggles,
 				_1: {
 					ctor: '::',
-					_0: _user$project$Builder$modelInfoPanel(model),
+					_0: _user$project$Builder$buildingStatusPanel(model),
 					_1: {
 						ctor: '::',
-						_0: _user$project$Builder$buildHistoryPanel(model.modelHistory),
+						_0: _user$project$Builder$modelInfoPanel(model),
 						_1: {ctor: '[]'}
 					}
 				}
@@ -14998,7 +15072,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Builder.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error ( String, Float )"],"TogglePanel":["Builder.Panel"],"SetRegister":["String"],"Build":[],"Clear":[],"EditParameter":["Types.Parameter","String"],"SetParametersAndBuild":["Types.ParameterRecord"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Builder.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildPanel":[]}}},"aliases":{"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ oligomerState : Maybe.Maybe Int , radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }"}},"message":"Builder.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Builder.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error ( String, Float )"],"TogglePanel":["Builder.Panel"],"SetRegister":["String"],"Build":[],"Clear":[],"EditParameter":["Types.Parameter","String"],"SetParametersAndBuild":["Types.ParameterRecord"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Builder.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildHistoryPanel":[],"BuildPanel":[]}}},"aliases":{"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ oligomerState : Maybe.Maybe Int , radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }"}},"message":"Builder.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

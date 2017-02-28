@@ -50,12 +50,14 @@ type alias Model =
 type alias PanelVisibility =
     { buildPanel : Bool
     , examplesPanel : Bool
+    , buildHistoryPanel : Bool
     }
 
 
 type Panel
     = BuildPanel
     | ExamplesPanel
+    | BuildHistoryPanel
 
 
 emptyModel : Model
@@ -75,7 +77,7 @@ emptyInput =
 
 defaultVisibility : PanelVisibility
 defaultVisibility =
-    PanelVisibility True False
+    PanelVisibility True False False
 
 
 
@@ -203,6 +205,15 @@ update msg model =
                                 }
                         in
                             { model | panelVisibility = newPanelVisibility } ! []
+                    
+                    BuildHistoryPanel ->
+                        let
+                            newPanelVisibility =
+                                { oldPanelVisibility 
+                                    | buildHistoryPanel = not oldPanelVisibility.buildHistoryPanel
+                                }
+                        in
+                            { model | panelVisibility = newPanelVisibility } ! []
 
 
 sendBuildCmd : ParameterRecord -> Cmd Msg
@@ -302,15 +313,16 @@ overlayPanels model =
     let
         defaultDivs =
             [ siteHeader
-            , toggles
+            , topLeftToggles
+            , topRightToggles
             , buildingStatusPanel model
             , modelInfoPanel model
-            , buildHistoryPanel model.modelHistory
             ]
 
         optionalDivs =
             [ ( model.panelVisibility.buildPanel, buildPanel model )
-            , ( model.panelVisibility.examplesPanel, examplesPanel)
+            , ( model.panelVisibility.examplesPanel, examplesPanel )
+            , ( model.panelVisibility.buildHistoryPanel, buildHistoryPanel model.modelHistory )
             ]
 
         activeDivs =
@@ -347,17 +359,32 @@ panelStyling =
     ]
 
 
-toggles : Html Msg
-toggles =
-    div [ id "toggles", style togglesStyling ]
+topLeftToggles : Html Msg
+topLeftToggles =
+    div [ id "top-left-toggles", style topLeftTogglesStyling ]
         [ toggleBuildPanel
         , toggleExamplesPanel
         ]
 
-togglesStyling : Styling
-togglesStyling =
+topLeftTogglesStyling : Styling
+topLeftTogglesStyling =
     [ ( "top", "7%" )
     , ( "left", "-5px" )
+    , ( "z-index", "2" )
+    , ( "position", "absolute" )
+    ]
+
+
+topRightToggles : Html Msg
+topRightToggles =
+    div [ id "top-right-toggles", style topRightTogglesStyling ]
+        [ toggleBuildHistoryPanel
+        ]
+
+topRightTogglesStyling : Styling
+topRightTogglesStyling =
+    [ ( "top", "7%" )
+    , ( "right", "-5px" )
     , ( "z-index", "2" )
     , ( "position", "absolute" )
     ]
@@ -679,6 +706,16 @@ buildHistoryPanelStyling =
     [ ( "top", "7%" )
     , ( "right", "2%" )
     ]
+
+
+toggleBuildHistoryPanel : Html Msg
+toggleBuildHistoryPanel =
+    div
+        [ class "overlay-panel panel-toggle"
+        , id "toggle-build-history-panel"
+        , onClick (TogglePanel BuildHistoryPanel)
+        ]
+        [ text "Build History" ]
 
 
 
