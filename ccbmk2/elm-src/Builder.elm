@@ -180,33 +180,34 @@ update msg model =
 
         TogglePanel panel ->
             let
-                oldPanelVisibility = model.panelVisibility
+                oldPanelVisibility =
+                    model.panelVisibility
             in
                 case panel of
                     BuildPanel ->
                         let
                             newPanelVisibility =
-                                { oldPanelVisibility 
+                                { oldPanelVisibility
                                     | buildPanel = not oldPanelVisibility.buildPanel
                                     , examplesPanel = False
                                 }
                         in
                             { model | panelVisibility = newPanelVisibility } ! []
-                    
+
                     ExamplesPanel ->
                         let
                             newPanelVisibility =
-                                { oldPanelVisibility 
+                                { oldPanelVisibility
                                     | buildPanel = False
                                     , examplesPanel = not oldPanelVisibility.examplesPanel
                                 }
                         in
                             { model | panelVisibility = newPanelVisibility } ! []
-                    
+
                     BuildHistoryPanel ->
                         let
                             newPanelVisibility =
-                                { oldPanelVisibility 
+                                { oldPanelVisibility
                                     | buildHistoryPanel = not oldPanelVisibility.buildHistoryPanel
                                 }
                         in
@@ -313,9 +314,9 @@ overlayPanels model =
             ]
 
         optionalDivs =
-            [
-                ( model.panelVisibility.buildPanel
-                , BuildPanel.buildPanel buildConfig model.parameters model.currentInput )
+            [ ( model.panelVisibility.buildPanel
+              , BuildPanel.buildPanel buildConfig model.parameters model.currentInput
+              )
             , ( model.panelVisibility.examplesPanel, examplesPanel )
             , ( model.panelVisibility.buildHistoryPanel, buildHistoryPanel model.modelHistory )
             ]
@@ -332,14 +333,14 @@ overlayPanels model =
 
 
 buildConfig : BuildPanel.BuildPanelMsgs Msg
-buildConfig = BuildPanel.config
-    { edit = EditParameter
-    , submit = Build
-    , clear = Clear
-    , setRegister = SetRegister
-    , toggle = TogglePanel
-    }
-
+buildConfig =
+    BuildPanel.config
+        { edit = EditParameter
+        , submit = Build
+        , clear = Clear
+        , setRegister = SetRegister
+        , toggle = TogglePanel
+        }
 
 
 siteHeader : Html msg
@@ -365,6 +366,7 @@ topLeftToggles =
         , toggleExamplesPanel
         ]
 
+
 topLeftTogglesStyling : Styling
 topLeftTogglesStyling =
     [ ( "top", "7%" )
@@ -379,6 +381,7 @@ topRightToggles =
     div [ id "top-right-toggles", style topRightTogglesStyling ]
         [ toggleBuildHistoryPanel
         ]
+
 
 topRightTogglesStyling : Styling
 topRightTogglesStyling =
