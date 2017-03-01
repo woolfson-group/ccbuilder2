@@ -15,7 +15,8 @@ import ParameterValidation exposing (containsInvalidParameter, editParameterValu
 import Task
 import Types
     exposing
-        ( ParameterRecord
+        ( Msg(..)
+        , ParameterRecord
         , InputValues
         , Parameter(..)
         , Panel(..)
@@ -100,17 +101,7 @@ port showStructure : String -> Cmd msg
 
 
 -- Update
-
-
-type Msg
-    = EditParameter Parameter String
-    | SetRegister String
-    | Build
-    | ProcessModel (Result Http.Error ( String, Float ))
-    | Clear
-    | SetParametersAndBuild ParameterRecord
-    | KeyMsg Keyboard.KeyCode
-    | TogglePanel Panel
+-- The Msg union type can be found in Types.elm
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -329,7 +320,7 @@ overlayPanels model =
 
         optionalDivs =
             [ ( model.panelVisibility.buildPanel
-              , BuildPanel.buildPanel buildConfig model.parameters model.currentInput
+              , BuildPanel.buildPanel model.parameters model.currentInput
               )
             , ( model.panelVisibility.examplesPanel, examplesPanel )
             , ( model.panelVisibility.buildHistoryPanel, buildHistoryPanel model.modelHistory )
@@ -344,17 +335,6 @@ overlayPanels model =
             defaultDivs ++ activeDivs
     in
         div [] allDivs
-
-
-buildConfig : BuildPanel.BuildPanelMsgs Msg
-buildConfig =
-    BuildPanel.config
-        { edit = EditParameter
-        , submit = Build
-        , clear = Clear
-        , setRegister = SetRegister
-        , toggle = TogglePanel
-        }
 
 
 siteHeader : Html msg
@@ -376,7 +356,7 @@ headerStyling =
 topLeftToggles : Html Msg
 topLeftToggles =
     div [ styles topLeftTogglesStyling ]
-        [ BuildPanel.toggleBuildPanel buildConfig
+        [ BuildPanel.toggleBuildPanel
         , toggleExamplesPanel
         ]
 

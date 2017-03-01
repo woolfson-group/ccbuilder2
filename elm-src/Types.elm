@@ -1,5 +1,19 @@
 module Types exposing (..)
 
+import Keyboard
+import Http
+
+
+type Msg
+    = EditParameter Parameter String
+    | SetRegister String
+    | Build
+    | ProcessModel (Result Http.Error ( String, Float ))
+    | Clear
+    | SetParametersAndBuild ParameterRecord
+    | KeyMsg Keyboard.KeyCode
+    | TogglePanel Panel
+
 
 type alias ParameterRecord =
     { oligomerState : Maybe Int

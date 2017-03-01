@@ -9,7 +9,8 @@ import Html.CssHelpers
 import ParameterValidation exposing (containsInvalidParameter, editParameterValue)
 import Types
     exposing
-        ( ParameterRecord
+        ( Msg(..)
+        , ParameterRecord
         , InputValues
         , Parameter(..)
         , Panel(..)
@@ -21,63 +22,33 @@ import Types
 
 
 styles : List Css.Mixin -> Attribute msg
-styles = Css.asPairs >> Html.Attributes.style
+styles =
+    Css.asPairs >> Html.Attributes.style
 
 
-type BuildPanelMsgs msg
-    = BuildPanelMsgs
-        { edit : Parameter -> String -> msg
-        , submit : msg
-        , clear : msg
-        , setRegister : String -> msg
-        , toggle : Panel -> msg
-        }
-
-
-config :
-    { edit : Parameter -> String -> msg
-    , submit : msg
-    , clear : msg
-    , setRegister : String -> msg
-    , toggle : Panel -> msg
-    }
-    -> BuildPanelMsgs msg
-config { edit, submit, clear, setRegister, toggle } =
-    BuildPanelMsgs
-        { edit = edit
-        , submit = submit
-        , clear = clear
-        , setRegister = setRegister
-        , toggle = toggle
-        }
-
-
-buildPanel : BuildPanelMsgs msg -> ParameterRecord -> InputValues -> Html msg
-buildPanel config parameters currentInput =
+buildPanel : ParameterRecord -> InputValues -> Html Msg
+buildPanel parameters currentInput =
     div [ class [ OverlayPanelCss ], id [ BuildPanel ], styles <| panelStyling ++ buildPanelStyling ]
         [ h3 [] [ text "Parameters" ]
-        , parameterInputForm config parameters currentInput
+        , parameterInputForm parameters currentInput
         ]
 
 
 buildPanelStyling : List Css.Mixin
-buildPanelStyling = [ Css.top (Css.px 60), Css.left (Css.px 30) ]
+buildPanelStyling =
+    [ Css.top (Css.px 60), Css.left (Css.px 30) ]
 
 
-parameterInputForm : BuildPanelMsgs msg -> ParameterRecord -> InputValues -> Html msg
-parameterInputForm config parameters currentInput =
-    let
-        (BuildPanelMsgs { clear }) =
-            config
-    in
-        List.map (parameterInput config) (allParameters currentInput)
-            |> flip (List.append)
-                [ sequenceInput config
-                    ( "Sequence", Sequence, currentInput.sequence, currentInput.register )
-                , parameterSubmit config parameters
-                , button [ onClick clear ] [ text "Clear" ]
-                ]
-            |> Html.div []
+parameterInputForm : ParameterRecord -> InputValues -> Html Msg
+parameterInputForm parameters currentInput =
+    List.map parameterInput (allParameters currentInput)
+        |> flip (List.append)
+            [ sequenceInput
+                ( "Sequence", Sequence, currentInput.sequence, currentInput.register )
+            , parameterSubmit parameters
+            , button [ onClick Clear ] [ text "Clear" ]
+            ]
+        |> Html.div []
 
 
 allParameters : InputValues -> List ( String, Parameter, String )
@@ -89,71 +60,64 @@ allParameters currentInput =
     ]
 
 
-parameterInput : BuildPanelMsgs msg -> ( String, Parameter, String ) -> Html msg
-parameterInput config ( parameterLabel, parameter, currentParameter ) =
-    let
-        (BuildPanelMsgs { edit }) =
-            config
-    in
-        div [ class [ ParameterInputCss ] ]
-            [ text parameterLabel
-            , br [] []
-            , input
-                [ type_ "text"
-                , name parameterLabel
-                , placeholder parameterLabel
-                , onInput (edit parameter)
-                , styles inputStyling
-                , value currentParameter
-                ]
-                []
+parameterInput : ( String, Parameter, String ) -> Html Msg
+parameterInput ( parameterLabel, parameter, currentParameter ) =
+    div [ class [ ParameterInputCss ] ]
+        [ text parameterLabel
+        , br [] []
+        , input
+            [ type_ "text"
+            , name parameterLabel
+            , placeholder parameterLabel
+            , onInput (EditParameter parameter)
+            , styles inputStyling
+            , value currentParameter
             ]
+            []
+        ]
 
 
-sequenceInput : BuildPanelMsgs msg -> ( String, Parameter, String, String ) -> Html msg
-sequenceInput config ( parameterLabel, parameter, currentSequence, currentRegister ) =
-    let
-        (BuildPanelMsgs { edit }) =
-            config
-    in
-        div [ class [ ParameterInputCss ] ]
-            [ text parameterLabel
-            , text " (Register: "
-            , registerSelection config currentRegister
-            , text ")"
-            , br [] []
-            , textarea
-                [ name parameterLabel
-                , rows 3
-                , cols 30
-                , styles inputStyling
-                , placeholder parameterLabel
-                , onInput (edit parameter)
-                , value currentSequence
-                ]
-                []
+sequenceInput : ( String, Parameter, String, String ) -> Html Msg
+sequenceInput ( parameterLabel, parameter, currentSequence, currentRegister ) =
+    div [ class [ ParameterInputCss ] ]
+        [ text parameterLabel
+        , text " (Register: "
+        , registerSelection currentRegister
+        , text ")"
+        , br [] []
+        , textarea
+            [ name parameterLabel
+            , rows 3
+            , cols 30
+            , styles inputStyling
+            , placeholder parameterLabel
+            , onInput (EditParameter parameter)
+            , value currentSequence
             ]
+            []
+        ]
 
 
 inputStyling : List Css.Mixin
-inputStyling = [ Css.width (Css.pct 100 ) ]
+inputStyling =
+    [ Css.width (Css.pct 100) ]
 
 
-parameterSubmit : BuildPanelMsgs msg -> ParameterRecord -> Html msg
-parameterSubmit (BuildPanelMsgs { submit }) parameters =
+parameterSubmit : ParameterRecord -> Html Msg
+parameterSubmit parameters =
     input
         [ type_ "submit"
         , value "Submit"
-        , onClick submit
+        , onClick Build
         , disabled (containsInvalidParameter parameters)
         ]
         []
 
 
-registerSelection : BuildPanelMsgs msg -> String -> Html msg
-registerSelection (BuildPanelMsgs { setRegister }) currentRegister =
+registerSelection : String -> Html Msg
+registerSelection currentRegister =
     select
-        [ value currentRegister, onInput setRegister ]
+        [ value currentRegister, onInput SetRegister ]
         (List.map registerOption [ "a", "b", "c", "d", "e", "f", "g" ])
 
 
@@ -162,10 +126,10 @@ registerOption register =
     option [ value register ] [ text register ]
 
 
-toggleBuildPanel : BuildPanelMsgs msg -> Html msg
-toggleBuildPanel (BuildPanelMsgs { toggle }) =
+toggleBuildPanel : Html Msg
+toggleBuildPanel =
     div
         [ class [ OverlayPanelCss, PanelToggleCss ]
-        , onClick (toggle BuildPanel)
+        , onClick (TogglePanel BuildPanel)
         ]
         [ text "Build" ]
