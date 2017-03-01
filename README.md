@@ -17,6 +17,7 @@
 
 ## TODO
 
+* Change build url to `/build-coiledcoil`
 * Add `SetRegister` to `EditParameter` message
 * Make a branch and refactor to remove CSS
 * Add stats logging with MongoDB

@@ -30,6 +30,8 @@ type Parameter
 
 
 type Panel
-    = BuildPanel
+    = AppHeaderPanel
+    | BuildPanel
     | ExamplesPanel
+    | BuildingStatusPanel
     | BuildHistoryPanel

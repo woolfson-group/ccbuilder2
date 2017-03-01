@@ -1,6 +1,6 @@
 module BuildPanel exposing (..)
 
-import BuilderCss exposing (CssClasses(..), CssIds(..), cssNamespace)
+import BuilderCss exposing (CssClasses(..), cssNamespace)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -50,7 +50,7 @@ config { edit, submit, clear, setRegister, toggle } =
 
 buildPanel : BuildPanelMsgs msg -> ParameterRecord -> InputValues -> Html msg
 buildPanel config parameters currentInput =
-    div [ class [ OverlayPanel ], id [ Build ], style <| panelStyling ++ buildPanelStyling ]
+    div [ class [ OverlayPanelCss ], id [ BuildPanel ], style <| panelStyling ++ buildPanelStyling ]
         [ h3 [] [ text "Parameters" ]
         , parameterInputForm config parameters currentInput
         ]
@@ -94,7 +94,7 @@ parameterInput config ( parameterLabel, parameter, currentParameter ) =
         (BuildPanelMsgs { edit }) =
             config
     in
-        div [ class [ ParameterInput ] ]
+        div [ class [ ParameterInputCss ] ]
             [ text parameterLabel
             , br [] []
             , input
@@ -115,7 +115,7 @@ sequenceInput config ( parameterLabel, parameter, currentSequence, currentRegist
         (BuildPanelMsgs { edit }) =
             config
     in
-        div [ class [ ParameterInput ] ]
+        div [ class [ ParameterInputCss ] ]
             [ text parameterLabel
             , text " (Register: "
             , registerSelection config currentRegister
@@ -165,7 +165,7 @@ registerOption register =
 toggleBuildPanel : BuildPanelMsgs msg -> Html msg
 toggleBuildPanel (BuildPanelMsgs { toggle }) =
     div
-        [ class [ OverlayPanel, PanelToggle ]
+        [ class [ OverlayPanelCss, PanelToggleCss ]
         , onClick (toggle BuildPanel)
         ]
         [ text "Build" ]

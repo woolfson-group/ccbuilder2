@@ -1,9 +1,11 @@
 port module Builder exposing (..)
 
+import BuilderCss exposing (CssClasses(..), cssNamespace)
 import BuildPanel
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Html.CssHelpers
 import Http
 import Json.Decode exposing (field, string, float, decodeString)
 import Json.Encode
@@ -18,6 +20,10 @@ import Types
         , Parameter(..)
         , Panel(..)
         )
+
+
+{ class, classList, id } =
+    Html.CssHelpers.withNamespace cssNamespace
 
 
 main : Program Never Model Msg
@@ -212,6 +218,8 @@ update msg model =
                                 }
                         in
                             { model | panelVisibility = newPanelVisibility } ! []
+                    
+                    _ -> model ! []
 
 
 sendBuildCmd : ParameterRecord -> Cmd Msg
@@ -329,7 +337,7 @@ overlayPanels model =
         allDivs =
             defaultDivs ++ activeDivs
     in
-        div [ id "overlay-panels" ] allDivs
+        div [] allDivs
 
 
 buildConfig : BuildPanel.BuildPanelMsgs Msg
@@ -345,7 +353,7 @@ buildConfig =
 
 siteHeader : Html msg
 siteHeader =
-    div [ id "app-header", style <| headerStyling ++ panelStyling ]
+    div [ id [ AppHeaderPanel ], style <| headerStyling ++ panelStyling ]
         [ header [] [ h1 [] [ text "CCBuilder Mk.2" ] ] ]
 
 
@@ -361,7 +369,7 @@ headerStyling =
 
 topLeftToggles : Html Msg
 topLeftToggles =
-    div [ id "top-left-toggles", style topLeftTogglesStyling ]
+    div [ style topLeftTogglesStyling ]
         [ BuildPanel.toggleBuildPanel buildConfig
         , toggleExamplesPanel
         ]
@@ -378,7 +386,7 @@ topLeftTogglesStyling =
 
 topRightToggles : Html Msg
 topRightToggles =
-    div [ id "top-right-toggles", style topRightTogglesStyling ]
+    div [ style topRightTogglesStyling ]
         [ toggleBuildHistoryPanel
         ]
 
@@ -398,25 +406,24 @@ topRightTogglesStyling =
 
 examplesPanel : Html Msg
 examplesPanel =
-    div [ class "overlay-panel", id "examples-panel", style <| panelStyling ++ examplesPanelStyling ]
+    div
+        [ class [ OverlayPanelCss ]
+        , id [ ExamplesPanel ], style <| panelStyling ++ examplesPanelStyling ]
         [ h3 [] [ text "Examples" ]
         , button
-            [ class "example-button"
-            , style exampleButtonStyling
+            [ style exampleButtonStyling
             , onClick <| SetParametersAndBuild basisSetDimer
             ]
             [ text "Dimer" ]
         , br [] []
         , button
-            [ class "example-button"
-            , style exampleButtonStyling
+            [ style exampleButtonStyling
             , onClick <| SetParametersAndBuild basisSetTrimer
             ]
             [ text "Trimer" ]
         , br [] []
         , button
-            [ class "example-button"
-            , style exampleButtonStyling
+            [ style exampleButtonStyling
             , onClick <| SetParametersAndBuild basisSetTetramer
             ]
             [ text "Tetramer" ]
@@ -472,8 +479,7 @@ basisSetTetramer =
 toggleExamplesPanel : Html Msg
 toggleExamplesPanel =
     div
-        [ class "overlay-panel panel-toggle"
-        , id "toggle-examples-panel"
+        [ class [ OverlayPanelCss, PanelToggleCss ]
         , onClick (TogglePanel ExamplesPanel)
         ]
         [ text "Examples" ]
@@ -486,8 +492,7 @@ toggleExamplesPanel =
 modelInfoPanel : Model -> Html Msg
 modelInfoPanel model =
     div
-        [ class "overlay-panel"
-        , id "model-info-panel"
+        [ class [ OverlayPanelCss ]
         , style <| panelStyling ++ modelInfoPanelStyling
         ]
         [ h3 [] [ text "Model Information" ]
@@ -525,8 +530,8 @@ modelInfoPanelStyling =
 buildHistoryPanel : List ParameterRecord -> Html Msg
 buildHistoryPanel modelHistory =
     div
-        [ class "overlay-panel"
-        , id "parameter-history"
+        [ class [ OverlayPanelCss ]
+        , id [ BuildHistoryPanel ]
         , style <| panelStyling ++ buildHistoryPanelStyling
         ]
         [ h3 [] [ text "Build History" ]
@@ -584,8 +589,7 @@ buildHistoryPanelStyling =
 toggleBuildHistoryPanel : Html Msg
 toggleBuildHistoryPanel =
     div
-        [ class "overlay-panel panel-toggle"
-        , id "toggle-build-history-panel"
+        [ class [ OverlayPanelCss, PanelToggleCss ]
         , onClick (TogglePanel BuildHistoryPanel)
         ]
         [ text "Build History" ]
@@ -599,8 +603,8 @@ buildingStatusPanel : Model -> Html msg
 buildingStatusPanel model =
     let
         commonAttr =
-            [ class "overlay-panel"
-            , id "building-status-panel"
+            [ class [ OverlayPanelCss ]
+            , id [ BuildingStatusPanel ]
             , style <| buildingStatusStyling ++ panelStyling
             ]
     in
