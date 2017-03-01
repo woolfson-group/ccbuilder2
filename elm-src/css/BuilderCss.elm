@@ -3,7 +3,7 @@ module BuilderCss exposing (..)
 import Css exposing (..)
 import Css.Namespace exposing (namespace)
 import Css.Elements exposing (
-    body, h1, h2, h3, table, tbody, input, textarea)
+    body, h1, h2, h3, table, tbody, tr, input, textarea)
 import Types exposing (Panel(..))
 
 
@@ -90,10 +90,14 @@ css =
             , Css.Elements.table
                 [ children
                     [ tbody
-                        [ fontFamilies [ "Source Code Pro", "monospace" ]
-                        , hover
-                            [ backgroundColor colorPalette.c3
-                            , cursor default
+                        [ children
+                            [ tr
+                                [ fontFamilies [ "Source Code Pro", "monospace" ]
+                                , hover
+                                    [ backgroundColor colorPalette.c3
+                                    , cursor default
+                                    ]
+                                ]
                             ]
                         ]
                     ]

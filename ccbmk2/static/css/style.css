@@ -75,11 +75,11 @@ table {
     font-size: 10pt;
 }
 
-#BuildHistoryPanel > table > tbody {
+#BuildHistoryPanel > table > tbody > tr {
     font-family: Source Code Pro, monospace;
 }
 
-#BuildHistoryPanel > table > tbody:hover {
+#BuildHistoryPanel > table > tbody > tr:hover {
     background-color: #9fb8ad;
     cursor: default;
 }

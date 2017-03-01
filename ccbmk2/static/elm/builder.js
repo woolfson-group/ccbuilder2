@@ -19186,30 +19186,40 @@ var _user$project$BuilderCss$css = function (_p0) {
 																						_0: _rtfeldman$elm_css$Css_Elements$tbody(
 																							{
 																								ctor: '::',
-																								_0: _rtfeldman$elm_css$Css$fontFamilies(
+																								_0: _rtfeldman$elm_css$Css$children(
 																									{
 																										ctor: '::',
-																										_0: 'Source Code Pro',
-																										_1: {
-																											ctor: '::',
-																											_0: 'monospace',
-																											_1: {ctor: '[]'}
-																										}
-																									}),
-																								_1: {
-																									ctor: '::',
-																									_0: _rtfeldman$elm_css$Css$hover(
-																										{
-																											ctor: '::',
-																											_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c3),
-																											_1: {
+																										_0: _rtfeldman$elm_css$Css_Elements$tr(
+																											{
 																												ctor: '::',
-																												_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$default),
-																												_1: {ctor: '[]'}
-																											}
-																										}),
-																									_1: {ctor: '[]'}
-																								}
+																												_0: _rtfeldman$elm_css$Css$fontFamilies(
+																													{
+																														ctor: '::',
+																														_0: 'Source Code Pro',
+																														_1: {
+																															ctor: '::',
+																															_0: 'monospace',
+																															_1: {ctor: '[]'}
+																														}
+																													}),
+																												_1: {
+																													ctor: '::',
+																													_0: _rtfeldman$elm_css$Css$hover(
+																														{
+																															ctor: '::',
+																															_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c3),
+																															_1: {
+																																ctor: '::',
+																																_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$default),
+																																_1: {ctor: '[]'}
+																															}
+																														}),
+																													_1: {ctor: '[]'}
+																												}
+																											}),
+																										_1: {ctor: '[]'}
+																									}),
+																								_1: {ctor: '[]'}
 																							}),
 																						_1: {ctor: '[]'}
 																					}),
