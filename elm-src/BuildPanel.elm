@@ -58,8 +58,8 @@ buildPanel config parameters currentInput =
 
 buildPanelStyling : Styling
 buildPanelStyling =
-    [ ( "top", "7%" )
-    , ( "left", "2%" )
+    [ ( "top", "60px" )
+    , ( "left", "30px" )
     ]
 
 

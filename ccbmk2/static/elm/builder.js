@@ -19578,10 +19578,10 @@ var _user$project$BuildPanel$allParameters = function (currentInput) {
 };
 var _user$project$BuildPanel$buildPanelStyling = {
 	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'top', _1: '7%'},
+	_0: {ctor: '_Tuple2', _0: 'top', _1: '60px'},
 	_1: {
 		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'left', _1: '2%'},
+		_0: {ctor: '_Tuple2', _0: 'left', _1: '30px'},
 		_1: {ctor: '[]'}
 	}
 };
@@ -19875,10 +19875,10 @@ var _user$project$Builder$buildingStatusStyling = {
 };
 var _user$project$Builder$buildHistoryPanelStyling = {
 	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'top', _1: '7%'},
+	_0: {ctor: '_Tuple2', _0: 'top', _1: '60px'},
 	_1: {
 		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'right', _1: '2%'},
+		_0: {ctor: '_Tuple2', _0: 'right', _1: '30px'},
 		_1: {ctor: '[]'}
 	}
 };
@@ -20013,10 +20013,10 @@ var _user$project$Builder$modelDetailTableHeader = A2(
 	});
 var _user$project$Builder$modelInfoPanelStyling = {
 	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'bottom', _1: '2%'},
+	_0: {ctor: '_Tuple2', _0: 'bottom', _1: '20px'},
 	_1: {
 		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'left', _1: '2%'},
+		_0: {ctor: '_Tuple2', _0: 'left', _1: '30px'},
 		_1: {ctor: '[]'}
 	}
 };
@@ -20065,16 +20065,16 @@ var _user$project$Builder$exampleButtonStyling = {
 };
 var _user$project$Builder$examplesPanelStyling = {
 	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'top', _1: '7%'},
+	_0: {ctor: '_Tuple2', _0: 'top', _1: '60px'},
 	_1: {
 		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'left', _1: '2%'},
+		_0: {ctor: '_Tuple2', _0: 'left', _1: '30px'},
 		_1: {ctor: '[]'}
 	}
 };
 var _user$project$Builder$topRightTogglesStyling = {
 	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'top', _1: '7%'},
+	_0: {ctor: '_Tuple2', _0: 'top', _1: '60px'},
 	_1: {
 		ctor: '::',
 		_0: {ctor: '_Tuple2', _0: 'right', _1: '-5px'},
@@ -20091,7 +20091,7 @@ var _user$project$Builder$topRightTogglesStyling = {
 };
 var _user$project$Builder$topLeftTogglesStyling = {
 	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 'top', _1: '7%'},
+	_0: {ctor: '_Tuple2', _0: 'top', _1: '60px'},
 	_1: {
 		ctor: '::',
 		_0: {ctor: '_Tuple2', _0: 'left', _1: '-5px'},

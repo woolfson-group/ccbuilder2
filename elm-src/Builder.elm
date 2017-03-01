@@ -377,7 +377,7 @@ topLeftToggles =
 
 topLeftTogglesStyling : Styling
 topLeftTogglesStyling =
-    [ ( "top", "7%" )
+    [ ( "top", "60px" )
     , ( "left", "-5px" )
     , ( "z-index", "2" )
     , ( "position", "absolute" )
@@ -393,7 +393,7 @@ topRightToggles =
 
 topRightTogglesStyling : Styling
 topRightTogglesStyling =
-    [ ( "top", "7%" )
+    [ ( "top", "60px" )
     , ( "right", "-5px" )
     , ( "z-index", "2" )
     , ( "position", "absolute" )
@@ -432,8 +432,8 @@ examplesPanel =
 
 examplesPanelStyling : Styling
 examplesPanelStyling =
-    [ ( "top", "7%" )
-    , ( "left", "2%" )
+    [ ( "top", "60px" )
+    , ( "left", "30px" )
     ]
 
 
@@ -518,8 +518,8 @@ roundToXDecPlaces precision num =
 
 modelInfoPanelStyling : Styling
 modelInfoPanelStyling =
-    [ ( "bottom", "2%" )
-    , ( "left", "2%" )
+    [ ( "bottom", "20px" )
+    , ( "left", "30px" )
     ]
 
 
@@ -581,8 +581,8 @@ makeParameterTh pString =
 
 buildHistoryPanelStyling : Styling
 buildHistoryPanelStyling =
-    [ ( "top", "7%" )
-    , ( "right", "2%" )
+    [ ( "top", "60px" )
+    , ( "right", "30px" )
     ]
 
 
