@@ -8,6 +8,8 @@
     * Rebuild the images using `docker build -t ccbmk2 .`
     * Delete the old `docker-compose` image using `docker-compose rm`
 * `docker exec -i -t ccmbmk2_web_1 /bin/bash`
+* `docker stop $(docker ps -a -q)` to stop all images
+* `docker rm $(docker ps -a -q)` to remove all images
 * Coolors
     * https://coolors.co/e6e8e6-ced0ce-9fb8ad-475841-3f403f
 
@@ -20,6 +22,5 @@
 * Tidy up the update function
 * Change build url to `/build-coiledcoil`
 * Add `SetRegister` to `EditParameter` message
-* Make a branch and refactor to remove CSS
 * Add stats logging with MongoDB
 * Independent chains and antiparallels

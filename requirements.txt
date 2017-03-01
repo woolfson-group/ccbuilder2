@@ -1,1 +1,4 @@
+pypandoc
+isambard
 flask
+pymongo
