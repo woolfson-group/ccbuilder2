@@ -1,7 +1,8 @@
 port module Builder exposing (..)
 
-import BuilderCss exposing (CssClasses(..), cssNamespace)
+import BuilderCss exposing (CssClasses(..), cssNamespace, panelStyling)
 import BuildPanel
+import Css
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -11,7 +12,6 @@ import Json.Decode exposing (field, string, float, decodeString)
 import Json.Encode
 import Keyboard
 import ParameterValidation exposing (containsInvalidParameter, editParameterValue)
-import Styling exposing (Styling, panelStyling)
 import Task
 import Types
     exposing
@@ -24,6 +24,11 @@ import Types
 
 { class, classList, id } =
     Html.CssHelpers.withNamespace cssNamespace
+
+
+styles : List Css.Mixin -> Attribute msg
+styles =
+    Css.asPairs >> Html.Attributes.style
 
 
 main : Program Never Model Msg
@@ -218,8 +223,9 @@ update msg model =
                                 }
                         in
                             { model | panelVisibility = newPanelVisibility } ! []
-                    
-                    _ -> model ! []
+
+                    _ ->
+                        model ! []
 
 
 sendBuildCmd : ParameterRecord -> Cmd Msg
@@ -297,16 +303,16 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-    div [ id "viewer", style viewerStyling ] [ overlayPanels model ]
+    div [ id "viewer", styles viewerStyling ] [ overlayPanels model ]
 
 
-viewerStyling : Styling
+viewerStyling : List Css.Mixin
 viewerStyling =
-    [ ( "position", "fixed" )
-    , ( "bottom", "0px" )
-    , ( "top", "0px" )
-    , ( "left", "0px" )
-    , ( "right", "0px" )
+    [ Css.position Css.fixed
+    , Css.bottom (Css.px 0)
+    , Css.top (Css.px 0)
+    , Css.left (Css.px 0)
+    , Css.right (Css.px 0)
     ]
 
 
@@ -353,50 +359,50 @@ buildConfig =
 
 siteHeader : Html msg
 siteHeader =
-    div [ id [ AppHeaderPanel ], style <| headerStyling ++ panelStyling ]
+    div [ id [ AppHeaderPanel ], styles <| headerStyling ++ panelStyling ]
         [ header [] [ h1 [] [ text "CCBuilder Mk.2" ] ] ]
 
 
-headerStyling : Styling
+headerStyling : List Css.Mixin
 headerStyling =
-    [ ( "position", "absolute" )
-    , ( "line-height", "50px" )
-    , ( "top", "0%" )
-    , ( "left", "0%" )
-    , ( "width", "100%" )
+    [ Css.position Css.absolute
+    , Css.lineHeight (Css.px 50)
+    , Css.top (Css.px 0)
+    , Css.left (Css.px 0)
+    , Css.width (Css.pct 100)
     ]
 
 
 topLeftToggles : Html Msg
 topLeftToggles =
-    div [ style topLeftTogglesStyling ]
+    div [ styles topLeftTogglesStyling ]
         [ BuildPanel.toggleBuildPanel buildConfig
         , toggleExamplesPanel
         ]
 
 
-topLeftTogglesStyling : Styling
+topLeftTogglesStyling : List Css.Mixin
 topLeftTogglesStyling =
-    [ ( "top", "60px" )
-    , ( "left", "-5px" )
-    , ( "z-index", "2" )
-    , ( "position", "absolute" )
+    [ Css.top (Css.px 60)
+    , Css.left (Css.px -5)
+    , Css.zIndex (Css.int 2)
+    , Css.position Css.absolute
     ]
 
 
 topRightToggles : Html Msg
 topRightToggles =
-    div [ style topRightTogglesStyling ]
+    div [ styles topRightTogglesStyling ]
         [ toggleBuildHistoryPanel
         ]
 
 
-topRightTogglesStyling : Styling
+topRightTogglesStyling : List Css.Mixin
 topRightTogglesStyling =
-    [ ( "top", "60px" )
-    , ( "right", "-5px" )
-    , ( "z-index", "2" )
-    , ( "position", "absolute" )
+    [ Css.top (Css.px 60)
+    , Css.right (Css.px -5)
+    , Css.zIndex (Css.int 2)
+    , Css.position Css.absolute
     ]
 
 
@@ -408,38 +414,40 @@ examplesPanel : Html Msg
 examplesPanel =
     div
         [ class [ OverlayPanelCss ]
-        , id [ ExamplesPanel ], style <| panelStyling ++ examplesPanelStyling ]
+        , id [ ExamplesPanel ]
+        , styles <| panelStyling ++ examplesPanelStyling
+        ]
         [ h3 [] [ text "Examples" ]
         , button
-            [ style exampleButtonStyling
+            [ styles exampleButtonStyling
             , onClick <| SetParametersAndBuild basisSetDimer
             ]
             [ text "Dimer" ]
         , br [] []
         , button
-            [ style exampleButtonStyling
+            [ styles exampleButtonStyling
             , onClick <| SetParametersAndBuild basisSetTrimer
             ]
             [ text "Trimer" ]
         , br [] []
         , button
-            [ style exampleButtonStyling
+            [ styles exampleButtonStyling
             , onClick <| SetParametersAndBuild basisSetTetramer
             ]
             [ text "Tetramer" ]
         ]
 
 
-examplesPanelStyling : Styling
+examplesPanelStyling : List Css.Mixin
 examplesPanelStyling =
-    [ ( "top", "60px" )
-    , ( "left", "30px" )
+    [ Css.top (Css.px 60)
+    , Css.left (Css.px 30)
     ]
 
 
-exampleButtonStyling : Styling
+exampleButtonStyling : List Css.Mixin
 exampleButtonStyling =
-    [ ( "width", "80%" )
+    [ Css.width (Css.pct 80)
     ]
 
 
@@ -493,7 +501,7 @@ modelInfoPanel : Model -> Html Msg
 modelInfoPanel model =
     div
         [ class [ OverlayPanelCss ]
-        , style <| panelStyling ++ modelInfoPanelStyling
+        , styles <| panelStyling ++ modelInfoPanelStyling
         ]
         [ h3 [] [ text "Model Information" ]
         , text "BUDE Energy"
@@ -516,10 +524,10 @@ roundToXDecPlaces precision num =
             |> flip (/) scaling
 
 
-modelInfoPanelStyling : Styling
+modelInfoPanelStyling : List Css.Mixin
 modelInfoPanelStyling =
-    [ ( "bottom", "20px" )
-    , ( "left", "30px" )
+    [ Css.bottom (Css.px 20)
+    , Css.left (Css.px 30)
     ]
 
 
@@ -532,7 +540,7 @@ buildHistoryPanel modelHistory =
     div
         [ class [ OverlayPanelCss ]
         , id [ BuildHistoryPanel ]
-        , style <| panelStyling ++ buildHistoryPanelStyling
+        , styles <| panelStyling ++ buildHistoryPanelStyling
         ]
         [ h3 [] [ text "Build History" ]
         , table []
@@ -546,12 +554,12 @@ modelDetailTableHeader : Html msg
 modelDetailTableHeader =
     thead []
         [ tr []
-            [ th [ style [ ( "width", "6em" ) ] ] [ text "Oligomer State" ]
-            , th [ style [ ( "width", "6em" ) ] ] [ text "Radius" ]
-            , th [ style [ ( "width", "6em" ) ] ] [ text "Pitch" ]
-            , th [ style [ ( "width", "6em" ) ] ] [ text "Interface Angle" ]
+            [ th [ styles [ Css.width (Css.em 6) ] ] [ text "Oligomer State" ]
+            , th [ styles [ Css.width (Css.em 6) ] ] [ text "Radius" ]
+            , th [ styles [ Css.width (Css.em 6) ] ] [ text "Pitch" ]
+            , th [ styles [ Css.width (Css.em 6) ] ] [ text "Interface Angle" ]
             , th [] [ text "Sequence" ]
-            , th [ style [ ( "width", "6em" ) ] ] [ text "Register" ]
+            , th [ styles [ Css.width (Css.em 6) ] ] [ text "Register" ]
             ]
         ]
 
@@ -579,10 +587,10 @@ makeParameterTh pString =
         |> th []
 
 
-buildHistoryPanelStyling : Styling
+buildHistoryPanelStyling : List Css.Mixin
 buildHistoryPanelStyling =
-    [ ( "top", "60px" )
-    , ( "right", "30px" )
+    [ Css.top (Css.px 60)
+    , Css.right (Css.px 30)
     ]
 
 
@@ -605,7 +613,7 @@ buildingStatusPanel model =
         commonAttr =
             [ class [ OverlayPanelCss ]
             , id [ BuildingStatusPanel ]
-            , style <| buildingStatusStyling ++ panelStyling
+            , styles <| buildingStatusStyling ++ panelStyling
             ]
     in
         if model.building then
@@ -617,10 +625,10 @@ buildingStatusPanel model =
             div (hidden True :: commonAttr) []
 
 
-buildingStatusStyling : Styling
+buildingStatusStyling : List Css.Mixin
 buildingStatusStyling =
-    [ ( "top", "50%" )
-    , ( "left", "50%" )
-    , ( "width", "80px" )
-    , ( "height", "80px" )
+    [ Css.top (Css.pct 50)
+    , Css.left (Css.pct 50)
+    , Css.width (Css.px 80)
+    , Css.height (Css.px 80)
     ]

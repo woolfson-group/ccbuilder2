@@ -107,6 +107,10 @@ css =
     ]
 
 
+panelStyling : List Mixin
+panelStyling = [ position absolute, zIndex (int 1) ]
+
+
 type alias ColorPalette =
     { c1 : Css.Color
     , c2 : Css.Color

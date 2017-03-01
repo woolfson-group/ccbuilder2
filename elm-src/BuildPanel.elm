@@ -1,12 +1,12 @@
 module BuildPanel exposing (..)
 
-import BuilderCss exposing (CssClasses(..), cssNamespace)
+import BuilderCss exposing (CssClasses(..), cssNamespace, panelStyling)
+import Css
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Html.CssHelpers
 import ParameterValidation exposing (containsInvalidParameter, editParameterValue)
-import Styling exposing (Styling, panelStyling)
 import Types
     exposing
         ( ParameterRecord
@@ -18,6 +18,10 @@ import Types
 
 { class, classList, id } =
     Html.CssHelpers.withNamespace cssNamespace
+
+
+styles : List Css.Mixin -> Attribute msg
+styles = Css.asPairs >> Html.Attributes.style
 
 
 type BuildPanelMsgs msg
@@ -50,17 +54,14 @@ config { edit, submit, clear, setRegister, toggle } =
 
 buildPanel : BuildPanelMsgs msg -> ParameterRecord -> InputValues -> Html msg
 buildPanel config parameters currentInput =
-    div [ class [ OverlayPanelCss ], id [ BuildPanel ], style <| panelStyling ++ buildPanelStyling ]
+    div [ class [ OverlayPanelCss ], id [ BuildPanel ], styles <| panelStyling ++ buildPanelStyling ]
         [ h3 [] [ text "Parameters" ]
         , parameterInputForm config parameters currentInput
         ]
 
 
-buildPanelStyling : Styling
-buildPanelStyling =
-    [ ( "top", "60px" )
-    , ( "left", "30px" )
-    ]
+buildPanelStyling : List Css.Mixin
+buildPanelStyling = [ Css.top (Css.px 60), Css.left (Css.px 30) ]
 
 
 parameterInputForm : BuildPanelMsgs msg -> ParameterRecord -> InputValues -> Html msg
@@ -102,7 +103,7 @@ parameterInput config ( parameterLabel, parameter, currentParameter ) =
                 , name parameterLabel
                 , placeholder parameterLabel
                 , onInput (edit parameter)
-                , style inputStyling
+                , styles inputStyling
                 , value currentParameter
                 ]
                 []
@@ -125,7 +126,7 @@ sequenceInput config ( parameterLabel, parameter, currentSequence, currentRegist
                 [ name parameterLabel
                 , rows 3
                 , cols 30
-                , style inputStyling
+                , styles inputStyling
                 , placeholder parameterLabel
                 , onInput (edit parameter)
                 , value currentSequence
@@ -134,9 +135,8 @@ sequenceInput config ( parameterLabel, parameter, currentSequence, currentRegist
             ]
 
 
-inputStyling : Styling
-inputStyling =
-    [ ( "width", "100%" ) ]
+inputStyling : List Css.Mixin
+inputStyling = [ Css.width (Css.pct 100 ) ]
 
 
 parameterSubmit : BuildPanelMsgs msg -> ParameterRecord -> Html msg
