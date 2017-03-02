@@ -19,6 +19,7 @@
 
 ## TODO
 
+* Add additional camera and representation controls
 * Tidy up the update function
 * Change build url to `/build-coiledcoil`
 * Add `SetRegister` to `EditParameter` message

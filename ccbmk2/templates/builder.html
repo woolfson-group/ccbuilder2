@@ -37,7 +37,7 @@
             var structure = pv.io.pdb(pdbString);
             viewer.ballsAndSticks('structure', structure);
             viewer.cartoon('structure', structure, { color: pv.color.byChain() });
-            viewer.centerOn(structure);
+            viewer.fitTo(structure);
         }
     );
 </script>
