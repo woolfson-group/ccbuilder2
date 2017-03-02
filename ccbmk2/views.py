@@ -29,8 +29,8 @@ def builder():
     return render_template('builder.html')
 
 
-@app.route('/builder/api', methods=['POST'])
-def process_builder_command():
+@app.route('/builder/api/build/coiled-coil', methods=['POST'])
+def build_coiled_coil_model():
     """Processes commands passed to the builder module."""
     (parameters_id, save_model) = store_parameters(request.json)
     model = model_store.find_one(request.json)
@@ -39,7 +39,7 @@ def process_builder_command():
         pdb_and_score = build_coiled_coil(request.json)
         build_start_end = datetime.datetime.now()
         build_time = build_start_end - build_start_time
-        log_build_request(request, build_time, parameters_id)
+        log_build_info(request, build_time, parameters_id)
         if save_model:
             store_model(request.json, pdb_and_score)
     else:
@@ -48,6 +48,35 @@ def process_builder_command():
 
 
 def store_parameters(request, number_for_save=5):
+    """Saves the requested parameters in the database.
+    
+    An additional 'requested' field is added to the request before
+    it is logged in the database, which is an integer that is
+    incremented whenever the same parameters are requested again.
+
+    Parameters
+    ----------
+
+    request : dict
+        Json body of the Http request that contains the build
+        parameters.
+    
+    number_for_save : int
+        The number of times the model must be requested before
+        it is cached in the models database.
+
+    Returns
+    -------
+
+    parameters_id : bson.ObjectID
+        The id of the parameters, this will be passed to the build
+        log to be stored to avoid duplication.
+    
+    save_model : Bool
+        Indicates whether the parameters have been requested enough
+        to make it desirable to save the model in the model
+        collection.
+    """
     parameters_log = parameters_store.find_one(request)
     if parameters_log == None:
         parameters_log = request
@@ -66,7 +95,8 @@ def store_parameters(request, number_for_save=5):
     return parameters_id, save_model
 
 
-def log_build_request(request, build_time, parameters_id):
+def log_build_info(request, build_time, parameters_id):
+    """Saves informations about the build process to the database."""
     build_request = {
         'ip': request.remote_addr,
         'date': datetime.datetime.now(),
@@ -78,6 +108,7 @@ def log_build_request(request, build_time, parameters_id):
 
 
 def store_model(request, pdb_and_score):
+    """Stores a model in the database.""" 
     model = request
     model['pdb'] = pdb_and_score['pdb']
     model['score'] = pdb_and_score['score']

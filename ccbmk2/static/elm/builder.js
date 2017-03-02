@@ -20181,7 +20181,7 @@ var _user$project$Builder$sendBuildCmd = function (parameters) {
 		_user$project$Types$ProcessModel,
 		A3(
 			_elm_lang$http$Http$post,
-			'/builder/api',
+			'/builder/api/build/coiled-coil',
 			_elm_lang$http$Http$jsonBody(
 				_user$project$Builder$parametersJson(parameters)),
 			_user$project$Builder$modellingResultsDecoder));
