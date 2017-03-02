@@ -223,7 +223,7 @@ sendBuildCmd : ParameterRecord -> Cmd Msg
 sendBuildCmd parameters =
     Http.send ProcessModel <|
         Http.post
-            "/builder/build_model"
+            "/builder/api"
             (Http.jsonBody <| parametersJson parameters)
             modellingResultsDecoder
 
