@@ -9,6 +9,7 @@ type Msg
     | SetRegister String
     | Build
     | ProcessModel (Result Http.Error ( String, Float ))
+    | DownloadPdb
     | Clear
     | SetParametersAndBuild ParameterRecord
     | KeyMsg Keyboard.KeyCode

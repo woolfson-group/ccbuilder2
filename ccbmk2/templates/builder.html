@@ -6,6 +6,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='elm/builder.js') }}"></script>
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <script type='text/javascript' src="{{ url_for('static', filename='javascript/bio-pv.min.js') }}"></script>
+    <script type='text/javascript' src="{{ url_for('static', filename='javascript/FileSaver.min.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css?family=Roboto|Russo+One|Source+Code+Pro" rel="stylesheet">
 </head>
@@ -38,6 +39,17 @@
             viewer.ballsAndSticks('structure', structure);
             viewer.cartoon('structure', structure, { color: pv.color.byChain() });
             viewer.fitTo(structure);
+        }
+    );
+
+    app.ports.downloadPdb.subscribe(
+        function(filename_text) {
+            var filename = filename_text[0];
+            var text = filename_text[1];
+            var blob = new Blob([text], {
+                type: "text/plain;charset=utf-8;",
+            });
+            saveAs(blob, filename);
         }
     );
 </script>

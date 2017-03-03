@@ -18862,6 +18862,7 @@ var _user$project$Types$SetParametersAndBuild = function (a) {
 	return {ctor: 'SetParametersAndBuild', _0: a};
 };
 var _user$project$Types$Clear = {ctor: 'Clear'};
+var _user$project$Types$DownloadPdb = {ctor: 'DownloadPdb'};
 var _user$project$Types$ProcessModel = function (a) {
 	return {ctor: 'ProcessModel', _0: a};
 };
@@ -19898,16 +19899,24 @@ var _user$project$Builder$makeParameterTh = function (pString) {
 		_elm_lang$core$List$singleton(
 			_elm_lang$html$Html$text(pString)));
 };
-var _user$project$Builder$modelInfoPanelStyling = {
-	ctor: '::',
-	_0: _rtfeldman$elm_css$Css$bottom(
-		_rtfeldman$elm_css$Css$px(20)),
-	_1: {
-		ctor: '::',
-		_0: _rtfeldman$elm_css$Css$left(
-			_rtfeldman$elm_css$Css$px(30)),
-		_1: {ctor: '[]'}
-	}
+var _user$project$Builder$downloadStructureButton = function (pdbFile) {
+	var deactivated = _elm_lang$core$Native_Utils.eq(pdbFile, _elm_lang$core$Maybe$Nothing) ? true : false;
+	return A2(
+		_elm_lang$html$Html$button,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$DownloadPdb),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$disabled(deactivated),
+				_1: {ctor: '[]'}
+			}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text('Download PDB'),
+			_1: {ctor: '[]'}
+		});
 };
 var _user$project$Builder$roundToXDecPlaces = F2(
 	function (precision, num) {
@@ -19923,6 +19932,17 @@ var _user$project$Builder$roundToXDecPlaces = F2(
 			_elm_lang$core$Basics$toFloat(
 				_elm_lang$core$Basics$round(num * scaling)));
 	});
+var _user$project$Builder$modelInfoPanelStyling = {
+	ctor: '::',
+	_0: _rtfeldman$elm_css$Css$bottom(
+		_rtfeldman$elm_css$Css$px(20)),
+	_1: {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css$left(
+			_rtfeldman$elm_css$Css$px(30)),
+		_1: {ctor: '[]'}
+	}
+};
 var _user$project$Builder$basisSetTetramer = {
 	oligomerState: _elm_lang$core$Maybe$Just(4),
 	radius: _elm_lang$core$Maybe$Just(6.8),
@@ -19943,7 +19963,7 @@ var _user$project$Builder$basisSetDimer = {
 	oligomerState: _elm_lang$core$Maybe$Just(2),
 	radius: _elm_lang$core$Maybe$Just(5.1),
 	pitch: _elm_lang$core$Maybe$Just(226),
-	phiCA: _elm_lang$core$Maybe$Just(26.4),
+	phiCA: _elm_lang$core$Maybe$Just(24),
 	sequence: _elm_lang$core$Maybe$Just('EIAALKQEIAALKKENAALKWEIAALKQ'),
 	register: 'g'
 };
@@ -20576,7 +20596,18 @@ var _user$project$Builder$modelInfoPanel = function (model) {
 										_elm_lang$core$Maybe$map,
 										_user$project$Builder$roundToXDecPlaces(1),
 										model.score)))),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$br,
+								{ctor: '[]'},
+								{ctor: '[]'}),
+							_1: {
+								ctor: '::',
+								_0: _user$project$Builder$downloadStructureButton(model.pdbFile),
+								_1: {ctor: '[]'}
+							}
+						}
 					}
 				}
 			}
@@ -20823,6 +20854,11 @@ var _user$project$Builder$showStructure = _elm_lang$core$Native_Platform.outgoin
 	function (v) {
 		return v;
 	});
+var _user$project$Builder$downloadPdb = _elm_lang$core$Native_Platform.outgoingPort(
+	'downloadPdb',
+	function (v) {
+		return [v._0, v._1];
+	});
 var _user$project$Builder$update = F2(
 	function (msg, model) {
 		var _p3 = msg;
@@ -20891,6 +20927,17 @@ var _user$project$Builder$update = F2(
 							{building: false}),
 						{ctor: '[]'});
 				}
+			case 'DownloadPdb':
+				var pdbFile = A2(_elm_lang$core$Maybe$withDefault, '', model.pdbFile);
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{
+						ctor: '::',
+						_0: _user$project$Builder$downloadPdb(
+							{ctor: '_Tuple2', _0: 'ccbuilder_model.pdb', _1: pdbFile}),
+						_1: {ctor: '[]'}
+					});
 			case 'Clear':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
@@ -21012,7 +21059,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error ( String, Float )"],"TogglePanel":["Types.Panel"],"SetRegister":["String"],"Build":[],"Clear":[],"EditParameter":["Types.Parameter","String"],"SetParametersAndBuild":["Types.ParameterRecord"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ oligomerState : Maybe.Maybe Int , radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error ( String, Float )"],"TogglePanel":["Types.Panel"],"SetRegister":["String"],"Build":[],"Clear":[],"DownloadPdb":[],"EditParameter":["Types.Parameter","String"],"SetParametersAndBuild":["Types.ParameterRecord"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ oligomerState : Maybe.Maybe Int , radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

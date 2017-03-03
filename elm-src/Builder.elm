@@ -99,6 +99,9 @@ port initialiseViewer : () -> Cmd msg
 port showStructure : String -> Cmd msg
 
 
+port downloadPdb : (String, String) -> Cmd msg
+
+
 
 -- Update
 -- The Msg union type can be found in Types.elm
@@ -154,6 +157,12 @@ update msg model =
 
         ProcessModel (Err _) ->
             { model | building = False } ! []
+        
+        DownloadPdb ->
+            let
+                pdbFile = Maybe.withDefault "" model.pdbFile
+            in
+                model ! [ downloadPdb ("ccbuilder_model.pdb", pdbFile) ]
 
         Clear ->
             { model | parameters = emptyParameters, currentInput = emptyInput } ! []
@@ -436,7 +445,7 @@ basisSetDimer =
     { oligomerState = Just 2
     , radius = Just 5.1
     , pitch = Just 226
-    , phiCA = Just 26.4
+    , phiCA = Just 24
     , sequence = Just "EIAALKQEIAALKKENAALKWEIAALKQ"
     , register = "g"
     }
@@ -490,7 +499,16 @@ modelInfoPanel model =
             |> Maybe.map toString
             |> Maybe.withDefault ""
             |> \val -> input [ value val, readonly True ] []
+        , br [] []
+        , downloadStructureButton model.pdbFile
         ]
+
+
+modelInfoPanelStyling : List Css.Mixin
+modelInfoPanelStyling =
+    [ Css.bottom (Css.px 20)
+    , Css.left (Css.px 30)
+    ]
 
 
 roundToXDecPlaces : Int -> Float -> Float
@@ -504,11 +522,16 @@ roundToXDecPlaces precision num =
             |> flip (/) scaling
 
 
-modelInfoPanelStyling : List Css.Mixin
-modelInfoPanelStyling =
-    [ Css.bottom (Css.px 20)
-    , Css.left (Css.px 30)
-    ]
+downloadStructureButton : Maybe String -> Html Msg
+downloadStructureButton pdbFile =
+    let
+        deactivated =
+            if pdbFile == Nothing then
+                True
+            else
+                False
+    in
+        button [ onClick DownloadPdb, disabled deactivated ] [ text "Download PDB" ]
 
 
 
