@@ -14,6 +14,7 @@ This is the source code for a web application for building models of coiled coil
 * `docker rm $(docker ps -a -q)` to remove all images
 * Coolors
     * https://coolors.co/e6e8e6-ced0ce-9fb8ad-475841-3f403f
+* `List.map (\v -> (toFloat v) * delta) (List.range 0 (n-1))`
 
 ## Style Guide
 

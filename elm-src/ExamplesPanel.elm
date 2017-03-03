@@ -52,73 +52,77 @@ examplesPanel =
         ]
 
 
-toStringRound =
-    toString << round
+tau : Float
+tau = 2 * pi
 
 
-x1f =
-    SvgAtt.x1 << toStringRound
+toStringRound : Float -> String
+toStringRound = toString << round
 
 
-y1f =
-    SvgAtt.y1 << toStringRound
+x1f : Float -> Svg.Attribute msg
+x1f = SvgAtt.x1 << toStringRound
 
 
-x2f =
-    SvgAtt.x2 << toStringRound
+y1f : Float -> Svg.Attribute msg
+y1f = SvgAtt.y1 << toStringRound
 
 
-y2f =
-    SvgAtt.y2 << toStringRound
+x2f : Float -> Svg.Attribute msg
+x2f = SvgAtt.x2 << toStringRound
 
 
-cxf =
-    SvgAtt.cx << toStringRound
+y2f : Float -> Svg.Attribute msg
+y2f = SvgAtt.y2 << toStringRound
 
 
-cyf =
-    SvgAtt.cy << toStringRound
+cxf : Float -> Svg.Attribute msg
+cxf = SvgAtt.cx << toStringRound
 
 
-rf =
-    SvgAtt.r << toStringRound
+cyf : Float -> Svg.Attribute msg
+cyf = SvgAtt.cy << toStringRound
 
 
-dimerIcon : Float -> Float -> Html msg
-dimerIcon width height =
+rf : Float -> Svg.Attribute msg
+rf = SvgAtt.r << toStringRound
+
+
+dimerIcon : Float -> Html msg
+dimerIcon widthAndHeight =
     Svg.svg
         [ SvgAtt.width "50px"
         , SvgAtt.height "50px"
         , SvgAtt.display "block"
         ]
         [ Svg.line
-            [ x1f (width * (1 / 2))
-            , y1f (height * (1 / 4))
-            , x2f (width * (1 / 2))
-            , y2f (height * (3 / 4))
+            [ x1f (widthAndHeight * (1 / 2))
+            , y1f (widthAndHeight * (1 / 4))
+            , x2f (widthAndHeight * (1 / 2))
+            , y2f (widthAndHeight * (3 / 4))
             , SvgAtt.strokeWidth <| toString 2
             , SvgAtt.stroke "black"
             ]
             []
-        , Svg.circle
-            [ cxf (width * (1 / 2))
-            , cyf (height * (1 / 4))
-            , rf 5
-            , SvgAtt.strokeWidth <| toString 2
-            , SvgAtt.stroke "black"
-            , SvgAtt.fill "grey"
-            ]
-            []
-        , Svg.circle
-            [ cxf (width * (1 / 2))
-            , cyf (height * (3 / 4))
-            , rf 5
-            , SvgAtt.strokeWidth <| toString 2
-            , SvgAtt.stroke "black"
-            , SvgAtt.fill "grey"
-            ]
-            []
+        , drawHelixCircle (widthAndHeight * (1 / 2)) (widthAndHeight * (1 / 4)) 5
+        , drawHelixCircle (widthAndHeight * (1 / 2)) (widthAndHeight * (3 / 4)) 5
         ]
+
+
+angleToCoordinate r theta 
+
+
+drawHelixCircle : Float -> Float -> Float -> Svg.Svg msg
+drawHelixCircle x y r =
+    Svg.circle
+        [ cxf x
+        , cyf y
+        , rf r
+        , SvgAtt.strokeWidth <| toString 2
+        , SvgAtt.stroke "black"
+        , SvgAtt.fill "grey"
+        ]
+        []
 
 
 examplesPanelStyling : List Css.Mixin
