@@ -19867,6 +19867,194 @@ var _user$project$BuildPanel$toggleBuildPanel = A2(
 		_1: {ctor: '[]'}
 	});
 
+var _user$project$ExamplesPanel$basisSetTetramer = {
+	oligomerState: _elm_lang$core$Maybe$Just(4),
+	radius: _elm_lang$core$Maybe$Just(6.8),
+	pitch: _elm_lang$core$Maybe$Just(213),
+	phiCA: _elm_lang$core$Maybe$Just(22.1),
+	sequence: _elm_lang$core$Maybe$Just('ELAAIKQELAAIKKELAAIKWELAAIKQ'),
+	register: 'g'
+};
+var _user$project$ExamplesPanel$basisSetTrimer = {
+	oligomerState: _elm_lang$core$Maybe$Just(3),
+	radius: _elm_lang$core$Maybe$Just(6.3),
+	pitch: _elm_lang$core$Maybe$Just(194),
+	phiCA: _elm_lang$core$Maybe$Just(20.0),
+	sequence: _elm_lang$core$Maybe$Just('EIAAIKQEIAAIKKEIAAIKWEIAAIKQ'),
+	register: 'g'
+};
+var _user$project$ExamplesPanel$basisSetDimer = {
+	oligomerState: _elm_lang$core$Maybe$Just(2),
+	radius: _elm_lang$core$Maybe$Just(5.1),
+	pitch: _elm_lang$core$Maybe$Just(226),
+	phiCA: _elm_lang$core$Maybe$Just(24),
+	sequence: _elm_lang$core$Maybe$Just('EIAALKQEIAALKKENAALKWEIAALKQ'),
+	register: 'g'
+};
+var _user$project$ExamplesPanel$exampleButtonStyling = {
+	ctor: '::',
+	_0: _rtfeldman$elm_css$Css$width(
+		_rtfeldman$elm_css$Css$pct(80)),
+	_1: {ctor: '[]'}
+};
+var _user$project$ExamplesPanel$examplesPanelStyling = {
+	ctor: '::',
+	_0: _rtfeldman$elm_css$Css$top(
+		_rtfeldman$elm_css$Css$px(60)),
+	_1: {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css$left(
+			_rtfeldman$elm_css$Css$px(30)),
+		_1: {ctor: '[]'}
+	}
+};
+var _user$project$ExamplesPanel$styles = function (_p0) {
+	return _elm_lang$html$Html_Attributes$style(
+		_rtfeldman$elm_css$Css$asPairs(_p0));
+};
+var _user$project$ExamplesPanel$_p1 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace(_user$project$BuilderCss$cssNamespace);
+var _user$project$ExamplesPanel$class = _user$project$ExamplesPanel$_p1.$class;
+var _user$project$ExamplesPanel$classList = _user$project$ExamplesPanel$_p1.classList;
+var _user$project$ExamplesPanel$id = _user$project$ExamplesPanel$_p1.id;
+var _user$project$ExamplesPanel$examplesPanel = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _user$project$ExamplesPanel$class(
+			{
+				ctor: '::',
+				_0: _user$project$BuilderCss$OverlayPanelCss,
+				_1: {ctor: '[]'}
+			}),
+		_1: {
+			ctor: '::',
+			_0: _user$project$ExamplesPanel$id(
+				{
+					ctor: '::',
+					_0: _user$project$Types$ExamplesPanel,
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _user$project$ExamplesPanel$styles(
+					A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$ExamplesPanel$examplesPanelStyling)),
+				_1: {ctor: '[]'}
+			}
+		}
+	},
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$h3,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text('Examples'),
+				_1: {ctor: '[]'}
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$button,
+				{
+					ctor: '::',
+					_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$exampleButtonStyling),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onClick(
+							_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetDimer)),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Dimer'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$br,
+					{ctor: '[]'},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$button,
+						{
+							ctor: '::',
+							_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$exampleButtonStyling),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(
+									_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetTrimer)),
+								_1: {ctor: '[]'}
+							}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Trimer'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$br,
+							{ctor: '[]'},
+							{ctor: '[]'}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$button,
+								{
+									ctor: '::',
+									_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$exampleButtonStyling),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(
+											_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetTetramer)),
+										_1: {ctor: '[]'}
+									}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Tetramer'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		}
+	});
+var _user$project$ExamplesPanel$toggleExamplesPanel = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _user$project$ExamplesPanel$class(
+			{
+				ctor: '::',
+				_0: _user$project$BuilderCss$OverlayPanelCss,
+				_1: {
+					ctor: '::',
+					_0: _user$project$BuilderCss$PanelToggleCss,
+					_1: {ctor: '[]'}
+				}
+			}),
+		_1: {
+			ctor: '::',
+			_0: _elm_lang$html$Html_Events$onClick(
+				_user$project$Types$TogglePanel(_user$project$Types$ExamplesPanel)),
+			_1: {ctor: '[]'}
+		}
+	},
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html$text('Examples'),
+		_1: {ctor: '[]'}
+	});
+
 var _user$project$Builder$buildingStatusStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$top(
@@ -19943,47 +20131,6 @@ var _user$project$Builder$modelInfoPanelStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$bottom(
 		_rtfeldman$elm_css$Css$px(20)),
-	_1: {
-		ctor: '::',
-		_0: _rtfeldman$elm_css$Css$left(
-			_rtfeldman$elm_css$Css$px(30)),
-		_1: {ctor: '[]'}
-	}
-};
-var _user$project$Builder$basisSetTetramer = {
-	oligomerState: _elm_lang$core$Maybe$Just(4),
-	radius: _elm_lang$core$Maybe$Just(6.8),
-	pitch: _elm_lang$core$Maybe$Just(213),
-	phiCA: _elm_lang$core$Maybe$Just(22.1),
-	sequence: _elm_lang$core$Maybe$Just('ELAAIKQELAAIKKELAAIKWELAAIKQ'),
-	register: 'g'
-};
-var _user$project$Builder$basisSetTrimer = {
-	oligomerState: _elm_lang$core$Maybe$Just(3),
-	radius: _elm_lang$core$Maybe$Just(6.3),
-	pitch: _elm_lang$core$Maybe$Just(194),
-	phiCA: _elm_lang$core$Maybe$Just(20.0),
-	sequence: _elm_lang$core$Maybe$Just('EIAAIKQEIAAIKKEIAAIKWEIAAIKQ'),
-	register: 'g'
-};
-var _user$project$Builder$basisSetDimer = {
-	oligomerState: _elm_lang$core$Maybe$Just(2),
-	radius: _elm_lang$core$Maybe$Just(5.1),
-	pitch: _elm_lang$core$Maybe$Just(226),
-	phiCA: _elm_lang$core$Maybe$Just(24),
-	sequence: _elm_lang$core$Maybe$Just('EIAALKQEIAALKKENAALKWEIAALKQ'),
-	register: 'g'
-};
-var _user$project$Builder$exampleButtonStyling = {
-	ctor: '::',
-	_0: _rtfeldman$elm_css$Css$width(
-		_rtfeldman$elm_css$Css$pct(80)),
-	_1: {ctor: '[]'}
-};
-var _user$project$Builder$examplesPanelStyling = {
-	ctor: '::',
-	_0: _rtfeldman$elm_css$Css$top(
-		_rtfeldman$elm_css$Css$px(60)),
 	_1: {
 		ctor: '::',
 		_0: _rtfeldman$elm_css$Css$left(
@@ -20239,6 +20386,22 @@ var _user$project$Builder$styles = function (_p2) {
 	return _elm_lang$html$Html_Attributes$style(
 		_rtfeldman$elm_css$Css$asPairs(_p2));
 };
+var _user$project$Builder$topLeftToggles = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _user$project$Builder$styles(_user$project$Builder$topLeftTogglesStyling),
+		_1: {ctor: '[]'}
+	},
+	{
+		ctor: '::',
+		_0: _user$project$BuildPanel$toggleBuildPanel,
+		_1: {
+			ctor: '::',
+			_0: _user$project$ExamplesPanel$toggleExamplesPanel,
+			_1: {ctor: '[]'}
+		}
+	});
 var _user$project$Builder$modelDetailTableHeader = A2(
 	_elm_lang$html$Html$thead,
 	{ctor: '[]'},
@@ -20405,160 +20568,6 @@ var _user$project$Builder$siteHeader = A2(
 				_1: {ctor: '[]'}
 			}),
 		_1: {ctor: '[]'}
-	});
-var _user$project$Builder$examplesPanel = A2(
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _user$project$Builder$class(
-			{
-				ctor: '::',
-				_0: _user$project$BuilderCss$OverlayPanelCss,
-				_1: {ctor: '[]'}
-			}),
-		_1: {
-			ctor: '::',
-			_0: _user$project$Builder$id(
-				{
-					ctor: '::',
-					_0: _user$project$Types$ExamplesPanel,
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: _user$project$Builder$styles(
-					A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$Builder$examplesPanelStyling)),
-				_1: {ctor: '[]'}
-			}
-		}
-	},
-	{
-		ctor: '::',
-		_0: A2(
-			_elm_lang$html$Html$h3,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text('Examples'),
-				_1: {ctor: '[]'}
-			}),
-		_1: {
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$button,
-				{
-					ctor: '::',
-					_0: _user$project$Builder$styles(_user$project$Builder$exampleButtonStyling),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Events$onClick(
-							_user$project$Types$SetParametersAndBuild(_user$project$Builder$basisSetDimer)),
-						_1: {ctor: '[]'}
-					}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('Dimer'),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$br,
-					{ctor: '[]'},
-					{ctor: '[]'}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$button,
-						{
-							ctor: '::',
-							_0: _user$project$Builder$styles(_user$project$Builder$exampleButtonStyling),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onClick(
-									_user$project$Types$SetParametersAndBuild(_user$project$Builder$basisSetTrimer)),
-								_1: {ctor: '[]'}
-							}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('Trimer'),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$br,
-							{ctor: '[]'},
-							{ctor: '[]'}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$button,
-								{
-									ctor: '::',
-									_0: _user$project$Builder$styles(_user$project$Builder$exampleButtonStyling),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onClick(
-											_user$project$Types$SetParametersAndBuild(_user$project$Builder$basisSetTetramer)),
-										_1: {ctor: '[]'}
-									}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('Tetramer'),
-									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
-						}
-					}
-				}
-			}
-		}
-	});
-var _user$project$Builder$toggleExamplesPanel = A2(
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _user$project$Builder$class(
-			{
-				ctor: '::',
-				_0: _user$project$BuilderCss$OverlayPanelCss,
-				_1: {
-					ctor: '::',
-					_0: _user$project$BuilderCss$PanelToggleCss,
-					_1: {ctor: '[]'}
-				}
-			}),
-		_1: {
-			ctor: '::',
-			_0: _elm_lang$html$Html_Events$onClick(
-				_user$project$Types$TogglePanel(_user$project$Types$ExamplesPanel)),
-			_1: {ctor: '[]'}
-		}
-	},
-	{
-		ctor: '::',
-		_0: _elm_lang$html$Html$text('Examples'),
-		_1: {ctor: '[]'}
-	});
-var _user$project$Builder$topLeftToggles = A2(
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _user$project$Builder$styles(_user$project$Builder$topLeftTogglesStyling),
-		_1: {ctor: '[]'}
-	},
-	{
-		ctor: '::',
-		_0: _user$project$BuildPanel$toggleBuildPanel,
-		_1: {
-			ctor: '::',
-			_0: _user$project$Builder$toggleExamplesPanel,
-			_1: {ctor: '[]'}
-		}
 	});
 var _user$project$Builder$modelInfoPanel = function (model) {
 	return A2(
@@ -20806,7 +20815,7 @@ var _user$project$Builder$overlayPanels = function (model) {
 		},
 		_1: {
 			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: model.panelVisibility.examplesPanel, _1: _user$project$Builder$examplesPanel},
+			_0: {ctor: '_Tuple2', _0: model.panelVisibility.examplesPanel, _1: _user$project$ExamplesPanel$examplesPanel},
 			_1: {
 				ctor: '::',
 				_0: {
