@@ -1,4 +1,6 @@
-# ccbmk2
+# CCBuilder Mk. 2
+
+This is the source code for a web application for building models of coiled coils and other parameterisable protein folds.
 
 ## Notes
 
@@ -22,4 +24,4 @@
 * Add additional camera and representation controls
 * Tidy up the update function
 * Add `SetRegister` to `EditParameter` message
-* Independent chains and antiparallels
+* Independent chains and anti-parallel structures
