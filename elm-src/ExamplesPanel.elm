@@ -6,6 +6,8 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Html.CssHelpers
+import Svg
+import Svg.Attributes as SvgAtt
 import Types
     exposing
         ( Msg(..)
@@ -34,22 +36,88 @@ examplesPanel =
         ]
         [ h3 [] [ text "Examples" ]
         , button
-            [ styles exampleButtonStyling
-            , onClick <| SetParametersAndBuild basisSetDimer
+            [ onClick <| SetParametersAndBuild basisSetDimer
             ]
-            [ text "Dimer" ]
+            [ dimerIcon 50 50 ]
         , br [] []
         , button
-            [ styles exampleButtonStyling
-            , onClick <| SetParametersAndBuild basisSetTrimer
+            [ onClick <| SetParametersAndBuild basisSetTrimer
             ]
             [ text "Trimer" ]
         , br [] []
         , button
-            [ styles exampleButtonStyling
-            , onClick <| SetParametersAndBuild basisSetTetramer
+            [ onClick <| SetParametersAndBuild basisSetTetramer
             ]
             [ text "Tetramer" ]
+        ]
+
+
+toStringRound =
+    toString << round
+
+
+x1f =
+    SvgAtt.x1 << toStringRound
+
+
+y1f =
+    SvgAtt.y1 << toStringRound
+
+
+x2f =
+    SvgAtt.x2 << toStringRound
+
+
+y2f =
+    SvgAtt.y2 << toStringRound
+
+
+cxf =
+    SvgAtt.cx << toStringRound
+
+
+cyf =
+    SvgAtt.cy << toStringRound
+
+
+rf =
+    SvgAtt.r << toStringRound
+
+
+dimerIcon : Float -> Float -> Html msg
+dimerIcon width height =
+    Svg.svg
+        [ SvgAtt.width "50px"
+        , SvgAtt.height "50px"
+        , SvgAtt.display "block"
+        ]
+        [ Svg.line
+            [ x1f (width * (1 / 2))
+            , y1f (height * (1 / 4))
+            , x2f (width * (1 / 2))
+            , y2f (height * (3 / 4))
+            , SvgAtt.strokeWidth <| toString 2
+            , SvgAtt.stroke "black"
+            ]
+            []
+        , Svg.circle
+            [ cxf (width * (1 / 2))
+            , cyf (height * (1 / 4))
+            , rf 5
+            , SvgAtt.strokeWidth <| toString 2
+            , SvgAtt.stroke "black"
+            , SvgAtt.fill "grey"
+            ]
+            []
+        , Svg.circle
+            [ cxf (width * (1 / 2))
+            , cyf (height * (3 / 4))
+            , rf 5
+            , SvgAtt.strokeWidth <| toString 2
+            , SvgAtt.stroke "black"
+            , SvgAtt.fill "grey"
+            ]
+            []
         ]
 
 
@@ -57,12 +125,6 @@ examplesPanelStyling : List Css.Mixin
 examplesPanelStyling =
     [ Css.top (Css.px 60)
     , Css.left (Css.px 30)
-    ]
-
-
-exampleButtonStyling : List Css.Mixin
-exampleButtonStyling =
-    [ Css.width (Css.pct 80)
     ]
 
 
