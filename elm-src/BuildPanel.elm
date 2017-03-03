@@ -117,7 +117,7 @@ parameterSubmit parameters =
 registerSelection : String -> Html Msg
 registerSelection currentRegister =
     select
-        [ value currentRegister, onInput SetRegister ]
+        [ value currentRegister, onInput (EditParameter Register) ]
         (List.map registerOption [ "a", "b", "c", "d", "e", "f", "g" ])
 
 

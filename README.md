@@ -22,6 +22,4 @@ This is the source code for a web application for building models of coiled coil
 ## TODO
 
 * Add additional camera and representation controls
-* Tidy up the update function
-* Add `SetRegister` to `EditParameter` message
 * Independent chains and anti-parallel structures

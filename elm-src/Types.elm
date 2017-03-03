@@ -6,7 +6,6 @@ import Http
 
 type Msg
     = EditParameter Parameter String
-    | SetRegister String
     | Build
     | ProcessModel (Result Http.Error ( String, Float ))
     | DownloadPdb
@@ -42,6 +41,7 @@ type Parameter
     | Pitch
     | PhiCA
     | Sequence
+    | Register
 
 
 type Panel

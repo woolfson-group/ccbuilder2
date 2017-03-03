@@ -99,7 +99,7 @@ port initialiseViewer : () -> Cmd msg
 port showStructure : String -> Cmd msg
 
 
-port downloadPdb : (String, String) -> Cmd msg
+port downloadPdb : ( String, String ) -> Cmd msg
 
 
 
@@ -117,22 +117,6 @@ update msg model =
             in
                 { model | parameters = p, currentInput = i } ! []
 
-        SetRegister register ->
-            let
-                oldParameters =
-                    model.parameters
-
-                newParameters =
-                    { oldParameters | register = register }
-
-                oldInput =
-                    model.currentInput
-
-                newInput =
-                    { oldInput | register = register }
-            in
-                { model | parameters = newParameters, currentInput = newInput } ! []
-
         Build ->
             ( { model | building = True }, sendBuildCmd model.parameters )
 
@@ -143,40 +127,37 @@ update msg model =
                         List.take 9 model.modelHistory
                     else
                         model.modelHistory
-
-                modelHistory =
-                    model.parameters :: oldHistory
             in
                 { model
                     | pdbFile = Just pdbFile
                     , score = Just score
                     , building = False
-                    , modelHistory = modelHistory
+                    , modelHistory = model.parameters :: oldHistory
                 }
                     ! [ showStructure pdbFile ]
 
         ProcessModel (Err _) ->
             { model | building = False } ! []
-        
+
         DownloadPdb ->
             let
-                pdbFile = Maybe.withDefault "" model.pdbFile
+                pdbFile =
+                    Maybe.withDefault "" model.pdbFile
             in
-                model ! [ downloadPdb ("ccbuilder_model.pdb", pdbFile) ]
+                model ! [ downloadPdb ( "ccbuilder_model.pdb", pdbFile ) ]
 
         Clear ->
             { model | parameters = emptyParameters, currentInput = emptyInput } ! []
 
         SetParametersAndBuild parameters ->
-            let
-                newInputValues =
-                    parametersToInput parameters
-            in
-                if containsInvalidParameter parameters then
-                    model ! []
-                else
-                    { model | parameters = parameters, currentInput = newInputValues }
-                        ! [ Task.perform identity (Task.succeed Build) ]
+            if containsInvalidParameter parameters then
+                model ! []
+            else
+                { model
+                    | parameters = parameters
+                    , currentInput = parametersToInput parameters
+                }
+                    ! [ Task.perform identity (Task.succeed Build) ]
 
         KeyMsg keyCode ->
             case keyCode of
@@ -190,42 +171,8 @@ update msg model =
                     model ! []
 
         TogglePanel panel ->
-            let
-                oldPanelVisibility =
-                    model.panelVisibility
-            in
-                case panel of
-                    BuildPanel ->
-                        let
-                            newPanelVisibility =
-                                { oldPanelVisibility
-                                    | buildPanel = not oldPanelVisibility.buildPanel
-                                    , examplesPanel = False
-                                }
-                        in
-                            { model | panelVisibility = newPanelVisibility } ! []
-
-                    ExamplesPanel ->
-                        let
-                            newPanelVisibility =
-                                { oldPanelVisibility
-                                    | buildPanel = False
-                                    , examplesPanel = not oldPanelVisibility.examplesPanel
-                                }
-                        in
-                            { model | panelVisibility = newPanelVisibility } ! []
-
-                    BuildHistoryPanel ->
-                        let
-                            newPanelVisibility =
-                                { oldPanelVisibility
-                                    | buildHistoryPanel = not oldPanelVisibility.buildHistoryPanel
-                                }
-                        in
-                            { model | panelVisibility = newPanelVisibility } ! []
-
-                    _ ->
-                        model ! []
+            { model | panelVisibility = togglePanelVisibility panel model.panelVisibility }
+                ! []
 
 
 sendBuildCmd : ParameterRecord -> Cmd Msg
@@ -286,6 +233,30 @@ maybeNumberToString mNum =
 
         Nothing ->
             ""
+
+
+togglePanelVisibility : Panel -> PanelVisibility -> PanelVisibility
+togglePanelVisibility panel currentVisibility =
+    case panel of
+        BuildPanel ->
+            { currentVisibility
+                | buildPanel = not currentVisibility.buildPanel
+                , examplesPanel = False
+            }
+
+        ExamplesPanel ->
+            { currentVisibility
+                | buildPanel = False
+                , examplesPanel = not currentVisibility.examplesPanel
+            }
+
+        BuildHistoryPanel ->
+            { currentVisibility
+                | buildHistoryPanel = not currentVisibility.buildHistoryPanel
+            }
+
+        _ ->
+            currentVisibility
 
 
 

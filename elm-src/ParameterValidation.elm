@@ -102,6 +102,16 @@ editParameterValue parameters currentInput parameter newValue =
                     { currentInput | sequence = newValue }
             in
                 ( newParameters, newInput )
+        
+        Register ->
+            let
+                newParameters =
+                    { parameters | register = newValue }
+
+                newInput =
+                    { currentInput | register = newValue }
+            in
+                ( newParameters, newInput )
 
 
 validateOligomerState : Int -> Maybe Int
