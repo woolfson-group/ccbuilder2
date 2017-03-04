@@ -38,17 +38,17 @@ examplesPanel =
         , button
             [ onClick <| SetParametersAndBuild basisSetDimer
             ]
-            [ dimerIcon 50 50 ]
+            [ ccIcon 2 50 ]
         , br [] []
         , button
             [ onClick <| SetParametersAndBuild basisSetTrimer
             ]
-            [ text "Trimer" ]
+            [ ccIcon 3 50 ]
         , br [] []
         , button
             [ onClick <| SetParametersAndBuild basisSetTetramer
             ]
-            [ text "Tetramer" ]
+            [ ccIcon 4 50 ]
         ]
 
 
@@ -88,32 +88,26 @@ rf : Float -> Svg.Attribute msg
 rf = SvgAtt.r << toStringRound
 
 
-dimerIcon : Float -> Html msg
-dimerIcon widthAndHeight =
-    Svg.svg
-        [ SvgAtt.width "50px"
-        , SvgAtt.height "50px"
-        , SvgAtt.display "block"
-        ]
-        [ Svg.line
-            [ x1f (widthAndHeight * (1 / 2))
-            , y1f (widthAndHeight * (1 / 4))
-            , x2f (widthAndHeight * (1 / 2))
-            , y2f (widthAndHeight * (3 / 4))
-            , SvgAtt.strokeWidth <| toString 2
-            , SvgAtt.stroke "black"
+ccIcon : Int -> Float -> Html msg
+ccIcon n widthAndHeight =
+    let
+        r = widthAndHeight/2
+        deltaAngle = tau / (toFloat n)
+        frameCoordinates =
+            List.map (\v -> ((toFloat v) * deltaAngle) + (tau/4)) (List.range 0 n)
+            |> List.map (\a -> fromPolar (r/2, a))
+            |> List.map (\(x, y) -> (x + r, r - y))
+    in
+        Svg.svg
+            [ SvgAtt.width "50px"
+            , SvgAtt.height "50px"
+            , SvgAtt.display "block"
             ]
-            []
-        , drawHelixCircle (widthAndHeight * (1 / 2)) (widthAndHeight * (1 / 4)) 5
-        , drawHelixCircle (widthAndHeight * (1 / 2)) (widthAndHeight * (3 / 4)) 5
-        ]
+            (List.map (drawHelixCircle (widthAndHeight/10)) frameCoordinates)
 
 
-angleToCoordinate r theta 
-
-
-drawHelixCircle : Float -> Float -> Float -> Svg.Svg msg
-drawHelixCircle x y r =
+drawHelixCircle : Float -> (Float, Float) -> Svg.Svg msg
+drawHelixCircle r (x, y) =
     Svg.circle
         [ cxf x
         , cyf y
