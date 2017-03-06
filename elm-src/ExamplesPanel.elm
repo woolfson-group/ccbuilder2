@@ -37,16 +37,19 @@ examplesPanel =
         [ h3 [] [ text "Examples" ]
         , button
             [ onClick <| SetParametersAndBuild basisSetDimer
+            , styles buttonStyling
             ]
             [ ccIcon 2 50 ]
         , br [] []
         , button
             [ onClick <| SetParametersAndBuild basisSetTrimer
+            , styles buttonStyling
             ]
             [ ccIcon 3 50 ]
         , br [] []
         , button
             [ onClick <| SetParametersAndBuild basisSetTetramer
+            , styles buttonStyling
             ]
             [ ccIcon 4 50 ]
         ]
@@ -97,13 +100,17 @@ ccIcon n widthAndHeight =
             List.map (\v -> ((toFloat v) * deltaAngle) + (tau/4)) (List.range 0 n)
             |> List.map (\a -> fromPolar (r/2, a))
             |> List.map (\(x, y) -> (x + r, r - y))
+        coordinatePairs = makeCoordinatePairs frameCoordinates
     in
         Svg.svg
             [ SvgAtt.width "50px"
             , SvgAtt.height "50px"
             , SvgAtt.display "block"
             ]
-            (List.map (drawHelixCircle (widthAndHeight/10)) frameCoordinates)
+            (
+                (List.map (drawHelixCircle (widthAndHeight/10)) frameCoordinates)
+                |> List.append (List.map drawLine coordinatePairs)
+            )
 
 
 drawHelixCircle : Float -> (Float, Float) -> Svg.Svg msg
@@ -119,10 +126,40 @@ drawHelixCircle r (x, y) =
         []
 
 
+makeCoordinatePairs : List (Float, Float) -> List ((Float, Float), (Float, Float))
+makeCoordinatePairs helixCentres =
+    let
+        hcl = List.length helixCentres
+        front = List.take (hcl - 1) helixCentres
+        back = Maybe.withDefault [] <| List.tail helixCentres
+    in
+        List.map2 (,) front back
+
+
+drawLine : ((Float, Float), (Float, Float)) -> Svg.Svg msg
+drawLine ((x1, y1), (x2, y2)) =
+    Svg.line
+        [ x1f x1
+        , y1f y1
+        , x2f x2
+        , y2f y2
+        , SvgAtt.strokeWidth <| toString 2
+        , SvgAtt.stroke "black"
+        ]
+        []
+
+
 examplesPanelStyling : List Css.Mixin
 examplesPanelStyling =
     [ Css.top (Css.px 60)
     , Css.left (Css.px 30)
+    ]
+
+
+buttonStyling : List Css.Mixin
+buttonStyling =
+    [ Css.margin (Css.px 5)
+    , Css.borderRadius (Css.px 10)
     ]
 
 

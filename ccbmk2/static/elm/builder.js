@@ -20232,6 +20232,17 @@ var _user$project$ExamplesPanel$basisSetDimer = {
 	sequence: _elm_lang$core$Maybe$Just('EIAALKQEIAALKKENAALKWEIAALKQ'),
 	register: 'g'
 };
+var _user$project$ExamplesPanel$buttonStyling = {
+	ctor: '::',
+	_0: _rtfeldman$elm_css$Css$margin(
+		_rtfeldman$elm_css$Css$px(5)),
+	_1: {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css$borderRadius(
+			_rtfeldman$elm_css$Css$px(10)),
+		_1: {ctor: '[]'}
+	}
+};
 var _user$project$ExamplesPanel$examplesPanelStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$top(
@@ -20242,6 +20253,22 @@ var _user$project$ExamplesPanel$examplesPanelStyling = {
 			_rtfeldman$elm_css$Css$px(30)),
 		_1: {ctor: '[]'}
 	}
+};
+var _user$project$ExamplesPanel$makeCoordinatePairs = function (helixCentres) {
+	var back = A2(
+		_elm_lang$core$Maybe$withDefault,
+		{ctor: '[]'},
+		_elm_lang$core$List$tail(helixCentres));
+	var hcl = _elm_lang$core$List$length(helixCentres);
+	var front = A2(_elm_lang$core$List$take, hcl - 1, helixCentres);
+	return A3(
+		_elm_lang$core$List$map2,
+		F2(
+			function (v0, v1) {
+				return {ctor: '_Tuple2', _0: v0, _1: v1};
+			}),
+		front,
+		back);
 };
 var _user$project$ExamplesPanel$toStringRound = function (_p0) {
 	return _elm_lang$core$Basics$toString(
@@ -20263,29 +20290,61 @@ var _user$project$ExamplesPanel$y2f = function (_p4) {
 	return _elm_lang$svg$Svg_Attributes$y2(
 		_user$project$ExamplesPanel$toStringRound(_p4));
 };
-var _user$project$ExamplesPanel$cxf = function (_p5) {
+var _user$project$ExamplesPanel$drawLine = function (_p5) {
+	var _p6 = _p5;
+	return A2(
+		_elm_lang$svg$Svg$line,
+		{
+			ctor: '::',
+			_0: _user$project$ExamplesPanel$x1f(_p6._0._0),
+			_1: {
+				ctor: '::',
+				_0: _user$project$ExamplesPanel$y1f(_p6._0._1),
+				_1: {
+					ctor: '::',
+					_0: _user$project$ExamplesPanel$x2f(_p6._1._0),
+					_1: {
+						ctor: '::',
+						_0: _user$project$ExamplesPanel$y2f(_p6._1._1),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$strokeWidth(
+								_elm_lang$core$Basics$toString(2)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		},
+		{ctor: '[]'});
+};
+var _user$project$ExamplesPanel$cxf = function (_p7) {
 	return _elm_lang$svg$Svg_Attributes$cx(
-		_user$project$ExamplesPanel$toStringRound(_p5));
-};
-var _user$project$ExamplesPanel$cyf = function (_p6) {
-	return _elm_lang$svg$Svg_Attributes$cy(
-		_user$project$ExamplesPanel$toStringRound(_p6));
-};
-var _user$project$ExamplesPanel$rf = function (_p7) {
-	return _elm_lang$svg$Svg_Attributes$r(
 		_user$project$ExamplesPanel$toStringRound(_p7));
 };
+var _user$project$ExamplesPanel$cyf = function (_p8) {
+	return _elm_lang$svg$Svg_Attributes$cy(
+		_user$project$ExamplesPanel$toStringRound(_p8));
+};
+var _user$project$ExamplesPanel$rf = function (_p9) {
+	return _elm_lang$svg$Svg_Attributes$r(
+		_user$project$ExamplesPanel$toStringRound(_p9));
+};
 var _user$project$ExamplesPanel$drawHelixCircle = F2(
-	function (r, _p8) {
-		var _p9 = _p8;
+	function (r, _p10) {
+		var _p11 = _p10;
 		return A2(
 			_elm_lang$svg$Svg$circle,
 			{
 				ctor: '::',
-				_0: _user$project$ExamplesPanel$cxf(_p9._0),
+				_0: _user$project$ExamplesPanel$cxf(_p11._0),
 				_1: {
 					ctor: '::',
-					_0: _user$project$ExamplesPanel$cyf(_p9._1),
+					_0: _user$project$ExamplesPanel$cyf(_p11._1),
 					_1: {
 						ctor: '::',
 						_0: _user$project$ExamplesPanel$rf(r),
@@ -20315,9 +20374,9 @@ var _user$project$ExamplesPanel$ccIcon = F2(
 		var r = widthAndHeight / 2;
 		var frameCoordinates = A2(
 			_elm_lang$core$List$map,
-			function (_p10) {
-				var _p11 = _p10;
-				return {ctor: '_Tuple2', _0: _p11._0 + r, _1: r - _p11._1};
+			function (_p12) {
+				var _p13 = _p12;
+				return {ctor: '_Tuple2', _0: _p13._0 + r, _1: r - _p13._1};
 			},
 			A2(
 				_elm_lang$core$List$map,
@@ -20331,6 +20390,7 @@ var _user$project$ExamplesPanel$ccIcon = F2(
 						return (_elm_lang$core$Basics$toFloat(v) * deltaAngle) + (_user$project$ExamplesPanel$tau / 4);
 					},
 					A2(_elm_lang$core$List$range, 0, n))));
+		var coordinatePairs = _user$project$ExamplesPanel$makeCoordinatePairs(frameCoordinates);
 		return A2(
 			_elm_lang$svg$Svg$svg,
 			{
@@ -20347,18 +20407,21 @@ var _user$project$ExamplesPanel$ccIcon = F2(
 				}
 			},
 			A2(
-				_elm_lang$core$List$map,
-				_user$project$ExamplesPanel$drawHelixCircle(widthAndHeight / 10),
-				frameCoordinates));
+				_elm_lang$core$List$append,
+				A2(_elm_lang$core$List$map, _user$project$ExamplesPanel$drawLine, coordinatePairs),
+				A2(
+					_elm_lang$core$List$map,
+					_user$project$ExamplesPanel$drawHelixCircle(widthAndHeight / 10),
+					frameCoordinates)));
 	});
-var _user$project$ExamplesPanel$styles = function (_p12) {
+var _user$project$ExamplesPanel$styles = function (_p14) {
 	return _elm_lang$html$Html_Attributes$style(
-		_rtfeldman$elm_css$Css$asPairs(_p12));
+		_rtfeldman$elm_css$Css$asPairs(_p14));
 };
-var _user$project$ExamplesPanel$_p13 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace(_user$project$BuilderCss$cssNamespace);
-var _user$project$ExamplesPanel$class = _user$project$ExamplesPanel$_p13.$class;
-var _user$project$ExamplesPanel$classList = _user$project$ExamplesPanel$_p13.classList;
-var _user$project$ExamplesPanel$id = _user$project$ExamplesPanel$_p13.id;
+var _user$project$ExamplesPanel$_p15 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace(_user$project$BuilderCss$cssNamespace);
+var _user$project$ExamplesPanel$class = _user$project$ExamplesPanel$_p15.$class;
+var _user$project$ExamplesPanel$classList = _user$project$ExamplesPanel$_p15.classList;
+var _user$project$ExamplesPanel$id = _user$project$ExamplesPanel$_p15.id;
 var _user$project$ExamplesPanel$examplesPanel = A2(
 	_elm_lang$html$Html$div,
 	{
@@ -20403,7 +20466,11 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 					ctor: '::',
 					_0: _elm_lang$html$Html_Events$onClick(
 						_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetDimer)),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
+						_1: {ctor: '[]'}
+					}
 				},
 				{
 					ctor: '::',
@@ -20424,7 +20491,11 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 							ctor: '::',
 							_0: _elm_lang$html$Html_Events$onClick(
 								_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetTrimer)),
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
+								_1: {ctor: '[]'}
+							}
 						},
 						{
 							ctor: '::',
@@ -20445,7 +20516,11 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 									ctor: '::',
 									_0: _elm_lang$html$Html_Events$onClick(
 										_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetTetramer)),
-									_1: {ctor: '[]'}
+									_1: {
+										ctor: '::',
+										_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
+										_1: {ctor: '[]'}
+									}
 								},
 								{
 									ctor: '::',
@@ -21480,7 +21555,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"message":"Types.Msg","aliases":{"Types.ParameterRecord":{"type":"{ oligomerState : Maybe.Maybe Int , radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }","args":[]},"Http.Response":{"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }","args":["body"]},"Keyboard.KeyCode":{"type":"Int","args":[]}},"unions":{"Types.Msg":{"tags":{"DownloadPdb":[],"EditParameter":["Types.Parameter","String"],"SetParametersAndBuild":["Types.ParameterRecord"],"KeyMsg":["Keyboard.KeyCode"],"ProcessModel":["Result.Result Http.Error ( String, Float )"],"TogglePanel":["Types.Panel"],"Build":[],"Clear":[]},"args":[]},"Dict.NColor":{"tags":{"Black":[],"BBlack":[],"Red":[],"NBlack":[]},"args":[]},"Types.Panel":{"tags":{"BuildingStatusPanel":[],"BuildHistoryPanel":[],"BuildPanel":[],"AppHeaderPanel":[],"ExamplesPanel":[]},"args":[]},"Result.Result":{"tags":{"Err":["error"],"Ok":["value"]},"args":["error","value"]},"Http.Error":{"tags":{"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"],"BadUrl":["String"],"NetworkError":[]},"args":[]},"Types.Parameter":{"tags":{"Sequence":[],"OligomerState":[],"Pitch":[],"Radius":[],"PhiCA":[],"Register":[]},"args":[]},"Dict.LeafColor":{"tags":{"LBlack":[],"LBBlack":[]},"args":[]},"Maybe.Maybe":{"tags":{"Nothing":[],"Just":["a"]},"args":["a"]},"Dict.Dict":{"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]},"args":["k","v"]}}},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"Register":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error ( String, Float )"],"TogglePanel":["Types.Panel"],"Build":[],"Clear":[],"DownloadPdb":[],"EditParameter":["Types.Parameter","String"],"SetParametersAndBuild":["Types.ParameterRecord"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ oligomerState : Maybe.Maybe Int , radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])
