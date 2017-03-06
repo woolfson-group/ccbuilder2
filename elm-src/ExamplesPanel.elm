@@ -35,23 +35,56 @@ examplesPanel =
         , styles <| panelStyling ++ examplesPanelStyling
         ]
         [ h3 [] [ text "Examples" ]
-        , button
-            [ onClick <| SetParametersAndBuild basisSetDimer
-            , styles buttonStyling
+        , div []
+            [ button
+                [ onClick <| SetParametersAndBuild basisSetDimer
+                , styles buttonStyling
+                ]
+                [ ccIcon 2 60 ]
+            , br [] []
+            , button
+                [ onClick <| SetParametersAndBuild basisSetTrimer
+                , styles buttonStyling
+                ]
+                [ ccIcon 3 60 ]
+            , br [] []
+            , button
+                [ onClick <| SetParametersAndBuild basisSetTetramer
+                , styles buttonStyling
+                ]
+                [ ccIcon 4 60 ]
             ]
-            [ ccIcon 2 50 ]
-        , br [] []
-        , button
-            [ onClick <| SetParametersAndBuild basisSetTrimer
-            , styles buttonStyling
+        , div []
+            [ button
+                [ onClick <| SetParametersAndBuild largermerCCPent
+                , styles buttonStyling
+                ]
+                [ ccIcon 5 60 ]
+            , br [] []
+            , button
+                [ onClick <| SetParametersAndBuild largermerCCHex
+                , styles buttonStyling
+                ]
+                [ ccIcon 6 60 ]
+            , br [] []
+            , button
+                [ onClick <| SetParametersAndBuild largermerCCHex2
+                , styles buttonStyling
+                ]
+                [ ccIcon 6 60 ]
+            , br [] []
+            , button
+                [ onClick <| SetParametersAndBuild largermerCCHex3
+                , styles buttonStyling
+                ]
+                [ ccIcon 6 60 ]
+                , br [] []
+            , button
+                [ onClick <| SetParametersAndBuild largermerCCHept
+                , styles buttonStyling
+                ]
+                [ ccIcon 7 60 ]
             ]
-            [ ccIcon 3 50 ]
-        , br [] []
-        , button
-            [ onClick <| SetParametersAndBuild basisSetTetramer
-            , styles buttonStyling
-            ]
-            [ ccIcon 4 50 ]
         ]
 
 
@@ -94,21 +127,21 @@ rf = SvgAtt.r << toStringRound
 ccIcon : Int -> Float -> Html msg
 ccIcon n widthAndHeight =
     let
-        r = widthAndHeight/2
+        r = widthAndHeight*0.5
         deltaAngle = tau / (toFloat n)
         frameCoordinates =
             List.map (\v -> ((toFloat v) * deltaAngle) + (tau/4)) (List.range 0 n)
-            |> List.map (\a -> fromPolar (r/2, a))
+            |> List.map (\a -> fromPolar (r*0.7, a))
             |> List.map (\(x, y) -> (x + r, r - y))
         coordinatePairs = makeCoordinatePairs frameCoordinates
     in
         Svg.svg
-            [ SvgAtt.width "50px"
-            , SvgAtt.height "50px"
+            [ SvgAtt.width <| toString widthAndHeight
+            , SvgAtt.height <| toString widthAndHeight
             , SvgAtt.display "block"
             ]
             (
-                (List.map (drawHelixCircle (widthAndHeight/10)) frameCoordinates)
+                (List.map (drawHelixCircle 6) frameCoordinates)
                 |> List.append (List.map drawLine coordinatePairs)
             )
 
@@ -193,6 +226,61 @@ basisSetTetramer =
     , phiCA = Just 22.1
     , sequence = Just "ELAAIKQELAAIKKELAAIKWELAAIKQ"
     , register = "g"
+    }
+
+
+largermerCCPent : ParameterRecord
+largermerCCPent =
+    { oligomerState = Just 5
+    , radius = Just 8.6
+    , pitch = Just 183
+    , phiCA = Just 14.4
+    , sequence = Just "KIEQILQKIEKILQKIEWILQKIEQILQ"
+    , register = "c"
+    }
+
+
+largermerCCHex : ParameterRecord
+largermerCCHex =
+    { oligomerState = Just 6
+    , radius = Just 9.1
+    , pitch = Just 228
+    , phiCA = Just 16.4
+    , sequence = Just "ELKAIAQELKAIAKELKAIAWELKAIAQ"
+    , register = "g"
+    }
+
+
+largermerCCHex2 : ParameterRecord
+largermerCCHex2 =
+    { oligomerState = Just 6
+    , radius = Just 9.5
+    , pitch = Just 162
+    , phiCA = Just 18.2
+    , sequence = Just "EIAKSLKEIAKSLKEIAWSLKEIAKSLK"
+    , register = "c"
+    }
+
+
+largermerCCHex3 : ParameterRecord
+largermerCCHex3 =
+    { oligomerState = Just 6
+    , radius = Just 9.7
+    , pitch = Just 132
+    , phiCA = Just 13.1
+    , sequence = Just "EIAQSIKEIAKSIKEIAWSIKEIAQSIK"
+    , register = "c"
+    }
+
+
+largermerCCHept : ParameterRecord
+largermerCCHept =
+    { oligomerState = Just 7
+    , radius = Just 9.8
+    , pitch = Just 329
+    , phiCA = Just 15.1
+    , sequence = Just "EIAQALKEIAKALKEIAWALKEIAQALK"
+    , register = "c"
     }
 
 

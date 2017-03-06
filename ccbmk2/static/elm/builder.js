@@ -20208,6 +20208,46 @@ var _user$project$BuildPanel$toggleBuildPanel = A2(
 		_1: {ctor: '[]'}
 	});
 
+var _user$project$ExamplesPanel$largermerCCHept = {
+	oligomerState: _elm_lang$core$Maybe$Just(7),
+	radius: _elm_lang$core$Maybe$Just(9.8),
+	pitch: _elm_lang$core$Maybe$Just(329),
+	phiCA: _elm_lang$core$Maybe$Just(15.1),
+	sequence: _elm_lang$core$Maybe$Just('EIAQALKEIAKALKEIAWALKEIAQALK'),
+	register: 'c'
+};
+var _user$project$ExamplesPanel$largermerCCHex3 = {
+	oligomerState: _elm_lang$core$Maybe$Just(6),
+	radius: _elm_lang$core$Maybe$Just(9.7),
+	pitch: _elm_lang$core$Maybe$Just(132),
+	phiCA: _elm_lang$core$Maybe$Just(13.1),
+	sequence: _elm_lang$core$Maybe$Just('EIAQSIKEIAKSIKEIAWSIKEIAQSIK'),
+	register: 'c'
+};
+var _user$project$ExamplesPanel$largermerCCHex2 = {
+	oligomerState: _elm_lang$core$Maybe$Just(6),
+	radius: _elm_lang$core$Maybe$Just(9.5),
+	pitch: _elm_lang$core$Maybe$Just(162),
+	phiCA: _elm_lang$core$Maybe$Just(18.2),
+	sequence: _elm_lang$core$Maybe$Just('EIAKSLKEIAKSLKEIAWSLKEIAKSLK'),
+	register: 'c'
+};
+var _user$project$ExamplesPanel$largermerCCHex = {
+	oligomerState: _elm_lang$core$Maybe$Just(6),
+	radius: _elm_lang$core$Maybe$Just(9.1),
+	pitch: _elm_lang$core$Maybe$Just(228),
+	phiCA: _elm_lang$core$Maybe$Just(16.4),
+	sequence: _elm_lang$core$Maybe$Just('ELKAIAQELKAIAKELKAIAWELKAIAQ'),
+	register: 'g'
+};
+var _user$project$ExamplesPanel$largermerCCPent = {
+	oligomerState: _elm_lang$core$Maybe$Just(5),
+	radius: _elm_lang$core$Maybe$Just(8.6),
+	pitch: _elm_lang$core$Maybe$Just(183),
+	phiCA: _elm_lang$core$Maybe$Just(14.4),
+	sequence: _elm_lang$core$Maybe$Just('KIEQILQKIEKILQKIEWILQKIEQILQ'),
+	register: 'c'
+};
 var _user$project$ExamplesPanel$basisSetTetramer = {
 	oligomerState: _elm_lang$core$Maybe$Just(4),
 	radius: _elm_lang$core$Maybe$Just(6.8),
@@ -20371,7 +20411,7 @@ var _user$project$ExamplesPanel$tau = 2 * _elm_lang$core$Basics$pi;
 var _user$project$ExamplesPanel$ccIcon = F2(
 	function (n, widthAndHeight) {
 		var deltaAngle = _user$project$ExamplesPanel$tau / _elm_lang$core$Basics$toFloat(n);
-		var r = widthAndHeight / 2;
+		var r = widthAndHeight * 0.5;
 		var frameCoordinates = A2(
 			_elm_lang$core$List$map,
 			function (_p12) {
@@ -20382,7 +20422,7 @@ var _user$project$ExamplesPanel$ccIcon = F2(
 				_elm_lang$core$List$map,
 				function (a) {
 					return _elm_lang$core$Basics$fromPolar(
-						{ctor: '_Tuple2', _0: r / 2, _1: a});
+						{ctor: '_Tuple2', _0: r * 0.7, _1: a});
 				},
 				A2(
 					_elm_lang$core$List$map,
@@ -20395,10 +20435,12 @@ var _user$project$ExamplesPanel$ccIcon = F2(
 			_elm_lang$svg$Svg$svg,
 			{
 				ctor: '::',
-				_0: _elm_lang$svg$Svg_Attributes$width('50px'),
+				_0: _elm_lang$svg$Svg_Attributes$width(
+					_elm_lang$core$Basics$toString(widthAndHeight)),
 				_1: {
 					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$height('50px'),
+					_0: _elm_lang$svg$Svg_Attributes$height(
+						_elm_lang$core$Basics$toString(widthAndHeight)),
 					_1: {
 						ctor: '::',
 						_0: _elm_lang$svg$Svg_Attributes$display('block'),
@@ -20411,7 +20453,7 @@ var _user$project$ExamplesPanel$ccIcon = F2(
 				A2(_elm_lang$core$List$map, _user$project$ExamplesPanel$drawLine, coordinatePairs),
 				A2(
 					_elm_lang$core$List$map,
-					_user$project$ExamplesPanel$drawHelixCircle(widthAndHeight / 10),
+					_user$project$ExamplesPanel$drawHelixCircle(6),
 					frameCoordinates)));
 	});
 var _user$project$ExamplesPanel$styles = function (_p14) {
@@ -20461,36 +20503,16 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 		_1: {
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$button,
+				_elm_lang$html$Html$div,
+				{ctor: '[]'},
 				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Events$onClick(
-						_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetDimer)),
-					_1: {
-						ctor: '::',
-						_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
-						_1: {ctor: '[]'}
-					}
-				},
-				{
-					ctor: '::',
-					_0: A2(_user$project$ExamplesPanel$ccIcon, 2, 50),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$br,
-					{ctor: '[]'},
-					{ctor: '[]'}),
-				_1: {
 					ctor: '::',
 					_0: A2(
 						_elm_lang$html$Html$button,
 						{
 							ctor: '::',
 							_0: _elm_lang$html$Html_Events$onClick(
-								_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetTrimer)),
+								_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetDimer)),
 							_1: {
 								ctor: '::',
 								_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
@@ -20499,7 +20521,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 						},
 						{
 							ctor: '::',
-							_0: A2(_user$project$ExamplesPanel$ccIcon, 3, 50),
+							_0: A2(_user$project$ExamplesPanel$ccIcon, 2, 60),
 							_1: {ctor: '[]'}
 						}),
 					_1: {
@@ -20515,7 +20537,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 								{
 									ctor: '::',
 									_0: _elm_lang$html$Html_Events$onClick(
-										_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetTetramer)),
+										_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetTrimer)),
 									_1: {
 										ctor: '::',
 										_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
@@ -20524,13 +20546,175 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 								},
 								{
 									ctor: '::',
-									_0: A2(_user$project$ExamplesPanel$ccIcon, 4, 50),
+									_0: A2(_user$project$ExamplesPanel$ccIcon, 3, 60),
 									_1: {ctor: '[]'}
 								}),
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$br,
+									{ctor: '[]'},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$button,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(
+												_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetTetramer)),
+											_1: {
+												ctor: '::',
+												_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
+												_1: {ctor: '[]'}
+											}
+										},
+										{
+											ctor: '::',
+											_0: A2(_user$project$ExamplesPanel$ccIcon, 4, 60),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}
 						}
 					}
-				}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$button,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(
+									_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCPent)),
+								_1: {
+									ctor: '::',
+									_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
+									_1: {ctor: '[]'}
+								}
+							},
+							{
+								ctor: '::',
+								_0: A2(_user$project$ExamplesPanel$ccIcon, 5, 60),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$br,
+								{ctor: '[]'},
+								{ctor: '[]'}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$button,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(
+											_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCHex)),
+										_1: {
+											ctor: '::',
+											_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
+											_1: {ctor: '[]'}
+										}
+									},
+									{
+										ctor: '::',
+										_0: A2(_user$project$ExamplesPanel$ccIcon, 6, 60),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$br,
+										{ctor: '[]'},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$button,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(
+													_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCHex2)),
+												_1: {
+													ctor: '::',
+													_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
+													_1: {ctor: '[]'}
+												}
+											},
+											{
+												ctor: '::',
+												_0: A2(_user$project$ExamplesPanel$ccIcon, 6, 60),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$br,
+												{ctor: '[]'},
+												{ctor: '[]'}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$button,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onClick(
+															_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCHex3)),
+														_1: {
+															ctor: '::',
+															_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
+															_1: {ctor: '[]'}
+														}
+													},
+													{
+														ctor: '::',
+														_0: A2(_user$project$ExamplesPanel$ccIcon, 6, 60),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$br,
+														{ctor: '[]'},
+														{ctor: '[]'}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$button,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Events$onClick(
+																	_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCHept)),
+																_1: {
+																	ctor: '::',
+																	_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
+																	_1: {ctor: '[]'}
+																}
+															},
+															{
+																ctor: '::',
+																_0: A2(_user$project$ExamplesPanel$ccIcon, 7, 60),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}),
+				_1: {ctor: '[]'}
 			}
 		}
 	});
