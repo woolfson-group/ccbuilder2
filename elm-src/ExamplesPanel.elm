@@ -36,7 +36,9 @@ examplesPanel =
         ]
         [ h3 [] [ text "Examples" ]
         , div []
-            [ button
+            [ text "Basis Set"
+            , br [] []
+            , button
                 [ onClick <| SetParametersAndBuild basisSetDimer
                 , styles buttonStyling
                 ]
@@ -55,7 +57,9 @@ examplesPanel =
                 [ ccIcon 4 60 ]
             ]
         , div []
-            [ button
+            [ text "α-Helical Barrels"
+            , br [] []
+            , button
                 [ onClick <| SetParametersAndBuild largermerCCPent
                 , styles buttonStyling
                 ]
@@ -131,7 +135,7 @@ ccIcon n widthAndHeight =
         deltaAngle = tau / (toFloat n)
         frameCoordinates =
             List.map (\v -> ((toFloat v) * deltaAngle) + (tau/4)) (List.range 0 n)
-            |> List.map (\a -> fromPolar (r*0.7, a))
+            |> List.map (\a -> fromPolar (r * ( Basics.max 0.5 (0.11 * (toFloat n))), a))
             |> List.map (\(x, y) -> (x + r, r - y))
         coordinatePairs = makeCoordinatePairs frameCoordinates
     in

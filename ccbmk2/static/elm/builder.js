@@ -20422,7 +20422,14 @@ var _user$project$ExamplesPanel$ccIcon = F2(
 				_elm_lang$core$List$map,
 				function (a) {
 					return _elm_lang$core$Basics$fromPolar(
-						{ctor: '_Tuple2', _0: r * 0.7, _1: a});
+						{
+							ctor: '_Tuple2',
+							_0: r * A2(
+								_elm_lang$core$Basics$max,
+								0.5,
+								0.11 * _elm_lang$core$Basics$toFloat(n)),
+							_1: a
+						});
 				},
 				A2(
 					_elm_lang$core$List$map,
@@ -20507,23 +20514,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 				{ctor: '[]'},
 				{
 					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$button,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(
-								_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetDimer)),
-							_1: {
-								ctor: '::',
-								_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
-								_1: {ctor: '[]'}
-							}
-						},
-						{
-							ctor: '::',
-							_0: A2(_user$project$ExamplesPanel$ccIcon, 2, 60),
-							_1: {ctor: '[]'}
-						}),
+					_0: _elm_lang$html$Html$text('Basis Set'),
 					_1: {
 						ctor: '::',
 						_0: A2(
@@ -20537,7 +20528,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 								{
 									ctor: '::',
 									_0: _elm_lang$html$Html_Events$onClick(
-										_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetTrimer)),
+										_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetDimer)),
 									_1: {
 										ctor: '::',
 										_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
@@ -20546,7 +20537,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 								},
 								{
 									ctor: '::',
-									_0: A2(_user$project$ExamplesPanel$ccIcon, 3, 60),
+									_0: A2(_user$project$ExamplesPanel$ccIcon, 2, 60),
 									_1: {ctor: '[]'}
 								}),
 							_1: {
@@ -20562,7 +20553,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 										{
 											ctor: '::',
 											_0: _elm_lang$html$Html_Events$onClick(
-												_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetTetramer)),
+												_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetTrimer)),
 											_1: {
 												ctor: '::',
 												_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
@@ -20571,10 +20562,37 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 										},
 										{
 											ctor: '::',
-											_0: A2(_user$project$ExamplesPanel$ccIcon, 4, 60),
+											_0: A2(_user$project$ExamplesPanel$ccIcon, 3, 60),
 											_1: {ctor: '[]'}
 										}),
-									_1: {ctor: '[]'}
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$br,
+											{ctor: '[]'},
+											{ctor: '[]'}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$button,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onClick(
+														_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetTetramer)),
+													_1: {
+														ctor: '::',
+														_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
+														_1: {ctor: '[]'}
+													}
+												},
+												{
+													ctor: '::',
+													_0: A2(_user$project$ExamplesPanel$ccIcon, 4, 60),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}
 								}
 							}
 						}
@@ -20587,23 +20605,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 					{ctor: '[]'},
 					{
 						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$button,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onClick(
-									_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCPent)),
-								_1: {
-									ctor: '::',
-									_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
-									_1: {ctor: '[]'}
-								}
-							},
-							{
-								ctor: '::',
-								_0: A2(_user$project$ExamplesPanel$ccIcon, 5, 60),
-								_1: {ctor: '[]'}
-							}),
+						_0: _elm_lang$html$Html$text('α-Helical Barrels'),
 						_1: {
 							ctor: '::',
 							_0: A2(
@@ -20617,7 +20619,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 									{
 										ctor: '::',
 										_0: _elm_lang$html$Html_Events$onClick(
-											_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCHex)),
+											_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCPent)),
 										_1: {
 											ctor: '::',
 											_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
@@ -20626,7 +20628,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 									},
 									{
 										ctor: '::',
-										_0: A2(_user$project$ExamplesPanel$ccIcon, 6, 60),
+										_0: A2(_user$project$ExamplesPanel$ccIcon, 5, 60),
 										_1: {ctor: '[]'}
 									}),
 								_1: {
@@ -20642,7 +20644,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 											{
 												ctor: '::',
 												_0: _elm_lang$html$Html_Events$onClick(
-													_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCHex2)),
+													_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCHex)),
 												_1: {
 													ctor: '::',
 													_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
@@ -20667,7 +20669,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 													{
 														ctor: '::',
 														_0: _elm_lang$html$Html_Events$onClick(
-															_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCHex3)),
+															_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCHex2)),
 														_1: {
 															ctor: '::',
 															_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
@@ -20692,7 +20694,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 															{
 																ctor: '::',
 																_0: _elm_lang$html$Html_Events$onClick(
-																	_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCHept)),
+																	_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCHex3)),
 																_1: {
 																	ctor: '::',
 																	_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
@@ -20701,10 +20703,37 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 															},
 															{
 																ctor: '::',
-																_0: A2(_user$project$ExamplesPanel$ccIcon, 7, 60),
+																_0: A2(_user$project$ExamplesPanel$ccIcon, 6, 60),
 																_1: {ctor: '[]'}
 															}),
-														_1: {ctor: '[]'}
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$br,
+																{ctor: '[]'},
+																{ctor: '[]'}),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$html$Html$button,
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html_Events$onClick(
+																			_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCHept)),
+																		_1: {
+																			ctor: '::',
+																			_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
+																			_1: {ctor: '[]'}
+																		}
+																	},
+																	{
+																		ctor: '::',
+																		_0: A2(_user$project$ExamplesPanel$ccIcon, 7, 60),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {ctor: '[]'}
+															}
+														}
 													}
 												}
 											}
