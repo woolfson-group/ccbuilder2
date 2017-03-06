@@ -19,6 +19,7 @@ import Types
         ( Msg(..)
         , ParameterRecord
         , InputValues
+        , ModellingResults
         , Parameter(..)
         , Panel(..)
         )
@@ -57,6 +58,7 @@ type alias Model =
     , currentInput : InputValues
     , pdbFile : Maybe String
     , score : Maybe Float
+    , residuesPerTurn : Maybe Float
     , building : Bool
     , modelHistory : List ParameterRecord
     , panelVisibility : PanelVisibility
@@ -72,7 +74,15 @@ type alias PanelVisibility =
 
 emptyModel : Model
 emptyModel =
-    Model emptyParameters emptyInput Nothing Nothing False [] defaultVisibility
+    { parameters = emptyParameters
+    , currentInput = emptyInput
+    , pdbFile = Nothing
+    , score = Nothing
+    , residuesPerTurn = Nothing
+    , building = False
+    , modelHistory = []
+    , panelVisibility = defaultVisibility
+    }
 
 
 emptyParameters : ParameterRecord
@@ -121,7 +131,7 @@ update msg model =
         Build ->
             ( { model | building = True }, sendBuildCmd model.parameters )
 
-        ProcessModel (Ok ( pdbFile, score )) ->
+        ProcessModel (Ok { pdbFile, score, residuesPerTurn}) ->
             let
                 oldHistory =
                     if List.length model.modelHistory == 10 then
@@ -132,6 +142,7 @@ update msg model =
                 { model
                     | pdbFile = Just pdbFile
                     , score = Just score
+                    , residuesPerTurn = Just residuesPerTurn
                     , building = False
                     , modelHistory = model.parameters :: oldHistory
                 }
@@ -185,9 +196,13 @@ sendBuildCmd parameters =
             modellingResultsDecoder
 
 
-modellingResultsDecoder : Json.Decode.Decoder ( String, Float )
+modellingResultsDecoder : Json.Decode.Decoder ModellingResults
 modellingResultsDecoder =
-    Json.Decode.map2 (,) (field "pdb" string) (field "score" float)
+    Json.Decode.map3
+        ModellingResults
+        (field "pdb" string)
+        (field "score" float)
+        (field "mean_rpt_value" float)
 
 
 parametersJson : ParameterRecord -> Json.Encode.Value
@@ -385,6 +400,13 @@ modelInfoPanel model =
             |> Maybe.withDefault ""
             |> \val -> input [ value val, readonly True ] []
         , br [] []
+        , text "Residues per Turn"
+        , br [] []
+        , Maybe.map (roundToXDecPlaces 2) model.residuesPerTurn
+            |> Maybe.map toString
+            |> Maybe.withDefault ""
+            |> \val -> input [ value val, readonly True ] []
+        , br [] []        
         , downloadStructureButton model.pdbFile
         ]
 

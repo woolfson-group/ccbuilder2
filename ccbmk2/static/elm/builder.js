@@ -19193,6 +19193,10 @@ var _user$project$Types$InputValues = F6(
 	function (a, b, c, d, e, f) {
 		return {oligomerState: a, radius: b, pitch: c, phiCA: d, sequence: e, register: f};
 	});
+var _user$project$Types$ModellingResults = F3(
+	function (a, b, c) {
+		return {pdbFile: a, score: b, residuesPerTurn: c};
+	});
 var _user$project$Types$TogglePanel = function (a) {
 	return {ctor: 'TogglePanel', _0: a};
 };
@@ -21080,14 +21084,12 @@ var _user$project$Builder$parametersJson = function (parameters) {
 			}
 		});
 };
-var _user$project$Builder$modellingResultsDecoder = A3(
-	_elm_lang$core$Json_Decode$map2,
-	F2(
-		function (v0, v1) {
-			return {ctor: '_Tuple2', _0: v0, _1: v1};
-		}),
+var _user$project$Builder$modellingResultsDecoder = A4(
+	_elm_lang$core$Json_Decode$map3,
+	_user$project$Types$ModellingResults,
 	A2(_elm_lang$core$Json_Decode$field, 'pdb', _elm_lang$core$Json_Decode$string),
-	A2(_elm_lang$core$Json_Decode$field, 'score', _elm_lang$core$Json_Decode$float));
+	A2(_elm_lang$core$Json_Decode$field, 'score', _elm_lang$core$Json_Decode$float),
+	A2(_elm_lang$core$Json_Decode$field, 'mean_rpt_value', _elm_lang$core$Json_Decode$float));
 var _user$project$Builder$sendBuildCmd = function (parameters) {
 	return A2(
 		_elm_lang$http$Http$send,
@@ -21359,8 +21361,53 @@ var _user$project$Builder$modelInfoPanel = function (model) {
 								{ctor: '[]'}),
 							_1: {
 								ctor: '::',
-								_0: _user$project$Builder$downloadStructureButton(model.pdbFile),
-								_1: {ctor: '[]'}
+								_0: _elm_lang$html$Html$text('Residues per Turn'),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$br,
+										{ctor: '[]'},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: function (val) {
+											return A2(
+												_elm_lang$html$Html$input,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$value(val),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$readonly(true),
+														_1: {ctor: '[]'}
+													}
+												},
+												{ctor: '[]'});
+										}(
+											A2(
+												_elm_lang$core$Maybe$withDefault,
+												'',
+												A2(
+													_elm_lang$core$Maybe$map,
+													_elm_lang$core$Basics$toString,
+													A2(
+														_elm_lang$core$Maybe$map,
+														_user$project$Builder$roundToXDecPlaces(2),
+														model.residuesPerTurn)))),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$br,
+												{ctor: '[]'},
+												{ctor: '[]'}),
+											_1: {
+												ctor: '::',
+												_0: _user$project$Builder$downloadStructureButton(model.pdbFile),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
 							}
 						}
 					}
@@ -21638,7 +21685,7 @@ var _user$project$Builder$update = F2(
 				};
 			case 'ProcessModel':
 				if (_p4._0.ctor === 'Ok') {
-					var _p6 = _p4._0._0._0;
+					var _p6 = _p4._0._0.pdbFile;
 					var oldHistory = _elm_lang$core$Native_Utils.eq(
 						_elm_lang$core$List$length(model.modelHistory),
 						10) ? A2(_elm_lang$core$List$take, 9, model.modelHistory) : model.modelHistory;
@@ -21648,7 +21695,8 @@ var _user$project$Builder$update = F2(
 							model,
 							{
 								pdbFile: _elm_lang$core$Maybe$Just(_p6),
-								score: _elm_lang$core$Maybe$Just(_p4._0._0._1),
+								score: _elm_lang$core$Maybe$Just(_p4._0._0.score),
+								residuesPerTurn: _elm_lang$core$Maybe$Just(_p4._0._0.residuesPerTurn),
 								building: false,
 								modelHistory: {ctor: '::', _0: model.parameters, _1: oldHistory}
 							}),
@@ -21738,24 +21786,25 @@ var _user$project$Builder$update = F2(
 					{ctor: '[]'});
 		}
 	});
-var _user$project$Builder$Model = F7(
-	function (a, b, c, d, e, f, g) {
-		return {parameters: a, currentInput: b, pdbFile: c, score: d, building: e, modelHistory: f, panelVisibility: g};
+var _user$project$Builder$Model = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {parameters: a, currentInput: b, pdbFile: c, score: d, residuesPerTurn: e, building: f, modelHistory: g, panelVisibility: h};
 	});
 var _user$project$Builder$PanelVisibility = F3(
 	function (a, b, c) {
 		return {buildPanel: a, examplesPanel: b, buildHistoryPanel: c};
 	});
 var _user$project$Builder$defaultVisibility = A3(_user$project$Builder$PanelVisibility, true, false, false);
-var _user$project$Builder$emptyModel = A7(
-	_user$project$Builder$Model,
-	_user$project$Builder$emptyParameters,
-	_user$project$Builder$emptyInput,
-	_elm_lang$core$Maybe$Nothing,
-	_elm_lang$core$Maybe$Nothing,
-	false,
-	{ctor: '[]'},
-	_user$project$Builder$defaultVisibility);
+var _user$project$Builder$emptyModel = {
+	parameters: _user$project$Builder$emptyParameters,
+	currentInput: _user$project$Builder$emptyInput,
+	pdbFile: _elm_lang$core$Maybe$Nothing,
+	score: _elm_lang$core$Maybe$Nothing,
+	residuesPerTurn: _elm_lang$core$Maybe$Nothing,
+	building: false,
+	modelHistory: {ctor: '[]'},
+	panelVisibility: _user$project$Builder$defaultVisibility
+};
 var _user$project$Builder$init = {
 	ctor: '_Tuple2',
 	_0: _user$project$Builder$emptyModel,
@@ -21768,7 +21817,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"Register":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error ( String, Float )"],"TogglePanel":["Types.Panel"],"Build":[],"Clear":[],"DownloadPdb":[],"EditParameter":["Types.Parameter","String"],"SetParametersAndBuild":["Types.ParameterRecord"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ oligomerState : Maybe.Maybe Int , radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"Register":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"TogglePanel":["Types.Panel"],"Build":[],"Clear":[],"DownloadPdb":[],"EditParameter":["Types.Parameter","String"],"SetParametersAndBuild":["Types.ParameterRecord"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ pdbFile : String, score : Float, residuesPerTurn : Float }"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ oligomerState : Maybe.Maybe Int , radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

@@ -7,7 +7,7 @@ import Http
 type Msg
     = EditParameter Parameter String
     | Build
-    | ProcessModel (Result Http.Error ( String, Float ))
+    | ProcessModel (Result Http.Error ModellingResults)
     | DownloadPdb
     | Clear
     | SetParametersAndBuild ParameterRecord
@@ -32,6 +32,13 @@ type alias InputValues =
     , phiCA : String
     , sequence : String
     , register : String
+    }
+
+
+type alias ModellingResults =
+    { pdbFile : String
+    , score : Float
+    , residuesPerTurn : Float
     }
 
 

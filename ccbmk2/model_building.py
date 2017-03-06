@@ -1,5 +1,7 @@
 """Module for building models using ISAMBARD."""
 
+import itertools
+
 import isambard
 
 
@@ -25,8 +27,9 @@ def build_coiled_coil(parameter_dict):
     
     Returns
     -------
-    coiled_coil : isambard.specification.CoiledCoil
-        Model of a coiled coil, built by ISAMBARD.
+    model_data : dict
+        A dictionary containing information about the model that has
+        been produced.
     """
     phica = parameter_dict['Interface Angle'] + registerAdjust[parameter_dict['Register']]
     coiled_coil = isambard.specifications.CoiledCoil.from_parameters(
@@ -37,4 +40,18 @@ def build_coiled_coil(parameter_dict):
         phica
         )
     coiled_coil.pack_new_sequences([parameter_dict['Sequence']] * parameter_dict['Oligomer State'])
-    return {'pdb': coiled_coil.pdb, 'score':coiled_coil.buff_internal_energy.total_energy}
+    ave_rpt = calculate_average_rpt(coiled_coil)
+    model_data = {
+        'pdb': coiled_coil.pdb,
+        'mean_rpt_value': ave_rpt,
+        'score':coiled_coil.buff_internal_energy.total_energy
+        }
+    return model_data
+
+
+def calculate_average_rpt(ampal):
+    """Returns the mean residues per turn value for an AMPAL object."""
+    rpt_lists = [isambard.analyse_protein.residues_per_turn(ch)[:-1] for ch in ampal]
+    rpt_values = list(itertools.chain(*rpt_lists))
+    average_rpt = sum(rpt_values)/len(rpt_values)
+    return average_rpt
