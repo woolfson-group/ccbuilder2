@@ -15,6 +15,9 @@ type Msg
     | TogglePanel Panel
 
 
+type alias PID = Int
+
+
 type alias ParameterRecord =
     { oligomerState : Maybe Int
     , radius : Maybe Float

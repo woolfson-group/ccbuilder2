@@ -3,6 +3,7 @@ port module Builder exposing (..)
 import BuilderCss exposing (CssClasses(..), cssNamespace, panelStyling)
 import BuildPanel
 import Css
+import Dict
 import ExamplesPanel
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -54,7 +55,7 @@ init =
 
 
 type alias Model =
-    { parameters : ParameterRecord
+    { parameters : Dict.Dict Int ParameterRecord
     , currentInput : InputValues
     , pdbFile : Maybe String
     , score : Maybe Float
@@ -74,7 +75,7 @@ type alias PanelVisibility =
 
 emptyModel : Model
 emptyModel =
-    { parameters = emptyParameters
+    { parameters = Dict.fromList [ (1, emptyParameterRecord) ]
     , currentInput = emptyInput
     , pdbFile = Nothing
     , score = Nothing
@@ -85,8 +86,8 @@ emptyModel =
     }
 
 
-emptyParameters : ParameterRecord
-emptyParameters =
+emptyParameterRecord : ParameterRecord
+emptyParameterRecord =
     ParameterRecord Nothing Nothing Nothing Nothing Nothing "a"
 
 
@@ -123,13 +124,19 @@ update msg model =
     case msg of
         EditParameter parameter newValue ->
             let
+                mParams = Dict.get 1 model.parameters
+                params =
+                    case mParams of
+                        Just ps -> ps
+                        Nothing -> emptyParameterRecord
                 ( p, i ) =
-                    editParameterValue model.parameters model.currentInput parameter newValue
+                    editParameterValue params model.currentInput parameter newValue
             in
-                { model | parameters = p, currentInput = i } ! []
+                { model | parameters = Dict.insert 1 p model.parameters, currentInput = i } ! []
 
         Build ->
-            ( { model | building = True }, sendBuildCmd model.parameters )
+            ( { model | building = True }, sendBuildCmd (Dict.get 1 model.parameters
+                        |> Maybe.withDefault emptyParameterRecord) )
 
         ProcessModel (Ok { pdbFile, score, residuesPerTurn}) ->
             let
@@ -144,7 +151,8 @@ update msg model =
                     , score = Just score
                     , residuesPerTurn = Just residuesPerTurn
                     , building = False
-                    , modelHistory = model.parameters :: oldHistory
+                    , modelHistory = (Dict.get 1 model.parameters
+                        |> Maybe.withDefault emptyParameterRecord) :: oldHistory
                 }
                     ! [ showStructure pdbFile ]
 
@@ -159,14 +167,14 @@ update msg model =
                 model ! [ downloadPdb ( "ccbuilder_model.pdb", pdbFile ) ]
 
         Clear ->
-            { model | parameters = emptyParameters, currentInput = emptyInput } ! []
+            { model | parameters = Dict.insert 1 emptyParameterRecord model.parameters, currentInput = emptyInput } ! []
 
         SetParametersAndBuild parameters ->
             if containsInvalidParameter parameters then
                 model ! []
             else
                 { model
-                    | parameters = parameters
+                    | parameters = Dict.insert 1 parameters model.parameters
                     , currentInput = parametersToInput parameters
                 }
                     ! [ Task.perform identity (Task.succeed Build) ]
@@ -174,7 +182,9 @@ update msg model =
         KeyMsg keyCode ->
             case keyCode of
                 13 ->
-                    if containsInvalidParameter model.parameters then
+                    if containsInvalidParameter
+                        (Dict.get 1 model.parameters
+                        |> Maybe.withDefault emptyParameterRecord) then
                         model ! []
                     else
                         model ! [ Task.perform identity (Task.succeed Build) ]
@@ -316,7 +326,8 @@ overlayPanels model =
 
         optionalDivs =
             [ ( model.panelVisibility.buildPanel
-              , BuildPanel.buildPanel model.parameters model.currentInput
+              , BuildPanel.buildPanel (Dict.get 1 model.parameters
+                |> Maybe.withDefault emptyParameterRecord) model.currentInput
               )
             , ( model.panelVisibility.examplesPanel, ExamplesPanel.examplesPanel )
             , ( model.panelVisibility.buildHistoryPanel, buildHistoryPanel model.modelHistory )

@@ -41,14 +41,20 @@ buildPanelStyling =
 
 parameterInputForm : ParameterRecord -> InputValues -> Html Msg
 parameterInputForm parameters currentInput =
+    Html.div []
+        (chainInputSection parameters currentInput
+            ++ [ parameterSubmit parameters
+               , button [ onClick Clear ] [ text "Clear" ]
+               ]
+        )
+
+
+chainInputSection : ParameterRecord -> InputValues -> List (Html Msg)
+chainInputSection parameters currentInput =
     List.map parameterInput (allParameters currentInput)
-        |> flip (List.append)
-            [ sequenceInput
+        ++ [ sequenceInput
                 ( "Sequence", Sequence, currentInput.sequence, currentInput.register )
-            , parameterSubmit parameters
-            , button [ onClick Clear ] [ text "Clear" ]
-            ]
-        |> Html.div []
+           ]
 
 
 allParameters : InputValues -> List ( String, Parameter, String )
