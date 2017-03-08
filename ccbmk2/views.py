@@ -43,7 +43,11 @@ def build_coiled_coil_model():
         if save_model:
             store_model(request.json, pdb_and_score)
     else:
-        pdb_and_score = {'pdb': model['pdb'], 'score': model['score']}
+        pdb_and_score = {
+            'pdb': model['pdb'],
+            'score': model['score'],
+            'mean_rpt_value': model['mean_rpt_value']
+            }
     return jsonify(pdb_and_score)
 
 
@@ -112,5 +116,6 @@ def store_model(request, pdb_and_score):
     model = request
     model['pdb'] = pdb_and_score['pdb']
     model['score'] = pdb_and_score['score']
+    model['mean_rpt_value'] = pdb_and_score['mean_rpt_value']
     model_store.insert_one(model)
     return
