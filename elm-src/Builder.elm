@@ -73,9 +73,15 @@ type alias PanelVisibility =
     }
 
 
+parameterRecordWithDefault : Int -> Dict.Dict Int ParameterRecord -> ParameterRecord
+parameterRecordWithDefault pRID parameters =
+    Dict.get pRID parameters
+        |> Maybe.withDefault emptyParameterRecord
+
+
 emptyModel : Model
 emptyModel =
-    { parameters = Dict.fromList [ (1, emptyParameterRecord) ]
+    { parameters = Dict.fromList [ ( 1, emptyParameterRecord ) ]
     , currentInput = emptyInput
     , pdbFile = Nothing
     , score = Nothing
@@ -124,21 +130,20 @@ update msg model =
     case msg of
         EditParameter parameter newValue ->
             let
-                mParams = Dict.get 1 model.parameters
                 params =
-                    case mParams of
-                        Just ps -> ps
-                        Nothing -> emptyParameterRecord
+                    parameterRecordWithDefault 1 model.parameters
+
                 ( p, i ) =
                     editParameterValue params model.currentInput parameter newValue
             in
                 { model | parameters = Dict.insert 1 p model.parameters, currentInput = i } ! []
 
         Build ->
-            ( { model | building = True }, sendBuildCmd (Dict.get 1 model.parameters
-                        |> Maybe.withDefault emptyParameterRecord) )
+            ( { model | building = True }
+            , sendBuildCmd (parameterRecordWithDefault 1 model.parameters)
+            )
 
-        ProcessModel (Ok { pdbFile, score, residuesPerTurn}) ->
+        ProcessModel (Ok { pdbFile, score, residuesPerTurn }) ->
             let
                 oldHistory =
                     if List.length model.modelHistory == 10 then
@@ -151,8 +156,9 @@ update msg model =
                     , score = Just score
                     , residuesPerTurn = Just residuesPerTurn
                     , building = False
-                    , modelHistory = (Dict.get 1 model.parameters
-                        |> Maybe.withDefault emptyParameterRecord) :: oldHistory
+                    , modelHistory =
+                        parameterRecordWithDefault 1 model.parameters
+                        :: oldHistory
                 }
                     ! [ showStructure pdbFile ]
 
@@ -182,9 +188,10 @@ update msg model =
         KeyMsg keyCode ->
             case keyCode of
                 13 ->
-                    if containsInvalidParameter
-                        (Dict.get 1 model.parameters
-                        |> Maybe.withDefault emptyParameterRecord) then
+                    if
+                        containsInvalidParameter
+                            (parameterRecordWithDefault 1 model.parameters)
+                    then
                         model ! []
                     else
                         model ! [ Task.perform identity (Task.succeed Build) ]
@@ -326,8 +333,11 @@ overlayPanels model =
 
         optionalDivs =
             [ ( model.panelVisibility.buildPanel
-              , BuildPanel.buildPanel (Dict.get 1 model.parameters
-                |> Maybe.withDefault emptyParameterRecord) model.currentInput
+              , BuildPanel.buildPanel
+                    (Dict.get 1 model.parameters
+                        |> Maybe.withDefault emptyParameterRecord
+                    )
+                    model.currentInput
               )
             , ( model.panelVisibility.examplesPanel, ExamplesPanel.examplesPanel )
             , ( model.panelVisibility.buildHistoryPanel, buildHistoryPanel model.modelHistory )
@@ -417,7 +427,7 @@ modelInfoPanel model =
             |> Maybe.map toString
             |> Maybe.withDefault ""
             |> \val -> input [ value val, readonly True ] []
-        , br [] []        
+        , br [] []
         , downloadStructureButton model.pdbFile
         ]
 
