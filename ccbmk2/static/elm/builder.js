@@ -19208,8 +19208,9 @@ var _user$project$Types$KeyMsg = function (a) {
 var _user$project$Types$SetParametersAndBuild = function (a) {
 	return {ctor: 'SetParametersAndBuild', _0: a};
 };
-var _user$project$Types$Clear = {ctor: 'Clear'};
 var _user$project$Types$DownloadPdb = {ctor: 'DownloadPdb'};
+var _user$project$Types$Clear = {ctor: 'Clear'};
+var _user$project$Types$AddChain = {ctor: 'AddChain'};
 var _user$project$Types$ProcessModel = function (a) {
 	return {ctor: 'ProcessModel', _0: a};
 };
@@ -20207,8 +20208,23 @@ var _user$project$BuildPanel$buildPanel = F2(
 					}),
 				_1: {
 					ctor: '::',
-					_0: A2(_user$project$BuildPanel$parameterInputForm, parametersDict, currentInputDict),
-					_1: {ctor: '[]'}
+					_0: A2(
+						_elm_lang$html$Html$button,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$AddChain),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Add Chain'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(_user$project$BuildPanel$parameterInputForm, parametersDict, currentInputDict),
+						_1: {ctor: '[]'}
+					}
 				}
 			});
 	});
@@ -21762,6 +21778,27 @@ var _user$project$Builder$update = F2(
 							{building: false}),
 						{ctor: '[]'});
 				}
+			case 'AddChain':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							parameters: A3(_elm_lang$core$Dict$insert, model.nextSectionID, _user$project$Types$emptyParameterRecord, model.parameters),
+							currentInput: A3(_elm_lang$core$Dict$insert, model.nextSectionID, _user$project$Types$emptyInput, model.currentInput),
+							nextSectionID: model.nextSectionID + 1
+						}),
+					{ctor: '[]'});
+			case 'Clear':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							parameters: A3(_elm_lang$core$Dict$insert, 1, _user$project$Types$emptyParameterRecord, model.parameters),
+							currentInput: A3(_elm_lang$core$Dict$insert, 1, _user$project$Types$emptyInput, model.currentInput)
+						}),
+					{ctor: '[]'});
 			case 'DownloadPdb':
 				var pdbFile = A2(_elm_lang$core$Maybe$withDefault, '', model.pdbFile);
 				return A2(
@@ -21773,16 +21810,6 @@ var _user$project$Builder$update = F2(
 							{ctor: '_Tuple2', _0: 'ccbuilder_model.pdb', _1: pdbFile}),
 						_1: {ctor: '[]'}
 					});
-			case 'Clear':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							parameters: A3(_elm_lang$core$Dict$insert, 1, _user$project$Types$emptyParameterRecord, model.parameters),
-							currentInput: A3(_elm_lang$core$Dict$insert, 1, _user$project$Types$emptyInput, model.currentInput)
-						}),
-					{ctor: '[]'});
 			case 'SetParametersAndBuild':
 				var _p7 = _p4._0;
 				return _user$project$ParameterValidation$containsInvalidParameter(_p7) ? A2(
@@ -21843,9 +21870,9 @@ var _user$project$Builder$update = F2(
 					{ctor: '[]'});
 		}
 	});
-var _user$project$Builder$Model = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {parameters: a, currentInput: b, pdbFile: c, score: d, residuesPerTurn: e, building: f, modelHistory: g, panelVisibility: h};
+var _user$project$Builder$Model = F9(
+	function (a, b, c, d, e, f, g, h, i) {
+		return {parameters: a, currentInput: b, nextSectionID: c, pdbFile: d, score: e, residuesPerTurn: f, building: g, modelHistory: h, panelVisibility: i};
 	});
 var _user$project$Builder$PanelVisibility = F3(
 	function (a, b, c) {
@@ -21865,6 +21892,7 @@ var _user$project$Builder$emptyModel = {
 			_0: {ctor: '_Tuple2', _0: 1, _1: _user$project$Types$emptyInput},
 			_1: {ctor: '[]'}
 		}),
+	nextSectionID: 2,
 	pdbFile: _elm_lang$core$Maybe$Nothing,
 	score: _elm_lang$core$Maybe$Nothing,
 	residuesPerTurn: _elm_lang$core$Maybe$Nothing,
@@ -21884,7 +21912,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"Register":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"TogglePanel":["Types.Panel"],"Build":[],"Clear":[],"DownloadPdb":[],"EditParameter":["Types.Parameter","String"],"SetParametersAndBuild":["Types.ParameterRecord"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ pdbFile : String, score : Float, residuesPerTurn : Float }"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ oligomerState : Maybe.Maybe Int , radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"Register":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"AddChain":[],"TogglePanel":["Types.Panel"],"Build":[],"Clear":[],"DownloadPdb":[],"EditParameter":["Types.Parameter","String"],"SetParametersAndBuild":["Types.ParameterRecord"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ pdbFile : String, score : Float, residuesPerTurn : Float }"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ oligomerState : Maybe.Maybe Int , radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

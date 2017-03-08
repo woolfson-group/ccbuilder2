@@ -12,10 +12,9 @@ import Types
     exposing
         ( Msg(..)
         , ParameterRecord
-        , PRID
+        , SectionID
         , ParametersDict
         , emptyParameterRecord
-        , IVID
         , InputValuesDict
         , InputValues
         , Parameter(..)
@@ -36,6 +35,7 @@ buildPanel : ParametersDict -> InputValuesDict -> Html Msg
 buildPanel parametersDict currentInputDict =
     div [ class [ OverlayPanelCss ], id [ BuildPanel ], styles <| panelStyling ++ buildPanelStyling ]
         [ h3 [] [ text "Parameters" ]
+        , button [ onClick AddChain ] [ text "Add Chain" ]
         , parameterInputForm parametersDict currentInputDict
         ]
 

@@ -9,17 +9,18 @@ type Msg
     = EditParameter Parameter String
     | Build
     | ProcessModel (Result Http.Error ModellingResults)
-    | DownloadPdb
+    | AddChain
     | Clear
+    | DownloadPdb
     | SetParametersAndBuild ParameterRecord
     | KeyMsg Keyboard.KeyCode
     | TogglePanel Panel
 
 
-type alias PRID = Int
+type alias SectionID = Int
 
 
-type alias ParametersDict = Dict.Dict PRID ParameterRecord
+type alias ParametersDict = Dict.Dict SectionID ParameterRecord
 
 
 type alias ParameterRecord =
@@ -32,10 +33,7 @@ type alias ParameterRecord =
     }
 
 
-type alias IVID = Int
-
-
-type alias InputValuesDict = Dict.Dict IVID InputValues
+type alias InputValuesDict = Dict.Dict SectionID InputValues
 
 
 type alias InputValues =

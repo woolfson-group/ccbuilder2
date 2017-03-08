@@ -19,11 +19,10 @@ import Types
     exposing
         ( Msg(..)
         , ParameterRecord
-        , PRID
+        , SectionID
         , ParametersDict
         , emptyParameterRecord
         , InputValues
-        , IVID
         , InputValuesDict
         , emptyInput
         , ModellingResults
@@ -63,6 +62,7 @@ init =
 type alias Model =
     { parameters : ParametersDict
     , currentInput : InputValuesDict
+    , nextSectionID : SectionID
     , pdbFile : Maybe String
     , score : Maybe Float
     , residuesPerTurn : Maybe Float
@@ -79,13 +79,13 @@ type alias PanelVisibility =
     }
 
 
-parameterRecordWithDefault : PRID -> ParametersDict -> ParameterRecord
+parameterRecordWithDefault : SectionID -> ParametersDict -> ParameterRecord
 parameterRecordWithDefault pRID parameters =
     Dict.get pRID parameters
         |> Maybe.withDefault emptyParameterRecord
 
 
-inputRecordWithDefault : IVID -> InputValuesDict -> InputValues
+inputRecordWithDefault : SectionID -> InputValuesDict -> InputValues
 inputRecordWithDefault iVID inputValues =
     Dict.get iVID inputValues
         |> Maybe.withDefault emptyInput
@@ -95,6 +95,7 @@ emptyModel : Model
 emptyModel =
     { parameters = Dict.fromList [ ( 1, emptyParameterRecord ) ]
     , currentInput = Dict.fromList [ ( 1, emptyInput ) ]
+    , nextSectionID = 2
     , pdbFile = Nothing
     , score = Nothing
     , residuesPerTurn = Nothing
@@ -174,12 +175,15 @@ update msg model =
         ProcessModel (Err _) ->
             { model | building = False } ! []
 
-        DownloadPdb ->
-            let
-                pdbFile =
-                    Maybe.withDefault "" model.pdbFile
-            in
-                model ! [ downloadPdb ( "ccbuilder_model.pdb", pdbFile ) ]
+        AddChain ->
+            { model
+                | parameters =
+                    Dict.insert model.nextSectionID emptyParameterRecord model.parameters
+                , currentInput =
+                    Dict.insert model.nextSectionID emptyInput model.currentInput
+                , nextSectionID = model.nextSectionID + 1
+            }
+                ! []
 
         Clear ->
             { model
@@ -188,6 +192,13 @@ update msg model =
                 , currentInput = Dict.insert 1 emptyInput model.currentInput
             }
                 ! []
+
+        DownloadPdb ->
+            let
+                pdbFile =
+                    Maybe.withDefault "" model.pdbFile
+            in
+                model ! [ downloadPdb ( "ccbuilder_model.pdb", pdbFile ) ]
 
         SetParametersAndBuild parameters ->
             if containsInvalidParameter parameters then
