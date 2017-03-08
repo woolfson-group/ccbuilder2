@@ -49,9 +49,7 @@ parameterInputForm : ParametersDict -> InputValuesDict -> Html Msg
 parameterInputForm parametersDict currentInputDict =
     Html.div []
         (createParametersSections currentInputDict
-            ++ [ parameterSubmit
-                (Dict.get 1 parametersDict
-                |> Maybe.withDefault emptyParameterRecord)
+            ++ [ parameterSubmit parametersDict
                , button [ onClick Clear ] [ text "Clear" ]
                ]
         )
@@ -124,15 +122,22 @@ inputStyling =
     [ Css.width (Css.pct 100) ]
 
 
-parameterSubmit : ParameterRecord -> Html Msg
+parameterSubmit : ParametersDict -> Html Msg
 parameterSubmit parameters =
     input
         [ type_ "submit"
         , value "Submit"
         , onClick Build
-        , disabled (containsInvalidParameter parameters)
+        , disabled (sumbitDisabled parameters)
         ]
         []
+
+
+sumbitDisabled : ParametersDict -> Bool
+sumbitDisabled parameters =
+    Dict.values parameters
+    |> List.map containsInvalidParameter
+    |> List.all (\v -> v == True)
 
 
 registerSelection : String -> Html Msg

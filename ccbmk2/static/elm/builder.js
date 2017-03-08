@@ -19901,6 +19901,17 @@ var _user$project$BuildPanel$registerSelection = function (currentRegister) {
 				}
 			}));
 };
+var _user$project$BuildPanel$sumbitDisabled = function (parameters) {
+	return A2(
+		_elm_lang$core$List$all,
+		function (v) {
+			return _elm_lang$core$Native_Utils.eq(v, true);
+		},
+		A2(
+			_elm_lang$core$List$map,
+			_user$project$ParameterValidation$containsInvalidParameter,
+			_elm_lang$core$Dict$values(parameters)));
+};
 var _user$project$BuildPanel$parameterSubmit = function (parameters) {
 	return A2(
 		_elm_lang$html$Html$input,
@@ -19916,7 +19927,7 @@ var _user$project$BuildPanel$parameterSubmit = function (parameters) {
 					_1: {
 						ctor: '::',
 						_0: _elm_lang$html$Html_Attributes$disabled(
-							_user$project$ParameterValidation$containsInvalidParameter(parameters)),
+							_user$project$BuildPanel$sumbitDisabled(parameters)),
 						_1: {ctor: '[]'}
 					}
 				}
@@ -20137,11 +20148,7 @@ var _user$project$BuildPanel$parameterInputForm = F2(
 				_user$project$BuildPanel$createParametersSections(currentInputDict),
 				{
 					ctor: '::',
-					_0: _user$project$BuildPanel$parameterSubmit(
-						A2(
-							_elm_lang$core$Maybe$withDefault,
-							_user$project$Types$emptyParameterRecord,
-							A2(_elm_lang$core$Dict$get, 1, parametersDict))),
+					_0: _user$project$BuildPanel$parameterSubmit(parametersDict),
 					_1: {
 						ctor: '::',
 						_0: A2(

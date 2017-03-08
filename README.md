@@ -22,7 +22,6 @@ This is the source code for a web application for building models of coiled coil
 
 ## TODO
 
-* Fix disabled button on bad parameter record
 * Add additional camera and representation controls
 * Independent chains and anti-parallel structures
 * Move examples panel below build, instead of separate tab
