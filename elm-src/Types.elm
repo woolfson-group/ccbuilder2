@@ -1,5 +1,6 @@
 module Types exposing (..)
 
+import Dict
 import Keyboard
 import Http
 
@@ -15,7 +16,10 @@ type Msg
     | TogglePanel Panel
 
 
-type alias PID = Int
+type alias PRID = Int
+
+
+type alias ParametersDict = Dict.Dict PRID ParameterRecord
 
 
 type alias ParameterRecord =

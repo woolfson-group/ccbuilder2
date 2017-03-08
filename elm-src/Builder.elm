@@ -19,6 +19,8 @@ import Types
     exposing
         ( Msg(..)
         , ParameterRecord
+        , PRID
+        , ParametersDict
         , InputValues
         , ModellingResults
         , Parameter(..)
@@ -55,7 +57,7 @@ init =
 
 
 type alias Model =
-    { parameters : Dict.Dict Int ParameterRecord
+    { parameters : ParametersDict
     , currentInput : InputValues
     , pdbFile : Maybe String
     , score : Maybe Float
@@ -73,7 +75,7 @@ type alias PanelVisibility =
     }
 
 
-parameterRecordWithDefault : Int -> Dict.Dict Int ParameterRecord -> ParameterRecord
+parameterRecordWithDefault : PRID -> ParametersDict -> ParameterRecord
 parameterRecordWithDefault pRID parameters =
     Dict.get pRID parameters
         |> Maybe.withDefault emptyParameterRecord
@@ -333,11 +335,7 @@ overlayPanels model =
 
         optionalDivs =
             [ ( model.panelVisibility.buildPanel
-              , BuildPanel.buildPanel
-                    (Dict.get 1 model.parameters
-                        |> Maybe.withDefault emptyParameterRecord
-                    )
-                    model.currentInput
+              , BuildPanel.buildPanel model.parameters model.currentInput
               )
             , ( model.panelVisibility.examplesPanel, ExamplesPanel.examplesPanel )
             , ( model.panelVisibility.buildHistoryPanel, buildHistoryPanel model.modelHistory )

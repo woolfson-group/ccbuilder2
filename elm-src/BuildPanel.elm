@@ -2,6 +2,7 @@ module BuildPanel exposing (..)
 
 import BuilderCss exposing (CssClasses(..), cssNamespace, panelStyling)
 import Css
+import Dict
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -11,6 +12,8 @@ import Types
     exposing
         ( Msg(..)
         , ParameterRecord
+        , PRID
+        , ParametersDict
         , InputValues
         , Parameter(..)
         , Panel(..)
@@ -26,11 +29,11 @@ styles =
     Css.asPairs >> Html.Attributes.style
 
 
-buildPanel : ParameterRecord -> InputValues -> Html Msg
-buildPanel parameters currentInput =
+buildPanel : ParametersDict -> InputValues -> Html Msg
+buildPanel parametersDict currentInput =
     div [ class [ OverlayPanelCss ], id [ BuildPanel ], styles <| panelStyling ++ buildPanelStyling ]
         [ h3 [] [ text "Parameters" ]
-        , parameterInputForm parameters currentInput
+        , parameterInputForm parametersDict currentInput
         ]
 
 
@@ -39,22 +42,31 @@ buildPanelStyling =
     [ Css.top (Css.px 60), Css.left (Css.px 30) ]
 
 
-parameterInputForm : ParameterRecord -> InputValues -> Html Msg
-parameterInputForm parameters currentInput =
+parameterInputForm : ParametersDict -> InputValues -> Html Msg
+parameterInputForm parametersDict currentInput =
     Html.div []
-        (chainInputSection parameters currentInput
-            ++ [ parameterSubmit parameters
+        (createParametersSections parametersDict currentInput
+            ++ [ parameterSubmit
+                (Dict.get 1 parametersDict
+                |> Maybe.withDefault (ParameterRecord Nothing Nothing Nothing Nothing Nothing "a"))
                , button [ onClick Clear ] [ text "Clear" ]
                ]
         )
 
 
-chainInputSection : ParameterRecord -> InputValues -> List (Html Msg)
-chainInputSection parameters currentInput =
+createParametersSections : ParametersDict -> InputValues -> List (Html Msg)
+createParametersSections parametersDict currentInput =
+    Dict.values parametersDict
+    |> List.map (chainInputSection currentInput)
+
+
+chainInputSection : InputValues -> ParameterRecord -> Html Msg
+chainInputSection currentInput parameters =
     List.map parameterInput (allParameters currentInput)
         ++ [ sequenceInput
                 ( "Sequence", Sequence, currentInput.sequence, currentInput.register )
            ]
+    |> div []
 
 
 allParameters : InputValues -> List ( String, Parameter, String )

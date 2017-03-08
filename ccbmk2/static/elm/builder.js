@@ -20103,31 +20103,45 @@ var _user$project$BuildPanel$sequenceInput = function (_p5) {
 		});
 };
 var _user$project$BuildPanel$chainInputSection = F2(
-	function (parameters, currentInput) {
-		return A2(
-			_elm_lang$core$Basics_ops['++'],
-			A2(
-				_elm_lang$core$List$map,
-				_user$project$BuildPanel$parameterInput,
-				_user$project$BuildPanel$allParameters(currentInput)),
-			{
-				ctor: '::',
-				_0: _user$project$BuildPanel$sequenceInput(
-					{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: currentInput.sequence, _3: currentInput.register}),
-				_1: {ctor: '[]'}
-			});
-	});
-var _user$project$BuildPanel$parameterInputForm = F2(
-	function (parameters, currentInput) {
+	function (currentInput, parameters) {
 		return A2(
 			_elm_lang$html$Html$div,
 			{ctor: '[]'},
 			A2(
 				_elm_lang$core$Basics_ops['++'],
-				A2(_user$project$BuildPanel$chainInputSection, parameters, currentInput),
+				A2(
+					_elm_lang$core$List$map,
+					_user$project$BuildPanel$parameterInput,
+					_user$project$BuildPanel$allParameters(currentInput)),
 				{
 					ctor: '::',
-					_0: _user$project$BuildPanel$parameterSubmit(parameters),
+					_0: _user$project$BuildPanel$sequenceInput(
+						{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: currentInput.sequence, _3: currentInput.register}),
+					_1: {ctor: '[]'}
+				}));
+	});
+var _user$project$BuildPanel$createParametersSection = F2(
+	function (parametersDict, currentInput) {
+		return A2(
+			_elm_lang$core$List$map,
+			_user$project$BuildPanel$chainInputSection(currentInput),
+			_elm_lang$core$Dict$values(parametersDict));
+	});
+var _user$project$BuildPanel$parameterInputForm = F2(
+	function (parametersDict, currentInput) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				A2(_user$project$BuildPanel$createParametersSection, parametersDict, currentInput),
+				{
+					ctor: '::',
+					_0: _user$project$BuildPanel$parameterSubmit(
+						A2(
+							_elm_lang$core$Maybe$withDefault,
+							A6(_user$project$Types$ParameterRecord, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, 'a'),
+							A2(_elm_lang$core$Dict$get, 1, parametersDict))),
 					_1: {
 						ctor: '::',
 						_0: A2(
@@ -20147,7 +20161,7 @@ var _user$project$BuildPanel$parameterInputForm = F2(
 				}));
 	});
 var _user$project$BuildPanel$buildPanel = F2(
-	function (parameters, currentInput) {
+	function (parametersDict, currentInput) {
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -20186,7 +20200,7 @@ var _user$project$BuildPanel$buildPanel = F2(
 					}),
 				_1: {
 					ctor: '::',
-					_0: A2(_user$project$BuildPanel$parameterInputForm, parameters, currentInput),
+					_0: A2(_user$project$BuildPanel$parameterInputForm, parametersDict, currentInput),
 					_1: {ctor: '[]'}
 				}
 			});
@@ -21109,6 +21123,13 @@ var _user$project$Builder$sendBuildCmd = function (parameters) {
 };
 var _user$project$Builder$emptyInput = A6(_user$project$Types$InputValues, '', '', '', '', '', 'a');
 var _user$project$Builder$emptyParameterRecord = A6(_user$project$Types$ParameterRecord, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, 'a');
+var _user$project$Builder$parameterRecordWithDefault = F2(
+	function (pRID, parameters) {
+		return A2(
+			_elm_lang$core$Maybe$withDefault,
+			_user$project$Builder$emptyParameterRecord,
+			A2(_elm_lang$core$Dict$get, pRID, parameters));
+	});
 var _user$project$Builder$styles = function (_p2) {
 	return _elm_lang$html$Html_Attributes$style(
 		_rtfeldman$elm_css$Css$asPairs(_p2));
@@ -21583,13 +21604,7 @@ var _user$project$Builder$overlayPanels = function (model) {
 		_0: {
 			ctor: '_Tuple2',
 			_0: model.panelVisibility.buildPanel,
-			_1: A2(
-				_user$project$BuildPanel$buildPanel,
-				A2(
-					_elm_lang$core$Maybe$withDefault,
-					_user$project$Builder$emptyParameterRecord,
-					A2(_elm_lang$core$Dict$get, 1, model.parameters)),
-				model.currentInput)
+			_1: A2(_user$project$BuildPanel$buildPanel, model.parameters, model.currentInput)
 		},
 		_1: {
 			ctor: '::',
@@ -21678,18 +21693,10 @@ var _user$project$Builder$update = F2(
 		var _p4 = msg;
 		switch (_p4.ctor) {
 			case 'EditParameter':
-				var mParams = A2(_elm_lang$core$Dict$get, 1, model.parameters);
-				var params = function () {
-					var _p5 = mParams;
-					if (_p5.ctor === 'Just') {
-						return _p5._0;
-					} else {
-						return _user$project$Builder$emptyParameterRecord;
-					}
-				}();
-				var _p6 = A4(_user$project$ParameterValidation$editParameterValue, params, model.currentInput, _p4._0, _p4._1);
-				var p = _p6._0;
-				var i = _p6._1;
+				var params = A2(_user$project$Builder$parameterRecordWithDefault, 1, model.parameters);
+				var _p5 = A4(_user$project$ParameterValidation$editParameterValue, params, model.currentInput, _p4._0, _p4._1);
+				var p = _p5._0;
+				var i = _p5._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -21706,14 +21713,11 @@ var _user$project$Builder$update = F2(
 						model,
 						{building: true}),
 					_1: _user$project$Builder$sendBuildCmd(
-						A2(
-							_elm_lang$core$Maybe$withDefault,
-							_user$project$Builder$emptyParameterRecord,
-							A2(_elm_lang$core$Dict$get, 1, model.parameters)))
+						A2(_user$project$Builder$parameterRecordWithDefault, 1, model.parameters))
 				};
 			case 'ProcessModel':
 				if (_p4._0.ctor === 'Ok') {
-					var _p7 = _p4._0._0.pdbFile;
+					var _p6 = _p4._0._0.pdbFile;
 					var oldHistory = _elm_lang$core$Native_Utils.eq(
 						_elm_lang$core$List$length(model.modelHistory),
 						10) ? A2(_elm_lang$core$List$take, 9, model.modelHistory) : model.modelHistory;
@@ -21722,22 +21726,19 @@ var _user$project$Builder$update = F2(
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								pdbFile: _elm_lang$core$Maybe$Just(_p7),
+								pdbFile: _elm_lang$core$Maybe$Just(_p6),
 								score: _elm_lang$core$Maybe$Just(_p4._0._0.score),
 								residuesPerTurn: _elm_lang$core$Maybe$Just(_p4._0._0.residuesPerTurn),
 								building: false,
 								modelHistory: {
 									ctor: '::',
-									_0: A2(
-										_elm_lang$core$Maybe$withDefault,
-										_user$project$Builder$emptyParameterRecord,
-										A2(_elm_lang$core$Dict$get, 1, model.parameters)),
+									_0: A2(_user$project$Builder$parameterRecordWithDefault, 1, model.parameters),
 									_1: oldHistory
 								}
 							}),
 						{
 							ctor: '::',
-							_0: _user$project$Builder$showStructure(_p7),
+							_0: _user$project$Builder$showStructure(_p6),
 							_1: {ctor: '[]'}
 						});
 				} else {
@@ -21770,8 +21771,8 @@ var _user$project$Builder$update = F2(
 						}),
 					{ctor: '[]'});
 			case 'SetParametersAndBuild':
-				var _p8 = _p4._0;
-				return _user$project$ParameterValidation$containsInvalidParameter(_p8) ? A2(
+				var _p7 = _p4._0;
+				return _user$project$ParameterValidation$containsInvalidParameter(_p7) ? A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
 					{ctor: '[]'}) : A2(
@@ -21779,8 +21780,8 @@ var _user$project$Builder$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parameters: A3(_elm_lang$core$Dict$insert, 1, _p8, model.parameters),
-							currentInput: _user$project$Builder$parametersToInput(_p8)
+							parameters: A3(_elm_lang$core$Dict$insert, 1, _p7, model.parameters),
+							currentInput: _user$project$Builder$parametersToInput(_p7)
 						}),
 					{
 						ctor: '::',
@@ -21791,13 +21792,10 @@ var _user$project$Builder$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'KeyMsg':
-				var _p9 = _p4._0;
-				if (_p9 === 13) {
+				var _p8 = _p4._0;
+				if (_p8 === 13) {
 					return _user$project$ParameterValidation$containsInvalidParameter(
-						A2(
-							_elm_lang$core$Maybe$withDefault,
-							_user$project$Builder$emptyParameterRecord,
-							A2(_elm_lang$core$Dict$get, 1, model.parameters))) ? A2(
+						A2(_user$project$Builder$parameterRecordWithDefault, 1, model.parameters)) ? A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						model,
 						{ctor: '[]'}) : A2(
