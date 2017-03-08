@@ -14,6 +14,9 @@ import Types
         , ParameterRecord
         , PRID
         , ParametersDict
+        , emptyParameterRecord
+        , IVID
+        , InputValuesDict
         , InputValues
         , Parameter(..)
         , Panel(..)
@@ -29,11 +32,11 @@ styles =
     Css.asPairs >> Html.Attributes.style
 
 
-buildPanel : ParametersDict -> InputValues -> Html Msg
-buildPanel parametersDict currentInput =
+buildPanel : ParametersDict -> InputValuesDict -> Html Msg
+buildPanel parametersDict currentInputDict =
     div [ class [ OverlayPanelCss ], id [ BuildPanel ], styles <| panelStyling ++ buildPanelStyling ]
         [ h3 [] [ text "Parameters" ]
-        , parameterInputForm parametersDict currentInput
+        , parameterInputForm parametersDict currentInputDict
         ]
 
 
@@ -42,26 +45,26 @@ buildPanelStyling =
     [ Css.top (Css.px 60), Css.left (Css.px 30) ]
 
 
-parameterInputForm : ParametersDict -> InputValues -> Html Msg
-parameterInputForm parametersDict currentInput =
+parameterInputForm : ParametersDict -> InputValuesDict -> Html Msg
+parameterInputForm parametersDict currentInputDict =
     Html.div []
-        (createParametersSections parametersDict currentInput
+        (createParametersSections currentInputDict
             ++ [ parameterSubmit
                 (Dict.get 1 parametersDict
-                |> Maybe.withDefault (ParameterRecord Nothing Nothing Nothing Nothing Nothing "a"))
+                |> Maybe.withDefault emptyParameterRecord)
                , button [ onClick Clear ] [ text "Clear" ]
                ]
         )
 
 
-createParametersSections : ParametersDict -> InputValues -> List (Html Msg)
-createParametersSections parametersDict currentInput =
-    Dict.values parametersDict
-    |> List.map (chainInputSection currentInput)
+createParametersSections : InputValuesDict -> List (Html Msg)
+createParametersSections currentInputDict =
+    Dict.values currentInputDict
+    |> List.map chainInputSection
 
 
-chainInputSection : InputValues -> ParameterRecord -> Html Msg
-chainInputSection currentInput parameters =
+chainInputSection : InputValues -> Html Msg
+chainInputSection currentInput =
     List.map parameterInput (allParameters currentInput)
         ++ [ sequenceInput
                 ( "Sequence", Sequence, currentInput.sequence, currentInput.register )

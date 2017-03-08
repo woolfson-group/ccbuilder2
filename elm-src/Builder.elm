@@ -21,7 +21,11 @@ import Types
         , ParameterRecord
         , PRID
         , ParametersDict
+        , emptyParameterRecord
         , InputValues
+        , IVID
+        , InputValuesDict
+        , emptyInput
         , ModellingResults
         , Parameter(..)
         , Panel(..)
@@ -58,7 +62,7 @@ init =
 
 type alias Model =
     { parameters : ParametersDict
-    , currentInput : InputValues
+    , currentInput : InputValuesDict
     , pdbFile : Maybe String
     , score : Maybe Float
     , residuesPerTurn : Maybe Float
@@ -81,10 +85,16 @@ parameterRecordWithDefault pRID parameters =
         |> Maybe.withDefault emptyParameterRecord
 
 
+inputRecordWithDefault : IVID -> InputValuesDict -> InputValues
+inputRecordWithDefault iVID inputValues =
+    Dict.get iVID inputValues
+        |> Maybe.withDefault emptyInput
+
+
 emptyModel : Model
 emptyModel =
     { parameters = Dict.fromList [ ( 1, emptyParameterRecord ) ]
-    , currentInput = emptyInput
+    , currentInput = Dict.fromList [ ( 1, emptyInput ) ]
     , pdbFile = Nothing
     , score = Nothing
     , residuesPerTurn = Nothing
@@ -92,16 +102,6 @@ emptyModel =
     , modelHistory = []
     , panelVisibility = defaultVisibility
     }
-
-
-emptyParameterRecord : ParameterRecord
-emptyParameterRecord =
-    ParameterRecord Nothing Nothing Nothing Nothing Nothing "a"
-
-
-emptyInput : InputValues
-emptyInput =
-    InputValues "" "" "" "" "" "a"
 
 
 defaultVisibility : PanelVisibility
@@ -135,10 +135,17 @@ update msg model =
                 params =
                     parameterRecordWithDefault 1 model.parameters
 
+                input =
+                    inputRecordWithDefault 1 model.currentInput
+
                 ( p, i ) =
-                    editParameterValue params model.currentInput parameter newValue
+                    editParameterValue params input parameter newValue
             in
-                { model | parameters = Dict.insert 1 p model.parameters, currentInput = i } ! []
+                { model
+                    | parameters = Dict.insert 1 p model.parameters
+                    , currentInput = Dict.insert 1 i model.currentInput
+                }
+                    ! []
 
         Build ->
             ( { model | building = True }
@@ -160,7 +167,7 @@ update msg model =
                     , building = False
                     , modelHistory =
                         parameterRecordWithDefault 1 model.parameters
-                        :: oldHistory
+                            :: oldHistory
                 }
                     ! [ showStructure pdbFile ]
 
@@ -175,7 +182,12 @@ update msg model =
                 model ! [ downloadPdb ( "ccbuilder_model.pdb", pdbFile ) ]
 
         Clear ->
-            { model | parameters = Dict.insert 1 emptyParameterRecord model.parameters, currentInput = emptyInput } ! []
+            { model
+                | parameters =
+                    Dict.insert 1 emptyParameterRecord model.parameters
+                , currentInput = Dict.insert 1 emptyInput model.currentInput
+            }
+                ! []
 
         SetParametersAndBuild parameters ->
             if containsInvalidParameter parameters then
@@ -183,7 +195,8 @@ update msg model =
             else
                 { model
                     | parameters = Dict.insert 1 parameters model.parameters
-                    , currentInput = parametersToInput parameters
+                    , currentInput =
+                        Dict.insert 1 (parametersToInput parameters) model.currentInput
                 }
                     ! [ Task.perform identity (Task.succeed Build) ]
 

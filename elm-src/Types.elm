@@ -32,6 +32,12 @@ type alias ParameterRecord =
     }
 
 
+type alias IVID = Int
+
+
+type alias InputValuesDict = Dict.Dict IVID InputValues
+
+
 type alias InputValues =
     { oligomerState : String
     , radius : String
@@ -64,3 +70,13 @@ type Panel
     | ExamplesPanel
     | BuildingStatusPanel
     | BuildHistoryPanel
+
+
+emptyParameterRecord : ParameterRecord
+emptyParameterRecord =
+    ParameterRecord Nothing Nothing Nothing Nothing Nothing "a"
+
+
+emptyInput : InputValues
+emptyInput =
+    InputValues "" "" "" "" "" "a"
