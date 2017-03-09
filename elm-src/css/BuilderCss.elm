@@ -15,6 +15,8 @@ type CssClasses
     = OverlayPanelCss
     | PanelToggleCss
     | ParameterInputCss
+    | FlexContainerCss
+    | FlexItemCss
 
 
 css : Stylesheet
@@ -62,6 +64,15 @@ css =
             textarea
                 [ fontFamilies [ "Source Code Pro", "monospace" ]
                 , resize none
+                ]
+            ]
+        ]
+    , class FlexContainerCss
+        [ displayFlex
+        , flexDirection row
+        , children
+            [ class FlexItemCss
+                [ flex auto
                 ]
             ]
         ]

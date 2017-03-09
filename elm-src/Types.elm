@@ -6,7 +6,8 @@ import Http
 
 
 type Msg
-    = EditParameter Parameter String
+    = EditParameter SectionID Parameter String
+    | ChangeBuildMode String
     | Build
     | ProcessModel (Result Http.Error ModellingResults)
     | AddChain
@@ -60,6 +61,11 @@ type Parameter
     | PhiCA
     | Sequence
     | Register
+
+
+type BuildMode
+    = Basic
+    | Advanced
 
 
 type Panel

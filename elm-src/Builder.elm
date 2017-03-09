@@ -27,6 +27,7 @@ import Types
         , emptyInput
         , ModellingResults
         , Parameter(..)
+        , BuildMode(..)
         , Panel(..)
         )
 
@@ -63,6 +64,7 @@ type alias Model =
     { parameters : ParametersDict
     , currentInput : InputValuesDict
     , nextSectionID : SectionID
+    , buildMode : BuildMode
     , pdbFile : Maybe String
     , score : Maybe Float
     , residuesPerTurn : Maybe Float
@@ -96,6 +98,7 @@ emptyModel =
     { parameters = Dict.fromList [ ( 1, emptyParameterRecord ) ]
     , currentInput = Dict.fromList [ ( 1, emptyInput ) ]
     , nextSectionID = 2
+    , buildMode = Basic
     , pdbFile = Nothing
     , score = Nothing
     , residuesPerTurn = Nothing
@@ -131,22 +134,37 @@ port downloadPdb : ( String, String ) -> Cmd msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        EditParameter parameter newValue ->
+        EditParameter sectionID parameter newValue ->
             let
                 params =
-                    parameterRecordWithDefault 1 model.parameters
+                    parameterRecordWithDefault sectionID model.parameters
 
                 input =
-                    inputRecordWithDefault 1 model.currentInput
+                    inputRecordWithDefault sectionID model.currentInput
 
                 ( p, i ) =
                     editParameterValue params input parameter newValue
             in
                 { model
-                    | parameters = Dict.insert 1 p model.parameters
-                    , currentInput = Dict.insert 1 i model.currentInput
+                    | parameters = Dict.insert sectionID p model.parameters
+                    , currentInput = Dict.insert sectionID i model.currentInput
                 }
                     ! []
+
+        ChangeBuildMode buildMode ->
+            let
+                newBuildMode =
+                    case buildMode of
+                        "Basic" ->
+                            Basic
+
+                        "Advanced" ->
+                            Advanced
+
+                        _ ->
+                            model.buildMode
+            in
+                { model | buildMode = newBuildMode } ! []
 
         Build ->
             ( { model | building = True }
@@ -188,8 +206,10 @@ update msg model =
         Clear ->
             { model
                 | parameters =
-                    Dict.insert 1 emptyParameterRecord model.parameters
-                , currentInput = Dict.insert 1 emptyInput model.currentInput
+                    Dict.fromList [ ( 1, emptyParameterRecord ) ]
+                , currentInput =
+                    Dict.fromList [ ( 1, emptyInput ) ]
+                , nextSectionID = 1
             }
                 ! []
 
@@ -200,6 +220,7 @@ update msg model =
             in
                 model ! [ downloadPdb ( "ccbuilder_model.pdb", pdbFile ) ]
 
+        -- FIX THIS!!!
         SetParametersAndBuild parameters ->
             if containsInvalidParameter parameters then
                 model ! []
@@ -359,7 +380,7 @@ overlayPanels model =
 
         optionalDivs =
             [ ( model.panelVisibility.buildPanel
-              , BuildPanel.buildPanel model.parameters model.currentInput
+              , BuildPanel.buildPanel model.buildMode model.parameters model.currentInput
               )
             , ( model.panelVisibility.examplesPanel, ExamplesPanel.examplesPanel )
             , ( model.panelVisibility.buildHistoryPanel, buildHistoryPanel model.modelHistory )

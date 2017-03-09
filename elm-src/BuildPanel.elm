@@ -18,6 +18,7 @@ import Types
         , InputValuesDict
         , InputValues
         , Parameter(..)
+        , BuildMode(..)
         , Panel(..)
         )
 
@@ -31,13 +32,49 @@ styles =
     Css.asPairs >> Html.Attributes.style
 
 
-buildPanel : ParametersDict -> InputValuesDict -> Html Msg
-buildPanel parametersDict currentInputDict =
-    div [ class [ OverlayPanelCss ], id [ BuildPanel ], styles <| panelStyling ++ buildPanelStyling ]
-        [ h3 [] [ text "Parameters" ]
-        , button [ onClick AddChain ] [ text "Add Chain" ]
-        , parameterInputForm parametersDict currentInputDict
-        ]
+buildPanel : BuildMode -> ParametersDict -> InputValuesDict -> Html Msg
+buildPanel buildMode parametersDict currentInputDict =
+    let
+        panelView =
+            case buildMode of
+                Basic ->
+                    basicParameterInputForm
+
+                Advanced ->
+                    advancedParameterInputForm
+    in
+        div
+            [ class [ OverlayPanelCss ]
+            , id [ BuildPanel ]
+            , styles <| panelStyling ++ buildPanelStyling
+            ]
+            [ h3 [] [ text "Parameters" ]
+            , selectBuildMode buildMode
+            , panelView parametersDict currentInputDict
+            ]
+
+
+selectBuildMode : BuildMode -> Html Msg
+selectBuildMode currentBuildMode =
+    let
+        buildModeValue =
+            case currentBuildMode of
+                Basic ->
+                    "Basic"
+
+                Advanced ->
+                    "Advanced"
+    in
+        select
+            [ value buildModeValue
+            , onInput ChangeBuildMode
+            ]
+            (List.map simpleOption [ "Basic", "Advanced" ])
+
+
+simpleOption : String -> Html msg
+simpleOption optionValue =
+    option [ value optionValue ] [ text optionValue ]
 
 
 buildPanelStyling : List Css.Mixin
@@ -45,8 +82,8 @@ buildPanelStyling =
     [ Css.top (Css.px 60), Css.left (Css.px 30) ]
 
 
-parameterInputForm : ParametersDict -> InputValuesDict -> Html Msg
-parameterInputForm parametersDict currentInputDict =
+basicParameterInputForm : ParametersDict -> InputValuesDict -> Html Msg
+basicParameterInputForm parametersDict currentInputDict =
     Html.div []
         (createParametersSections currentInputDict
             ++ [ parameterSubmit parametersDict
@@ -55,19 +92,30 @@ parameterInputForm parametersDict currentInputDict =
         )
 
 
+advancedParameterInputForm : ParametersDict -> InputValuesDict -> Html Msg
+advancedParameterInputForm parametersDict currentInputDict =
+    Html.div []
+        [ button [ onClick AddChain ] [ text "Add Chain" ]
+        , Html.div [ class [ FlexContainerCss ] ]
+            (createParametersSections currentInputDict)
+        , parameterSubmit parametersDict
+        , button [ onClick Clear ] [ text "Clear" ]
+        ]
+
+
 createParametersSections : InputValuesDict -> List (Html Msg)
 createParametersSections currentInputDict =
-    Dict.values currentInputDict
-    |> List.map chainInputSection
+    Dict.toList currentInputDict
+        |> List.map chainInputSection
 
 
-chainInputSection : InputValues -> Html Msg
-chainInputSection currentInput =
-    List.map parameterInput (allParameters currentInput)
-        ++ [ sequenceInput
+chainInputSection : (SectionID, InputValues) -> Html Msg
+chainInputSection (sectionID, currentInput) =
+    List.map (parameterInput sectionID) (allParameters currentInput)
+        ++ [ sequenceInput sectionID
                 ( "Sequence", Sequence, currentInput.sequence, currentInput.register )
            ]
-    |> div []
+        |> div [ class [ FlexItemCss ] ]
 
 
 allParameters : InputValues -> List ( String, Parameter, String )
@@ -79,8 +127,8 @@ allParameters currentInput =
     ]
 
 
-parameterInput : ( String, Parameter, String ) -> Html Msg
-parameterInput ( parameterLabel, parameter, currentParameter ) =
+parameterInput : SectionID -> ( String, Parameter, String ) -> Html Msg
+parameterInput sectionID ( parameterLabel, parameter, currentParameter ) =
     div [ class [ ParameterInputCss ] ]
         [ text parameterLabel
         , br [] []
@@ -88,7 +136,7 @@ parameterInput ( parameterLabel, parameter, currentParameter ) =
             [ type_ "text"
             , name parameterLabel
             , placeholder parameterLabel
-            , onInput (EditParameter parameter)
+            , onInput (EditParameter sectionID parameter)
             , styles inputStyling
             , value currentParameter
             ]
@@ -96,12 +144,12 @@ parameterInput ( parameterLabel, parameter, currentParameter ) =
         ]
 
 
-sequenceInput : ( String, Parameter, String, String ) -> Html Msg
-sequenceInput ( parameterLabel, parameter, currentSequence, currentRegister ) =
+sequenceInput : SectionID -> ( String, Parameter, String, String ) -> Html Msg
+sequenceInput sectionID ( parameterLabel, parameter, currentSequence, currentRegister ) =
     div [ class [ ParameterInputCss ] ]
         [ text parameterLabel
         , text " (Register: "
-        , registerSelection currentRegister
+        , registerSelection sectionID currentRegister
         , text ")"
         , br [] []
         , textarea
@@ -110,7 +158,7 @@ sequenceInput ( parameterLabel, parameter, currentSequence, currentRegister ) =
             , cols 30
             , styles inputStyling
             , placeholder parameterLabel
-            , onInput (EditParameter parameter)
+            , onInput (EditParameter sectionID parameter)
             , value currentSequence
             ]
             []
@@ -136,20 +184,15 @@ parameterSubmit parameters =
 sumbitDisabled : ParametersDict -> Bool
 sumbitDisabled parameters =
     Dict.values parameters
-    |> List.map containsInvalidParameter
-    |> List.all (\v -> v == True)
+        |> List.map containsInvalidParameter
+        |> List.all (\v -> v == True)
 
 
-registerSelection : String -> Html Msg
-registerSelection currentRegister =
+registerSelection : SectionID -> String -> Html Msg
+registerSelection sectionID currentRegister =
     select
-        [ value currentRegister, onInput (EditParameter Register) ]
-        (List.map registerOption [ "a", "b", "c", "d", "e", "f", "g" ])
-
-
-registerOption : String -> Html msg
-registerOption register =
-    option [ value register ] [ text register ]
+        [ value currentRegister, onInput (EditParameter sectionID Register) ]
+        (List.map simpleOption [ "a", "b", "c", "d", "e", "f", "g" ])
 
 
 toggleBuildPanel : Html Msg

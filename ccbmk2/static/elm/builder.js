@@ -19215,9 +19215,12 @@ var _user$project$Types$ProcessModel = function (a) {
 	return {ctor: 'ProcessModel', _0: a};
 };
 var _user$project$Types$Build = {ctor: 'Build'};
-var _user$project$Types$EditParameter = F2(
-	function (a, b) {
-		return {ctor: 'EditParameter', _0: a, _1: b};
+var _user$project$Types$ChangeBuildMode = function (a) {
+	return {ctor: 'ChangeBuildMode', _0: a};
+};
+var _user$project$Types$EditParameter = F3(
+	function (a, b, c) {
+		return {ctor: 'EditParameter', _0: a, _1: b, _2: c};
 	});
 var _user$project$Types$Register = {ctor: 'Register'};
 var _user$project$Types$Sequence = {ctor: 'Sequence'};
@@ -19225,6 +19228,8 @@ var _user$project$Types$PhiCA = {ctor: 'PhiCA'};
 var _user$project$Types$Pitch = {ctor: 'Pitch'};
 var _user$project$Types$Radius = {ctor: 'Radius'};
 var _user$project$Types$OligomerState = {ctor: 'OligomerState'};
+var _user$project$Types$Advanced = {ctor: 'Advanced'};
+var _user$project$Types$Basic = {ctor: 'Basic'};
 var _user$project$Types$BuildHistoryPanel = {ctor: 'BuildHistoryPanel'};
 var _user$project$Types$BuildingStatusPanel = {ctor: 'BuildingStatusPanel'};
 var _user$project$Types$ExamplesPanel = {ctor: 'ExamplesPanel'};
@@ -19253,6 +19258,8 @@ var _user$project$BuilderCss$ColorPalette = F5(
 	function (a, b, c, d, e) {
 		return {c1: a, c2: b, c3: c, c4: d, c5: e};
 	});
+var _user$project$BuilderCss$FlexItemCss = {ctor: 'FlexItemCss'};
+var _user$project$BuilderCss$FlexContainerCss = {ctor: 'FlexContainerCss'};
 var _user$project$BuilderCss$ParameterInputCss = {ctor: 'ParameterInputCss'};
 var _user$project$BuilderCss$PanelToggleCss = {ctor: 'PanelToggleCss'};
 var _user$project$BuilderCss$OverlayPanelCss = {ctor: 'OverlayPanelCss'};
@@ -19461,37 +19468,30 @@ var _user$project$BuilderCss$css = function (_p0) {
 								_1: {
 									ctor: '::',
 									_0: A2(
-										_rtfeldman$elm_css$Css$id,
-										_user$project$Types$AppHeaderPanel,
+										_rtfeldman$elm_css$Css$class,
+										_user$project$BuilderCss$FlexContainerCss,
 										{
 											ctor: '::',
-											_0: _rtfeldman$elm_css$Css$fontFamilies(
-												{
-													ctor: '::',
-													_0: 'Source Code Pro',
-													_1: {
-														ctor: '::',
-														_0: 'monospace',
-														_1: {ctor: '[]'}
-													}
-												}),
+											_0: _rtfeldman$elm_css$Css$displayFlex,
 											_1: {
 												ctor: '::',
-												_0: _rtfeldman$elm_css$Css$color(_user$project$BuilderCss$colorPalette.c1),
+												_0: _rtfeldman$elm_css$Css$flexDirection(_rtfeldman$elm_css$Css$row),
 												_1: {
 													ctor: '::',
-													_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c4),
-													_1: {
-														ctor: '::',
-														_0: A5(
-															_rtfeldman$elm_css$Css$boxShadow5,
-															_rtfeldman$elm_css$Css$px(0),
-															_rtfeldman$elm_css$Css$px(0),
-															_rtfeldman$elm_css$Css$px(10),
-															_rtfeldman$elm_css$Css$px(2),
-															A3(_rtfeldman$elm_css$Css$rgb, 100, 100, 100)),
-														_1: {ctor: '[]'}
-													}
+													_0: _rtfeldman$elm_css$Css$children(
+														{
+															ctor: '::',
+															_0: A2(
+																_rtfeldman$elm_css$Css$class,
+																_user$project$BuilderCss$FlexItemCss,
+																{
+																	ctor: '::',
+																	_0: _rtfeldman$elm_css$Css$flex(_rtfeldman$elm_css$Css$auto),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
 												}
 											}
 										}),
@@ -19499,116 +19499,154 @@ var _user$project$BuilderCss$css = function (_p0) {
 										ctor: '::',
 										_0: A2(
 											_rtfeldman$elm_css$Css$id,
-											_user$project$Types$BuildPanel,
+											_user$project$Types$AppHeaderPanel,
 											{
 												ctor: '::',
-												_0: _rtfeldman$elm_css$Css$paddingRight(
-													_rtfeldman$elm_css$Css$px(12)),
-												_1: {ctor: '[]'}
+												_0: _rtfeldman$elm_css$Css$fontFamilies(
+													{
+														ctor: '::',
+														_0: 'Source Code Pro',
+														_1: {
+															ctor: '::',
+															_0: 'monospace',
+															_1: {ctor: '[]'}
+														}
+													}),
+												_1: {
+													ctor: '::',
+													_0: _rtfeldman$elm_css$Css$color(_user$project$BuilderCss$colorPalette.c1),
+													_1: {
+														ctor: '::',
+														_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c4),
+														_1: {
+															ctor: '::',
+															_0: A5(
+																_rtfeldman$elm_css$Css$boxShadow5,
+																_rtfeldman$elm_css$Css$px(0),
+																_rtfeldman$elm_css$Css$px(0),
+																_rtfeldman$elm_css$Css$px(10),
+																_rtfeldman$elm_css$Css$px(2),
+																A3(_rtfeldman$elm_css$Css$rgb, 100, 100, 100)),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
 											}),
 										_1: {
 											ctor: '::',
 											_0: A2(
 												_rtfeldman$elm_css$Css$id,
-												_user$project$Types$ExamplesPanel,
+												_user$project$Types$BuildPanel,
 												{
 													ctor: '::',
-													_0: _rtfeldman$elm_css$Css$textAlign(_rtfeldman$elm_css$Css$center),
+													_0: _rtfeldman$elm_css$Css$paddingRight(
+														_rtfeldman$elm_css$Css$px(12)),
 													_1: {ctor: '[]'}
 												}),
 											_1: {
 												ctor: '::',
 												_0: A2(
 													_rtfeldman$elm_css$Css$id,
-													_user$project$Types$BuildingStatusPanel,
+													_user$project$Types$ExamplesPanel,
 													{
 														ctor: '::',
 														_0: _rtfeldman$elm_css$Css$textAlign(_rtfeldman$elm_css$Css$center),
-														_1: {
-															ctor: '::',
-															_0: _rtfeldman$elm_css$Css$marginTop(
-																_rtfeldman$elm_css$Css$px(-40)),
-															_1: {
-																ctor: '::',
-																_0: _rtfeldman$elm_css$Css$marginLeft(
-																	_rtfeldman$elm_css$Css$px(-40)),
-																_1: {ctor: '[]'}
-															}
-														}
+														_1: {ctor: '[]'}
 													}),
 												_1: {
 													ctor: '::',
 													_0: A2(
 														_rtfeldman$elm_css$Css$id,
-														_user$project$Types$BuildHistoryPanel,
+														_user$project$Types$BuildingStatusPanel,
 														{
 															ctor: '::',
-															_0: _rtfeldman$elm_css$Css$children(
-																{
+															_0: _rtfeldman$elm_css$Css$textAlign(_rtfeldman$elm_css$Css$center),
+															_1: {
+																ctor: '::',
+																_0: _rtfeldman$elm_css$Css$marginTop(
+																	_rtfeldman$elm_css$Css$px(-40)),
+																_1: {
 																	ctor: '::',
-																	_0: _rtfeldman$elm_css$Css_Elements$table(
-																		{
-																			ctor: '::',
-																			_0: _rtfeldman$elm_css$Css$fontSize(
-																				_rtfeldman$elm_css$Css$pt(10)),
-																			_1: {ctor: '[]'}
-																		}),
-																	_1: {
+																	_0: _rtfeldman$elm_css$Css$marginLeft(
+																		_rtfeldman$elm_css$Css$px(-40)),
+																	_1: {ctor: '[]'}
+																}
+															}
+														}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_rtfeldman$elm_css$Css$id,
+															_user$project$Types$BuildHistoryPanel,
+															{
+																ctor: '::',
+																_0: _rtfeldman$elm_css$Css$children(
+																	{
 																		ctor: '::',
 																		_0: _rtfeldman$elm_css$Css_Elements$table(
 																			{
 																				ctor: '::',
-																				_0: _rtfeldman$elm_css$Css$children(
-																					{
-																						ctor: '::',
-																						_0: _rtfeldman$elm_css$Css_Elements$tbody(
-																							{
-																								ctor: '::',
-																								_0: _rtfeldman$elm_css$Css$children(
-																									{
-																										ctor: '::',
-																										_0: _rtfeldman$elm_css$Css_Elements$tr(
-																											{
-																												ctor: '::',
-																												_0: _rtfeldman$elm_css$Css$fontFamilies(
-																													{
-																														ctor: '::',
-																														_0: 'Source Code Pro',
-																														_1: {
-																															ctor: '::',
-																															_0: 'monospace',
-																															_1: {ctor: '[]'}
-																														}
-																													}),
-																												_1: {
+																				_0: _rtfeldman$elm_css$Css$fontSize(
+																					_rtfeldman$elm_css$Css$pt(10)),
+																				_1: {ctor: '[]'}
+																			}),
+																		_1: {
+																			ctor: '::',
+																			_0: _rtfeldman$elm_css$Css_Elements$table(
+																				{
+																					ctor: '::',
+																					_0: _rtfeldman$elm_css$Css$children(
+																						{
+																							ctor: '::',
+																							_0: _rtfeldman$elm_css$Css_Elements$tbody(
+																								{
+																									ctor: '::',
+																									_0: _rtfeldman$elm_css$Css$children(
+																										{
+																											ctor: '::',
+																											_0: _rtfeldman$elm_css$Css_Elements$tr(
+																												{
 																													ctor: '::',
-																													_0: _rtfeldman$elm_css$Css$hover(
+																													_0: _rtfeldman$elm_css$Css$fontFamilies(
 																														{
 																															ctor: '::',
-																															_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c3),
+																															_0: 'Source Code Pro',
 																															_1: {
 																																ctor: '::',
-																																_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$default),
+																																_0: 'monospace',
 																																_1: {ctor: '[]'}
 																															}
 																														}),
-																													_1: {ctor: '[]'}
-																												}
-																											}),
-																										_1: {ctor: '[]'}
-																									}),
-																								_1: {ctor: '[]'}
-																							}),
-																						_1: {ctor: '[]'}
-																					}),
-																				_1: {ctor: '[]'}
-																			}),
-																		_1: {ctor: '[]'}
-																	}
-																}),
-															_1: {ctor: '[]'}
-														}),
-													_1: {ctor: '[]'}
+																													_1: {
+																														ctor: '::',
+																														_0: _rtfeldman$elm_css$Css$hover(
+																															{
+																																ctor: '::',
+																																_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c3),
+																																_1: {
+																																	ctor: '::',
+																																	_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$default),
+																																	_1: {ctor: '[]'}
+																																}
+																															}),
+																														_1: {ctor: '[]'}
+																													}
+																												}),
+																											_1: {ctor: '[]'}
+																										}),
+																									_1: {ctor: '[]'}
+																								}),
+																							_1: {ctor: '[]'}
+																						}),
+																					_1: {ctor: '[]'}
+																				}),
+																			_1: {ctor: '[]'}
+																		}
+																	}),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}
 												}
 											}
 										}
@@ -19842,66 +19880,6 @@ var _user$project$ParameterValidation$containsInvalidParameter = function (_p2) 
 		});
 };
 
-var _user$project$BuildPanel$registerOption = function (register) {
-	return A2(
-		_elm_lang$html$Html$option,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$value(register),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(register),
-			_1: {ctor: '[]'}
-		});
-};
-var _user$project$BuildPanel$registerSelection = function (currentRegister) {
-	return A2(
-		_elm_lang$html$Html$select,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$value(currentRegister),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html_Events$onInput(
-					_user$project$Types$EditParameter(_user$project$Types$Register)),
-				_1: {ctor: '[]'}
-			}
-		},
-		A2(
-			_elm_lang$core$List$map,
-			_user$project$BuildPanel$registerOption,
-			{
-				ctor: '::',
-				_0: 'a',
-				_1: {
-					ctor: '::',
-					_0: 'b',
-					_1: {
-						ctor: '::',
-						_0: 'c',
-						_1: {
-							ctor: '::',
-							_0: 'd',
-							_1: {
-								ctor: '::',
-								_0: 'e',
-								_1: {
-									ctor: '::',
-									_0: 'f',
-									_1: {
-										ctor: '::',
-										_0: 'g',
-										_1: {ctor: '[]'}
-									}
-								}
-							}
-						}
-					}
-				}
-			}));
-};
 var _user$project$BuildPanel$sumbitDisabled = function (parameters) {
 	return A2(
 		_elm_lang$core$List$all,
@@ -19972,164 +19950,274 @@ var _user$project$BuildPanel$buildPanelStyling = {
 		_1: {ctor: '[]'}
 	}
 };
-var _user$project$BuildPanel$styles = function (_p0) {
-	return _elm_lang$html$Html_Attributes$style(
-		_rtfeldman$elm_css$Css$asPairs(_p0));
-};
-var _user$project$BuildPanel$_p1 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace(_user$project$BuilderCss$cssNamespace);
-var _user$project$BuildPanel$class = _user$project$BuildPanel$_p1.$class;
-var _user$project$BuildPanel$classList = _user$project$BuildPanel$_p1.classList;
-var _user$project$BuildPanel$id = _user$project$BuildPanel$_p1.id;
-var _user$project$BuildPanel$parameterInput = function (_p2) {
-	var _p3 = _p2;
-	var _p4 = _p3._0;
+var _user$project$BuildPanel$simpleOption = function (optionValue) {
 	return A2(
-		_elm_lang$html$Html$div,
+		_elm_lang$html$Html$option,
 		{
 			ctor: '::',
-			_0: _user$project$BuildPanel$class(
-				{
-					ctor: '::',
-					_0: _user$project$BuilderCss$ParameterInputCss,
-					_1: {ctor: '[]'}
-				}),
+			_0: _elm_lang$html$Html_Attributes$value(optionValue),
 			_1: {ctor: '[]'}
 		},
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html$text(_p4),
-			_1: {
+			_0: _elm_lang$html$Html$text(optionValue),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$BuildPanel$registerSelection = F2(
+	function (sectionID, currentRegister) {
+		return A2(
+			_elm_lang$html$Html$select,
+			{
 				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$br,
-					{ctor: '[]'},
-					{ctor: '[]'}),
+				_0: _elm_lang$html$Html_Attributes$value(currentRegister),
 				_1: {
 					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$input,
-						{
+					_0: _elm_lang$html$Html_Events$onInput(
+						A2(_user$project$Types$EditParameter, sectionID, _user$project$Types$Register)),
+					_1: {ctor: '[]'}
+				}
+			},
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$BuildPanel$simpleOption,
+				{
+					ctor: '::',
+					_0: 'a',
+					_1: {
+						ctor: '::',
+						_0: 'b',
+						_1: {
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$type_('text'),
+							_0: 'c',
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$name(_p4),
+								_0: 'd',
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$placeholder(_p4),
+									_0: 'e',
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onInput(
-											_user$project$Types$EditParameter(_p3._1)),
+										_0: 'f',
 										_1: {
 											ctor: '::',
-											_0: _user$project$BuildPanel$styles(_user$project$BuildPanel$inputStyling),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$value(_p3._2),
-												_1: {ctor: '[]'}
-											}
+											_0: 'g',
+											_1: {ctor: '[]'}
 										}
 									}
 								}
 							}
-						},
-						{ctor: '[]'}),
-					_1: {ctor: '[]'}
-				}
-			}
-		});
-};
-var _user$project$BuildPanel$sequenceInput = function (_p5) {
-	var _p6 = _p5;
-	var _p7 = _p6._0;
+						}
+					}
+				}));
+	});
+var _user$project$BuildPanel$selectBuildMode = function (currentBuildMode) {
+	var buildModeValue = function () {
+		var _p0 = currentBuildMode;
+		if (_p0.ctor === 'Basic') {
+			return 'Basic';
+		} else {
+			return 'Advanced';
+		}
+	}();
 	return A2(
-		_elm_lang$html$Html$div,
+		_elm_lang$html$Html$select,
 		{
 			ctor: '::',
-			_0: _user$project$BuildPanel$class(
-				{
-					ctor: '::',
-					_0: _user$project$BuilderCss$ParameterInputCss,
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(_p7),
+			_0: _elm_lang$html$Html_Attributes$value(buildModeValue),
 			_1: {
 				ctor: '::',
-				_0: _elm_lang$html$Html$text(' (Register: '),
+				_0: _elm_lang$html$Html_Events$onInput(_user$project$Types$ChangeBuildMode),
+				_1: {ctor: '[]'}
+			}
+		},
+		A2(
+			_elm_lang$core$List$map,
+			_user$project$BuildPanel$simpleOption,
+			{
+				ctor: '::',
+				_0: 'Basic',
 				_1: {
 					ctor: '::',
-					_0: _user$project$BuildPanel$registerSelection(_p6._3),
+					_0: 'Advanced',
+					_1: {ctor: '[]'}
+				}
+			}));
+};
+var _user$project$BuildPanel$styles = function (_p1) {
+	return _elm_lang$html$Html_Attributes$style(
+		_rtfeldman$elm_css$Css$asPairs(_p1));
+};
+var _user$project$BuildPanel$_p2 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace(_user$project$BuilderCss$cssNamespace);
+var _user$project$BuildPanel$class = _user$project$BuildPanel$_p2.$class;
+var _user$project$BuildPanel$classList = _user$project$BuildPanel$_p2.classList;
+var _user$project$BuildPanel$id = _user$project$BuildPanel$_p2.id;
+var _user$project$BuildPanel$parameterInput = F2(
+	function (sectionID, _p3) {
+		var _p4 = _p3;
+		var _p5 = _p4._0;
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _user$project$BuildPanel$class(
+					{
+						ctor: '::',
+						_0: _user$project$BuilderCss$ParameterInputCss,
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(_p5),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$br,
+						{ctor: '[]'},
+						{ctor: '[]'}),
 					_1: {
 						ctor: '::',
-						_0: _elm_lang$html$Html$text(')'),
+						_0: A2(
+							_elm_lang$html$Html$input,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$type_('text'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$name(_p5),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$placeholder(_p5),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onInput(
+												A2(_user$project$Types$EditParameter, sectionID, _p4._1)),
+											_1: {
+												ctor: '::',
+												_0: _user$project$BuildPanel$styles(_user$project$BuildPanel$inputStyling),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$value(_p4._2),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
+					}
+				}
+			});
+	});
+var _user$project$BuildPanel$sequenceInput = F2(
+	function (sectionID, _p6) {
+		var _p7 = _p6;
+		var _p8 = _p7._0;
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _user$project$BuildPanel$class(
+					{
+						ctor: '::',
+						_0: _user$project$BuilderCss$ParameterInputCss,
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(_p8),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(' (Register: '),
+					_1: {
+						ctor: '::',
+						_0: A2(_user$project$BuildPanel$registerSelection, sectionID, _p7._3),
 						_1: {
 							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$br,
-								{ctor: '[]'},
-								{ctor: '[]'}),
+							_0: _elm_lang$html$Html$text(')'),
 							_1: {
 								ctor: '::',
 								_0: A2(
-									_elm_lang$html$Html$textarea,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$name(_p7),
-										_1: {
+									_elm_lang$html$Html$br,
+									{ctor: '[]'},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$textarea,
+										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$rows(3),
+											_0: _elm_lang$html$Html_Attributes$name(_p8),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$cols(30),
+												_0: _elm_lang$html$Html_Attributes$rows(3),
 												_1: {
 													ctor: '::',
-													_0: _user$project$BuildPanel$styles(_user$project$BuildPanel$inputStyling),
+													_0: _elm_lang$html$Html_Attributes$cols(30),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$placeholder(_p7),
+														_0: _user$project$BuildPanel$styles(_user$project$BuildPanel$inputStyling),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html_Events$onInput(
-																_user$project$Types$EditParameter(_p6._1)),
+															_0: _elm_lang$html$Html_Attributes$placeholder(_p8),
 															_1: {
 																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$value(_p6._2),
-																_1: {ctor: '[]'}
+																_0: _elm_lang$html$Html_Events$onInput(
+																	A2(_user$project$Types$EditParameter, sectionID, _p7._1)),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$value(_p7._2),
+																	_1: {ctor: '[]'}
+																}
 															}
 														}
 													}
 												}
 											}
-										}
-									},
-									{ctor: '[]'}),
-								_1: {ctor: '[]'}
+										},
+										{ctor: '[]'}),
+									_1: {ctor: '[]'}
+								}
 							}
 						}
 					}
 				}
-			}
-		});
-};
-var _user$project$BuildPanel$chainInputSection = function (currentInput) {
+			});
+	});
+var _user$project$BuildPanel$chainInputSection = function (_p9) {
+	var _p10 = _p9;
+	var _p12 = _p10._0;
+	var _p11 = _p10._1;
 	return A2(
 		_elm_lang$html$Html$div,
-		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _user$project$BuildPanel$class(
+				{
+					ctor: '::',
+					_0: _user$project$BuilderCss$FlexItemCss,
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		},
 		A2(
 			_elm_lang$core$Basics_ops['++'],
 			A2(
 				_elm_lang$core$List$map,
-				_user$project$BuildPanel$parameterInput,
-				_user$project$BuildPanel$allParameters(currentInput)),
+				_user$project$BuildPanel$parameterInput(_p12),
+				_user$project$BuildPanel$allParameters(_p11)),
 			{
 				ctor: '::',
-				_0: _user$project$BuildPanel$sequenceInput(
-					{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: currentInput.sequence, _3: currentInput.register}),
+				_0: A2(
+					_user$project$BuildPanel$sequenceInput,
+					_p12,
+					{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: _p11.sequence, _3: _p11.register}),
 				_1: {ctor: '[]'}
 			}));
 };
@@ -20137,9 +20225,9 @@ var _user$project$BuildPanel$createParametersSections = function (currentInputDi
 	return A2(
 		_elm_lang$core$List$map,
 		_user$project$BuildPanel$chainInputSection,
-		_elm_lang$core$Dict$values(currentInputDict));
+		_elm_lang$core$Dict$toList(currentInputDict));
 };
-var _user$project$BuildPanel$parameterInputForm = F2(
+var _user$project$BuildPanel$basicParameterInputForm = F2(
 	function (parametersDict, currentInputDict) {
 		return A2(
 			_elm_lang$html$Html$div,
@@ -20168,8 +20256,73 @@ var _user$project$BuildPanel$parameterInputForm = F2(
 					}
 				}));
 	});
-var _user$project$BuildPanel$buildPanel = F2(
+var _user$project$BuildPanel$advancedParameterInputForm = F2(
 	function (parametersDict, currentInputDict) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$button,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$AddChain),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Add Chain'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _user$project$BuildPanel$class(
+								{
+									ctor: '::',
+									_0: _user$project$BuilderCss$FlexContainerCss,
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						},
+						_user$project$BuildPanel$createParametersSections(currentInputDict)),
+					_1: {
+						ctor: '::',
+						_0: _user$project$BuildPanel$parameterSubmit(parametersDict),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$button,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$Clear),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Clear'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			});
+	});
+var _user$project$BuildPanel$buildPanel = F3(
+	function (buildMode, parametersDict, currentInputDict) {
+		var panelView = function () {
+			var _p13 = buildMode;
+			if (_p13.ctor === 'Basic') {
+				return _user$project$BuildPanel$basicParameterInputForm;
+			} else {
+				return _user$project$BuildPanel$advancedParameterInputForm;
+			}
+		}();
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -20208,21 +20361,10 @@ var _user$project$BuildPanel$buildPanel = F2(
 					}),
 				_1: {
 					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$button,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$AddChain),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('Add Chain'),
-							_1: {ctor: '[]'}
-						}),
+					_0: _user$project$BuildPanel$selectBuildMode(buildMode),
 					_1: {
 						ctor: '::',
-						_0: A2(_user$project$BuildPanel$parameterInputForm, parametersDict, currentInputDict),
+						_0: A2(panelView, parametersDict, currentInputDict),
 						_1: {ctor: '[]'}
 					}
 				}
@@ -21632,7 +21774,7 @@ var _user$project$Builder$overlayPanels = function (model) {
 		_0: {
 			ctor: '_Tuple2',
 			_0: model.panelVisibility.buildPanel,
-			_1: A2(_user$project$BuildPanel$buildPanel, model.parameters, model.currentInput)
+			_1: A3(_user$project$BuildPanel$buildPanel, model.buildMode, model.parameters, model.currentInput)
 		},
 		_1: {
 			ctor: '::',
@@ -21721,9 +21863,10 @@ var _user$project$Builder$update = F2(
 		var _p4 = msg;
 		switch (_p4.ctor) {
 			case 'EditParameter':
-				var input = A2(_user$project$Builder$inputRecordWithDefault, 1, model.currentInput);
-				var params = A2(_user$project$Builder$parameterRecordWithDefault, 1, model.parameters);
-				var _p5 = A4(_user$project$ParameterValidation$editParameterValue, params, input, _p4._0, _p4._1);
+				var _p6 = _p4._0;
+				var input = A2(_user$project$Builder$inputRecordWithDefault, _p6, model.currentInput);
+				var params = A2(_user$project$Builder$parameterRecordWithDefault, _p6, model.parameters);
+				var _p5 = A4(_user$project$ParameterValidation$editParameterValue, params, input, _p4._1, _p4._2);
 				var p = _p5._0;
 				var i = _p5._1;
 				return A2(
@@ -21731,9 +21874,27 @@ var _user$project$Builder$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parameters: A3(_elm_lang$core$Dict$insert, 1, p, model.parameters),
-							currentInput: A3(_elm_lang$core$Dict$insert, 1, i, model.currentInput)
+							parameters: A3(_elm_lang$core$Dict$insert, _p6, p, model.parameters),
+							currentInput: A3(_elm_lang$core$Dict$insert, _p6, i, model.currentInput)
 						}),
+					{ctor: '[]'});
+			case 'ChangeBuildMode':
+				var newBuildMode = function () {
+					var _p7 = _p4._0;
+					switch (_p7) {
+						case 'Basic':
+							return _user$project$Types$Basic;
+						case 'Advanced':
+							return _user$project$Types$Advanced;
+						default:
+							return model.buildMode;
+					}
+				}();
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{buildMode: newBuildMode}),
 					{ctor: '[]'});
 			case 'Build':
 				return {
@@ -21746,7 +21907,7 @@ var _user$project$Builder$update = F2(
 				};
 			case 'ProcessModel':
 				if (_p4._0.ctor === 'Ok') {
-					var _p6 = _p4._0._0.pdbFile;
+					var _p8 = _p4._0._0.pdbFile;
 					var oldHistory = _elm_lang$core$Native_Utils.eq(
 						_elm_lang$core$List$length(model.modelHistory),
 						10) ? A2(_elm_lang$core$List$take, 9, model.modelHistory) : model.modelHistory;
@@ -21755,7 +21916,7 @@ var _user$project$Builder$update = F2(
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								pdbFile: _elm_lang$core$Maybe$Just(_p6),
+								pdbFile: _elm_lang$core$Maybe$Just(_p8),
 								score: _elm_lang$core$Maybe$Just(_p4._0._0.score),
 								residuesPerTurn: _elm_lang$core$Maybe$Just(_p4._0._0.residuesPerTurn),
 								building: false,
@@ -21767,7 +21928,7 @@ var _user$project$Builder$update = F2(
 							}),
 						{
 							ctor: '::',
-							_0: _user$project$Builder$showStructure(_p6),
+							_0: _user$project$Builder$showStructure(_p8),
 							_1: {ctor: '[]'}
 						});
 				} else {
@@ -21811,8 +21972,8 @@ var _user$project$Builder$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'SetParametersAndBuild':
-				var _p7 = _p4._0;
-				return _user$project$ParameterValidation$containsInvalidParameter(_p7) ? A2(
+				var _p9 = _p4._0;
+				return _user$project$ParameterValidation$containsInvalidParameter(_p9) ? A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
 					{ctor: '[]'}) : A2(
@@ -21820,11 +21981,11 @@ var _user$project$Builder$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parameters: A3(_elm_lang$core$Dict$insert, 1, _p7, model.parameters),
+							parameters: A3(_elm_lang$core$Dict$insert, 1, _p9, model.parameters),
 							currentInput: A3(
 								_elm_lang$core$Dict$insert,
 								1,
-								_user$project$Builder$parametersToInput(_p7),
+								_user$project$Builder$parametersToInput(_p9),
 								model.currentInput)
 						}),
 					{
@@ -21836,8 +21997,8 @@ var _user$project$Builder$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'KeyMsg':
-				var _p8 = _p4._0;
-				if (_p8 === 13) {
+				var _p10 = _p4._0;
+				if (_p10 === 13) {
 					return _user$project$ParameterValidation$containsInvalidParameter(
 						A2(_user$project$Builder$parameterRecordWithDefault, 1, model.parameters)) ? A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
@@ -21870,10 +22031,27 @@ var _user$project$Builder$update = F2(
 					{ctor: '[]'});
 		}
 	});
-var _user$project$Builder$Model = F9(
-	function (a, b, c, d, e, f, g, h, i) {
-		return {parameters: a, currentInput: b, nextSectionID: c, pdbFile: d, score: e, residuesPerTurn: f, building: g, modelHistory: h, panelVisibility: i};
-	});
+var _user$project$Builder$Model = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return {parameters: a, currentInput: b, nextSectionID: c, buildMode: d, pdbFile: e, score: f, residuesPerTurn: g, building: h, modelHistory: i, panelVisibility: j};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
 var _user$project$Builder$PanelVisibility = F3(
 	function (a, b, c) {
 		return {buildPanel: a, examplesPanel: b, buildHistoryPanel: c};
@@ -21893,6 +22071,7 @@ var _user$project$Builder$emptyModel = {
 			_1: {ctor: '[]'}
 		}),
 	nextSectionID: 2,
+	buildMode: _user$project$Types$Basic,
 	pdbFile: _elm_lang$core$Maybe$Nothing,
 	score: _elm_lang$core$Maybe$Nothing,
 	residuesPerTurn: _elm_lang$core$Maybe$Nothing,
@@ -21912,7 +22091,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"Register":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"AddChain":[],"TogglePanel":["Types.Panel"],"Build":[],"Clear":[],"DownloadPdb":[],"EditParameter":["Types.Parameter","String"],"SetParametersAndBuild":["Types.ParameterRecord"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ pdbFile : String, score : Float, residuesPerTurn : Float }"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ oligomerState : Maybe.Maybe Int , radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"Register":[],"OligomerState":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"AddChain":[],"TogglePanel":["Types.Panel"],"ChangeBuildMode":["String"],"Build":[],"Clear":[],"DownloadPdb":[],"EditParameter":["Types.SectionID","Types.Parameter","String"],"SetParametersAndBuild":["Types.ParameterRecord"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ pdbFile : String, score : Float, residuesPerTurn : Float }"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ oligomerState : Maybe.Maybe Int , radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

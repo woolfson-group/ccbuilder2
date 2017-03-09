@@ -50,6 +50,15 @@ table {
     resize: none;
 }
 
+.builderFlexContainerCss {
+    display: flex;
+    flex-direction: row;
+}
+
+.builderFlexContainerCss > .builderFlexItemCss {
+    flex: auto;
+}
+
 #AppHeaderPanel {
     font-family: Source Code Pro, monospace;
     color: #e6e8e6;
