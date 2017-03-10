@@ -16,13 +16,13 @@ registerAdjust = {
 }
 
 
-def build_coiled_coil(parameter_dict):
+def build_coiled_coil(parameters):
     """Builds a model of a coiled coil using the input parameters.
     
     Parameters
     ----------
-    parameter_dict : dict[str, int/float/str]
-        Contains parameters required for building a coiled coil i.e.
+    parameter : [ dict[str, int/float/str] ]
+        List of parameter dictionaries required for building a coiled coil i.e.
         oligomer state, radius, pitch, phiCA, sequence.
     
     Returns
@@ -31,15 +31,15 @@ def build_coiled_coil(parameter_dict):
         A dictionary containing information about the model that has
         been produced.
     """
-    phica = parameter_dict['Interface Angle'] + registerAdjust[parameter_dict['Register']]
-    coiled_coil = isambard.specifications.CoiledCoil.from_parameters(
-        parameter_dict['Oligomer State'],
-        len(parameter_dict['Sequence']),
-        parameter_dict['Radius'],
-        parameter_dict['Pitch'],
-        phica
-        )
-    coiled_coil.pack_new_sequences([parameter_dict['Sequence']] * parameter_dict['Oligomer State'])
+    coiled_coil = isambard.specifications.CoiledCoil(len(parameters), auto_build=False)
+    coiled_coil.major_radii = [p['Radius'] for p in parameters]
+    coiled_coil.major_pitches = [p['Pitch'] for p in parameters]
+    raw_phi = [p['Interface Angle'] for p in parameters]
+    registers = [p['Register'] for p in parameters]
+    coiled_coil.phi_c_alphas = [ia + registerAdjust[r] for ia, r in zip(raw_phi, registers)]
+    sequences = [p['Sequence'] for p in parameters]
+    coiled_coil.build()
+    coiled_coil.pack_new_sequences(sequences)
     ave_rpt = calculate_average_rpt(coiled_coil)
     model_data = {
         'pdb': coiled_coil.pdb,

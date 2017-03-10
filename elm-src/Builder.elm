@@ -182,7 +182,7 @@ update msg model =
 
         Build ->
             ( { model | building = True }
-            , sendBuildCmd (parameterRecordWithDefault 1 model.parameters)
+            , sendBuildCmd model.parameters
             )
 
         ProcessModel (Ok { pdbFile, score, residuesPerTurn }) ->
@@ -298,12 +298,15 @@ msgToCommand msg =
     Task.perform identity (Task.succeed msg)
 
 
-sendBuildCmd : ParameterRecord -> Cmd Msg
+sendBuildCmd : ParametersDict -> Cmd Msg
 sendBuildCmd parameters =
     Http.send ProcessModel <|
         Http.post
             "/builder/api/build/coiled-coil"
-            (Http.jsonBody <| parametersJson parameters)
+            (Dict.values parameters
+                |> List.map parameterRecordJson
+                |> Json.Encode.list
+                |> Http.jsonBody)
             modellingResultsDecoder
 
 
@@ -316,8 +319,8 @@ modellingResultsDecoder =
         (field "mean_rpt_value" float)
 
 
-parametersJson : ParameterRecord -> Json.Encode.Value
-parametersJson parameters =
+parameterRecordJson : ParameterRecord -> Json.Encode.Value
+parameterRecordJson parameters =
     Json.Encode.object
         [ ( "Radius", parameters.radius |> Maybe.withDefault 0 |> Json.Encode.float )
         , ( "Pitch", parameters.pitch |> Maybe.withDefault 0 |> Json.Encode.float )

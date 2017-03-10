@@ -32,16 +32,18 @@ def builder():
 @app.route('/builder/api/build/coiled-coil', methods=['POST'])
 def build_coiled_coil_model():
     """Processes commands passed to the builder module."""
-    (parameters_id, save_model) = store_parameters(request.json)
-    model = model_store.find_one(request.json)
+    print(request.json, file=sys.stderr)
+    #(parameters_id, save_model) = store_parameters(request.json)
+    model = None#model_store.find_one(request.json)
     if model is None:
         build_start_time = datetime.datetime.now()
         pdb_and_score = build_coiled_coil(request.json)
+        print(pdb_and_score['score'], file=sys.stderr)
         build_start_end = datetime.datetime.now()
         build_time = build_start_end - build_start_time
-        log_build_info(request, build_time, parameters_id)
-        if save_model:
-            store_model(request.json, pdb_and_score)
+        #log_build_info(request, build_time, parameters_id)
+        #if save_model:
+        #    store_model(request.json, pdb_and_score)
     else:
         pdb_and_score = {
             'pdb': model['pdb'],

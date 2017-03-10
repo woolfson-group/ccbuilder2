@@ -20007,7 +20007,7 @@ var _user$project$BuildPanel$selectOligomericState = function (currentOS) {
 		{
 			ctor: '::',
 			_0: _elm_lang$html$Html_Attributes$value(
-				_elm_lang$core$Basics$toString(4)),
+				_elm_lang$core$Basics$toString(currentOS)),
 			_1: {
 				ctor: '::',
 				_0: _elm_lang$html$Html_Events$onInput(_user$project$Types$SetOligomericState),
@@ -21404,7 +21404,7 @@ var _user$project$Builder$parametersDictToInputDict = function (parameters) {
 			},
 			_elm_lang$core$Dict$toList(parameters)));
 };
-var _user$project$Builder$parametersJson = function (parameters) {
+var _user$project$Builder$parameterRecordJson = function (parameters) {
 	return _elm_lang$core$Json_Encode$object(
 		{
 			ctor: '::',
@@ -21466,7 +21466,11 @@ var _user$project$Builder$sendBuildCmd = function (parameters) {
 			_elm_lang$http$Http$post,
 			'/builder/api/build/coiled-coil',
 			_elm_lang$http$Http$jsonBody(
-				_user$project$Builder$parametersJson(parameters)),
+				_elm_lang$core$Json_Encode$list(
+					A2(
+						_elm_lang$core$List$map,
+						_user$project$Builder$parameterRecordJson,
+						_elm_lang$core$Dict$values(parameters)))),
 			_user$project$Builder$modellingResultsDecoder));
 };
 var _user$project$Builder$msgToCommand = function (msg) {
@@ -22102,8 +22106,7 @@ var _user$project$Builder$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{building: true}),
-					_1: _user$project$Builder$sendBuildCmd(
-						A2(_user$project$Builder$parameterRecordWithDefault, 1, model.parameters))
+					_1: _user$project$Builder$sendBuildCmd(model.parameters)
 				};
 			case 'ProcessModel':
 				if (_p6._0.ctor === 'Ok') {
