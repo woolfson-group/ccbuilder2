@@ -1,20 +1,31 @@
-module ParameterValidation exposing (containsInvalidParameter, editParameterValue)
+module ParameterValidation
+    exposing
+        ( containsInvalidParameter
+        , editParameterValue
+        , invalidParameterDict
+        )
 
+import Dict
 import String
 import Types
     exposing
         ( ParameterRecord
+        , ParametersDict
         , InputValues
         , Parameter(..)
         )
 
 
-containsInvalidParameter : ParameterRecord -> Bool
-containsInvalidParameter { oligomerState, radius, pitch, phiCA, sequence } =
-    let
-        vOS =
-            oligomerState /= Nothing
+invalidParameterDict : ParametersDict -> Bool
+invalidParameterDict parameters =
+    Dict.values parameters
+        |> List.map containsInvalidParameter
+        |> List.any (\b -> b == True)
 
+
+containsInvalidParameter : ParameterRecord -> Bool
+containsInvalidParameter { radius, pitch, phiCA, sequence } =
+    let
         vRadius =
             radius /= Nothing
 
@@ -27,27 +38,12 @@ containsInvalidParameter { oligomerState, radius, pitch, phiCA, sequence } =
         vSeq =
             sequence /= Nothing
     in
-        List.member False [ vOS, vRadius, vPitch, vPhiCA, vSeq ]
+        List.member False [ vRadius, vPitch, vPhiCA, vSeq ]
 
 
 editParameterValue : ParameterRecord -> InputValues -> Parameter -> String -> ( ParameterRecord, InputValues )
 editParameterValue parameters currentInput parameter newValue =
     case parameter of
-        OligomerState ->
-            let
-                postValOS =
-                    String.toInt newValue
-                        |> Result.toMaybe
-                        |> Maybe.andThen validateOligomerState
-
-                newParameters =
-                    { parameters | oligomerState = postValOS }
-
-                newInput =
-                    { currentInput | oligomerState = newValue }
-            in
-                ( newParameters, newInput )
-
         Radius ->
             let
                 postValRadius =
@@ -102,7 +98,7 @@ editParameterValue parameters currentInput parameter newValue =
                     { currentInput | sequence = newValue }
             in
                 ( newParameters, newInput )
-        
+
         Register ->
             let
                 newParameters =
@@ -112,14 +108,6 @@ editParameterValue parameters currentInput parameter newValue =
                     { currentInput | register = newValue }
             in
                 ( newParameters, newInput )
-
-
-validateOligomerState : Int -> Maybe Int
-validateOligomerState os =
-    if (os > 0) && (isNotNaN <| toFloat os) then
-        Just os
-    else
-        Nothing
 
 
 validateRadius : Float -> Maybe Float

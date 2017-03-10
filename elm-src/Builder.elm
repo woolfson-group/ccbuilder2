@@ -13,7 +13,13 @@ import Http
 import Json.Decode exposing (field, string, float, decodeString)
 import Json.Encode
 import Keyboard
-import ParameterValidation exposing (containsInvalidParameter, editParameterValue)
+import ParameterValidation
+    exposing
+        ( containsInvalidParameter
+        , editParameterValue
+        , invalidParameterDict
+        )
+import String
 import Task
 import Types
     exposing
@@ -63,7 +69,7 @@ init =
 type alias Model =
     { parameters : ParametersDict
     , currentInput : InputValuesDict
-    , nextSectionID : SectionID
+    , oligomericState : Int
     , buildMode : BuildMode
     , pdbFile : Maybe String
     , score : Maybe Float
@@ -95,9 +101,9 @@ inputRecordWithDefault iVID inputValues =
 
 emptyModel : Model
 emptyModel =
-    { parameters = Dict.fromList [ ( 1, emptyParameterRecord ) ]
-    , currentInput = Dict.fromList [ ( 1, emptyInput ) ]
-    , nextSectionID = 2
+    { parameters = Dict.fromList [ ( 1, emptyParameterRecord ), ( 2, emptyParameterRecord ) ]
+    , currentInput = Dict.fromList [ ( 1, emptyInput ), ( 2, emptyInput ) ]
+    , oligomericState = 2
     , buildMode = Basic
     , pdbFile = Nothing
     , score = Nothing
@@ -134,7 +140,7 @@ port downloadPdb : ( String, String ) -> Cmd msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        EditParameter sectionID parameter newValue ->
+        EditSingleParameter parameter sectionID newValue ->
             let
                 params =
                     parameterRecordWithDefault sectionID model.parameters
@@ -150,6 +156,14 @@ update msg model =
                     , currentInput = Dict.insert sectionID i model.currentInput
                 }
                     ! []
+
+        EditAllParameters parameter newValue ->
+            model
+                ! (List.range 1 model.oligomericState
+                    |> List.map (EditSingleParameter parameter)
+                    |> List.map2 (\v m -> m v) (List.repeat model.oligomericState newValue)
+                    |> List.map msgToCommand
+                  )
 
         ChangeBuildMode buildMode ->
             let
@@ -193,23 +207,52 @@ update msg model =
         ProcessModel (Err _) ->
             { model | building = False } ! []
 
-        AddChain ->
-            { model
-                | parameters =
-                    Dict.insert model.nextSectionID emptyParameterRecord model.parameters
-                , currentInput =
-                    Dict.insert model.nextSectionID emptyInput model.currentInput
-                , nextSectionID = model.nextSectionID + 1
-            }
-                ! []
+        SetOligomericState n ->
+            let
+                oligomericState =
+                    String.toInt n
+                        |> Result.toMaybe
+                        |> Maybe.withDefault 2
+            in
+                if oligomericState > model.oligomericState then
+                    { model
+                        | parameters =
+                            List.range (model.oligomericState + 1) oligomericState
+                                |> List.map (\k -> ( k, emptyParameterRecord ))
+                                |> List.append (Dict.toList model.parameters)
+                                |> Dict.fromList
+                        , currentInput =
+                            List.range (model.oligomericState + 1) oligomericState
+                                |> List.map (\k -> ( k, emptyInput ))
+                                |> List.append (Dict.toList model.currentInput)
+                                |> Dict.fromList
+                        , oligomericState = oligomericState
+                    }
+                        ! []
+                else
+                    { model
+                        | parameters =
+                            Dict.toList model.parameters
+                                |> List.take oligomericState
+                                |> Dict.fromList
+                        , currentInput =
+                            Dict.toList model.currentInput
+                                |> List.take oligomericState
+                                |> Dict.fromList
+                        , oligomericState = oligomericState
+                    }
+                        ! []
 
         Clear ->
             { model
                 | parameters =
-                    Dict.fromList [ ( 1, emptyParameterRecord ) ]
+                    Dict.keys model.parameters
+                        |> List.map (\k -> ( k, emptyParameterRecord ))
+                        |> Dict.fromList
                 , currentInput =
-                    Dict.fromList [ ( 1, emptyInput ) ]
-                , nextSectionID = 1
+                    Dict.keys model.currentInput
+                        |> List.map (\k -> ( k, emptyInput ))
+                        |> Dict.fromList
             }
                 ! []
 
@@ -220,15 +263,14 @@ update msg model =
             in
                 model ! [ downloadPdb ( "ccbuilder_model.pdb", pdbFile ) ]
 
-        -- FIX THIS!!!
         SetParametersAndBuild parameters ->
-            if containsInvalidParameter parameters then
+            if invalidParameterDict parameters then
                 model ! []
             else
                 { model
-                    | parameters = Dict.insert 1 parameters model.parameters
-                    , currentInput =
-                        Dict.insert 1 (parametersToInput parameters) model.currentInput
+                    | parameters = parameters
+                    , currentInput = parametersDictToInputDict parameters
+                    , oligomericState = Dict.toList parameters |> List.length
                 }
                     ! [ Task.perform identity (Task.succeed Build) ]
 
@@ -241,7 +283,7 @@ update msg model =
                     then
                         model ! []
                     else
-                        model ! [ Task.perform identity (Task.succeed Build) ]
+                        model ! [ msgToCommand Build ]
 
                 _ ->
                     model ! []
@@ -249,6 +291,11 @@ update msg model =
         TogglePanel panel ->
             { model | panelVisibility = togglePanelVisibility panel model.panelVisibility }
                 ! []
+
+
+msgToCommand : Msg -> Cmd Msg
+msgToCommand msg =
+    Task.perform identity (Task.succeed msg)
 
 
 sendBuildCmd : ParameterRecord -> Cmd Msg
@@ -272,8 +319,7 @@ modellingResultsDecoder =
 parametersJson : ParameterRecord -> Json.Encode.Value
 parametersJson parameters =
     Json.Encode.object
-        [ ( "Oligomer State", parameters.oligomerState |> Maybe.withDefault 0 |> Json.Encode.int )
-        , ( "Radius", parameters.radius |> Maybe.withDefault 0 |> Json.Encode.float )
+        [ ( "Radius", parameters.radius |> Maybe.withDefault 0 |> Json.Encode.float )
         , ( "Pitch", parameters.pitch |> Maybe.withDefault 0 |> Json.Encode.float )
         , ( "Interface Angle", parameters.phiCA |> Maybe.withDefault 0 |> Json.Encode.float )
         , ( "Sequence", parameters.sequence |> Maybe.withDefault "" |> Json.Encode.string )
@@ -281,28 +327,33 @@ parametersJson parameters =
         ]
 
 
-parametersToInput : ParameterRecord -> InputValues
-parametersToInput parameters =
-    let
-        os =
-            maybeNumberToString parameters.oligomerState
+parametersDictToInputDict : ParametersDict -> InputValuesDict
+parametersDictToInputDict parameters =
+    Dict.toList parameters
+    |> List.map (\(k, v) -> (k, parametersToInput v))
+    |> Dict.fromList
 
+
+
+parametersToInput : ParameterRecord -> InputValues
+parametersToInput parameterRecord =
+    let
         rad =
-            maybeNumberToString parameters.radius
+            maybeNumberToString parameterRecord.radius
 
         pit =
-            maybeNumberToString parameters.pitch
+            maybeNumberToString parameterRecord.pitch
 
         phi =
-            maybeNumberToString parameters.phiCA
+            maybeNumberToString parameterRecord.phiCA
 
         seq =
-            Maybe.withDefault "" parameters.sequence
+            Maybe.withDefault "" parameterRecord.sequence
 
         reg =
-            parameters.register
+            parameterRecord.register
     in
-        InputValues os rad pit phi seq reg
+        InputValues rad pit phi seq reg
 
 
 maybeNumberToString : Maybe number -> String
@@ -519,7 +570,7 @@ buildHistoryPanel modelHistory =
         [ h3 [] [ text "Build History" ]
         , table []
             [ modelDetailTableHeader
-            , List.map modelParametersAsRow modelHistory |> tbody []
+            --, List.map modelParametersAsRow modelHistory |> tbody []
             ]
         ]
 
@@ -537,7 +588,7 @@ modelDetailTableHeader =
             ]
         ]
 
-
+{--
 modelParametersAsRow : ParameterRecord -> Html Msg
 modelParametersAsRow parameters =
     let
@@ -552,7 +603,7 @@ modelParametersAsRow parameters =
             , inputParameters.sequence |> makeParameterTh
             , inputParameters.register |> makeParameterTh
             ]
-
+--}
 
 makeParameterTh : String -> Html Msg
 makeParameterTh pString =

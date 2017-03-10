@@ -2,6 +2,7 @@ module ExamplesPanel exposing (examplesPanel, toggleExamplesPanel)
 
 import BuilderCss exposing (CssClasses(..), cssNamespace, panelStyling)
 import Css
+import Dict
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -12,6 +13,7 @@ import Types
     exposing
         ( Msg(..)
         , ParameterRecord
+        , ParametersDict
         , InputValues
         , Parameter(..)
         , Panel(..)
@@ -200,92 +202,97 @@ buttonStyling =
     ]
 
 
-basisSetDimer : ParameterRecord
+basisSetDimer : ParametersDict
 basisSetDimer =
-    { oligomerState = Just 2
-    , radius = Just 5.1
-    , pitch = Just 226
-    , phiCA = Just 24
-    , sequence = Just "EIAALKQEIAALKKENAALKWEIAALKQ"
-    , register = "g"
-    }
+    makeHomoOligomerExample 2
+        { radius = Just 5.1
+        , pitch = Just 226
+        , phiCA = Just 24
+        , sequence = Just "EIAALKQEIAALKKENAALKWEIAALKQ"
+        , register = "g"
+        }
 
 
-basisSetTrimer : ParameterRecord
+basisSetTrimer : ParametersDict
 basisSetTrimer =
-    { oligomerState = Just 3
-    , radius = Just 6.3
-    , pitch = Just 194
-    , phiCA = Just 20.0
-    , sequence = Just "EIAAIKQEIAAIKKEIAAIKWEIAAIKQ"
-    , register = "g"
-    }
+    makeHomoOligomerExample 3
+        { radius = Just 6.3
+        , pitch = Just 194
+        , phiCA = Just 20.0
+        , sequence = Just "EIAAIKQEIAAIKKEIAAIKWEIAAIKQ"
+        , register = "g"
+        }
 
 
-basisSetTetramer : ParameterRecord
+basisSetTetramer : ParametersDict
 basisSetTetramer =
-    { oligomerState = Just 4
-    , radius = Just 6.8
-    , pitch = Just 213
-    , phiCA = Just 22.1
-    , sequence = Just "ELAAIKQELAAIKKELAAIKWELAAIKQ"
-    , register = "g"
-    }
+    makeHomoOligomerExample 4
+        { radius = Just 6.8
+        , pitch = Just 213
+        , phiCA = Just 22.1
+        , sequence = Just "ELAAIKQELAAIKKELAAIKWELAAIKQ"
+        , register = "g"
+        }
 
 
-largermerCCPent : ParameterRecord
+largermerCCPent : ParametersDict
 largermerCCPent =
-    { oligomerState = Just 5
-    , radius = Just 8.6
-    , pitch = Just 183
-    , phiCA = Just 14.4
-    , sequence = Just "KIEQILQKIEKILQKIEWILQKIEQILQ"
-    , register = "c"
-    }
+    makeHomoOligomerExample 5
+        { radius = Just 8.6
+        , pitch = Just 183
+        , phiCA = Just 14.4
+        , sequence = Just "KIEQILQKIEKILQKIEWILQKIEQILQ"
+        , register = "c"
+        }
 
 
-largermerCCHex : ParameterRecord
+largermerCCHex : ParametersDict
 largermerCCHex =
-    { oligomerState = Just 6
-    , radius = Just 9.1
-    , pitch = Just 228
-    , phiCA = Just 16.4
-    , sequence = Just "ELKAIAQELKAIAKELKAIAWELKAIAQ"
-    , register = "g"
-    }
+    makeHomoOligomerExample 6
+        { radius = Just 9.1
+        , pitch = Just 228
+        , phiCA = Just 16.4
+        , sequence = Just "ELKAIAQELKAIAKELKAIAWELKAIAQ"
+        , register = "g"
+        }
 
 
-largermerCCHex2 : ParameterRecord
+largermerCCHex2 : ParametersDict
 largermerCCHex2 =
-    { oligomerState = Just 6
-    , radius = Just 9.5
-    , pitch = Just 162
-    , phiCA = Just 18.2
-    , sequence = Just "EIAKSLKEIAKSLKEIAWSLKEIAKSLK"
-    , register = "c"
-    }
+    makeHomoOligomerExample 6
+        { radius = Just 9.5
+        , pitch = Just 162
+        , phiCA = Just 18.2
+        , sequence = Just "EIAKSLKEIAKSLKEIAWSLKEIAKSLK"
+        , register = "c"
+        }
 
 
-largermerCCHex3 : ParameterRecord
+largermerCCHex3 : ParametersDict
 largermerCCHex3 =
-    { oligomerState = Just 6
-    , radius = Just 9.7
-    , pitch = Just 132
-    , phiCA = Just 13.1
-    , sequence = Just "EIAQSIKEIAKSIKEIAWSIKEIAQSIK"
-    , register = "c"
-    }
+    makeHomoOligomerExample 6
+        { radius = Just 9.7
+        , pitch = Just 132
+        , phiCA = Just 13.1
+        , sequence = Just "EIAQSIKEIAKSIKEIAWSIKEIAQSIK"
+        , register = "c"
+        }
 
 
-largermerCCHept : ParameterRecord
+largermerCCHept : ParametersDict
 largermerCCHept =
-    { oligomerState = Just 7
-    , radius = Just 9.8
-    , pitch = Just 329
-    , phiCA = Just 15.1
-    , sequence = Just "EIAQALKEIAKALKEIAWALKEIAQALK"
-    , register = "c"
-    }
+    makeHomoOligomerExample 7
+        { radius = Just 9.8
+        , pitch = Just 329
+        , phiCA = Just 15.1
+        , sequence = Just "EIAQALKEIAKALKEIAWALKEIAQALK"
+        , register = "c"
+        }
+
+makeHomoOligomerExample : Int -> ParameterRecord -> ParametersDict
+makeHomoOligomerExample oligomericState parameters =
+    List.map2 (,) (List.range 1 oligomericState) (List.repeat oligomericState parameters)
+    |> Dict.fromList
 
 
 toggleExamplesPanel : Html Msg

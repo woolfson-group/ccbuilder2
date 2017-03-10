@@ -6,14 +6,15 @@ import Http
 
 
 type Msg
-    = EditParameter SectionID Parameter String
+    = EditSingleParameter Parameter SectionID String
+    | EditAllParameters Parameter String
     | ChangeBuildMode String
     | Build
     | ProcessModel (Result Http.Error ModellingResults)
-    | AddChain
+    | SetOligomericState String
     | Clear
     | DownloadPdb
-    | SetParametersAndBuild ParameterRecord
+    | SetParametersAndBuild ParametersDict
     | KeyMsg Keyboard.KeyCode
     | TogglePanel Panel
 
@@ -25,8 +26,7 @@ type alias ParametersDict = Dict.Dict SectionID ParameterRecord
 
 
 type alias ParameterRecord =
-    { oligomerState : Maybe Int
-    , radius : Maybe Float
+    { radius : Maybe Float
     , pitch : Maybe Float
     , phiCA : Maybe Float
     , sequence : Maybe String
@@ -38,8 +38,7 @@ type alias InputValuesDict = Dict.Dict SectionID InputValues
 
 
 type alias InputValues =
-    { oligomerState : String
-    , radius : String
+    { radius : String
     , pitch : String
     , phiCA : String
     , sequence : String
@@ -55,8 +54,7 @@ type alias ModellingResults =
 
 
 type Parameter
-    = OligomerState
-    | Radius
+    = Radius
     | Pitch
     | PhiCA
     | Sequence
@@ -78,9 +76,9 @@ type Panel
 
 emptyParameterRecord : ParameterRecord
 emptyParameterRecord =
-    ParameterRecord Nothing Nothing Nothing Nothing Nothing "a"
+    ParameterRecord Nothing Nothing Nothing Nothing "a"
 
 
 emptyInput : InputValues
 emptyInput =
-    InputValues "" "" "" "" "" "a"
+    InputValues "" "" "" "" "a"
