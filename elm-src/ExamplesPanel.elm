@@ -1,4 +1,4 @@
-module ExamplesPanel exposing (examplesPanel, toggleExamplesPanel)
+module ExamplesPanel exposing (examplesPanel, toggleExamplesPanel, basisSetDimer)
 
 import BuilderCss exposing (CssClasses(..), cssNamespace, panelStyling)
 import Css
@@ -36,9 +36,10 @@ examplesPanel =
         , id [ ExamplesPanel ]
         , styles <| panelStyling ++ examplesPanelStyling
         ]
-        [ h3 [] [ text "Examples" ]
+        [ h2 [] [ text "Examples" ]
         , div []
-            [ text "Basis Set"
+            [ h3 [] [ text "Basis Set" ]
+            , text "CC Di"
             , br [] []
             , button
                 [ onClick <| SetParametersAndBuild basisSetDimer
@@ -46,11 +47,15 @@ examplesPanel =
                 ]
                 [ ccIcon 2 60 ]
             , br [] []
+            , text "CC Tri"
+            , br [] []
             , button
                 [ onClick <| SetParametersAndBuild basisSetTrimer
                 , styles buttonStyling
                 ]
                 [ ccIcon 3 60 ]
+            , br [] []
+            , text "CC Tet"
             , br [] []
             , button
                 [ onClick <| SetParametersAndBuild basisSetTetramer
@@ -59,7 +64,8 @@ examplesPanel =
                 [ ccIcon 4 60 ]
             ]
         , div []
-            [ text "α-Helical Barrels"
+            [ h3 [] [ text "α-Helical Barrels" ]
+            , text "CC Pent"
             , br [] []
             , button
                 [ onClick <| SetParametersAndBuild largermerCCPent
@@ -67,11 +73,15 @@ examplesPanel =
                 ]
                 [ ccIcon 5 60 ]
             , br [] []
+            , text "CC Hex"
+            , br [] []
             , button
                 [ onClick <| SetParametersAndBuild largermerCCHex
                 , styles buttonStyling
                 ]
                 [ ccIcon 6 60 ]
+            , br [] []
+            , text "CC Hex2"
             , br [] []
             , button
                 [ onClick <| SetParametersAndBuild largermerCCHex2
@@ -79,12 +89,16 @@ examplesPanel =
                 ]
                 [ ccIcon 6 60 ]
             , br [] []
+            , text "CC Hex3"
+            , br [] []
             , button
                 [ onClick <| SetParametersAndBuild largermerCCHex3
                 , styles buttonStyling
                 ]
                 [ ccIcon 6 60 ]
-                , br [] []
+            , br [] []
+            , text "CC Hept"
+            , br [] []
             , button
                 [ onClick <| SetParametersAndBuild largermerCCHept
                 , styles buttonStyling
@@ -191,7 +205,7 @@ drawLine ((x1, y1), (x2, y2)) =
 examplesPanelStyling : List Css.Mixin
 examplesPanelStyling =
     [ Css.top (Css.px 60)
-    , Css.left (Css.px 30)
+    , Css.left (Css.px 35)
     ]
 
 
@@ -298,7 +312,7 @@ makeHomoOligomerExample oligomericState parameters =
 toggleExamplesPanel : Html Msg
 toggleExamplesPanel =
     div
-        [ class [ OverlayPanelCss, PanelToggleCss ]
+        [ class [ OverlayPanelCss, LeftPanelToggleCss  ]
         , onClick (TogglePanel ExamplesPanel)
         ]
         [ text "Examples" ]

@@ -60,7 +60,9 @@ main =
 
 init : ( Model, Cmd Msg )
 init =
-    ( emptyModel, initialiseViewer () )
+    emptyModel !
+        [ initialiseViewer ()
+        , msgToCommand (SetParametersAndBuild ExamplesPanel.basisSetDimer) ]
 
 
 
@@ -276,15 +278,6 @@ update msg model =
                     | parameters = parameters
                     , currentInput = parametersDictToInputDict parameters
                     , oligomericState = Dict.toList parameters |> List.length
-                    , panelVisibility =
-                        let
-                            currentPanelVisibility =
-                                model.panelVisibility
-                        in
-                            { currentPanelVisibility
-                                | buildPanel = True
-                                , examplesPanel = False
-                            }
                 }
                     ! [ msgToCommand Build ]
 
@@ -508,7 +501,7 @@ topLeftToggles =
 topLeftTogglesStyling : List Css.Mixin
 topLeftTogglesStyling =
     [ Css.top (Css.px 60)
-    , Css.left (Css.px -5)
+    , Css.left (Css.px 0)
     , Css.zIndex (Css.int 2)
     , Css.position Css.absolute
     ]
@@ -524,7 +517,7 @@ topRightToggles =
 topRightTogglesStyling : List Css.Mixin
 topRightTogglesStyling =
     [ Css.top (Css.px 60)
-    , Css.right (Css.px -5)
+    , Css.right (Css.px 0)
     , Css.zIndex (Css.int 2)
     , Css.position Css.absolute
     ]
@@ -692,14 +685,14 @@ makeParameterTh pString =
 buildHistoryPanelStyling : List Css.Mixin
 buildHistoryPanelStyling =
     [ Css.top (Css.px 60)
-    , Css.right (Css.px 30)
+    , Css.right (Css.px 35)
     ]
 
 
 toggleBuildHistoryPanel : Html Msg
 toggleBuildHistoryPanel =
     div
-        [ class [ OverlayPanelCss, PanelToggleCss ]
+        [ class [ OverlayPanelCss, RightPanelToggleCss ]
         , onClick (TogglePanel BuildHistoryPanel)
         ]
         [ text "Build History" ]
