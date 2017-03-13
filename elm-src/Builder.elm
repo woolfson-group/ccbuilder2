@@ -26,6 +26,7 @@ import Types
         ( Msg(..)
         , ParameterRecord
         , SectionID
+        , HistoryID
         , ParametersDict
         , emptyParameterRecord
         , InputValues
@@ -75,7 +76,8 @@ type alias Model =
     , score : Maybe Float
     , residuesPerTurn : Maybe Float
     , building : Bool
-    , modelHistory : List ParameterRecord
+    , modelHistory : Dict.Dict HistoryID ( ParametersDict, Bool )
+    , nextHistoryID : HistoryID
     , panelVisibility : PanelVisibility
     }
 
@@ -109,7 +111,8 @@ emptyModel =
     , score = Nothing
     , residuesPerTurn = Nothing
     , building = False
-    , modelHistory = []
+    , modelHistory = Dict.empty
+    , nextHistoryID = 1
     , panelVisibility = defaultVisibility
     }
 
@@ -188,8 +191,10 @@ update msg model =
         ProcessModel (Ok { pdbFile, score, residuesPerTurn }) ->
             let
                 oldHistory =
-                    if List.length model.modelHistory == 10 then
-                        List.take 9 model.modelHistory
+                    if (Dict.toList model.modelHistory |> List.length) == 10 then
+                        Dict.toList model.modelHistory
+                            |> List.take 9
+                            |> Dict.fromList
                     else
                         model.modelHistory
             in
@@ -199,8 +204,8 @@ update msg model =
                     , residuesPerTurn = Just residuesPerTurn
                     , building = False
                     , modelHistory =
-                        parameterRecordWithDefault 1 model.parameters
-                            :: oldHistory
+                        Dict.insert model.nextHistoryID ( model.parameters, False ) oldHistory
+                    , nextHistoryID = model.nextHistoryID + 1
                 }
                     ! [ showStructure pdbFile ]
 
@@ -271,8 +276,17 @@ update msg model =
                     | parameters = parameters
                     , currentInput = parametersDictToInputDict parameters
                     , oligomericState = Dict.toList parameters |> List.length
+                    , panelVisibility =
+                        let
+                            currentPanelVisibility =
+                                model.panelVisibility
+                        in
+                            { currentPanelVisibility
+                                | buildPanel = True
+                                , examplesPanel = False
+                            }
                 }
-                    ! [ Task.perform identity (Task.succeed Build) ]
+                    ! [ msgToCommand Build ]
 
         KeyMsg keyCode ->
             case keyCode of
@@ -292,6 +306,22 @@ update msg model =
             { model | panelVisibility = togglePanelVisibility panel model.panelVisibility }
                 ! []
 
+        ExpandHistory hID ->
+            let
+                oldEntry =
+                    Dict.get hID model.modelHistory
+            in
+                case oldEntry of
+                    Just ( parametersDict, visible ) ->
+                        { model
+                            | modelHistory =
+                                Dict.insert hID ( parametersDict, not visible ) model.modelHistory
+                        }
+                            ! []
+
+                    Nothing ->
+                        model ! []
+
 
 msgToCommand : Msg -> Cmd Msg
 msgToCommand msg =
@@ -306,7 +336,8 @@ sendBuildCmd parameters =
             (Dict.values parameters
                 |> List.map parameterRecordJson
                 |> Json.Encode.list
-                |> Http.jsonBody)
+                |> Http.jsonBody
+            )
             modellingResultsDecoder
 
 
@@ -333,9 +364,8 @@ parameterRecordJson parameters =
 parametersDictToInputDict : ParametersDict -> InputValuesDict
 parametersDictToInputDict parameters =
     Dict.toList parameters
-    |> List.map (\(k, v) -> (k, parametersToInput v))
-    |> Dict.fromList
-
+        |> List.map (\( k, v ) -> ( k, parametersToInput v ))
+        |> Dict.fromList
 
 
 parametersToInput : ParameterRecord -> InputValues
@@ -563,7 +593,7 @@ downloadStructureButton pdbFile =
 -- Build History
 
 
-buildHistoryPanel : List ParameterRecord -> Html Msg
+buildHistoryPanel : Dict.Dict Int ( ParametersDict, Bool ) -> Html Msg
 buildHistoryPanel modelHistory =
     div
         [ class [ OverlayPanelCss ]
@@ -573,7 +603,9 @@ buildHistoryPanel modelHistory =
         [ h3 [] [ text "Build History" ]
         , table []
             [ modelDetailTableHeader
-            --, List.map modelParametersAsRow modelHistory |> tbody []
+            , List.map modelParametersAsRow (Dict.toList modelHistory |> List.reverse)
+                |> List.concat
+                |> tbody []
             ]
         ]
 
@@ -582,31 +614,73 @@ modelDetailTableHeader : Html msg
 modelDetailTableHeader =
     thead []
         [ tr []
-            [ th [ styles [ Css.width (Css.em 6) ] ] [ text "Oligomer State" ]
+            [ th [] []
             , th [ styles [ Css.width (Css.em 6) ] ] [ text "Radius" ]
             , th [ styles [ Css.width (Css.em 6) ] ] [ text "Pitch" ]
             , th [ styles [ Css.width (Css.em 6) ] ] [ text "Interface Angle" ]
             , th [] [ text "Sequence" ]
             , th [ styles [ Css.width (Css.em 6) ] ] [ text "Register" ]
+            , th [] []
             ]
         ]
 
-{--
-modelParametersAsRow : ParameterRecord -> Html Msg
-modelParametersAsRow parameters =
+
+modelParametersAsRow : ( HistoryID, ( ParametersDict, Bool ) ) -> List (Html Msg)
+modelParametersAsRow ( hID, ( parameters, visible ) ) =
     let
-        inputParameters =
-            parametersToInput parameters
+        parameterRecords =
+            Dict.values parameters
+
+        topRowParameters =
+            List.head parameterRecords
+                |> Maybe.withDefault emptyParameterRecord
+                |> parametersToInput
+
+        foldedRows =
+            List.tail parameterRecords
+                |> Maybe.withDefault []
+                |> List.map parametersToInput
+                |> List.map modelFoldedRow
     in
-        tr [ onClick (SetParametersAndBuild parameters) ]
-            [ inputParameters.oligomerState |> makeParameterTh
-            , inputParameters.radius |> makeParameterTh
-            , inputParameters.pitch |> makeParameterTh
-            , inputParameters.phiCA |> makeParameterTh
-            , inputParameters.sequence |> makeParameterTh
-            , inputParameters.register |> makeParameterTh
+        if not visible then
+            [ modelHistoryTopRow hID parameters topRowParameters visible ]
+        else
+            (modelHistoryTopRow hID parameters topRowParameters visible)
+                :: foldedRows
+
+
+modelHistoryTopRow : HistoryID -> ParametersDict -> InputValues -> Bool -> Html Msg
+modelHistoryTopRow hID parameters inputParameters visible =
+    tr
+        []
+        [ div
+            [ onClick (ExpandHistory hID) ]
+            [ if (not visible) then
+                text "▶"
+              else
+                text "▼"
             ]
---}
+        , inputParameters.radius |> makeParameterTh
+        , inputParameters.pitch |> makeParameterTh
+        , inputParameters.phiCA |> makeParameterTh
+        , inputParameters.sequence |> makeParameterTh
+        , inputParameters.register |> makeParameterTh
+        , button [ onClick (SetParametersAndBuild parameters) ] [ text "Rebuild" ]
+        ]
+
+
+modelFoldedRow : InputValues -> Html Msg
+modelFoldedRow inputParameters =
+    tr
+        []
+        [ text " ┋"
+        , inputParameters.radius |> makeParameterTh
+        , inputParameters.pitch |> makeParameterTh
+        , inputParameters.phiCA |> makeParameterTh
+        , inputParameters.sequence |> makeParameterTh
+        , inputParameters.register |> makeParameterTh
+        ]
+
 
 makeParameterTh : String -> Html Msg
 makeParameterTh pString =

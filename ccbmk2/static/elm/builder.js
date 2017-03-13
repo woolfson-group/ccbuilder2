@@ -19199,6 +19199,9 @@ var _user$project$Types$ModellingResults = F3(
 	function (a, b, c) {
 		return {pdbFile: a, score: b, residuesPerTurn: c};
 	});
+var _user$project$Types$ExpandHistory = function (a) {
+	return {ctor: 'ExpandHistory', _0: a};
+};
 var _user$project$Types$TogglePanel = function (a) {
 	return {ctor: 'TogglePanel', _0: a};
 };
@@ -21217,6 +21220,95 @@ var _user$project$Builder$makeParameterTh = function (pString) {
 		_elm_lang$core$List$singleton(
 			_elm_lang$html$Html$text(pString)));
 };
+var _user$project$Builder$modelFoldedRow = function (inputParameters) {
+	return A2(
+		_elm_lang$html$Html$tr,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(' ┋'),
+			_1: {
+				ctor: '::',
+				_0: _user$project$Builder$makeParameterTh(inputParameters.radius),
+				_1: {
+					ctor: '::',
+					_0: _user$project$Builder$makeParameterTh(inputParameters.pitch),
+					_1: {
+						ctor: '::',
+						_0: _user$project$Builder$makeParameterTh(inputParameters.phiCA),
+						_1: {
+							ctor: '::',
+							_0: _user$project$Builder$makeParameterTh(inputParameters.sequence),
+							_1: {
+								ctor: '::',
+								_0: _user$project$Builder$makeParameterTh(inputParameters.register),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		});
+};
+var _user$project$Builder$modelHistoryTopRow = F4(
+	function (hID, parameters, inputParameters, visible) {
+		return A2(
+			_elm_lang$html$Html$tr,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onClick(
+							_user$project$Types$ExpandHistory(hID)),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: (!visible) ? _elm_lang$html$Html$text('▶') : _elm_lang$html$Html$text('▼'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _user$project$Builder$makeParameterTh(inputParameters.radius),
+					_1: {
+						ctor: '::',
+						_0: _user$project$Builder$makeParameterTh(inputParameters.pitch),
+						_1: {
+							ctor: '::',
+							_0: _user$project$Builder$makeParameterTh(inputParameters.phiCA),
+							_1: {
+								ctor: '::',
+								_0: _user$project$Builder$makeParameterTh(inputParameters.sequence),
+								_1: {
+									ctor: '::',
+									_0: _user$project$Builder$makeParameterTh(inputParameters.register),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$button,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(
+													_user$project$Types$SetParametersAndBuild(parameters)),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Rebuild'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				}
+			});
+	});
 var _user$project$Builder$downloadStructureButton = function (pdbFile) {
 	var deactivated = _elm_lang$core$Native_Utils.eq(pdbFile, _elm_lang$core$Maybe$Nothing) ? true : false;
 	return A2(
@@ -21390,16 +21482,47 @@ var _user$project$Builder$parametersToInput = function (parameterRecord) {
 	var rad = _user$project$Builder$maybeNumberToString(parameterRecord.radius);
 	return A5(_user$project$Types$InputValues, rad, pit, phi, seq, reg);
 };
+var _user$project$Builder$modelParametersAsRow = function (_p2) {
+	var _p3 = _p2;
+	var _p6 = _p3._1._1;
+	var _p5 = _p3._1._0;
+	var _p4 = _p3._0;
+	var parameterRecords = _elm_lang$core$Dict$values(_p5);
+	var topRowParameters = _user$project$Builder$parametersToInput(
+		A2(
+			_elm_lang$core$Maybe$withDefault,
+			_user$project$Types$emptyParameterRecord,
+			_elm_lang$core$List$head(parameterRecords)));
+	var foldedRows = A2(
+		_elm_lang$core$List$map,
+		_user$project$Builder$modelFoldedRow,
+		A2(
+			_elm_lang$core$List$map,
+			_user$project$Builder$parametersToInput,
+			A2(
+				_elm_lang$core$Maybe$withDefault,
+				{ctor: '[]'},
+				_elm_lang$core$List$tail(parameterRecords))));
+	return (!_p6) ? {
+		ctor: '::',
+		_0: A4(_user$project$Builder$modelHistoryTopRow, _p4, _p5, topRowParameters, _p6),
+		_1: {ctor: '[]'}
+	} : {
+		ctor: '::',
+		_0: A4(_user$project$Builder$modelHistoryTopRow, _p4, _p5, topRowParameters, _p6),
+		_1: foldedRows
+	};
+};
 var _user$project$Builder$parametersDictToInputDict = function (parameters) {
 	return _elm_lang$core$Dict$fromList(
 		A2(
 			_elm_lang$core$List$map,
-			function (_p2) {
-				var _p3 = _p2;
+			function (_p7) {
+				var _p8 = _p7;
 				return {
 					ctor: '_Tuple2',
-					_0: _p3._0,
-					_1: _user$project$Builder$parametersToInput(_p3._1)
+					_0: _p8._0,
+					_1: _user$project$Builder$parametersToInput(_p8._1)
 				};
 			},
 			_elm_lang$core$Dict$toList(parameters)));
@@ -21493,9 +21616,9 @@ var _user$project$Builder$parameterRecordWithDefault = F2(
 			_user$project$Types$emptyParameterRecord,
 			A2(_elm_lang$core$Dict$get, pRID, parameters));
 	});
-var _user$project$Builder$styles = function (_p4) {
+var _user$project$Builder$styles = function (_p9) {
 	return _elm_lang$html$Html_Attributes$style(
-		_rtfeldman$elm_css$Css$asPairs(_p4));
+		_rtfeldman$elm_css$Css$asPairs(_p9));
 };
 var _user$project$Builder$topLeftToggles = A2(
 	_elm_lang$html$Html$div,
@@ -21525,22 +21648,8 @@ var _user$project$Builder$modelDetailTableHeader = A2(
 				ctor: '::',
 				_0: A2(
 					_elm_lang$html$Html$th,
-					{
-						ctor: '::',
-						_0: _user$project$Builder$styles(
-							{
-								ctor: '::',
-								_0: _rtfeldman$elm_css$Css$width(
-									_rtfeldman$elm_css$Css$em(6)),
-								_1: {ctor: '[]'}
-							}),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text('Oligomer State'),
-						_1: {ctor: '[]'}
-					}),
+					{ctor: '[]'},
+					{ctor: '[]'}),
 				_1: {
 					ctor: '::',
 					_0: A2(
@@ -21631,7 +21740,14 @@ var _user$project$Builder$modelDetailTableHeader = A2(
 											_0: _elm_lang$html$Html$text('Register'),
 											_1: {ctor: '[]'}
 										}),
-									_1: {ctor: '[]'}
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$th,
+											{ctor: '[]'},
+											{ctor: '[]'}),
+										_1: {ctor: '[]'}
+									}
 								}
 							}
 						}
@@ -21640,10 +21756,10 @@ var _user$project$Builder$modelDetailTableHeader = A2(
 			}),
 		_1: {ctor: '[]'}
 	});
-var _user$project$Builder$_p5 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace(_user$project$BuilderCss$cssNamespace);
-var _user$project$Builder$class = _user$project$Builder$_p5.$class;
-var _user$project$Builder$classList = _user$project$Builder$_p5.classList;
-var _user$project$Builder$id = _user$project$Builder$_p5.id;
+var _user$project$Builder$_p10 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace(_user$project$BuilderCss$cssNamespace);
+var _user$project$Builder$class = _user$project$Builder$_p10.$class;
+var _user$project$Builder$classList = _user$project$Builder$_p10.classList;
+var _user$project$Builder$id = _user$project$Builder$_p10.id;
 var _user$project$Builder$siteHeader = A2(
 	_elm_lang$html$Html$div,
 	{
@@ -21850,7 +21966,19 @@ var _user$project$Builder$buildHistoryPanel = function (modelHistory) {
 					{
 						ctor: '::',
 						_0: _user$project$Builder$modelDetailTableHeader,
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$tbody,
+								{ctor: '[]'},
+								_elm_lang$core$List$concat(
+									A2(
+										_elm_lang$core$List$map,
+										_user$project$Builder$modelParametersAsRow,
+										_elm_lang$core$List$reverse(
+											_elm_lang$core$Dict$toList(modelHistory))))),
+							_1: {ctor: '[]'}
+						}
 					}),
 				_1: {ctor: '[]'}
 			}
@@ -22046,22 +22174,22 @@ var _user$project$Builder$downloadPdb = _elm_lang$core$Native_Platform.outgoingP
 	});
 var _user$project$Builder$update = F2(
 	function (msg, model) {
-		var _p6 = msg;
-		switch (_p6.ctor) {
+		var _p11 = msg;
+		switch (_p11.ctor) {
 			case 'EditSingleParameter':
-				var _p8 = _p6._1;
-				var input = A2(_user$project$Builder$inputRecordWithDefault, _p8, model.currentInput);
-				var params = A2(_user$project$Builder$parameterRecordWithDefault, _p8, model.parameters);
-				var _p7 = A4(_user$project$ParameterValidation$editParameterValue, params, input, _p6._0, _p6._2);
-				var p = _p7._0;
-				var i = _p7._1;
+				var _p13 = _p11._1;
+				var input = A2(_user$project$Builder$inputRecordWithDefault, _p13, model.currentInput);
+				var params = A2(_user$project$Builder$parameterRecordWithDefault, _p13, model.parameters);
+				var _p12 = A4(_user$project$ParameterValidation$editParameterValue, params, input, _p11._0, _p11._2);
+				var p = _p12._0;
+				var i = _p12._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parameters: A3(_elm_lang$core$Dict$insert, _p8, p, model.parameters),
-							currentInput: A3(_elm_lang$core$Dict$insert, _p8, i, model.currentInput)
+							parameters: A3(_elm_lang$core$Dict$insert, _p13, p, model.parameters),
+							currentInput: A3(_elm_lang$core$Dict$insert, _p13, i, model.currentInput)
 						}),
 					{ctor: '[]'});
 			case 'EditAllParameters':
@@ -22077,15 +22205,15 @@ var _user$project$Builder$update = F2(
 								function (v, m) {
 									return m(v);
 								}),
-							A2(_elm_lang$core$List$repeat, model.oligomericState, _p6._1),
+							A2(_elm_lang$core$List$repeat, model.oligomericState, _p11._1),
 							A2(
 								_elm_lang$core$List$map,
-								_user$project$Types$EditSingleParameter(_p6._0),
+								_user$project$Types$EditSingleParameter(_p11._0),
 								A2(_elm_lang$core$List$range, 1, model.oligomericState)))));
 			case 'ChangeBuildMode':
 				var newBuildMode = function () {
-					var _p9 = _p6._0;
-					switch (_p9) {
+					var _p14 = _p11._0;
+					switch (_p14) {
 						case 'Basic':
 							return _user$project$Types$Basic;
 						case 'Advanced':
@@ -22109,29 +22237,35 @@ var _user$project$Builder$update = F2(
 					_1: _user$project$Builder$sendBuildCmd(model.parameters)
 				};
 			case 'ProcessModel':
-				if (_p6._0.ctor === 'Ok') {
-					var _p10 = _p6._0._0.pdbFile;
+				if (_p11._0.ctor === 'Ok') {
+					var _p15 = _p11._0._0.pdbFile;
 					var oldHistory = _elm_lang$core$Native_Utils.eq(
-						_elm_lang$core$List$length(model.modelHistory),
-						10) ? A2(_elm_lang$core$List$take, 9, model.modelHistory) : model.modelHistory;
+						_elm_lang$core$List$length(
+							_elm_lang$core$Dict$toList(model.modelHistory)),
+						10) ? _elm_lang$core$Dict$fromList(
+						A2(
+							_elm_lang$core$List$take,
+							9,
+							_elm_lang$core$Dict$toList(model.modelHistory))) : model.modelHistory;
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								pdbFile: _elm_lang$core$Maybe$Just(_p10),
-								score: _elm_lang$core$Maybe$Just(_p6._0._0.score),
-								residuesPerTurn: _elm_lang$core$Maybe$Just(_p6._0._0.residuesPerTurn),
+								pdbFile: _elm_lang$core$Maybe$Just(_p15),
+								score: _elm_lang$core$Maybe$Just(_p11._0._0.score),
+								residuesPerTurn: _elm_lang$core$Maybe$Just(_p11._0._0.residuesPerTurn),
 								building: false,
-								modelHistory: {
-									ctor: '::',
-									_0: A2(_user$project$Builder$parameterRecordWithDefault, 1, model.parameters),
-									_1: oldHistory
-								}
+								modelHistory: A3(
+									_elm_lang$core$Dict$insert,
+									model.nextHistoryID,
+									{ctor: '_Tuple2', _0: model.parameters, _1: false},
+									oldHistory),
+								nextHistoryID: model.nextHistoryID + 1
 							}),
 						{
 							ctor: '::',
-							_0: _user$project$Builder$showStructure(_p10),
+							_0: _user$project$Builder$showStructure(_p15),
 							_1: {ctor: '[]'}
 						});
 				} else {
@@ -22147,7 +22281,7 @@ var _user$project$Builder$update = F2(
 					_elm_lang$core$Maybe$withDefault,
 					2,
 					_elm_lang$core$Result$toMaybe(
-						_elm_lang$core$String$toInt(_p6._0)));
+						_elm_lang$core$String$toInt(_p11._0)));
 				return (_elm_lang$core$Native_Utils.cmp(oligomericState, model.oligomericState) > 0) ? A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -22227,8 +22361,8 @@ var _user$project$Builder$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'SetParametersAndBuild':
-				var _p11 = _p6._0;
-				return _user$project$ParameterValidation$invalidParameterDict(_p11) ? A2(
+				var _p16 = _p11._0;
+				return _user$project$ParameterValidation$invalidParameterDict(_p16) ? A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
 					{ctor: '[]'}) : A2(
@@ -22236,22 +22370,25 @@ var _user$project$Builder$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parameters: _p11,
-							currentInput: _user$project$Builder$parametersDictToInputDict(_p11),
+							parameters: _p16,
+							currentInput: _user$project$Builder$parametersDictToInputDict(_p16),
 							oligomericState: _elm_lang$core$List$length(
-								_elm_lang$core$Dict$toList(_p11))
+								_elm_lang$core$Dict$toList(_p16)),
+							panelVisibility: function () {
+								var currentPanelVisibility = model.panelVisibility;
+								return _elm_lang$core$Native_Utils.update(
+									currentPanelVisibility,
+									{buildPanel: true, examplesPanel: false});
+							}()
 						}),
 					{
 						ctor: '::',
-						_0: A2(
-							_elm_lang$core$Task$perform,
-							_elm_lang$core$Basics$identity,
-							_elm_lang$core$Task$succeed(_user$project$Types$Build)),
+						_0: _user$project$Builder$msgToCommand(_user$project$Types$Build),
 						_1: {ctor: '[]'}
 					});
 			case 'KeyMsg':
-				var _p12 = _p6._0;
-				if (_p12 === 13) {
+				var _p17 = _p11._0;
+				if (_p17 === 13) {
 					return _user$project$ParameterValidation$containsInvalidParameter(
 						A2(_user$project$Builder$parameterRecordWithDefault, 1, model.parameters)) ? A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
@@ -22270,15 +22407,38 @@ var _user$project$Builder$update = F2(
 						model,
 						{ctor: '[]'});
 				}
-			default:
+			case 'TogglePanel':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							panelVisibility: A2(_user$project$Builder$togglePanelVisibility, _p6._0, model.panelVisibility)
+							panelVisibility: A2(_user$project$Builder$togglePanelVisibility, _p11._0, model.panelVisibility)
 						}),
 					{ctor: '[]'});
+			default:
+				var _p19 = _p11._0;
+				var oldEntry = A2(_elm_lang$core$Dict$get, _p19, model.modelHistory);
+				var _p18 = oldEntry;
+				if (_p18.ctor === 'Just') {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								modelHistory: A3(
+									_elm_lang$core$Dict$insert,
+									_p19,
+									{ctor: '_Tuple2', _0: _p18._0._0, _1: !_p18._0._1},
+									model.modelHistory)
+							}),
+						{ctor: '[]'});
+				} else {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						model,
+						{ctor: '[]'});
+				}
 		}
 	});
 var _user$project$Builder$Model = function (a) {
@@ -22291,7 +22451,9 @@ var _user$project$Builder$Model = function (a) {
 							return function (h) {
 								return function (i) {
 									return function (j) {
-										return {parameters: a, currentInput: b, oligomericState: c, buildMode: d, pdbFile: e, score: f, residuesPerTurn: g, building: h, modelHistory: i, panelVisibility: j};
+										return function (k) {
+											return {parameters: a, currentInput: b, oligomericState: c, buildMode: d, pdbFile: e, score: f, residuesPerTurn: g, building: h, modelHistory: i, nextHistoryID: j, panelVisibility: k};
+										};
 									};
 								};
 							};
@@ -22334,7 +22496,8 @@ var _user$project$Builder$emptyModel = {
 	score: _elm_lang$core$Maybe$Nothing,
 	residuesPerTurn: _elm_lang$core$Maybe$Nothing,
 	building: false,
-	modelHistory: {ctor: '[]'},
+	modelHistory: _elm_lang$core$Dict$empty,
+	nextHistoryID: 1,
 	panelVisibility: _user$project$Builder$defaultVisibility
 };
 var _user$project$Builder$init = {
@@ -22349,7 +22512,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"ChangeBuildMode":["String"],"Build":[],"Clear":[],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"SetParametersAndBuild":["Types.ParametersDict"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ pdbFile : String, score : Float, residuesPerTurn : Float }"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"ChangeBuildMode":["String"],"Build":[],"Clear":[],"ExpandHistory":["Types.HistoryID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"SetParametersAndBuild":["Types.ParametersDict"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ pdbFile : String, score : Float, residuesPerTurn : Float }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

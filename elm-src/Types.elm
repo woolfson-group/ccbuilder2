@@ -17,9 +17,12 @@ type Msg
     | SetParametersAndBuild ParametersDict
     | KeyMsg Keyboard.KeyCode
     | TogglePanel Panel
+    | ExpandHistory HistoryID
 
 
 type alias SectionID = Int
+
+type alias HistoryID = Int
 
 
 type alias ParametersDict = Dict.Dict SectionID ParameterRecord
