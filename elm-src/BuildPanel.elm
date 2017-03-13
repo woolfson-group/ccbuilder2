@@ -82,7 +82,7 @@ selectOligomericState currentOS =
         [ value (toString currentOS)
         , onInput SetOligomericState
         ]
-        (List.map (toString >> simpleOption) (List.range 2 30) )
+        (List.map (toString >> simpleOption) (List.range 2 30))
 
 
 simpleOption : String -> Html msg
@@ -93,7 +93,8 @@ simpleOption optionValue =
 buildPanelStyling : List Css.Mixin
 buildPanelStyling =
     [ Css.top (Css.px 60)
-    , Css.left (Css.px 35) ]
+    , Css.left (Css.px 35)
+    ]
 
 
 allParameters : InputValues -> List ( String, Parameter, String )
@@ -172,6 +173,18 @@ advancedParameterInputForm parametersDict currentInputDict =
         , parameterSubmit parametersDict
         , button [ onClick Clear ] [ text "Clear" ]
         ]
+
+
+chunks : Int -> List a -> List (List a)
+chunks k xs =
+    let
+        len =
+            List.length xs
+    in
+        if len > k then
+            List.take k xs :: chunks k (List.drop k xs)
+        else
+            [ xs ]
 
 
 createParametersSections : InputValuesDict -> List (Html Msg)

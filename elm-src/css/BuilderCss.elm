@@ -87,6 +87,9 @@ css =
                 ]
             ]
         ]
+    , class FlexItemCss
+        [ padding (px 10)
+        ]
     , id AppHeaderPanel
         [ fontFamilies [ "Source Code Pro", "monospace" ]
         , color colorPalette.c1

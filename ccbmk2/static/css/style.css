@@ -71,6 +71,10 @@ table {
     flex: auto;
 }
 
+.builderFlexItemCss {
+    padding: 10px;
+}
+
 #AppHeaderPanel {
     font-family: Source Code Pro, monospace;
     color: #e6e8e6;
