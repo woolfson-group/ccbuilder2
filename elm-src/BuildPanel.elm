@@ -94,6 +94,8 @@ buildPanelStyling : List Css.Mixin
 buildPanelStyling =
     [ Css.top (Css.px 60)
     , Css.left (Css.px 35)
+    , Css.overflow Css.auto
+    , Css.maxHeight (Css.pct 80)
     ]
 
 
@@ -166,13 +168,19 @@ allSequenceInput ( parameterLabel, parameter, currentSequence, currentRegister )
 
 advancedParameterInputForm : ParametersDict -> InputValuesDict -> Html Msg
 advancedParameterInputForm parametersDict currentInputDict =
-    Html.div []
-        [ h3 [] [ text "Parameters" ]
-        , Html.div [ class [ FlexContainerCss ] ]
-            (createParametersSections currentInputDict)
-        , parameterSubmit parametersDict
-        , button [ onClick Clear ] [ text "Clear" ]
-        ]
+    let
+        inputChunks =
+            Dict.toList currentInputDict
+            |> chunks 4
+    in
+        Html.div []
+            [ h3 [] [ text "Parameters" ]
+            , Html.div
+                []
+                (List.map createParametersSections inputChunks)
+            , parameterSubmit parametersDict
+            , button [ onClick Clear ] [ text "Clear" ]
+            ]
 
 
 chunks : Int -> List a -> List (List a)
@@ -187,10 +195,10 @@ chunks k xs =
             [ xs ]
 
 
-createParametersSections : InputValuesDict -> List (Html Msg)
-createParametersSections currentInputDict =
-    Dict.toList currentInputDict
-        |> List.map singleChainInputSection
+createParametersSections : List ( SectionID, InputValues ) -> Html Msg
+createParametersSections currentInputChunk =
+    List.map singleChainInputSection currentInputChunk
+    |> Html.div [ class [ FlexContainerCss ] ]
 
 
 singleChainInputSection : ( SectionID, InputValues ) -> Html Msg

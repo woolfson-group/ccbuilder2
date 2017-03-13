@@ -19541,7 +19541,7 @@ var _user$project$BuilderCss$css = function (_p0) {
 																	_user$project$BuilderCss$FlexItemCss,
 																	{
 																		ctor: '::',
-																		_0: _rtfeldman$elm_css$Css$flex(_rtfeldman$elm_css$Css$auto),
+																		_0: _rtfeldman$elm_css$Css$flex(_rtfeldman$elm_css$Css$none),
 																		_1: {ctor: '[]'}
 																	}),
 																_1: {ctor: '[]'}
@@ -19977,6 +19977,22 @@ var _user$project$BuildPanel$inputStyling = {
 		_rtfeldman$elm_css$Css$pct(100)),
 	_1: {ctor: '[]'}
 };
+var _user$project$BuildPanel$chunks = F2(
+	function (k, xs) {
+		var len = _elm_lang$core$List$length(xs);
+		return (_elm_lang$core$Native_Utils.cmp(len, k) > 0) ? {
+			ctor: '::',
+			_0: A2(_elm_lang$core$List$take, k, xs),
+			_1: A2(
+				_user$project$BuildPanel$chunks,
+				k,
+				A2(_elm_lang$core$List$drop, k, xs))
+		} : {
+			ctor: '::',
+			_0: xs,
+			_1: {ctor: '[]'}
+		};
+	});
 var _user$project$BuildPanel$allParameters = function (currentInput) {
 	return {
 		ctor: '::',
@@ -20000,7 +20016,16 @@ var _user$project$BuildPanel$buildPanelStyling = {
 		ctor: '::',
 		_0: _rtfeldman$elm_css$Css$left(
 			_rtfeldman$elm_css$Css$px(35)),
-		_1: {ctor: '[]'}
+		_1: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css$overflow(_rtfeldman$elm_css$Css$auto),
+			_1: {
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Css$maxHeight(
+					_rtfeldman$elm_css$Css$pct(80)),
+				_1: {ctor: '[]'}
+			}
+		}
 	}
 };
 var _user$project$BuildPanel$simpleOption = function (optionValue) {
@@ -20502,14 +20527,27 @@ var _user$project$BuildPanel$singleChainInputSection = function (_p16) {
 				_1: {ctor: '[]'}
 			}));
 };
-var _user$project$BuildPanel$createParametersSections = function (currentInputDict) {
+var _user$project$BuildPanel$createParametersSections = function (currentInputChunk) {
 	return A2(
-		_elm_lang$core$List$map,
-		_user$project$BuildPanel$singleChainInputSection,
-		_elm_lang$core$Dict$toList(currentInputDict));
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _user$project$BuildPanel$class(
+				{
+					ctor: '::',
+					_0: _user$project$BuilderCss$FlexContainerCss,
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		},
+		A2(_elm_lang$core$List$map, _user$project$BuildPanel$singleChainInputSection, currentInputChunk));
 };
 var _user$project$BuildPanel$advancedParameterInputForm = F2(
 	function (parametersDict, currentInputDict) {
+		var inputChunks = A2(
+			_user$project$BuildPanel$chunks,
+			4,
+			_elm_lang$core$Dict$toList(currentInputDict));
 		return A2(
 			_elm_lang$html$Html$div,
 			{ctor: '[]'},
@@ -20527,17 +20565,8 @@ var _user$project$BuildPanel$advancedParameterInputForm = F2(
 					ctor: '::',
 					_0: A2(
 						_elm_lang$html$Html$div,
-						{
-							ctor: '::',
-							_0: _user$project$BuildPanel$class(
-								{
-									ctor: '::',
-									_0: _user$project$BuilderCss$FlexContainerCss,
-									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
-						},
-						_user$project$BuildPanel$createParametersSections(currentInputDict)),
+						{ctor: '[]'},
+						A2(_elm_lang$core$List$map, _user$project$BuildPanel$createParametersSections, inputChunks)),
 					_1: {
 						ctor: '::',
 						_0: _user$project$BuildPanel$parameterSubmit(parametersDict),

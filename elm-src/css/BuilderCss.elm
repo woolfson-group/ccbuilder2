@@ -83,7 +83,7 @@ css =
         , flexDirection row
         , children
             [ class FlexItemCss
-                [ flex auto
+                [ flex none
                 ]
             ]
         ]

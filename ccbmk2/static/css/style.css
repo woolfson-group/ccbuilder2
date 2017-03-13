@@ -68,7 +68,7 @@ table {
 }
 
 .builderFlexContainerCss > .builderFlexItemCss {
-    flex: auto;
+    flex: none;
 }
 
 .builderFlexItemCss {
