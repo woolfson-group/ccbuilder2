@@ -13,7 +13,8 @@ cssNamespace = "builder"
 
 type CssClasses
     = OverlayPanelCss
-    | PanelToggleCss
+    | LeftPanelToggleCss
+    | RightPanelToggleCss
     | ParameterInputCss
     | FlexContainerCss
     | FlexItemCss
@@ -33,7 +34,7 @@ css =
         ]
     , each [ h2, h3 ]
         [ marginTop (px 2)
-        , marginBottom (px 2)
+        , marginBottom (px 0)
         ]
     , Css.Elements.table
         [ borderCollapse collapse
@@ -45,10 +46,20 @@ css =
         , borderRadius (px 5)
         , boxShadow5 (px 0) (px 0) (px 10) (px 2) (rgb 100 100 100) 
         ]
-    , class PanelToggleCss
+    , class LeftPanelToggleCss
         [ property "writing-mode" "vertical-rl"
         , property "user-select" "none"
         , marginBottom (px 2)
+        , borderRadius4 (px 0) (px 5) (px 5) (px 0)
+        , hover
+            [ cursor default
+            ]
+        ]
+    , class RightPanelToggleCss
+        [ property "writing-mode" "vertical-rl"
+        , property "user-select" "none"
+        , marginBottom (px 2)
+        , borderRadius4 (px 5) (px 0) (px 0) (px 5)
         , hover
             [ cursor default
             ]

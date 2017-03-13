@@ -49,11 +49,10 @@ buildPanel buildMode parametersDict currentInputDict =
             , id [ BuildPanel ]
             , styles <| panelStyling ++ buildPanelStyling
             ]
-            [ h3 [] [ text "Parameters" ]
+            [ h2 [] [ text "Build" ]
             , selectBuildMode buildMode
             , br [] []
-            , text "Oligomeric State"
-            , br [] []
+            , h3 [] [ text "Oligomeric State" ]
             , selectOligomericState (Dict.toList parametersDict |> List.length)
             , panelView parametersDict currentInputDict
             ]
@@ -93,7 +92,8 @@ simpleOption optionValue =
 
 buildPanelStyling : List Css.Mixin
 buildPanelStyling =
-    [ Css.top (Css.px 60), Css.left (Css.px 30) ]
+    [ Css.top (Css.px 60)
+    , Css.left (Css.px 35) ]
 
 
 allParameters : InputValues -> List ( String, Parameter, String )
@@ -107,7 +107,8 @@ allParameters currentInput =
 basicParameterInputForm : ParametersDict -> InputValuesDict -> Html Msg
 basicParameterInputForm parametersDict currentInputDict =
     Html.div []
-        [ Dict.get 1 currentInputDict
+        [ h3 [] [ text "Parameters" ]
+        , Dict.get 1 currentInputDict
             |> Maybe.withDefault emptyInput
             |> allChainInputSection
         , parameterSubmit parametersDict
@@ -165,7 +166,8 @@ allSequenceInput ( parameterLabel, parameter, currentSequence, currentRegister )
 advancedParameterInputForm : ParametersDict -> InputValuesDict -> Html Msg
 advancedParameterInputForm parametersDict currentInputDict =
     Html.div []
-        [ Html.div [ class [ FlexContainerCss ] ]
+        [ h3 [] [ text "Parameters" ]
+        , Html.div [ class [ FlexContainerCss ] ]
             (createParametersSections currentInputDict)
         , parameterSubmit parametersDict
         , button [ onClick Clear ] [ text "Clear" ]
@@ -258,7 +260,7 @@ registerSelection sectionID currentRegister =
 toggleBuildPanel : Html Msg
 toggleBuildPanel =
     div
-        [ class [ OverlayPanelCss, PanelToggleCss ]
+        [ class [ OverlayPanelCss, LeftPanelToggleCss ]
         , onClick (TogglePanel BuildPanel)
         ]
         [ text "Build" ]
