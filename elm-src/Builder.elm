@@ -286,8 +286,7 @@ update msg model =
             case keyCode of
                 13 ->
                     if
-                        containsInvalidParameter
-                            (parameterRecordWithDefault 1 model.parameters)
+                        invalidParameterDict model.parameters
                     then
                         model ! []
                     else

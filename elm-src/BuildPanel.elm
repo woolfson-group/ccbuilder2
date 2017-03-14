@@ -7,7 +7,12 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Html.CssHelpers
-import ParameterValidation exposing (containsInvalidParameter, editParameterValue)
+import ParameterValidation
+    exposing
+        ( containsInvalidParameter
+        , editParameterValue
+        , invalidParameterDict
+        )
 import Types
     exposing
         ( Msg(..)
@@ -99,11 +104,18 @@ buildPanelStyling =
     ]
 
 
-allParameters : InputValues -> List ( String, Parameter, String )
-allParameters currentInput =
+basicParameters : InputValues -> List ( String, Parameter, String )
+basicParameters currentInput =
     [ ( "Radius", Radius, currentInput.radius )
     , ( "Pitch", Pitch, currentInput.pitch )
     , ( "Interface Angle", PhiCA, currentInput.phiCA )
+    ]
+
+
+advancedParameters : InputValues -> List ( String, Parameter, String )
+advancedParameters currentInput =
+    [ ( "Super-Helical Rotation", SuperHelicalRotation, currentInput.superHelRot )
+    , ( "Z-Shift", ZShift, currentInput.zShift )
     ]
 
 
@@ -121,10 +133,13 @@ basicParameterInputForm parametersDict currentInputDict =
 
 allChainInputSection : InputValues -> Html Msg
 allChainInputSection currentInput =
-    List.map allParameterInput (allParameters currentInput)
-        ++ [ allSequenceInput
+    List.map
+        allParameterInput
+        (basicParameters currentInput)
+        |> (++)
+            [ allSequenceInput
                 ( "Sequence", Sequence, currentInput.sequence, currentInput.register )
-           ]
+            ]
         |> div [ class [ FlexItemCss ] ]
 
 
@@ -171,7 +186,7 @@ advancedParameterInputForm parametersDict currentInputDict =
     let
         inputChunks =
             Dict.toList currentInputDict
-            |> chunks 4
+                |> chunks 4
     in
         Html.div []
             [ h3 [] [ text "Parameters" ]
@@ -198,14 +213,23 @@ chunks k xs =
 createParametersSections : List ( SectionID, InputValues ) -> Html Msg
 createParametersSections currentInputChunk =
     List.map singleChainInputSection currentInputChunk
-    |> Html.div [ class [ FlexContainerCss ] ]
+        |> Html.div [ class [ FlexContainerCss ] ]
 
 
 singleChainInputSection : ( SectionID, InputValues ) -> Html Msg
 singleChainInputSection ( sectionID, currentInput ) =
-    List.map (singleParameterInput sectionID) (allParameters currentInput)
+    List.map
+        (singleParameterInput sectionID)
+        ((basicParameters currentInput) ++ (advancedParameters currentInput))
         ++ [ singleSequenceInput sectionID
                 ( "Sequence", Sequence, currentInput.sequence, currentInput.register )
+           ]
+        ++ [ input
+                [ type_ "checkbox"
+                , onClick (EditSingleParameter Orientation sectionID "")
+                ]
+                []
+           , text "Anti Parallel"
            ]
         |> div [ class [ FlexItemCss ] ]
 
@@ -259,16 +283,9 @@ parameterSubmit parameters =
         [ type_ "submit"
         , value "Submit"
         , onClick Build
-        , disabled (sumbitDisabled parameters)
+        , disabled (invalidParameterDict parameters)
         ]
         []
-
-
-sumbitDisabled : ParametersDict -> Bool
-sumbitDisabled parameters =
-    Dict.values parameters
-        |> List.map containsInvalidParameter
-        |> List.any (\v -> v == True)
 
 
 registerSelection : SectionID -> String -> Html Msg

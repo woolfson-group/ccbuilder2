@@ -20028,17 +20028,6 @@ var _user$project$ParameterValidation$invalidParameterDict = function (parameter
 			_elm_lang$core$Dict$values(parameters)));
 };
 
-var _user$project$BuildPanel$sumbitDisabled = function (parameters) {
-	return A2(
-		_elm_lang$core$List$any,
-		function (v) {
-			return _elm_lang$core$Native_Utils.eq(v, true);
-		},
-		A2(
-			_elm_lang$core$List$map,
-			_user$project$ParameterValidation$containsInvalidParameter,
-			_elm_lang$core$Dict$values(parameters)));
-};
 var _user$project$BuildPanel$parameterSubmit = function (parameters) {
 	return A2(
 		_elm_lang$html$Html$input,
@@ -20054,7 +20043,7 @@ var _user$project$BuildPanel$parameterSubmit = function (parameters) {
 					_1: {
 						ctor: '::',
 						_0: _elm_lang$html$Html_Attributes$disabled(
-							_user$project$BuildPanel$sumbitDisabled(parameters)),
+							_user$project$ParameterValidation$invalidParameterDict(parameters)),
 						_1: {ctor: '[]'}
 					}
 				}
@@ -20084,7 +20073,18 @@ var _user$project$BuildPanel$chunks = F2(
 			_1: {ctor: '[]'}
 		};
 	});
-var _user$project$BuildPanel$allParameters = function (currentInput) {
+var _user$project$BuildPanel$advancedParameters = function (currentInput) {
+	return {
+		ctor: '::',
+		_0: {ctor: '_Tuple3', _0: 'Super-Helical Rotation', _1: _user$project$Types$SuperHelicalRotation, _2: currentInput.superHelRot},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple3', _0: 'Z-Shift', _1: _user$project$Types$ZShift, _2: currentInput.zShift},
+			_1: {ctor: '[]'}
+		}
+	};
+};
+var _user$project$BuildPanel$basicParameters = function (currentInput) {
 	return {
 		ctor: '::',
 		_0: {ctor: '_Tuple3', _0: 'Radius', _1: _user$project$Types$Radius, _2: currentInput.radius},
@@ -20392,17 +20392,20 @@ var _user$project$BuildPanel$allChainInputSection = function (currentInput) {
 			_1: {ctor: '[]'}
 		},
 		A2(
-			_elm_lang$core$Basics_ops['++'],
-			A2(
-				_elm_lang$core$List$map,
-				_user$project$BuildPanel$allParameterInput,
-				_user$project$BuildPanel$allParameters(currentInput)),
+			F2(
+				function (x, y) {
+					return A2(_elm_lang$core$Basics_ops['++'], x, y);
+				}),
 			{
 				ctor: '::',
 				_0: _user$project$BuildPanel$allSequenceInput(
 					{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: currentInput.sequence, _3: currentInput.register}),
 				_1: {ctor: '[]'}
-			}));
+			},
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$BuildPanel$allParameterInput,
+				_user$project$BuildPanel$basicParameters(currentInput))));
 };
 var _user$project$BuildPanel$basicParameterInputForm = F2(
 	function (parametersDict, currentInputDict) {
@@ -20608,15 +20611,41 @@ var _user$project$BuildPanel$singleChainInputSection = function (_p16) {
 			A2(
 				_elm_lang$core$List$map,
 				_user$project$BuildPanel$singleParameterInput(_p19),
-				_user$project$BuildPanel$allParameters(_p18)),
-			{
-				ctor: '::',
-				_0: A2(
-					_user$project$BuildPanel$singleSequenceInput,
-					_p19,
-					{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: _p18.sequence, _3: _p18.register}),
-				_1: {ctor: '[]'}
-			}));
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_user$project$BuildPanel$basicParameters(_p18),
+					_user$project$BuildPanel$advancedParameters(_p18))),
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				{
+					ctor: '::',
+					_0: A2(
+						_user$project$BuildPanel$singleSequenceInput,
+						_p19,
+						{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: _p18.sequence, _3: _p18.register}),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$input,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(
+									A3(_user$project$Types$EditSingleParameter, _user$project$Types$Orientation, _p19, '')),
+								_1: {ctor: '[]'}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Anti Parallel'),
+						_1: {ctor: '[]'}
+					}
+				})));
 };
 var _user$project$BuildPanel$createParametersSections = function (currentInputChunk) {
 	return A2(
@@ -22726,8 +22755,7 @@ var _user$project$Builder$update = F2(
 			case 'KeyMsg':
 				var _p17 = _p11._0;
 				if (_p17 === 13) {
-					return _user$project$ParameterValidation$containsInvalidParameter(
-						A2(_user$project$Builder$parameterRecordWithDefault, 1, model.parameters)) ? A2(
+					return _user$project$ParameterValidation$invalidParameterDict(model.parameters) ? A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						model,
 						{ctor: '[]'}) : A2(

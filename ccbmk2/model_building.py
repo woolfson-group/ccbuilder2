@@ -42,7 +42,7 @@ def build_coiled_coil(parameters):
     coiled_coil.rotational_offsets = [
         d + p['Super-Helical Rotation'] for d, p in zip(
             coiled_coil.rotational_offsets, parameters)]
-    coiled_coil.orientations = [p['Orientation'] for p in parameters]
+    coiled_coil.orientations = [-1 if p['Orientation'] else 1 for p in parameters]
     coiled_coil.z_shifts = [p['Z-Shift'] for p in parameters]
     coiled_coil.build()
     coiled_coil.pack_new_sequences(sequences)
