@@ -19308,13 +19308,26 @@ var _user$project$BuilderCss$css = function (_p0) {
 			_0: _rtfeldman$elm_css$Css_Elements$h1(
 				{
 					ctor: '::',
-					_0: _rtfeldman$elm_css$Css$margin(
-						_rtfeldman$elm_css$Css$px(0)),
+					_0: _rtfeldman$elm_css$Css$fontFamilies(
+						{
+							ctor: '::',
+							_0: 'Russo One',
+							_1: {
+								ctor: '::',
+								_0: 'sans-serif',
+								_1: {ctor: '[]'}
+							}
+						}),
 					_1: {
 						ctor: '::',
-						_0: _rtfeldman$elm_css$Css$paddingLeft(
-							_rtfeldman$elm_css$Css$px(10)),
-						_1: {ctor: '[]'}
+						_0: _rtfeldman$elm_css$Css$margin(
+							_rtfeldman$elm_css$Css$px(0)),
+						_1: {
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Css$paddingLeft(
+								_rtfeldman$elm_css$Css$px(10)),
+							_1: {ctor: '[]'}
+						}
 					}
 				}),
 			_1: {

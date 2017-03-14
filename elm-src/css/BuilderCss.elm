@@ -29,7 +29,8 @@ css =
         , padding (px 0)
         ]
     , h1
-        [ margin (px 0)
+        [ fontFamilies [ "Russo One", "sans-serif" ]
+        , margin (px 0)
         , paddingLeft (px 10)
         ]
     , each [ h2, h3 ]
