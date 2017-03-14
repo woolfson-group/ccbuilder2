@@ -22737,11 +22737,17 @@ var _user$project$Builder$update = F2(
 						{buildMode: newBuildMode}),
 					{ctor: '[]'});
 			case 'Build':
+				var panelVisibility = model.panelVisibility;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{building: true}),
+						{
+							building: true,
+							panelVisibility: _elm_lang$core$Native_Utils.update(
+								panelVisibility,
+								{buildPanel: false, examplesPanel: false})
+						}),
 					_1: _user$project$Builder$sendBuildCmd(model.parameters)
 				};
 			case 'ProcessModel':

@@ -206,9 +206,16 @@ update msg model =
                 { model | buildMode = newBuildMode } ! []
 
         Build ->
-            ( { model | building = True }
-            , sendBuildCmd model.parameters
-            )
+            let
+                panelVisibility = model.panelVisibility
+            in
+                ( { model
+                    | building = True
+                    , panelVisibility = 
+                        { panelVisibility | buildPanel = False, examplesPanel = False }
+                }
+                , sendBuildCmd model.parameters
+                )
 
         ProcessModel (Ok { pdbFile, score, residuesPerTurn }) ->
             let
