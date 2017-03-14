@@ -34,6 +34,9 @@ type alias ParameterRecord =
     , phiCA : Maybe Float
     , sequence : Maybe String
     , register : String
+    , superHelRot : Maybe Float
+    , antiParallel : Bool
+    , zShift : Maybe Float
     }
 
 
@@ -46,6 +49,9 @@ type alias InputValues =
     , phiCA : String
     , sequence : String
     , register : String
+    , superHelRot : String
+    , antiParallel : String
+    , zShift : String
     }
 
 
@@ -62,6 +68,9 @@ type Parameter
     | PhiCA
     | Sequence
     | Register
+    | SuperHelicalRotation
+    | Orientation
+    | ZShift
 
 
 type BuildMode
@@ -79,9 +88,9 @@ type Panel
 
 emptyParameterRecord : ParameterRecord
 emptyParameterRecord =
-    ParameterRecord Nothing Nothing Nothing Nothing "a"
+    ParameterRecord Nothing Nothing Nothing Nothing "a" Nothing False Nothing
 
 
 emptyInput : InputValues
 emptyInput =
-    InputValues "" "" "" "" "a"
+    InputValues "" "" "" "" "a" "" "False" ""

@@ -1,6 +1,7 @@
 """Module for building models using ISAMBARD."""
 
 import itertools
+import sys
 
 import isambard
 
@@ -38,6 +39,11 @@ def build_coiled_coil(parameters):
     registers = [p['Register'] for p in parameters]
     coiled_coil.phi_c_alphas = [ia + registerAdjust[r] for ia, r in zip(raw_phi, registers)]
     sequences = [p['Sequence'] for p in parameters]
+    coiled_coil.rotational_offsets = [
+        d + p['Super-Helical Rotation'] for d, p in zip(
+            coiled_coil.rotational_offsets, parameters)]
+    coiled_coil.orientations = [p['Orientation'] for p in parameters]
+    coiled_coil.z_shifts = [p['Z-Shift'] for p in parameters]
     coiled_coil.build()
     coiled_coil.pack_new_sequences(sequences)
     ave_rpt = calculate_average_rpt(coiled_coil)

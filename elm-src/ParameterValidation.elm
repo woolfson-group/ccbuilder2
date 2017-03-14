@@ -24,7 +24,7 @@ invalidParameterDict parameters =
 
 
 containsInvalidParameter : ParameterRecord -> Bool
-containsInvalidParameter { radius, pitch, phiCA, sequence } =
+containsInvalidParameter { radius, pitch, phiCA, sequence, superHelRot, zShift } =
     let
         vRadius =
             radius /= Nothing
@@ -37,8 +37,14 @@ containsInvalidParameter { radius, pitch, phiCA, sequence } =
 
         vSeq =
             sequence /= Nothing
+        
+        vSuperHelRot
+            = superHelRot /= Nothing
+        
+        vZShift
+            = zShift /= Nothing
     in
-        List.member False [ vRadius, vPitch, vPhiCA, vSeq ]
+        List.member False [ vRadius, vPitch, vPhiCA, vSeq, vSuperHelRot, vZShift ]
 
 
 editParameterValue : ParameterRecord -> InputValues -> Parameter -> String -> ( ParameterRecord, InputValues )
@@ -108,6 +114,46 @@ editParameterValue parameters currentInput parameter newValue =
                     { currentInput | register = newValue }
             in
                 ( newParameters, newInput )
+        
+        SuperHelicalRotation ->
+            let
+                postValSHR =
+                    String.toFloat newValue
+                        |> Result.toMaybe
+                        |> Maybe.andThen validateSuperHelicalRot
+
+                newParameters =
+                    { parameters | superHelRot = postValSHR }
+
+                newInput =
+                    { currentInput | superHelRot = newValue }
+            in
+                ( newParameters, newInput )
+        
+        Orientation ->
+            let
+                newParameters =
+                    { parameters | antiParallel = not parameters.antiParallel }
+
+                newInput =
+                    { currentInput | antiParallel = toString newParameters.antiParallel }
+            in
+                ( newParameters, newInput )
+        
+        ZShift ->
+            let
+                postValZShift =
+                    String.toFloat newValue
+                        |> Result.toMaybe
+                        |> Maybe.andThen validateZShift
+
+                newParameters =
+                    { parameters | zShift = postValZShift }
+
+                newInput =
+                    { currentInput | zShift = newValue }
+            in
+                ( newParameters, newInput )
 
 
 validateRadius : Float -> Maybe Float
@@ -146,6 +192,22 @@ validateSequence sequence =
             Just (String.toUpper sequence)
         else
             Nothing
+
+
+validateSuperHelicalRot : Float -> Maybe Float
+validateSuperHelicalRot superHelRot =
+    if isNotNaN superHelRot then
+        Just superHelRot
+    else
+        Nothing
+
+
+validateZShift : Float -> Maybe Float
+validateZShift zShift =
+    if isNotNaN zShift then
+        Just zShift
+    else
+        Nothing
 
 
 isAllowedSeqChar : Char -> Bool

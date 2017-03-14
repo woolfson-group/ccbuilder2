@@ -224,6 +224,9 @@ basisSetDimer =
         , phiCA = Just 24
         , sequence = Just "EIAALKQEIAALKKENAALKWEIAALKQ"
         , register = "g"
+        , superHelRot = Just 0.0
+        , antiParallel = False
+        , zShift = Just 0.0
         }
 
 
@@ -235,6 +238,9 @@ basisSetTrimer =
         , phiCA = Just 20.0
         , sequence = Just "EIAAIKQEIAAIKKEIAAIKWEIAAIKQ"
         , register = "g"
+        , superHelRot = Just 0.0
+        , antiParallel = False
+        , zShift = Just 0.0
         }
 
 
@@ -246,6 +252,9 @@ basisSetTetramer =
         , phiCA = Just 22.1
         , sequence = Just "ELAAIKQELAAIKKELAAIKWELAAIKQ"
         , register = "g"
+        , superHelRot = Just 0.0
+        , antiParallel = False
+        , zShift = Just 0.0
         }
 
 
@@ -257,6 +266,9 @@ largermerCCPent =
         , phiCA = Just 14.4
         , sequence = Just "KIEQILQKIEKILQKIEWILQKIEQILQ"
         , register = "c"
+        , superHelRot = Just 0.0
+        , antiParallel = False
+        , zShift = Just 0.0
         }
 
 
@@ -268,6 +280,9 @@ largermerCCHex =
         , phiCA = Just 16.4
         , sequence = Just "ELKAIAQELKAIAKELKAIAWELKAIAQ"
         , register = "g"
+        , superHelRot = Just 0.0
+        , antiParallel = False
+        , zShift = Just 0.0
         }
 
 
@@ -279,6 +294,9 @@ largermerCCHex2 =
         , phiCA = Just 18.2
         , sequence = Just "EIAKSLKEIAKSLKEIAWSLKEIAKSLK"
         , register = "c"
+        , superHelRot = Just 0.0
+        , antiParallel = False
+        , zShift = Just 0.0
         }
 
 
@@ -290,6 +308,9 @@ largermerCCHex3 =
         , phiCA = Just 13.1
         , sequence = Just "EIAQSIKEIAKSIKEIAWSIKEIAQSIK"
         , register = "c"
+        , superHelRot = Just 0.0
+        , antiParallel = False
+        , zShift = Just 0.0
         }
 
 
@@ -301,6 +322,9 @@ largermerCCHept =
         , phiCA = Just 15.1
         , sequence = Just "EIAQALKEIAKALKEIAWALKEIAQALK"
         , register = "c"
+        , superHelRot = Just 0.0
+        , antiParallel = False
+        , zShift = Just 0.0
         }
 
 makeHomoOligomerExample : Int -> ParameterRecord -> ParametersDict

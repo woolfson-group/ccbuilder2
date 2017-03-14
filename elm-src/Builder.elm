@@ -60,9 +60,10 @@ main =
 
 init : ( Model, Cmd Msg )
 init =
-    emptyModel !
-        [ initialiseViewer ()
-        , msgToCommand (SetParametersAndBuild ExamplesPanel.basisSetDimer) ]
+    emptyModel
+        ! [ initialiseViewer ()
+          , msgToCommand (SetParametersAndBuild ExamplesPanel.basisSetDimer)
+          ]
 
 
 
@@ -351,6 +352,13 @@ parameterRecordJson parameters =
         , ( "Interface Angle", parameters.phiCA |> Maybe.withDefault 0 |> Json.Encode.float )
         , ( "Sequence", parameters.sequence |> Maybe.withDefault "" |> Json.Encode.string )
         , ( "Register", parameters.register |> Json.Encode.string )
+        , ( "Super-Helical Rotation"
+          , parameters.superHelRot
+                |> Maybe.withDefault 0
+                |> Json.Encode.float
+          )
+        , ( "Orientation", parameters.antiParallel |> Json.Encode.bool )
+        , ( "Z-Shift", parameters.zShift |> Maybe.withDefault 0 |> Json.Encode.float )
         ]
 
 
@@ -378,8 +386,17 @@ parametersToInput parameterRecord =
 
         reg =
             parameterRecord.register
+
+        rot =
+            maybeNumberToString parameterRecord.superHelRot
+
+        ant =
+            toString parameterRecord.antiParallel
+
+        zsh =
+            maybeNumberToString parameterRecord.zShift
     in
-        InputValues rad pit phi seq reg
+        InputValues rad pit phi seq reg rot ant zsh
 
 
 maybeNumberToString : Maybe number -> String

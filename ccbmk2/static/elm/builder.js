@@ -19185,16 +19185,16 @@ var _rtfeldman$elm_css_helpers$Html_CssHelpers$Namespace = F4(
 		return {$class: a, classList: b, id: c, name: d};
 	});
 
-var _user$project$Types$ParameterRecord = F5(
-	function (a, b, c, d, e) {
-		return {radius: a, pitch: b, phiCA: c, sequence: d, register: e};
+var _user$project$Types$ParameterRecord = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {radius: a, pitch: b, phiCA: c, sequence: d, register: e, superHelRot: f, antiParallel: g, zShift: h};
 	});
-var _user$project$Types$emptyParameterRecord = A5(_user$project$Types$ParameterRecord, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, 'a');
-var _user$project$Types$InputValues = F5(
-	function (a, b, c, d, e) {
-		return {radius: a, pitch: b, phiCA: c, sequence: d, register: e};
+var _user$project$Types$emptyParameterRecord = A8(_user$project$Types$ParameterRecord, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, 'a', _elm_lang$core$Maybe$Nothing, false, _elm_lang$core$Maybe$Nothing);
+var _user$project$Types$InputValues = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {radius: a, pitch: b, phiCA: c, sequence: d, register: e, superHelRot: f, antiParallel: g, zShift: h};
 	});
-var _user$project$Types$emptyInput = A5(_user$project$Types$InputValues, '', '', '', '', 'a');
+var _user$project$Types$emptyInput = A8(_user$project$Types$InputValues, '', '', '', '', 'a', '', 'False', '');
 var _user$project$Types$ModellingResults = F3(
 	function (a, b, c) {
 		return {pdbFile: a, score: b, residuesPerTurn: c};
@@ -19231,6 +19231,9 @@ var _user$project$Types$EditSingleParameter = F3(
 	function (a, b, c) {
 		return {ctor: 'EditSingleParameter', _0: a, _1: b, _2: c};
 	});
+var _user$project$Types$ZShift = {ctor: 'ZShift'};
+var _user$project$Types$Orientation = {ctor: 'Orientation'};
+var _user$project$Types$SuperHelicalRotation = {ctor: 'SuperHelicalRotation'};
 var _user$project$Types$Register = {ctor: 'Register'};
 var _user$project$Types$Sequence = {ctor: 'Sequence'};
 var _user$project$Types$PhiCA = {ctor: 'PhiCA'};
@@ -19851,6 +19854,12 @@ var _user$project$ParameterValidation$isAllowedSeqChar = function ($char) {
 	};
 	return A2(_elm_lang$core$List$member, $char, allowed);
 };
+var _user$project$ParameterValidation$validateZShift = function (zShift) {
+	return _user$project$ParameterValidation$isNotNaN(zShift) ? _elm_lang$core$Maybe$Just(zShift) : _elm_lang$core$Maybe$Nothing;
+};
+var _user$project$ParameterValidation$validateSuperHelicalRot = function (superHelRot) {
+	return _user$project$ParameterValidation$isNotNaN(superHelRot) ? _elm_lang$core$Maybe$Just(superHelRot) : _elm_lang$core$Maybe$Nothing;
+};
 var _user$project$ParameterValidation$validateSequence = function (sequence) {
 	var allValidChars = A2(
 		_elm_lang$core$List$all,
@@ -19924,7 +19933,7 @@ var _user$project$ParameterValidation$editParameterValue = F4(
 						sequence: _user$project$ParameterValidation$validateSequence(newValue)
 					});
 				return {ctor: '_Tuple2', _0: newParameters, _1: newInput};
-			default:
+			case 'Register':
 				var newInput = _elm_lang$core$Native_Utils.update(
 					currentInput,
 					{register: newValue});
@@ -19932,10 +19941,48 @@ var _user$project$ParameterValidation$editParameterValue = F4(
 					parameters,
 					{register: newValue});
 				return {ctor: '_Tuple2', _0: newParameters, _1: newInput};
+			case 'SuperHelicalRotation':
+				var newInput = _elm_lang$core$Native_Utils.update(
+					currentInput,
+					{superHelRot: newValue});
+				var postValSHR = A2(
+					_elm_lang$core$Maybe$andThen,
+					_user$project$ParameterValidation$validateSuperHelicalRot,
+					_elm_lang$core$Result$toMaybe(
+						_elm_lang$core$String$toFloat(newValue)));
+				var newParameters = _elm_lang$core$Native_Utils.update(
+					parameters,
+					{superHelRot: postValSHR});
+				return {ctor: '_Tuple2', _0: newParameters, _1: newInput};
+			case 'Orientation':
+				var newParameters = _elm_lang$core$Native_Utils.update(
+					parameters,
+					{antiParallel: !parameters.antiParallel});
+				var newInput = _elm_lang$core$Native_Utils.update(
+					currentInput,
+					{
+						antiParallel: _elm_lang$core$Basics$toString(newParameters.antiParallel)
+					});
+				return {ctor: '_Tuple2', _0: newParameters, _1: newInput};
+			default:
+				var newInput = _elm_lang$core$Native_Utils.update(
+					currentInput,
+					{zShift: newValue});
+				var postValZShift = A2(
+					_elm_lang$core$Maybe$andThen,
+					_user$project$ParameterValidation$validateZShift,
+					_elm_lang$core$Result$toMaybe(
+						_elm_lang$core$String$toFloat(newValue)));
+				var newParameters = _elm_lang$core$Native_Utils.update(
+					parameters,
+					{zShift: postValZShift});
+				return {ctor: '_Tuple2', _0: newParameters, _1: newInput};
 		}
 	});
 var _user$project$ParameterValidation$containsInvalidParameter = function (_p2) {
 	var _p3 = _p2;
+	var vZShift = !_elm_lang$core$Native_Utils.eq(_p3.zShift, _elm_lang$core$Maybe$Nothing);
+	var vSuperHelRot = !_elm_lang$core$Native_Utils.eq(_p3.superHelRot, _elm_lang$core$Maybe$Nothing);
 	var vSeq = !_elm_lang$core$Native_Utils.eq(_p3.sequence, _elm_lang$core$Maybe$Nothing);
 	var vPhiCA = !_elm_lang$core$Native_Utils.eq(_p3.phiCA, _elm_lang$core$Maybe$Nothing);
 	var vPitch = !_elm_lang$core$Native_Utils.eq(_p3.pitch, _elm_lang$core$Maybe$Nothing);
@@ -19955,7 +20002,15 @@ var _user$project$ParameterValidation$containsInvalidParameter = function (_p2) 
 					_1: {
 						ctor: '::',
 						_0: vSeq,
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: vSuperHelRot,
+							_1: {
+								ctor: '::',
+								_0: vZShift,
+								_1: {ctor: '[]'}
+							}
+						}
 					}
 				}
 			}
@@ -20754,7 +20809,10 @@ var _user$project$ExamplesPanel$largermerCCHept = A2(
 		pitch: _elm_lang$core$Maybe$Just(329),
 		phiCA: _elm_lang$core$Maybe$Just(15.1),
 		sequence: _elm_lang$core$Maybe$Just('EIAQALKEIAKALKEIAWALKEIAQALK'),
-		register: 'c'
+		register: 'c',
+		superHelRot: _elm_lang$core$Maybe$Just(0.0),
+		antiParallel: false,
+		zShift: _elm_lang$core$Maybe$Just(0.0)
 	});
 var _user$project$ExamplesPanel$largermerCCHex3 = A2(
 	_user$project$ExamplesPanel$makeHomoOligomerExample,
@@ -20764,7 +20822,10 @@ var _user$project$ExamplesPanel$largermerCCHex3 = A2(
 		pitch: _elm_lang$core$Maybe$Just(132),
 		phiCA: _elm_lang$core$Maybe$Just(13.1),
 		sequence: _elm_lang$core$Maybe$Just('EIAQSIKEIAKSIKEIAWSIKEIAQSIK'),
-		register: 'c'
+		register: 'c',
+		superHelRot: _elm_lang$core$Maybe$Just(0.0),
+		antiParallel: false,
+		zShift: _elm_lang$core$Maybe$Just(0.0)
 	});
 var _user$project$ExamplesPanel$largermerCCHex2 = A2(
 	_user$project$ExamplesPanel$makeHomoOligomerExample,
@@ -20774,7 +20835,10 @@ var _user$project$ExamplesPanel$largermerCCHex2 = A2(
 		pitch: _elm_lang$core$Maybe$Just(162),
 		phiCA: _elm_lang$core$Maybe$Just(18.2),
 		sequence: _elm_lang$core$Maybe$Just('EIAKSLKEIAKSLKEIAWSLKEIAKSLK'),
-		register: 'c'
+		register: 'c',
+		superHelRot: _elm_lang$core$Maybe$Just(0.0),
+		antiParallel: false,
+		zShift: _elm_lang$core$Maybe$Just(0.0)
 	});
 var _user$project$ExamplesPanel$largermerCCHex = A2(
 	_user$project$ExamplesPanel$makeHomoOligomerExample,
@@ -20784,7 +20848,10 @@ var _user$project$ExamplesPanel$largermerCCHex = A2(
 		pitch: _elm_lang$core$Maybe$Just(228),
 		phiCA: _elm_lang$core$Maybe$Just(16.4),
 		sequence: _elm_lang$core$Maybe$Just('ELKAIAQELKAIAKELKAIAWELKAIAQ'),
-		register: 'g'
+		register: 'g',
+		superHelRot: _elm_lang$core$Maybe$Just(0.0),
+		antiParallel: false,
+		zShift: _elm_lang$core$Maybe$Just(0.0)
 	});
 var _user$project$ExamplesPanel$largermerCCPent = A2(
 	_user$project$ExamplesPanel$makeHomoOligomerExample,
@@ -20794,7 +20861,10 @@ var _user$project$ExamplesPanel$largermerCCPent = A2(
 		pitch: _elm_lang$core$Maybe$Just(183),
 		phiCA: _elm_lang$core$Maybe$Just(14.4),
 		sequence: _elm_lang$core$Maybe$Just('KIEQILQKIEKILQKIEWILQKIEQILQ'),
-		register: 'c'
+		register: 'c',
+		superHelRot: _elm_lang$core$Maybe$Just(0.0),
+		antiParallel: false,
+		zShift: _elm_lang$core$Maybe$Just(0.0)
 	});
 var _user$project$ExamplesPanel$basisSetTetramer = A2(
 	_user$project$ExamplesPanel$makeHomoOligomerExample,
@@ -20804,7 +20874,10 @@ var _user$project$ExamplesPanel$basisSetTetramer = A2(
 		pitch: _elm_lang$core$Maybe$Just(213),
 		phiCA: _elm_lang$core$Maybe$Just(22.1),
 		sequence: _elm_lang$core$Maybe$Just('ELAAIKQELAAIKKELAAIKWELAAIKQ'),
-		register: 'g'
+		register: 'g',
+		superHelRot: _elm_lang$core$Maybe$Just(0.0),
+		antiParallel: false,
+		zShift: _elm_lang$core$Maybe$Just(0.0)
 	});
 var _user$project$ExamplesPanel$basisSetTrimer = A2(
 	_user$project$ExamplesPanel$makeHomoOligomerExample,
@@ -20814,7 +20887,10 @@ var _user$project$ExamplesPanel$basisSetTrimer = A2(
 		pitch: _elm_lang$core$Maybe$Just(194),
 		phiCA: _elm_lang$core$Maybe$Just(20.0),
 		sequence: _elm_lang$core$Maybe$Just('EIAAIKQEIAAIKKEIAAIKWEIAAIKQ'),
-		register: 'g'
+		register: 'g',
+		superHelRot: _elm_lang$core$Maybe$Just(0.0),
+		antiParallel: false,
+		zShift: _elm_lang$core$Maybe$Just(0.0)
 	});
 var _user$project$ExamplesPanel$basisSetDimer = A2(
 	_user$project$ExamplesPanel$makeHomoOligomerExample,
@@ -20824,7 +20900,10 @@ var _user$project$ExamplesPanel$basisSetDimer = A2(
 		pitch: _elm_lang$core$Maybe$Just(226),
 		phiCA: _elm_lang$core$Maybe$Just(24),
 		sequence: _elm_lang$core$Maybe$Just('EIAALKQEIAALKKENAALKWEIAALKQ'),
-		register: 'g'
+		register: 'g',
+		superHelRot: _elm_lang$core$Maybe$Just(0.0),
+		antiParallel: false,
+		zShift: _elm_lang$core$Maybe$Just(0.0)
 	});
 var _user$project$ExamplesPanel$buttonStyling = {
 	ctor: '::',
@@ -21710,12 +21789,15 @@ var _user$project$Builder$maybeNumberToString = function (mNum) {
 	}
 };
 var _user$project$Builder$parametersToInput = function (parameterRecord) {
+	var zsh = _user$project$Builder$maybeNumberToString(parameterRecord.zShift);
+	var ant = _elm_lang$core$Basics$toString(parameterRecord.antiParallel);
+	var rot = _user$project$Builder$maybeNumberToString(parameterRecord.superHelRot);
 	var reg = parameterRecord.register;
 	var seq = A2(_elm_lang$core$Maybe$withDefault, '', parameterRecord.sequence);
 	var phi = _user$project$Builder$maybeNumberToString(parameterRecord.phiCA);
 	var pit = _user$project$Builder$maybeNumberToString(parameterRecord.pitch);
 	var rad = _user$project$Builder$maybeNumberToString(parameterRecord.radius);
-	return A5(_user$project$Types$InputValues, rad, pit, phi, seq, reg);
+	return A8(_user$project$Types$InputValues, rad, pit, phi, seq, reg, rot, ant, zsh);
 };
 var _user$project$Builder$modelParametersAsRow = function (_p2) {
 	var _p3 = _p2;
@@ -21803,7 +21885,33 @@ var _user$project$Builder$parameterRecordJson = function (parameters) {
 								_0: 'Register',
 								_1: _elm_lang$core$Json_Encode$string(parameters.register)
 							},
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'Super-Helical Rotation',
+									_1: _elm_lang$core$Json_Encode$float(
+										A2(_elm_lang$core$Maybe$withDefault, 0, parameters.superHelRot))
+								},
+								_1: {
+									ctor: '::',
+									_0: {
+										ctor: '_Tuple2',
+										_0: 'Orientation',
+										_1: _elm_lang$core$Json_Encode$bool(parameters.antiParallel)
+									},
+									_1: {
+										ctor: '::',
+										_0: {
+											ctor: '_Tuple2',
+											_0: 'Z-Shift',
+											_1: _elm_lang$core$Json_Encode$float(
+												A2(_elm_lang$core$Maybe$withDefault, 0, parameters.zShift))
+										},
+										_1: {ctor: '[]'}
+									}
+								}
+							}
 						}
 					}
 				}
@@ -22749,7 +22857,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"Radius":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"ChangeBuildMode":["String"],"Build":[],"Clear":[],"ExpandHistory":["Types.HistoryID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"SetParametersAndBuild":["Types.ParametersDict"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ pdbFile : String, score : Float, residuesPerTurn : Float }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"ChangeBuildMode":["String"],"Build":[],"Clear":[],"ExpandHistory":["Types.HistoryID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"SetParametersAndBuild":["Types.ParametersDict"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ pdbFile : String, score : Float, residuesPerTurn : Float }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])
