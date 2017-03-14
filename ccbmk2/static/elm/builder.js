@@ -19223,6 +19223,12 @@ var _user$project$Types$Build = {ctor: 'Build'};
 var _user$project$Types$ChangeBuildMode = function (a) {
 	return {ctor: 'ChangeBuildMode', _0: a};
 };
+var _user$project$Types$PasteParameters = function (a) {
+	return {ctor: 'PasteParameters', _0: a};
+};
+var _user$project$Types$CopyParameters = function (a) {
+	return {ctor: 'CopyParameters', _0: a};
+};
 var _user$project$Types$EditAllParameters = F2(
 	function (a, b) {
 		return {ctor: 'EditAllParameters', _0: a, _1: b};
@@ -20635,14 +20641,49 @@ var _user$project$BuildPanel$singleChainInputSection = function (_p16) {
 						_1: {ctor: '[]'}
 					}
 				},
-				{
-					ctor: '::',
-					_0: A2(
-						_user$project$BuildPanel$singleSequenceInput,
-						_p19,
-						{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: _p18.sequence, _3: _p18.register}),
-					_1: {ctor: '[]'}
-				})));
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					{
+						ctor: '::',
+						_0: A2(
+							_user$project$BuildPanel$singleSequenceInput,
+							_p19,
+							{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: _p18.sequence, _3: _p18.register}),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$button,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(
+									_user$project$Types$CopyParameters(_p19)),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Copy'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$button,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(
+										_user$project$Types$PasteParameters(_p19)),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Paste'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}))));
 };
 var _user$project$BuildPanel$createParametersSections = function (currentInputChunk) {
 	return A2(
@@ -22652,10 +22693,35 @@ var _user$project$Builder$update = F2(
 								_elm_lang$core$List$map,
 								_user$project$Types$EditSingleParameter(_p11._0),
 								A2(_elm_lang$core$List$range, 1, model.oligomericState)))));
+			case 'CopyParameters':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							parameterClipBoard: A2(_elm_lang$core$Dict$get, _p11._0, model.parameters)
+						}),
+					{ctor: '[]'});
+			case 'PasteParameters':
+				var _p14 = _p11._0;
+				var pastedParameters = A2(_elm_lang$core$Maybe$withDefault, _user$project$Types$emptyParameterRecord, model.parameterClipBoard);
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							parameters: A3(_elm_lang$core$Dict$insert, _p14, pastedParameters, model.parameters),
+							currentInput: A3(
+								_elm_lang$core$Dict$insert,
+								_p14,
+								_user$project$Builder$parametersToInput(pastedParameters),
+								model.currentInput)
+						}),
+					{ctor: '[]'});
 			case 'ChangeBuildMode':
 				var newBuildMode = function () {
-					var _p14 = _p11._0;
-					switch (_p14) {
+					var _p15 = _p11._0;
+					switch (_p15) {
 						case 'Basic':
 							return _user$project$Types$Basic;
 						case 'Advanced':
@@ -22680,7 +22746,7 @@ var _user$project$Builder$update = F2(
 				};
 			case 'ProcessModel':
 				if (_p11._0.ctor === 'Ok') {
-					var _p15 = _p11._0._0.pdbFile;
+					var _p16 = _p11._0._0.pdbFile;
 					var oldHistory = _elm_lang$core$Native_Utils.eq(
 						_elm_lang$core$List$length(
 							_elm_lang$core$Dict$toList(model.modelHistory)),
@@ -22694,7 +22760,7 @@ var _user$project$Builder$update = F2(
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								pdbFile: _elm_lang$core$Maybe$Just(_p15),
+								pdbFile: _elm_lang$core$Maybe$Just(_p16),
 								score: _elm_lang$core$Maybe$Just(_p11._0._0.score),
 								residuesPerTurn: _elm_lang$core$Maybe$Just(_p11._0._0.residuesPerTurn),
 								building: false,
@@ -22707,7 +22773,7 @@ var _user$project$Builder$update = F2(
 							}),
 						{
 							ctor: '::',
-							_0: _user$project$Builder$showStructure(_p15),
+							_0: _user$project$Builder$showStructure(_p16),
 							_1: {ctor: '[]'}
 						});
 				} else {
@@ -22803,8 +22869,8 @@ var _user$project$Builder$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'SetParametersAndBuild':
-				var _p16 = _p11._0;
-				return _user$project$ParameterValidation$invalidParameterDict(_p16) ? A2(
+				var _p17 = _p11._0;
+				return _user$project$ParameterValidation$invalidParameterDict(_p17) ? A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
 					{ctor: '[]'}) : A2(
@@ -22812,10 +22878,10 @@ var _user$project$Builder$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parameters: _p16,
-							currentInput: _user$project$Builder$parametersDictToInputDict(_p16),
+							parameters: _p17,
+							currentInput: _user$project$Builder$parametersDictToInputDict(_p17),
 							oligomericState: _elm_lang$core$List$length(
-								_elm_lang$core$Dict$toList(_p16))
+								_elm_lang$core$Dict$toList(_p17))
 						}),
 					{
 						ctor: '::',
@@ -22823,8 +22889,8 @@ var _user$project$Builder$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'KeyMsg':
-				var _p17 = _p11._0;
-				if (_p17 === 13) {
+				var _p18 = _p11._0;
+				if (_p18 === 13) {
 					return _user$project$ParameterValidation$invalidParameterDict(model.parameters) ? A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						model,
@@ -22852,10 +22918,10 @@ var _user$project$Builder$update = F2(
 						}),
 					{ctor: '[]'});
 			default:
-				var _p19 = _p11._0;
-				var oldEntry = A2(_elm_lang$core$Dict$get, _p19, model.modelHistory);
-				var _p18 = oldEntry;
-				if (_p18.ctor === 'Just') {
+				var _p20 = _p11._0;
+				var oldEntry = A2(_elm_lang$core$Dict$get, _p20, model.modelHistory);
+				var _p19 = oldEntry;
+				if (_p19.ctor === 'Just') {
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
@@ -22863,8 +22929,8 @@ var _user$project$Builder$update = F2(
 							{
 								modelHistory: A3(
 									_elm_lang$core$Dict$insert,
-									_p19,
-									{ctor: '_Tuple2', _0: _p18._0._0, _1: !_p18._0._1},
+									_p20,
+									{ctor: '_Tuple2', _0: _p19._0._0, _1: !_p19._0._1},
 									model.modelHistory)
 							}),
 						{ctor: '[]'});
@@ -22887,7 +22953,9 @@ var _user$project$Builder$Model = function (a) {
 								return function (i) {
 									return function (j) {
 										return function (k) {
-											return {parameters: a, currentInput: b, oligomericState: c, buildMode: d, pdbFile: e, score: f, residuesPerTurn: g, building: h, modelHistory: i, nextHistoryID: j, panelVisibility: k};
+											return function (l) {
+												return {parameters: a, currentInput: b, parameterClipBoard: c, oligomericState: d, buildMode: e, pdbFile: f, score: g, residuesPerTurn: h, building: i, modelHistory: j, nextHistoryID: k, panelVisibility: l};
+											};
 										};
 									};
 								};
@@ -22925,6 +22993,7 @@ var _user$project$Builder$emptyModel = {
 				_1: {ctor: '[]'}
 			}
 		}),
+	parameterClipBoard: _elm_lang$core$Maybe$Nothing,
 	oligomericState: 2,
 	buildMode: _user$project$Types$Basic,
 	pdbFile: _elm_lang$core$Maybe$Nothing,
@@ -22955,7 +23024,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"ChangeBuildMode":["String"],"Build":[],"Clear":[],"ExpandHistory":["Types.HistoryID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"SetParametersAndBuild":["Types.ParametersDict"],"KeyMsg":["Keyboard.KeyCode"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ pdbFile : String, score : Float, residuesPerTurn : Float }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"ChangeBuildMode":["String"],"Build":[],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"SetParametersAndBuild":["Types.ParametersDict"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ pdbFile : String, score : Float, residuesPerTurn : Float }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

@@ -231,6 +231,10 @@ singleChainInputSection ( sectionID, currentInput ) =
         ++ [ singleSequenceInput sectionID
                 ( "Sequence", Sequence, currentInput.sequence, currentInput.register )
            ]
+        ++
+            [ button [ onClick (CopyParameters sectionID) ] [ text "Copy" ]
+            , button [ onClick (PasteParameters sectionID) ] [ text "Paste" ]
+            ]
         |> div [ class [ FlexItemCss ] ]
 
 

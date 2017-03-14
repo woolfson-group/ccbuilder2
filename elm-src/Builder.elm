@@ -73,6 +73,7 @@ init =
 type alias Model =
     { parameters : ParametersDict
     , currentInput : InputValuesDict
+    , parameterClipBoard : Maybe ParameterRecord
     , oligomericState : Int
     , buildMode : BuildMode
     , pdbFile : Maybe String
@@ -108,6 +109,7 @@ emptyModel : Model
 emptyModel =
     { parameters = Dict.fromList [ ( 1, emptyParameterRecord ), ( 2, emptyParameterRecord ) ]
     , currentInput = Dict.fromList [ ( 1, emptyInput ), ( 2, emptyInput ) ]
+    , parameterClipBoard = Nothing
     , oligomericState = 2
     , buildMode = Basic
     , pdbFile = Nothing
@@ -170,6 +172,23 @@ update msg model =
                     |> List.map2 (\v m -> m v) (List.repeat model.oligomericState newValue)
                     |> List.map msgToCommand
                   )
+
+        CopyParameters sectionID ->
+            { model | parameterClipBoard = Dict.get sectionID model.parameters } ! []
+
+        PasteParameters sectionID ->
+            let
+                pastedParameters =
+                    Maybe.withDefault emptyParameterRecord model.parameterClipBoard
+            in
+                { model
+                    | parameters = Dict.insert sectionID pastedParameters model.parameters
+                    , currentInput =
+                        Dict.insert sectionID
+                            (parametersToInput pastedParameters)
+                            model.currentInput
+                }
+                    ! []
 
         ChangeBuildMode buildMode ->
             let

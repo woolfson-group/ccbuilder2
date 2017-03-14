@@ -8,6 +8,8 @@ import Http
 type Msg
     = EditSingleParameter Parameter SectionID String
     | EditAllParameters Parameter String
+    | CopyParameters SectionID
+    | PasteParameters SectionID
     | ChangeBuildMode String
     | Build
     | ProcessModel (Result Http.Error ModellingResults)
