@@ -555,7 +555,7 @@ modelInfoPanel model =
 modelInfoPanelStyling : List Css.Mixin
 modelInfoPanelStyling =
     [ Css.bottom (Css.px 20)
-    , Css.left (Css.px 30)
+    , Css.left (Css.px 35)
     ]
 
 

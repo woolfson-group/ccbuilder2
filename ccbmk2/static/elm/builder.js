@@ -21584,7 +21584,7 @@ var _user$project$Builder$modelInfoPanelStyling = {
 	_1: {
 		ctor: '::',
 		_0: _rtfeldman$elm_css$Css$left(
-			_rtfeldman$elm_css$Css$px(30)),
+			_rtfeldman$elm_css$Css$px(35)),
 		_1: {ctor: '[]'}
 	}
 };
