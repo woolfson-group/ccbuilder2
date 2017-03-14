@@ -285,9 +285,7 @@ update msg model =
         KeyMsg keyCode ->
             case keyCode of
                 13 ->
-                    if
-                        invalidParameterDict model.parameters
-                    then
+                    if invalidParameterDict model.parameters then
                         model ! []
                     else
                         model ! [ msgToCommand Build ]
@@ -627,6 +625,8 @@ modelDetailTableHeader =
             , th [ styles [ Css.width (Css.em 6) ] ] [ text "Radius" ]
             , th [ styles [ Css.width (Css.em 6) ] ] [ text "Pitch" ]
             , th [ styles [ Css.width (Css.em 6) ] ] [ text "Interface Angle" ]
+            , th [ styles [ Css.width (Css.em 6) ] ] [ text "Super-Helical Rotation" ]
+            , th [ styles [ Css.width (Css.em 6) ] ] [ text "Z-Shift" ]
             , th [] [ text "Sequence" ]
             , th [ styles [ Css.width (Css.em 6) ] ] [ text "Register" ]
             , th [] []
@@ -662,33 +662,43 @@ modelHistoryTopRow : HistoryID -> ParametersDict -> InputValues -> Bool -> Html 
 modelHistoryTopRow hID parameters inputParameters visible =
     tr
         []
-        [ div
+        ([ div
             [ onClick (ExpandHistory hID) ]
             [ if (not visible) then
                 text "▶"
               else
                 text "▼"
             ]
-        , inputParameters.radius |> makeParameterTh
-        , inputParameters.pitch |> makeParameterTh
-        , inputParameters.phiCA |> makeParameterTh
-        , inputParameters.sequence |> makeParameterTh
-        , inputParameters.register |> makeParameterTh
-        , button [ onClick (SetParametersAndBuild parameters) ] [ text "Rebuild" ]
-        ]
+         ]
+            ++ List.map makeParameterTh
+                [ inputParameters.radius
+                , inputParameters.pitch
+                , inputParameters.phiCA
+                , inputParameters.superHelRot
+                , inputParameters.zShift
+                , inputParameters.sequence
+                , inputParameters.register
+                ]
+            ++ [ button [ onClick (SetParametersAndBuild parameters) ] [ text "Rebuild" ] ]
+        )
 
 
 modelFoldedRow : InputValues -> Html Msg
 modelFoldedRow inputParameters =
     tr
         []
-        [ text " ┋"
-        , inputParameters.radius |> makeParameterTh
-        , inputParameters.pitch |> makeParameterTh
-        , inputParameters.phiCA |> makeParameterTh
-        , inputParameters.sequence |> makeParameterTh
-        , inputParameters.register |> makeParameterTh
-        ]
+        ([ text " ┋"
+         ]
+            ++ List.map makeParameterTh
+                [ inputParameters.radius
+                , inputParameters.pitch
+                , inputParameters.phiCA
+                , inputParameters.superHelRot
+                , inputParameters.zShift
+                , inputParameters.sequence
+                , inputParameters.register
+                ]
+        )
 
 
 makeParameterTh : String -> Html Msg

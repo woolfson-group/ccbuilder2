@@ -21564,90 +21564,121 @@ var _user$project$Builder$modelFoldedRow = function (inputParameters) {
 	return A2(
 		_elm_lang$html$Html$tr,
 		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(' ┋'),
-			_1: {
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			{
 				ctor: '::',
-				_0: _user$project$Builder$makeParameterTh(inputParameters.radius),
-				_1: {
+				_0: _elm_lang$html$Html$text(' ┋'),
+				_1: {ctor: '[]'}
+			},
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$Builder$makeParameterTh,
+				{
 					ctor: '::',
-					_0: _user$project$Builder$makeParameterTh(inputParameters.pitch),
+					_0: inputParameters.radius,
 					_1: {
 						ctor: '::',
-						_0: _user$project$Builder$makeParameterTh(inputParameters.phiCA),
+						_0: inputParameters.pitch,
 						_1: {
 							ctor: '::',
-							_0: _user$project$Builder$makeParameterTh(inputParameters.sequence),
+							_0: inputParameters.phiCA,
 							_1: {
 								ctor: '::',
-								_0: _user$project$Builder$makeParameterTh(inputParameters.register),
-								_1: {ctor: '[]'}
+								_0: inputParameters.superHelRot,
+								_1: {
+									ctor: '::',
+									_0: inputParameters.zShift,
+									_1: {
+										ctor: '::',
+										_0: inputParameters.sequence,
+										_1: {
+											ctor: '::',
+											_0: inputParameters.register,
+											_1: {ctor: '[]'}
+										}
+									}
+								}
 							}
 						}
 					}
-				}
-			}
-		});
+				})));
 };
 var _user$project$Builder$modelHistoryTopRow = F4(
 	function (hID, parameters, inputParameters, visible) {
 		return A2(
 			_elm_lang$html$Html$tr,
 			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Events$onClick(
-							_user$project$Types$ExpandHistory(hID)),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: (!visible) ? _elm_lang$html$Html$text('▶') : _elm_lang$html$Html$text('▼'),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				{
 					ctor: '::',
-					_0: _user$project$Builder$makeParameterTh(inputParameters.radius),
-					_1: {
-						ctor: '::',
-						_0: _user$project$Builder$makeParameterTh(inputParameters.pitch),
-						_1: {
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
 							ctor: '::',
-							_0: _user$project$Builder$makeParameterTh(inputParameters.phiCA),
+							_0: _elm_lang$html$Html_Events$onClick(
+								_user$project$Types$ExpandHistory(hID)),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: (!visible) ? _elm_lang$html$Html$text('▶') : _elm_lang$html$Html$text('▼'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				},
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					A2(
+						_elm_lang$core$List$map,
+						_user$project$Builder$makeParameterTh,
+						{
+							ctor: '::',
+							_0: inputParameters.radius,
 							_1: {
 								ctor: '::',
-								_0: _user$project$Builder$makeParameterTh(inputParameters.sequence),
+								_0: inputParameters.pitch,
 								_1: {
 									ctor: '::',
-									_0: _user$project$Builder$makeParameterTh(inputParameters.register),
+									_0: inputParameters.phiCA,
 									_1: {
 										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$button,
-											{
+										_0: inputParameters.superHelRot,
+										_1: {
+											ctor: '::',
+											_0: inputParameters.zShift,
+											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html_Events$onClick(
-													_user$project$Types$SetParametersAndBuild(parameters)),
-												_1: {ctor: '[]'}
-											},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text('Rebuild'),
-												_1: {ctor: '[]'}
-											}),
-										_1: {ctor: '[]'}
+												_0: inputParameters.sequence,
+												_1: {
+													ctor: '::',
+													_0: inputParameters.register,
+													_1: {ctor: '[]'}
+												}
+											}
+										}
 									}
 								}
 							}
-						}
-					}
-				}
-			});
+						}),
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$button,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(
+									_user$project$Types$SetParametersAndBuild(parameters)),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Rebuild'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					})));
 	});
 var _user$project$Builder$downloadStructureButton = function (pdbFile) {
 	var deactivated = _elm_lang$core$Native_Utils.eq(pdbFile, _elm_lang$core$Maybe$Nothing) ? true : false;
@@ -22083,10 +22114,20 @@ var _user$project$Builder$modelDetailTableHeader = A2(
 								ctor: '::',
 								_0: A2(
 									_elm_lang$html$Html$th,
-									{ctor: '[]'},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text('Sequence'),
+										_0: _user$project$Builder$styles(
+											{
+												ctor: '::',
+												_0: _rtfeldman$elm_css$Css$width(
+													_rtfeldman$elm_css$Css$em(6)),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Super-Helical Rotation'),
 										_1: {ctor: '[]'}
 									}),
 								_1: {
@@ -22106,7 +22147,7 @@ var _user$project$Builder$modelDetailTableHeader = A2(
 										},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('Register'),
+											_0: _elm_lang$html$Html$text('Z-Shift'),
 											_1: {ctor: '[]'}
 										}),
 									_1: {
@@ -22114,8 +22155,40 @@ var _user$project$Builder$modelDetailTableHeader = A2(
 										_0: A2(
 											_elm_lang$html$Html$th,
 											{ctor: '[]'},
-											{ctor: '[]'}),
-										_1: {ctor: '[]'}
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Sequence'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$th,
+												{
+													ctor: '::',
+													_0: _user$project$Builder$styles(
+														{
+															ctor: '::',
+															_0: _rtfeldman$elm_css$Css$width(
+																_rtfeldman$elm_css$Css$em(6)),
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Register'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$th,
+													{ctor: '[]'},
+													{ctor: '[]'}),
+												_1: {ctor: '[]'}
+											}
+										}
 									}
 								}
 							}
