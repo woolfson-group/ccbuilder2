@@ -136,7 +136,7 @@ allChainInputSection currentInput =
     List.map
         allParameterInput
         (basicParameters currentInput)
-        |> (++)
+        ++
             [ allSequenceInput
                 ( "Sequence", Sequence, currentInput.sequence, currentInput.register )
             ]
@@ -221,15 +221,15 @@ singleChainInputSection ( sectionID, currentInput ) =
     List.map
         (singleParameterInput sectionID)
         ((basicParameters currentInput) ++ (advancedParameters currentInput))
-        ++ [ singleSequenceInput sectionID
-                ( "Sequence", Sequence, currentInput.sequence, currentInput.register )
-           ]
         ++ [ input
                 [ type_ "checkbox"
                 , onClick (EditSingleParameter Orientation sectionID "")
                 ]
                 []
            , text "Anti Parallel"
+           ]
+        ++ [ singleSequenceInput sectionID
+                ( "Sequence", Sequence, currentInput.sequence, currentInput.register )
            ]
         |> div [ class [ FlexItemCss ] ]
 

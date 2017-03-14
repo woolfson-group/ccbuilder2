@@ -22,6 +22,7 @@ This is the source code for a web application for building models of coiled coil
 
 ## TODO
 
+* Add extra parameters to history
 * Convert advanced build to a table
 * Add additional camera and representation controls
 * Anti-parallel structures

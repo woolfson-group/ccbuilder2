@@ -20392,20 +20392,17 @@ var _user$project$BuildPanel$allChainInputSection = function (currentInput) {
 			_1: {ctor: '[]'}
 		},
 		A2(
-			F2(
-				function (x, y) {
-					return A2(_elm_lang$core$Basics_ops['++'], x, y);
-				}),
+			_elm_lang$core$Basics_ops['++'],
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$BuildPanel$allParameterInput,
+				_user$project$BuildPanel$basicParameters(currentInput)),
 			{
 				ctor: '::',
 				_0: _user$project$BuildPanel$allSequenceInput(
 					{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: currentInput.sequence, _3: currentInput.register}),
 				_1: {ctor: '[]'}
-			},
-			A2(
-				_elm_lang$core$List$map,
-				_user$project$BuildPanel$allParameterInput,
-				_user$project$BuildPanel$basicParameters(currentInput))));
+			}));
 };
 var _user$project$BuildPanel$basicParameterInputForm = F2(
 	function (parametersDict, currentInputDict) {
@@ -20620,14 +20617,6 @@ var _user$project$BuildPanel$singleChainInputSection = function (_p16) {
 				{
 					ctor: '::',
 					_0: A2(
-						_user$project$BuildPanel$singleSequenceInput,
-						_p19,
-						{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: _p18.sequence, _3: _p18.register}),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: A2(
 						_elm_lang$html$Html$input,
 						{
 							ctor: '::',
@@ -20645,6 +20634,14 @@ var _user$project$BuildPanel$singleChainInputSection = function (_p16) {
 						_0: _elm_lang$html$Html$text('Anti Parallel'),
 						_1: {ctor: '[]'}
 					}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_user$project$BuildPanel$singleSequenceInput,
+						_p19,
+						{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: _p18.sequence, _3: _p18.register}),
+					_1: {ctor: '[]'}
 				})));
 };
 var _user$project$BuildPanel$createParametersSections = function (currentInputChunk) {
