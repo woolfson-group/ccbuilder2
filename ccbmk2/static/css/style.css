@@ -28,7 +28,11 @@ table {
 
 .builderLeftPanelToggleCss {
     writing-mode: vertical-rl;
+    -webkit-writing-mode: vertical-rl;
+    -ms-writing-mode: vertical-rl;
     user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
     margin-bottom: 2px;
     border-radius: 0px 5px 5px 0px;
 }
@@ -39,7 +43,12 @@ table {
 
 .builderRightPanelToggleCss {
     writing-mode: vertical-rl;
+    -webkit-writing-mode: vertical-rl;
+    -ms-writing-mode: vertical-rl;
     user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    float: right;
     margin-bottom: 2px;
     border-radius: 5px 0px 0px 5px;
 }

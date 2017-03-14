@@ -48,7 +48,11 @@ css =
         ]
     , class LeftPanelToggleCss
         [ property "writing-mode" "vertical-rl"
+        , property "-webkit-writing-mode" "vertical-rl"
+        , property "-ms-writing-mode" "vertical-rl"
         , property "user-select" "none"
+        , property "-ms-user-select" "none"
+        , property "-webkit-user-select" "none"
         , marginBottom (px 2)
         , borderRadius4 (px 0) (px 5) (px 5) (px 0)
         , hover
@@ -57,7 +61,12 @@ css =
         ]
     , class RightPanelToggleCss
         [ property "writing-mode" "vertical-rl"
+        , property "-webkit-writing-mode" "vertical-rl"
+        , property "-ms-writing-mode" "vertical-rl"
         , property "user-select" "none"
+        , property "-ms-user-select" "none"
+        , property "-webkit-user-select" "none"
+        , float right
         , marginBottom (px 2)
         , borderRadius4 (px 5) (px 0) (px 0) (px 5)
         , hover

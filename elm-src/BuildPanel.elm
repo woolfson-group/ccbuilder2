@@ -268,7 +268,7 @@ sumbitDisabled : ParametersDict -> Bool
 sumbitDisabled parameters =
     Dict.values parameters
         |> List.map containsInvalidParameter
-        |> List.all (\v -> v == True)
+        |> List.any (\v -> v == True)
 
 
 registerSelection : SectionID -> String -> Html Msg

@@ -19393,28 +19393,44 @@ var _user$project$BuilderCss$css = function (_p0) {
 									_0: A2(_rtfeldman$elm_css$Css$property, 'writing-mode', 'vertical-rl'),
 									_1: {
 										ctor: '::',
-										_0: A2(_rtfeldman$elm_css$Css$property, 'user-select', 'none'),
+										_0: A2(_rtfeldman$elm_css$Css$property, '-webkit-writing-mode', 'vertical-rl'),
 										_1: {
 											ctor: '::',
-											_0: _rtfeldman$elm_css$Css$marginBottom(
-												_rtfeldman$elm_css$Css$px(2)),
+											_0: A2(_rtfeldman$elm_css$Css$property, '-ms-writing-mode', 'vertical-rl'),
 											_1: {
 												ctor: '::',
-												_0: A4(
-													_rtfeldman$elm_css$Css$borderRadius4,
-													_rtfeldman$elm_css$Css$px(0),
-													_rtfeldman$elm_css$Css$px(5),
-													_rtfeldman$elm_css$Css$px(5),
-													_rtfeldman$elm_css$Css$px(0)),
+												_0: A2(_rtfeldman$elm_css$Css$property, 'user-select', 'none'),
 												_1: {
 													ctor: '::',
-													_0: _rtfeldman$elm_css$Css$hover(
-														{
+													_0: A2(_rtfeldman$elm_css$Css$property, '-ms-user-select', 'none'),
+													_1: {
+														ctor: '::',
+														_0: A2(_rtfeldman$elm_css$Css$property, '-webkit-user-select', 'none'),
+														_1: {
 															ctor: '::',
-															_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$default),
-															_1: {ctor: '[]'}
-														}),
-													_1: {ctor: '[]'}
+															_0: _rtfeldman$elm_css$Css$marginBottom(
+																_rtfeldman$elm_css$Css$px(2)),
+															_1: {
+																ctor: '::',
+																_0: A4(
+																	_rtfeldman$elm_css$Css$borderRadius4,
+																	_rtfeldman$elm_css$Css$px(0),
+																	_rtfeldman$elm_css$Css$px(5),
+																	_rtfeldman$elm_css$Css$px(5),
+																	_rtfeldman$elm_css$Css$px(0)),
+																_1: {
+																	ctor: '::',
+																	_0: _rtfeldman$elm_css$Css$hover(
+																		{
+																			ctor: '::',
+																			_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$default),
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {ctor: '[]'}
+																}
+															}
+														}
+													}
 												}
 											}
 										}
@@ -19430,28 +19446,48 @@ var _user$project$BuilderCss$css = function (_p0) {
 										_0: A2(_rtfeldman$elm_css$Css$property, 'writing-mode', 'vertical-rl'),
 										_1: {
 											ctor: '::',
-											_0: A2(_rtfeldman$elm_css$Css$property, 'user-select', 'none'),
+											_0: A2(_rtfeldman$elm_css$Css$property, '-webkit-writing-mode', 'vertical-rl'),
 											_1: {
 												ctor: '::',
-												_0: _rtfeldman$elm_css$Css$marginBottom(
-													_rtfeldman$elm_css$Css$px(2)),
+												_0: A2(_rtfeldman$elm_css$Css$property, '-ms-writing-mode', 'vertical-rl'),
 												_1: {
 													ctor: '::',
-													_0: A4(
-														_rtfeldman$elm_css$Css$borderRadius4,
-														_rtfeldman$elm_css$Css$px(5),
-														_rtfeldman$elm_css$Css$px(0),
-														_rtfeldman$elm_css$Css$px(0),
-														_rtfeldman$elm_css$Css$px(5)),
+													_0: A2(_rtfeldman$elm_css$Css$property, 'user-select', 'none'),
 													_1: {
 														ctor: '::',
-														_0: _rtfeldman$elm_css$Css$hover(
-															{
+														_0: A2(_rtfeldman$elm_css$Css$property, '-ms-user-select', 'none'),
+														_1: {
+															ctor: '::',
+															_0: A2(_rtfeldman$elm_css$Css$property, '-webkit-user-select', 'none'),
+															_1: {
 																ctor: '::',
-																_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$default),
-																_1: {ctor: '[]'}
-															}),
-														_1: {ctor: '[]'}
+																_0: _rtfeldman$elm_css$Css$float(_rtfeldman$elm_css$Css$right),
+																_1: {
+																	ctor: '::',
+																	_0: _rtfeldman$elm_css$Css$marginBottom(
+																		_rtfeldman$elm_css$Css$px(2)),
+																	_1: {
+																		ctor: '::',
+																		_0: A4(
+																			_rtfeldman$elm_css$Css$borderRadius4,
+																			_rtfeldman$elm_css$Css$px(5),
+																			_rtfeldman$elm_css$Css$px(0),
+																			_rtfeldman$elm_css$Css$px(0),
+																			_rtfeldman$elm_css$Css$px(5)),
+																		_1: {
+																			ctor: '::',
+																			_0: _rtfeldman$elm_css$Css$hover(
+																				{
+																					ctor: '::',
+																					_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$default),
+																					_1: {ctor: '[]'}
+																				}),
+																			_1: {ctor: '[]'}
+																		}
+																	}
+																}
+															}
+														}
 													}
 												}
 											}
@@ -19939,7 +19975,7 @@ var _user$project$ParameterValidation$invalidParameterDict = function (parameter
 
 var _user$project$BuildPanel$sumbitDisabled = function (parameters) {
 	return A2(
-		_elm_lang$core$List$all,
+		_elm_lang$core$List$any,
 		function (v) {
 			return _elm_lang$core$Native_Utils.eq(v, true);
 		},
