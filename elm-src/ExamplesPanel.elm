@@ -227,6 +227,7 @@ basisSetDimer =
         , superHelRot = Just 0.0
         , antiParallel = False
         , zShift = Just 0.0
+        , linkedSuperHelRot = True
         }
 
 
@@ -241,6 +242,7 @@ basisSetTrimer =
         , superHelRot = Just 0.0
         , antiParallel = False
         , zShift = Just 0.0
+        , linkedSuperHelRot = True
         }
 
 
@@ -255,6 +257,7 @@ basisSetTetramer =
         , superHelRot = Just 0.0
         , antiParallel = False
         , zShift = Just 0.0
+        , linkedSuperHelRot = True
         }
 
 
@@ -269,6 +272,7 @@ largermerCCPent =
         , superHelRot = Just 0.0
         , antiParallel = False
         , zShift = Just 0.0
+        , linkedSuperHelRot = True
         }
 
 
@@ -283,6 +287,7 @@ largermerCCHex =
         , superHelRot = Just 0.0
         , antiParallel = False
         , zShift = Just 0.0
+        , linkedSuperHelRot = True
         }
 
 
@@ -297,6 +302,7 @@ largermerCCHex2 =
         , superHelRot = Just 0.0
         , antiParallel = False
         , zShift = Just 0.0
+        , linkedSuperHelRot = True
         }
 
 
@@ -311,6 +317,7 @@ largermerCCHex3 =
         , superHelRot = Just 0.0
         , antiParallel = False
         , zShift = Just 0.0
+        , linkedSuperHelRot = True
         }
 
 
@@ -325,6 +332,7 @@ largermerCCHept =
         , superHelRot = Just 0.0
         , antiParallel = False
         , zShift = Just 0.0
+        , linkedSuperHelRot = True
         }
 
 makeHomoOligomerExample : Int -> ParameterRecord -> ParametersDict

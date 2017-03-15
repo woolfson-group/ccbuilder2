@@ -115,7 +115,6 @@ basicParameters currentInput =
 advancedParameters : InputValues -> List ( String, Parameter, String )
 advancedParameters currentInput =
     [ ( "Super-Helical Rotation", SuperHelicalRotation, currentInput.superHelRot )
-    , ( "Z-Shift", ZShift, currentInput.zShift )
     ]
 
 
@@ -136,10 +135,9 @@ allChainInputSection currentInput =
     List.map
         allParameterInput
         (basicParameters currentInput)
-        ++
-            [ allSequenceInput
+        ++ [ allSequenceInput
                 ( "Sequence", Sequence, currentInput.sequence, currentInput.register )
-            ]
+           ]
         |> div [ class [ FlexItemCss ] ]
 
 
@@ -221,9 +219,15 @@ singleChainInputSection ( sectionID, currentInput ) =
     List.map
         (singleParameterInput sectionID)
         ((basicParameters currentInput) ++ (advancedParameters currentInput))
+        ++ [ singleZShiftInput
+                sectionID
+                ( "Z-Shift", ZShift, currentInput.zShift )
+                (if currentInput.linkedSuperHelRot == "True" then True else False)
+           ]
         ++ [ input
                 [ type_ "checkbox"
                 , onClick (EditSingleParameter Orientation sectionID "")
+                , checked (if currentInput.antiParallel == "True" then True else False)
                 ]
                 []
            , text "Anti Parallel"
@@ -231,10 +235,9 @@ singleChainInputSection ( sectionID, currentInput ) =
         ++ [ singleSequenceInput sectionID
                 ( "Sequence", Sequence, currentInput.sequence, currentInput.register )
            ]
-        ++
-            [ button [ onClick (CopyParameters sectionID) ] [ text "Copy" ]
-            , button [ onClick (PasteParameters sectionID) ] [ text "Paste" ]
-            ]
+        ++ [ button [ onClick (CopyParameters sectionID) ] [ text "Copy" ]
+           , button [ onClick (PasteParameters sectionID) ] [ text "Paste" ]
+           ]
         |> div [ class [ FlexItemCss ] ]
 
 
@@ -242,6 +245,29 @@ singleParameterInput : SectionID -> ( String, Parameter, String ) -> Html Msg
 singleParameterInput sectionID ( parameterLabel, parameter, currentParameter ) =
     div [ class [ ParameterInputCss ] ]
         [ text parameterLabel
+        , br [] []
+        , input
+            [ type_ "text"
+            , name parameterLabel
+            , placeholder parameterLabel
+            , onInput (EditSingleParameter parameter sectionID)
+            , styles inputStyling
+            , value currentParameter
+            ]
+            []
+        ]
+
+
+singleZShiftInput : SectionID -> ( String, Parameter, String ) -> Bool -> Html Msg
+singleZShiftInput sectionID ( parameterLabel, parameter, currentParameter ) isChecked =
+    div [ class [ ParameterInputCss ] ]
+        [ text parameterLabel
+        , input
+            [ type_ "checkbox"
+            , onClick (EditSingleParameter LinkedSuperHelRot sectionID "")
+            , checked isChecked
+            ]
+            []
         , br [] []
         , input
             [ type_ "text"

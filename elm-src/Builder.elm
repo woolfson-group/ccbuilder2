@@ -418,8 +418,11 @@ parametersToInput parameterRecord =
 
         zsh =
             maybeNumberToString parameterRecord.zShift
+        
+        lsh =
+            toString parameterRecord.linkedSuperHelRot
     in
-        InputValues rad pit phi seq reg rot ant zsh
+        InputValues rad pit phi seq reg rot ant zsh lsh
 
 
 maybeNumberToString : Maybe number -> String

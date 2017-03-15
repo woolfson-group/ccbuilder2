@@ -154,6 +154,18 @@ editParameterValue parameters currentInput parameter newValue =
                     { currentInput | zShift = newValue }
             in
                 ( newParameters, newInput )
+        
+        LinkedSuperHelRot ->
+            let
+                newParameters =
+                    { parameters
+                        | linkedSuperHelRot = not parameters.antiParallel }
+
+                newInput =
+                    { currentInput 
+                        | linkedSuperHelRot = toString newParameters.linkedSuperHelRot }
+            in
+                ( newParameters, newInput )
 
 
 validateRadius : Float -> Maybe Float

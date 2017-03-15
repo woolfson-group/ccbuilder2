@@ -39,6 +39,7 @@ type alias ParameterRecord =
     , superHelRot : Maybe Float
     , antiParallel : Bool
     , zShift : Maybe Float
+    , linkedSuperHelRot : Bool
     }
 
 
@@ -54,6 +55,7 @@ type alias InputValues =
     , superHelRot : String
     , antiParallel : String
     , zShift : String
+    , linkedSuperHelRot : String
     }
 
 
@@ -73,6 +75,7 @@ type Parameter
     | SuperHelicalRotation
     | Orientation
     | ZShift
+    | LinkedSuperHelRot
 
 
 type BuildMode
@@ -90,9 +93,9 @@ type Panel
 
 emptyParameterRecord : ParameterRecord
 emptyParameterRecord =
-    ParameterRecord Nothing Nothing Nothing Nothing "a" Nothing False Nothing
+    ParameterRecord Nothing Nothing Nothing Nothing "a" Nothing False Nothing True
 
 
 emptyInput : InputValues
 emptyInput =
-    InputValues "" "" "" "" "a" "" "False" ""
+    InputValues "" "" "" "" "a" "" "False" "" "True"

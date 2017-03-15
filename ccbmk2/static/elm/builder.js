@@ -19185,16 +19185,16 @@ var _rtfeldman$elm_css_helpers$Html_CssHelpers$Namespace = F4(
 		return {$class: a, classList: b, id: c, name: d};
 	});
 
-var _user$project$Types$ParameterRecord = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {radius: a, pitch: b, phiCA: c, sequence: d, register: e, superHelRot: f, antiParallel: g, zShift: h};
+var _user$project$Types$ParameterRecord = F9(
+	function (a, b, c, d, e, f, g, h, i) {
+		return {radius: a, pitch: b, phiCA: c, sequence: d, register: e, superHelRot: f, antiParallel: g, zShift: h, linkedSuperHelRot: i};
 	});
-var _user$project$Types$emptyParameterRecord = A8(_user$project$Types$ParameterRecord, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, 'a', _elm_lang$core$Maybe$Nothing, false, _elm_lang$core$Maybe$Nothing);
-var _user$project$Types$InputValues = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {radius: a, pitch: b, phiCA: c, sequence: d, register: e, superHelRot: f, antiParallel: g, zShift: h};
+var _user$project$Types$emptyParameterRecord = A9(_user$project$Types$ParameterRecord, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, _elm_lang$core$Maybe$Nothing, 'a', _elm_lang$core$Maybe$Nothing, false, _elm_lang$core$Maybe$Nothing, true);
+var _user$project$Types$InputValues = F9(
+	function (a, b, c, d, e, f, g, h, i) {
+		return {radius: a, pitch: b, phiCA: c, sequence: d, register: e, superHelRot: f, antiParallel: g, zShift: h, linkedSuperHelRot: i};
 	});
-var _user$project$Types$emptyInput = A8(_user$project$Types$InputValues, '', '', '', '', 'a', '', 'False', '');
+var _user$project$Types$emptyInput = A9(_user$project$Types$InputValues, '', '', '', '', 'a', '', 'False', '', 'True');
 var _user$project$Types$ModellingResults = F3(
 	function (a, b, c) {
 		return {pdbFile: a, score: b, residuesPerTurn: c};
@@ -19237,6 +19237,7 @@ var _user$project$Types$EditSingleParameter = F3(
 	function (a, b, c) {
 		return {ctor: 'EditSingleParameter', _0: a, _1: b, _2: c};
 	});
+var _user$project$Types$LinkedSuperHelRot = {ctor: 'LinkedSuperHelRot'};
 var _user$project$Types$ZShift = {ctor: 'ZShift'};
 var _user$project$Types$Orientation = {ctor: 'Orientation'};
 var _user$project$Types$SuperHelicalRotation = {ctor: 'SuperHelicalRotation'};
@@ -19983,7 +19984,7 @@ var _user$project$ParameterValidation$editParameterValue = F4(
 						antiParallel: _elm_lang$core$Basics$toString(newParameters.antiParallel)
 					});
 				return {ctor: '_Tuple2', _0: newParameters, _1: newInput};
-			default:
+			case 'ZShift':
 				var newInput = _elm_lang$core$Native_Utils.update(
 					currentInput,
 					{zShift: newValue});
@@ -19995,6 +19996,16 @@ var _user$project$ParameterValidation$editParameterValue = F4(
 				var newParameters = _elm_lang$core$Native_Utils.update(
 					parameters,
 					{zShift: postValZShift});
+				return {ctor: '_Tuple2', _0: newParameters, _1: newInput};
+			default:
+				var newParameters = _elm_lang$core$Native_Utils.update(
+					parameters,
+					{linkedSuperHelRot: !parameters.antiParallel});
+				var newInput = _elm_lang$core$Native_Utils.update(
+					currentInput,
+					{
+						linkedSuperHelRot: _elm_lang$core$Basics$toString(newParameters.linkedSuperHelRot)
+					});
 				return {ctor: '_Tuple2', _0: newParameters, _1: newInput};
 		}
 	});
@@ -20096,11 +20107,7 @@ var _user$project$BuildPanel$advancedParameters = function (currentInput) {
 	return {
 		ctor: '::',
 		_0: {ctor: '_Tuple3', _0: 'Super-Helical Rotation', _1: _user$project$Types$SuperHelicalRotation, _2: currentInput.superHelRot},
-		_1: {
-			ctor: '::',
-			_0: {ctor: '_Tuple3', _0: 'Z-Shift', _1: _user$project$Types$ZShift, _2: currentInput.zShift},
-			_1: {ctor: '[]'}
-		}
+		_1: {ctor: '[]'}
 	};
 };
 var _user$project$BuildPanel$basicParameters = function (currentInput) {
@@ -20529,8 +20536,8 @@ var _user$project$BuildPanel$singleParameterInput = F2(
 				}
 			});
 	});
-var _user$project$BuildPanel$singleSequenceInput = F2(
-	function (sectionID, _p13) {
+var _user$project$BuildPanel$singleZShiftInput = F3(
+	function (sectionID, _p13, isChecked) {
 		var _p14 = _p13;
 		var _p15 = _p14._0;
 		return A2(
@@ -20550,10 +20557,91 @@ var _user$project$BuildPanel$singleSequenceInput = F2(
 				_0: _elm_lang$html$Html$text(_p15),
 				_1: {
 					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$input,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(
+									A3(_user$project$Types$EditSingleParameter, _user$project$Types$LinkedSuperHelRot, sectionID, '')),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$checked(isChecked),
+									_1: {ctor: '[]'}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$br,
+							{ctor: '[]'},
+							{ctor: '[]'}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$input,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$type_('text'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$name(_p15),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$placeholder(_p15),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onInput(
+													A2(_user$project$Types$EditSingleParameter, _p14._1, sectionID)),
+												_1: {
+													ctor: '::',
+													_0: _user$project$BuildPanel$styles(_user$project$BuildPanel$inputStyling),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$value(_p14._2),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									}
+								},
+								{ctor: '[]'}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			});
+	});
+var _user$project$BuildPanel$singleSequenceInput = F2(
+	function (sectionID, _p16) {
+		var _p17 = _p16;
+		var _p18 = _p17._0;
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _user$project$BuildPanel$class(
+					{
+						ctor: '::',
+						_0: _user$project$BuilderCss$ParameterInputCss,
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(_p18),
+				_1: {
+					ctor: '::',
 					_0: _elm_lang$html$Html$text(' (Register: '),
 					_1: {
 						ctor: '::',
-						_0: A2(_user$project$BuildPanel$registerSelection, sectionID, _p14._3),
+						_0: A2(_user$project$BuildPanel$registerSelection, sectionID, _p17._3),
 						_1: {
 							ctor: '::',
 							_0: _elm_lang$html$Html$text(')'),
@@ -20569,7 +20657,7 @@ var _user$project$BuildPanel$singleSequenceInput = F2(
 										_elm_lang$html$Html$textarea,
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$name(_p15),
+											_0: _elm_lang$html$Html_Attributes$name(_p18),
 											_1: {
 												ctor: '::',
 												_0: _elm_lang$html$Html_Attributes$rows(3),
@@ -20581,14 +20669,14 @@ var _user$project$BuildPanel$singleSequenceInput = F2(
 														_0: _user$project$BuildPanel$styles(_user$project$BuildPanel$inputStyling),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$placeholder(_p15),
+															_0: _elm_lang$html$Html_Attributes$placeholder(_p18),
 															_1: {
 																ctor: '::',
 																_0: _elm_lang$html$Html_Events$onInput(
-																	A2(_user$project$Types$EditSingleParameter, _p14._1, sectionID)),
+																	A2(_user$project$Types$EditSingleParameter, _p17._1, sectionID)),
 																_1: {
 																	ctor: '::',
-																	_0: _elm_lang$html$Html_Attributes$value(_p14._2),
+																	_0: _elm_lang$html$Html_Attributes$value(_p17._2),
 																	_1: {ctor: '[]'}
 																}
 															}
@@ -20606,10 +20694,10 @@ var _user$project$BuildPanel$singleSequenceInput = F2(
 				}
 			});
 	});
-var _user$project$BuildPanel$singleChainInputSection = function (_p16) {
-	var _p17 = _p16;
-	var _p19 = _p17._0;
-	var _p18 = _p17._1;
+var _user$project$BuildPanel$singleChainInputSection = function (_p19) {
+	var _p20 = _p19;
+	var _p22 = _p20._0;
+	var _p21 = _p20._1;
 	return A2(
 		_elm_lang$html$Html$div,
 		{
@@ -20626,77 +20714,93 @@ var _user$project$BuildPanel$singleChainInputSection = function (_p16) {
 			_elm_lang$core$Basics_ops['++'],
 			A2(
 				_elm_lang$core$List$map,
-				_user$project$BuildPanel$singleParameterInput(_p19),
+				_user$project$BuildPanel$singleParameterInput(_p22),
 				A2(
 					_elm_lang$core$Basics_ops['++'],
-					_user$project$BuildPanel$basicParameters(_p18),
-					_user$project$BuildPanel$advancedParameters(_p18))),
+					_user$project$BuildPanel$basicParameters(_p21),
+					_user$project$BuildPanel$advancedParameters(_p21))),
 			A2(
 				_elm_lang$core$Basics_ops['++'],
 				{
 					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$input,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onClick(
-									A3(_user$project$Types$EditSingleParameter, _user$project$Types$Orientation, _p19, '')),
-								_1: {ctor: '[]'}
-							}
-						},
-						{ctor: '[]'}),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html$text('Anti Parallel'),
-						_1: {ctor: '[]'}
-					}
+					_0: A3(
+						_user$project$BuildPanel$singleZShiftInput,
+						_p22,
+						{ctor: '_Tuple3', _0: 'Z-Shift', _1: _user$project$Types$ZShift, _2: _p21.zShift},
+						_elm_lang$core$Native_Utils.eq(_p21.linkedSuperHelRot, 'True') ? true : false),
+					_1: {ctor: '[]'}
 				},
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					{
 						ctor: '::',
 						_0: A2(
-							_user$project$BuildPanel$singleSequenceInput,
-							_p19,
-							{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: _p18.sequence, _3: _p18.register}),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$button,
+							_elm_lang$html$Html$input,
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onClick(
-									_user$project$Types$CopyParameters(_p19)),
-								_1: {ctor: '[]'}
+								_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(
+										A3(_user$project$Types$EditSingleParameter, _user$project$Types$Orientation, _p22, '')),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$checked(
+											_elm_lang$core$Native_Utils.eq(_p21.antiParallel, 'True') ? true : false),
+										_1: {ctor: '[]'}
+									}
+								}
 							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('Copy'),
-								_1: {ctor: '[]'}
-							}),
+							{ctor: '[]'}),
 						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Anti Parallel'),
+							_1: {ctor: '[]'}
+						}
+					},
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						{
+							ctor: '::',
+							_0: A2(
+								_user$project$BuildPanel$singleSequenceInput,
+								_p22,
+								{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: _p21.sequence, _3: _p21.register}),
+							_1: {ctor: '[]'}
+						},
+						{
 							ctor: '::',
 							_0: A2(
 								_elm_lang$html$Html$button,
 								{
 									ctor: '::',
 									_0: _elm_lang$html$Html_Events$onClick(
-										_user$project$Types$PasteParameters(_p19)),
+										_user$project$Types$CopyParameters(_p22)),
 									_1: {ctor: '[]'}
 								},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('Paste'),
+									_0: _elm_lang$html$Html$text('Copy'),
 									_1: {ctor: '[]'}
 								}),
-							_1: {ctor: '[]'}
-						}
-					}))));
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$button,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(
+											_user$project$Types$PasteParameters(_p22)),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Paste'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						})))));
 };
 var _user$project$BuildPanel$createParametersSections = function (currentInputChunk) {
 	return A2(
@@ -20764,8 +20868,8 @@ var _user$project$BuildPanel$advancedParameterInputForm = F2(
 var _user$project$BuildPanel$buildPanel = F3(
 	function (buildMode, parametersDict, currentInputDict) {
 		var panelView = function () {
-			var _p20 = buildMode;
-			if (_p20.ctor === 'Basic') {
+			var _p23 = buildMode;
+			if (_p23.ctor === 'Basic') {
 				return _user$project$BuildPanel$basicParameterInputForm;
 			} else {
 				return _user$project$BuildPanel$advancedParameterInputForm;
@@ -20892,7 +20996,8 @@ var _user$project$ExamplesPanel$largermerCCHept = A2(
 		register: 'c',
 		superHelRot: _elm_lang$core$Maybe$Just(0.0),
 		antiParallel: false,
-		zShift: _elm_lang$core$Maybe$Just(0.0)
+		zShift: _elm_lang$core$Maybe$Just(0.0),
+		linkedSuperHelRot: true
 	});
 var _user$project$ExamplesPanel$largermerCCHex3 = A2(
 	_user$project$ExamplesPanel$makeHomoOligomerExample,
@@ -20905,7 +21010,8 @@ var _user$project$ExamplesPanel$largermerCCHex3 = A2(
 		register: 'c',
 		superHelRot: _elm_lang$core$Maybe$Just(0.0),
 		antiParallel: false,
-		zShift: _elm_lang$core$Maybe$Just(0.0)
+		zShift: _elm_lang$core$Maybe$Just(0.0),
+		linkedSuperHelRot: true
 	});
 var _user$project$ExamplesPanel$largermerCCHex2 = A2(
 	_user$project$ExamplesPanel$makeHomoOligomerExample,
@@ -20918,7 +21024,8 @@ var _user$project$ExamplesPanel$largermerCCHex2 = A2(
 		register: 'c',
 		superHelRot: _elm_lang$core$Maybe$Just(0.0),
 		antiParallel: false,
-		zShift: _elm_lang$core$Maybe$Just(0.0)
+		zShift: _elm_lang$core$Maybe$Just(0.0),
+		linkedSuperHelRot: true
 	});
 var _user$project$ExamplesPanel$largermerCCHex = A2(
 	_user$project$ExamplesPanel$makeHomoOligomerExample,
@@ -20931,7 +21038,8 @@ var _user$project$ExamplesPanel$largermerCCHex = A2(
 		register: 'g',
 		superHelRot: _elm_lang$core$Maybe$Just(0.0),
 		antiParallel: false,
-		zShift: _elm_lang$core$Maybe$Just(0.0)
+		zShift: _elm_lang$core$Maybe$Just(0.0),
+		linkedSuperHelRot: true
 	});
 var _user$project$ExamplesPanel$largermerCCPent = A2(
 	_user$project$ExamplesPanel$makeHomoOligomerExample,
@@ -20944,7 +21052,8 @@ var _user$project$ExamplesPanel$largermerCCPent = A2(
 		register: 'c',
 		superHelRot: _elm_lang$core$Maybe$Just(0.0),
 		antiParallel: false,
-		zShift: _elm_lang$core$Maybe$Just(0.0)
+		zShift: _elm_lang$core$Maybe$Just(0.0),
+		linkedSuperHelRot: true
 	});
 var _user$project$ExamplesPanel$basisSetTetramer = A2(
 	_user$project$ExamplesPanel$makeHomoOligomerExample,
@@ -20957,7 +21066,8 @@ var _user$project$ExamplesPanel$basisSetTetramer = A2(
 		register: 'g',
 		superHelRot: _elm_lang$core$Maybe$Just(0.0),
 		antiParallel: false,
-		zShift: _elm_lang$core$Maybe$Just(0.0)
+		zShift: _elm_lang$core$Maybe$Just(0.0),
+		linkedSuperHelRot: true
 	});
 var _user$project$ExamplesPanel$basisSetTrimer = A2(
 	_user$project$ExamplesPanel$makeHomoOligomerExample,
@@ -20970,7 +21080,8 @@ var _user$project$ExamplesPanel$basisSetTrimer = A2(
 		register: 'g',
 		superHelRot: _elm_lang$core$Maybe$Just(0.0),
 		antiParallel: false,
-		zShift: _elm_lang$core$Maybe$Just(0.0)
+		zShift: _elm_lang$core$Maybe$Just(0.0),
+		linkedSuperHelRot: true
 	});
 var _user$project$ExamplesPanel$basisSetDimer = A2(
 	_user$project$ExamplesPanel$makeHomoOligomerExample,
@@ -20983,7 +21094,8 @@ var _user$project$ExamplesPanel$basisSetDimer = A2(
 		register: 'g',
 		superHelRot: _elm_lang$core$Maybe$Just(0.0),
 		antiParallel: false,
-		zShift: _elm_lang$core$Maybe$Just(0.0)
+		zShift: _elm_lang$core$Maybe$Just(0.0),
+		linkedSuperHelRot: true
 	});
 var _user$project$ExamplesPanel$buttonStyling = {
 	ctor: '::',
@@ -21900,6 +22012,7 @@ var _user$project$Builder$maybeNumberToString = function (mNum) {
 	}
 };
 var _user$project$Builder$parametersToInput = function (parameterRecord) {
+	var lsh = _elm_lang$core$Basics$toString(parameterRecord.linkedSuperHelRot);
 	var zsh = _user$project$Builder$maybeNumberToString(parameterRecord.zShift);
 	var ant = _elm_lang$core$Basics$toString(parameterRecord.antiParallel);
 	var rot = _user$project$Builder$maybeNumberToString(parameterRecord.superHelRot);
@@ -21908,7 +22021,7 @@ var _user$project$Builder$parametersToInput = function (parameterRecord) {
 	var phi = _user$project$Builder$maybeNumberToString(parameterRecord.phiCA);
 	var pit = _user$project$Builder$maybeNumberToString(parameterRecord.pitch);
 	var rad = _user$project$Builder$maybeNumberToString(parameterRecord.radius);
-	return A8(_user$project$Types$InputValues, rad, pit, phi, seq, reg, rot, ant, zsh);
+	return A9(_user$project$Types$InputValues, rad, pit, phi, seq, reg, rot, ant, zsh, lsh);
 };
 var _user$project$Builder$modelParametersAsRow = function (_p2) {
 	var _p3 = _p2;
@@ -23043,7 +23156,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"ChangeBuildMode":["String"],"Build":[],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"SetParametersAndBuild":["Types.ParametersDict"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ pdbFile : String, score : Float, residuesPerTurn : Float }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"ChangeBuildMode":["String"],"Build":[],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"SetParametersAndBuild":["Types.ParametersDict"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ pdbFile : String, score : Float, residuesPerTurn : Float }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])
