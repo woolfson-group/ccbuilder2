@@ -38,16 +38,16 @@ examplesPanel =
         ]
         [ h2 [] [ text "Examples" ]
         , div []
-            [ h3 [] [ text "Basis Set" ]
-            , text "CC Di"
-            , br [] []
+            [ hr [] []
+            , h3 [] [ text "Basis Set" ]
+            , hr [] []
             , button
                 [ onClick <| SetParametersAndBuild basisSetDimer
                 , styles buttonStyling
                 ]
                 [ ccIcon 2 60 ]
             , br [] []
-            , text "CC Tri"
+            , text "CC Di"
             , br [] []
             , button
                 [ onClick <| SetParametersAndBuild basisSetTrimer
@@ -55,25 +55,27 @@ examplesPanel =
                 ]
                 [ ccIcon 3 60 ]
             , br [] []
-            , text "CC Tet"
+            , text "CC Tri"
             , br [] []
             , button
                 [ onClick <| SetParametersAndBuild basisSetTetramer
                 , styles buttonStyling
                 ]
                 [ ccIcon 4 60 ]
+            , br [] []
+            , text "CC Tet"
             ]
         , div []
-            [ h3 [] [ text "α-Helical Barrels" ]
-            , text "CC Pent"
-            , br [] []
+            [ hr [] []
+            , h3 [] [ text "α-Helical Barrels" ]
+            , hr [] []
             , button
                 [ onClick <| SetParametersAndBuild largermerCCPent
                 , styles buttonStyling
                 ]
                 [ ccIcon 5 60 ]
             , br [] []
-            , text "CC Hex"
+            , text "CC Pent"
             , br [] []
             , button
                 [ onClick <| SetParametersAndBuild largermerCCHex
@@ -81,7 +83,7 @@ examplesPanel =
                 ]
                 [ ccIcon 6 60 ]
             , br [] []
-            , text "CC Hex2"
+            , text "CC Hex"
             , br [] []
             , button
                 [ onClick <| SetParametersAndBuild largermerCCHex2
@@ -89,7 +91,7 @@ examplesPanel =
                 ]
                 [ ccIcon 6 60 ]
             , br [] []
-            , text "CC Hex3"
+            , text "CC Hex2"
             , br [] []
             , button
                 [ onClick <| SetParametersAndBuild largermerCCHex3
@@ -97,13 +99,15 @@ examplesPanel =
                 ]
                 [ ccIcon 6 60 ]
             , br [] []
-            , text "CC Hept"
+            , text "CC Hex3"
             , br [] []
             , button
                 [ onClick <| SetParametersAndBuild largermerCCHept
                 , styles buttonStyling
                 ]
                 [ ccIcon 7 60 ]
+            , br [] []
+            , text "CC Hept"
             ]
         ]
 

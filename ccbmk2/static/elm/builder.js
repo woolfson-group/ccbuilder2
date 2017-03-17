@@ -21340,20 +21340,23 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 				{
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$h3,
+						_elm_lang$html$Html$hr,
 						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('Basis Set'),
-							_1: {ctor: '[]'}
-						}),
+						{ctor: '[]'}),
 					_1: {
 						ctor: '::',
-						_0: _elm_lang$html$Html$text('CC Di'),
+						_0: A2(
+							_elm_lang$html$Html$h3,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Basis Set'),
+								_1: {ctor: '[]'}
+							}),
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$br,
+								_elm_lang$html$Html$hr,
 								{ctor: '[]'},
 								{ctor: '[]'}),
 							_1: {
@@ -21383,7 +21386,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 										{ctor: '[]'}),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$html$Html$text('CC Tri'),
+										_0: _elm_lang$html$Html$text('CC Di'),
 										_1: {
 											ctor: '::',
 											_0: A2(
@@ -21417,7 +21420,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 														{ctor: '[]'}),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html$text('CC Tet'),
+														_0: _elm_lang$html$Html$text('CC Tri'),
 														_1: {
 															ctor: '::',
 															_0: A2(
@@ -21443,7 +21446,18 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 																		_0: A2(_user$project$ExamplesPanel$ccIcon, 4, 60),
 																		_1: {ctor: '[]'}
 																	}),
-																_1: {ctor: '[]'}
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$html$Html$br,
+																		{ctor: '[]'},
+																		{ctor: '[]'}),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text('CC Tet'),
+																		_1: {ctor: '[]'}
+																	}
+																}
 															}
 														}
 													}
@@ -21464,20 +21478,23 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 					{
 						ctor: '::',
 						_0: A2(
-							_elm_lang$html$Html$h3,
+							_elm_lang$html$Html$hr,
 							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('α-Helical Barrels'),
-								_1: {ctor: '[]'}
-							}),
+							{ctor: '[]'}),
 						_1: {
 							ctor: '::',
-							_0: _elm_lang$html$Html$text('CC Pent'),
+							_0: A2(
+								_elm_lang$html$Html$h3,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('α-Helical Barrels'),
+									_1: {ctor: '[]'}
+								}),
 							_1: {
 								ctor: '::',
 								_0: A2(
-									_elm_lang$html$Html$br,
+									_elm_lang$html$Html$hr,
 									{ctor: '[]'},
 									{ctor: '[]'}),
 								_1: {
@@ -21507,7 +21524,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 											{ctor: '[]'}),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('CC Hex'),
+											_0: _elm_lang$html$Html$text('CC Pent'),
 											_1: {
 												ctor: '::',
 												_0: A2(
@@ -21541,7 +21558,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 															{ctor: '[]'}),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html$text('CC Hex2'),
+															_0: _elm_lang$html$Html$text('CC Hex'),
 															_1: {
 																ctor: '::',
 																_0: A2(
@@ -21575,7 +21592,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 																			{ctor: '[]'}),
 																		_1: {
 																			ctor: '::',
-																			_0: _elm_lang$html$Html$text('CC Hex3'),
+																			_0: _elm_lang$html$Html$text('CC Hex2'),
 																			_1: {
 																				ctor: '::',
 																				_0: A2(
@@ -21609,7 +21626,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 																							{ctor: '[]'}),
 																						_1: {
 																							ctor: '::',
-																							_0: _elm_lang$html$Html$text('CC Hept'),
+																							_0: _elm_lang$html$Html$text('CC Hex3'),
 																							_1: {
 																								ctor: '::',
 																								_0: A2(
@@ -21635,7 +21652,18 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 																											_0: A2(_user$project$ExamplesPanel$ccIcon, 7, 60),
 																											_1: {ctor: '[]'}
 																										}),
-																									_1: {ctor: '[]'}
+																									_1: {
+																										ctor: '::',
+																										_0: A2(
+																											_elm_lang$html$Html$br,
+																											{ctor: '[]'},
+																											{ctor: '[]'}),
+																										_1: {
+																											ctor: '::',
+																											_0: _elm_lang$html$Html$text('CC Hept'),
+																											_1: {ctor: '[]'}
+																										}
+																									}
 																								}
 																							}
 																						}
