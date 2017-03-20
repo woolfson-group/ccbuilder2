@@ -138,6 +138,9 @@ port initialiseViewer : () -> Cmd msg
 port showStructure : String -> Cmd msg
 
 
+port showAxes : () -> Cmd msg
+
+
 port downloadPdb : ( String, String ) -> Cmd msg
 
 
@@ -339,6 +342,9 @@ update msg model =
 
                     Nothing ->
                         model ! []
+        
+        ShowAxes ->
+            model ! [ showAxes () ]
 
 
 msgToCommand : Msg -> Cmd Msg
@@ -512,6 +518,7 @@ overlayPanels model =
               )
             , ( model.panelVisibility.examplesPanel, ExamplesPanel.examplesPanel )
             , ( model.panelVisibility.buildHistoryPanel, buildHistoryPanel model.modelHistory )
+            , ( model.panelVisibility.viewerPanel, viewerPanel )
             ]
 
         activeDivs =
@@ -765,6 +772,26 @@ toggleBuildHistoryPanel =
 
 
 -- Viewer Panel
+
+
+viewerPanel : Html Msg
+viewerPanel =
+    div
+        [ class [ OverlayPanelCss ]
+        , id [ ViewerPanel ]
+        , styles <| panelStyling ++ viewerPanelStyling
+        ]
+        [ h3 [] [ text "Viewer Options" ]
+        , button [ onClick ShowAxes ] [ text "Show Axes" ]
+        ]
+
+
+viewerPanelStyling : List Css.Mixin
+viewerPanelStyling =
+    [ Css.top (Css.px 60)
+    , Css.right (Css.px 35)
+    ]
+
 
 toggleViewerPanel : Html Msg
 toggleViewerPanel =

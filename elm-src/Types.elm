@@ -20,6 +20,7 @@ type Msg
     | KeyMsg Keyboard.KeyCode
     | TogglePanel Panel
     | ExpandHistory HistoryID
+    | ShowAxes
 
 
 type alias SectionID = Int

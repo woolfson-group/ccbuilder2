@@ -30,16 +30,37 @@
             };
             // insert the viewer under the Dom element with id 'gl'.
             viewer = pv.Viewer(document.getElementById('viewer'), options);
+            window.onresize = function(event) {
+                viewer.fitParent();
+            }
         }
     );
 
     app.ports.showStructure.subscribe(
         function (pdbString) {
-            viewer.clear();
+            if (viewer.get('structure')) {
+                viewer.rm('structure');
+            }
             var structure = pv.io.pdb(pdbString);
             viewer.ballsAndSticks('structure', structure);
             viewer.cartoon('structure', structure, { color: pv.color.byChain() });
             viewer.fitTo(structure);
+        }
+    );
+
+    app.ports.showAxes.subscribe(
+        function () {
+            console.log(viewer.get('axes'));
+            if (viewer.get('axes')) {
+                viewer.rm('axes')
+                viewer.requestRedraw();
+            }
+            else {
+                var axes = viewer.customMesh('axes');
+                axes.addTube([0, 0, 0], [10, 0, 0], 0.2, { cap : true, color: 'red' })
+                axes.addTube([0, 0, 0], [0, 10, 0], 0.2, { cap : true, color: 'blue' })
+                axes.addTube([0, 0, 0], [0, 0, 10], 0.2, { cap : true, color: 'green' })
+            }
         }
     );
 

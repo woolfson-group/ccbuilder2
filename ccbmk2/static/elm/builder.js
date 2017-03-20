@@ -19199,6 +19199,7 @@ var _user$project$Types$ModellingResults = F3(
 	function (a, b, c) {
 		return {pdbFile: a, score: b, residuesPerTurn: c};
 	});
+var _user$project$Types$ShowAxes = {ctor: 'ShowAxes'};
 var _user$project$Types$ExpandHistory = function (a) {
 	return {ctor: 'ExpandHistory', _0: a};
 };
@@ -21768,6 +21769,17 @@ var _user$project$Builder$buildingStatusStyling = {
 		}
 	}
 };
+var _user$project$Builder$viewerPanelStyling = {
+	ctor: '::',
+	_0: _rtfeldman$elm_css$Css$top(
+		_rtfeldman$elm_css$Css$px(60)),
+	_1: {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css$right(
+			_rtfeldman$elm_css$Css$px(35)),
+		_1: {ctor: '[]'}
+	}
+};
 var _user$project$Builder$buildHistoryPanelStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$top(
@@ -22688,6 +22700,59 @@ var _user$project$Builder$toggleBuildHistoryPanel = A2(
 		_0: _elm_lang$html$Html$text('Build History'),
 		_1: {ctor: '[]'}
 	});
+var _user$project$Builder$viewerPanel = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _user$project$Builder$class(
+			{
+				ctor: '::',
+				_0: _user$project$BuilderCss$OverlayPanelCss,
+				_1: {ctor: '[]'}
+			}),
+		_1: {
+			ctor: '::',
+			_0: _user$project$Builder$id(
+				{
+					ctor: '::',
+					_0: _user$project$Types$ViewerPanel,
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _user$project$Builder$styles(
+					A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$Builder$viewerPanelStyling)),
+				_1: {ctor: '[]'}
+			}
+		}
+	},
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$h3,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text('Viewer Options'),
+				_1: {ctor: '[]'}
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$button,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$ShowAxes),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Show Axes'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		}
+	});
 var _user$project$Builder$toggleViewerPanel = A2(
 	_elm_lang$html$Html$div,
 	{
@@ -22808,7 +22873,11 @@ var _user$project$Builder$overlayPanels = function (model) {
 					_0: model.panelVisibility.buildHistoryPanel,
 					_1: _user$project$Builder$buildHistoryPanel(model.modelHistory)
 				},
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: model.panelVisibility.viewerPanel, _1: _user$project$Builder$viewerPanel},
+					_1: {ctor: '[]'}
+				}
 			}
 		}
 	};
@@ -22874,6 +22943,11 @@ var _user$project$Builder$showStructure = _elm_lang$core$Native_Platform.outgoin
 	'showStructure',
 	function (v) {
 		return v;
+	});
+var _user$project$Builder$showAxes = _elm_lang$core$Native_Platform.outgoingPort(
+	'showAxes',
+	function (v) {
+		return null;
 	});
 var _user$project$Builder$downloadPdb = _elm_lang$core$Native_Platform.outgoingPort(
 	'downloadPdb',
@@ -23148,7 +23222,7 @@ var _user$project$Builder$update = F2(
 							panelVisibility: A2(_user$project$Builder$togglePanelVisibility, _p11._0, model.panelVisibility)
 						}),
 					{ctor: '[]'});
-			default:
+			case 'ExpandHistory':
 				var _p20 = _p11._0;
 				var oldEntry = A2(_elm_lang$core$Dict$get, _p20, model.modelHistory);
 				var _p19 = oldEntry;
@@ -23171,6 +23245,16 @@ var _user$project$Builder$update = F2(
 						model,
 						{ctor: '[]'});
 				}
+			default:
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{
+						ctor: '::',
+						_0: _user$project$Builder$showAxes(
+							{ctor: '_Tuple0'}),
+						_1: {ctor: '[]'}
+					});
 		}
 	});
 var _user$project$Builder$Model = function (a) {
@@ -23255,7 +23339,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"ChangeBuildMode":["String"],"Build":[],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"SetParametersAndBuild":["Types.ParametersDict"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ pdbFile : String, score : Float, residuesPerTurn : Float }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"ChangeBuildMode":["String"],"Build":[],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"SetParametersAndBuild":["Types.ParametersDict"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ pdbFile : String, score : Float, residuesPerTurn : Float }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])
