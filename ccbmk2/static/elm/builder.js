@@ -19333,127 +19333,86 @@ var _user$project$BuilderCss$css = function (_p0) {
 				}),
 			_1: {
 				ctor: '::',
-				_0: A2(
-					_rtfeldman$elm_css$Css$each,
+				_0: _rtfeldman$elm_css$Css_Elements$h4(
 					{
 						ctor: '::',
-						_0: _rtfeldman$elm_css$Css_Elements$h2,
-						_1: {
-							ctor: '::',
-							_0: _rtfeldman$elm_css$Css_Elements$h3,
-							_1: {ctor: '[]'}
-						}
-					},
-					{
-						ctor: '::',
-						_0: _rtfeldman$elm_css$Css$marginTop(
-							_rtfeldman$elm_css$Css$px(2)),
-						_1: {
-							ctor: '::',
-							_0: _rtfeldman$elm_css$Css$marginBottom(
-								_rtfeldman$elm_css$Css$px(0)),
-							_1: {ctor: '[]'}
-						}
+						_0: _rtfeldman$elm_css$Css$textDecoration(_rtfeldman$elm_css$Css$underline),
+						_1: {ctor: '[]'}
 					}),
 				_1: {
 					ctor: '::',
-					_0: _rtfeldman$elm_css$Css_Elements$table(
+					_0: A2(
+						_rtfeldman$elm_css$Css$each,
 						{
 							ctor: '::',
-							_0: _rtfeldman$elm_css$Css$borderCollapse(_rtfeldman$elm_css$Css$collapse),
-							_1: {ctor: '[]'}
+							_0: _rtfeldman$elm_css$Css_Elements$h2,
+							_1: {
+								ctor: '::',
+								_0: _rtfeldman$elm_css$Css_Elements$h3,
+								_1: {
+									ctor: '::',
+									_0: _rtfeldman$elm_css$Css_Elements$h4,
+									_1: {ctor: '[]'}
+								}
+							}
+						},
+						{
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Css$marginTop(
+								_rtfeldman$elm_css$Css$px(2)),
+							_1: {
+								ctor: '::',
+								_0: _rtfeldman$elm_css$Css$marginBottom(
+									_rtfeldman$elm_css$Css$px(0)),
+								_1: {ctor: '[]'}
+							}
 						}),
 					_1: {
 						ctor: '::',
-						_0: A2(
-							_rtfeldman$elm_css$Css$class,
-							_user$project$BuilderCss$OverlayPanelCss,
+						_0: _rtfeldman$elm_css$Css_Elements$table(
 							{
 								ctor: '::',
-								_0: _rtfeldman$elm_css$Css$fontFamilies(
-									{
-										ctor: '::',
-										_0: 'Roboto',
-										_1: {
-											ctor: '::',
-											_0: 'sans-serif',
-											_1: {ctor: '[]'}
-										}
-									}),
-								_1: {
-									ctor: '::',
-									_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c2),
-									_1: {
-										ctor: '::',
-										_0: _rtfeldman$elm_css$Css$padding(
-											_rtfeldman$elm_css$Css$px(5)),
-										_1: {
-											ctor: '::',
-											_0: _rtfeldman$elm_css$Css$borderRadius(
-												_rtfeldman$elm_css$Css$px(5)),
-											_1: {
-												ctor: '::',
-												_0: A5(
-													_rtfeldman$elm_css$Css$boxShadow5,
-													_rtfeldman$elm_css$Css$px(0),
-													_rtfeldman$elm_css$Css$px(0),
-													_rtfeldman$elm_css$Css$px(10),
-													_rtfeldman$elm_css$Css$px(2),
-													A3(_rtfeldman$elm_css$Css$rgb, 100, 100, 100)),
-												_1: {ctor: '[]'}
-											}
-										}
-									}
-								}
+								_0: _rtfeldman$elm_css$Css$borderCollapse(_rtfeldman$elm_css$Css$collapse),
+								_1: {ctor: '[]'}
 							}),
 						_1: {
 							ctor: '::',
 							_0: A2(
 								_rtfeldman$elm_css$Css$class,
-								_user$project$BuilderCss$LeftPanelToggleCss,
+								_user$project$BuilderCss$OverlayPanelCss,
 								{
 									ctor: '::',
-									_0: A2(_rtfeldman$elm_css$Css$property, 'writing-mode', 'vertical-rl'),
-									_1: {
-										ctor: '::',
-										_0: A2(_rtfeldman$elm_css$Css$property, '-webkit-writing-mode', 'vertical-rl'),
-										_1: {
+									_0: _rtfeldman$elm_css$Css$fontFamilies(
+										{
 											ctor: '::',
-											_0: A2(_rtfeldman$elm_css$Css$property, '-ms-writing-mode', 'vertical-rl'),
+											_0: 'Roboto',
 											_1: {
 												ctor: '::',
-												_0: A2(_rtfeldman$elm_css$Css$property, 'user-select', 'none'),
+												_0: 'sans-serif',
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {
+										ctor: '::',
+										_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c2),
+										_1: {
+											ctor: '::',
+											_0: _rtfeldman$elm_css$Css$padding(
+												_rtfeldman$elm_css$Css$px(5)),
+											_1: {
+												ctor: '::',
+												_0: _rtfeldman$elm_css$Css$borderRadius(
+													_rtfeldman$elm_css$Css$px(5)),
 												_1: {
 													ctor: '::',
-													_0: A2(_rtfeldman$elm_css$Css$property, '-ms-user-select', 'none'),
-													_1: {
-														ctor: '::',
-														_0: A2(_rtfeldman$elm_css$Css$property, '-webkit-user-select', 'none'),
-														_1: {
-															ctor: '::',
-															_0: _rtfeldman$elm_css$Css$marginBottom(
-																_rtfeldman$elm_css$Css$px(2)),
-															_1: {
-																ctor: '::',
-																_0: A4(
-																	_rtfeldman$elm_css$Css$borderRadius4,
-																	_rtfeldman$elm_css$Css$px(0),
-																	_rtfeldman$elm_css$Css$px(5),
-																	_rtfeldman$elm_css$Css$px(5),
-																	_rtfeldman$elm_css$Css$px(0)),
-																_1: {
-																	ctor: '::',
-																	_0: _rtfeldman$elm_css$Css$hover(
-																		{
-																			ctor: '::',
-																			_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$default),
-																			_1: {ctor: '[]'}
-																		}),
-																	_1: {ctor: '[]'}
-																}
-															}
-														}
-													}
+													_0: A5(
+														_rtfeldman$elm_css$Css$boxShadow5,
+														_rtfeldman$elm_css$Css$px(0),
+														_rtfeldman$elm_css$Css$px(0),
+														_rtfeldman$elm_css$Css$px(10),
+														_rtfeldman$elm_css$Css$px(2),
+														A3(_rtfeldman$elm_css$Css$rgb, 100, 100, 100)),
+													_1: {ctor: '[]'}
 												}
 											}
 										}
@@ -19463,7 +19422,7 @@ var _user$project$BuilderCss$css = function (_p0) {
 								ctor: '::',
 								_0: A2(
 									_rtfeldman$elm_css$Css$class,
-									_user$project$BuilderCss$RightPanelToggleCss,
+									_user$project$BuilderCss$LeftPanelToggleCss,
 									{
 										ctor: '::',
 										_0: A2(_rtfeldman$elm_css$Css$property, 'writing-mode', 'vertical-rl'),
@@ -19484,29 +19443,25 @@ var _user$project$BuilderCss$css = function (_p0) {
 															_0: A2(_rtfeldman$elm_css$Css$property, '-webkit-user-select', 'none'),
 															_1: {
 																ctor: '::',
-																_0: _rtfeldman$elm_css$Css$float(_rtfeldman$elm_css$Css$right),
+																_0: _rtfeldman$elm_css$Css$marginBottom(
+																	_rtfeldman$elm_css$Css$px(2)),
 																_1: {
 																	ctor: '::',
-																	_0: _rtfeldman$elm_css$Css$marginBottom(
-																		_rtfeldman$elm_css$Css$px(2)),
+																	_0: A4(
+																		_rtfeldman$elm_css$Css$borderRadius4,
+																		_rtfeldman$elm_css$Css$px(0),
+																		_rtfeldman$elm_css$Css$px(5),
+																		_rtfeldman$elm_css$Css$px(5),
+																		_rtfeldman$elm_css$Css$px(0)),
 																	_1: {
 																		ctor: '::',
-																		_0: A4(
-																			_rtfeldman$elm_css$Css$borderRadius4,
-																			_rtfeldman$elm_css$Css$px(5),
-																			_rtfeldman$elm_css$Css$px(0),
-																			_rtfeldman$elm_css$Css$px(0),
-																			_rtfeldman$elm_css$Css$px(5)),
-																		_1: {
-																			ctor: '::',
-																			_0: _rtfeldman$elm_css$Css$hover(
-																				{
-																					ctor: '::',
-																					_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$default),
-																					_1: {ctor: '[]'}
-																				}),
-																			_1: {ctor: '[]'}
-																		}
+																		_0: _rtfeldman$elm_css$Css$hover(
+																			{
+																				ctor: '::',
+																				_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$default),
+																				_1: {ctor: '[]'}
+																			}),
+																		_1: {ctor: '[]'}
 																	}
 																}
 															}
@@ -19520,62 +19475,56 @@ var _user$project$BuilderCss$css = function (_p0) {
 									ctor: '::',
 									_0: A2(
 										_rtfeldman$elm_css$Css$class,
-										_user$project$BuilderCss$ParameterInputCss,
+										_user$project$BuilderCss$RightPanelToggleCss,
 										{
 											ctor: '::',
-											_0: _rtfeldman$elm_css$Css$paddingTop(
-												_rtfeldman$elm_css$Css$px(5)),
+											_0: A2(_rtfeldman$elm_css$Css$property, 'writing-mode', 'vertical-rl'),
 											_1: {
 												ctor: '::',
-												_0: _rtfeldman$elm_css$Css$paddingBottom(
-													_rtfeldman$elm_css$Css$px(5)),
+												_0: A2(_rtfeldman$elm_css$Css$property, '-webkit-writing-mode', 'vertical-rl'),
 												_1: {
 													ctor: '::',
-													_0: _rtfeldman$elm_css$Css$children(
-														{
+													_0: A2(_rtfeldman$elm_css$Css$property, '-ms-writing-mode', 'vertical-rl'),
+													_1: {
+														ctor: '::',
+														_0: A2(_rtfeldman$elm_css$Css$property, 'user-select', 'none'),
+														_1: {
 															ctor: '::',
-															_0: A2(
-																_rtfeldman$elm_css$Css$each,
-																{
-																	ctor: '::',
-																	_0: _rtfeldman$elm_css$Css_Elements$input,
-																	_1: {
-																		ctor: '::',
-																		_0: _rtfeldman$elm_css$Css_Elements$textarea,
-																		_1: {ctor: '[]'}
-																	}
-																},
-																{
-																	ctor: '::',
-																	_0: _rtfeldman$elm_css$Css$marginTop(
-																		_rtfeldman$elm_css$Css$px(2)),
-																	_1: {ctor: '[]'}
-																}),
+															_0: A2(_rtfeldman$elm_css$Css$property, '-ms-user-select', 'none'),
 															_1: {
 																ctor: '::',
-																_0: _rtfeldman$elm_css$Css_Elements$textarea(
-																	{
+																_0: A2(_rtfeldman$elm_css$Css$property, '-webkit-user-select', 'none'),
+																_1: {
+																	ctor: '::',
+																	_0: _rtfeldman$elm_css$Css$float(_rtfeldman$elm_css$Css$right),
+																	_1: {
 																		ctor: '::',
-																		_0: _rtfeldman$elm_css$Css$fontFamilies(
-																			{
-																				ctor: '::',
-																				_0: 'Source Code Pro',
-																				_1: {
-																					ctor: '::',
-																					_0: 'monospace',
-																					_1: {ctor: '[]'}
-																				}
-																			}),
+																		_0: _rtfeldman$elm_css$Css$marginBottom(
+																			_rtfeldman$elm_css$Css$px(2)),
 																		_1: {
 																			ctor: '::',
-																			_0: _rtfeldman$elm_css$Css$resize(_rtfeldman$elm_css$Css$none),
-																			_1: {ctor: '[]'}
+																			_0: A4(
+																				_rtfeldman$elm_css$Css$borderRadius4,
+																				_rtfeldman$elm_css$Css$px(5),
+																				_rtfeldman$elm_css$Css$px(0),
+																				_rtfeldman$elm_css$Css$px(0),
+																				_rtfeldman$elm_css$Css$px(5)),
+																			_1: {
+																				ctor: '::',
+																				_0: _rtfeldman$elm_css$Css$hover(
+																					{
+																						ctor: '::',
+																						_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$default),
+																						_1: {ctor: '[]'}
+																					}),
+																				_1: {ctor: '[]'}
+																			}
 																		}
-																	}),
-																_1: {ctor: '[]'}
+																	}
+																}
 															}
-														}),
-													_1: {ctor: '[]'}
+														}
+													}
 												}
 											}
 										}),
@@ -19583,27 +19532,60 @@ var _user$project$BuilderCss$css = function (_p0) {
 										ctor: '::',
 										_0: A2(
 											_rtfeldman$elm_css$Css$class,
-											_user$project$BuilderCss$FlexContainerCss,
+											_user$project$BuilderCss$ParameterInputCss,
 											{
 												ctor: '::',
-												_0: _rtfeldman$elm_css$Css$displayFlex,
+												_0: _rtfeldman$elm_css$Css$paddingTop(
+													_rtfeldman$elm_css$Css$px(5)),
 												_1: {
 													ctor: '::',
-													_0: _rtfeldman$elm_css$Css$flexDirection(_rtfeldman$elm_css$Css$row),
+													_0: _rtfeldman$elm_css$Css$paddingBottom(
+														_rtfeldman$elm_css$Css$px(5)),
 													_1: {
 														ctor: '::',
 														_0: _rtfeldman$elm_css$Css$children(
 															{
 																ctor: '::',
 																_0: A2(
-																	_rtfeldman$elm_css$Css$class,
-																	_user$project$BuilderCss$FlexItemCss,
+																	_rtfeldman$elm_css$Css$each,
 																	{
 																		ctor: '::',
-																		_0: _rtfeldman$elm_css$Css$flex(_rtfeldman$elm_css$Css$none),
+																		_0: _rtfeldman$elm_css$Css_Elements$input,
+																		_1: {
+																			ctor: '::',
+																			_0: _rtfeldman$elm_css$Css_Elements$textarea,
+																			_1: {ctor: '[]'}
+																		}
+																	},
+																	{
+																		ctor: '::',
+																		_0: _rtfeldman$elm_css$Css$marginTop(
+																			_rtfeldman$elm_css$Css$px(2)),
 																		_1: {ctor: '[]'}
 																	}),
-																_1: {ctor: '[]'}
+																_1: {
+																	ctor: '::',
+																	_0: _rtfeldman$elm_css$Css_Elements$textarea(
+																		{
+																			ctor: '::',
+																			_0: _rtfeldman$elm_css$Css$fontFamilies(
+																				{
+																					ctor: '::',
+																					_0: 'Source Code Pro',
+																					_1: {
+																						ctor: '::',
+																						_0: 'monospace',
+																						_1: {ctor: '[]'}
+																					}
+																				}),
+																			_1: {
+																				ctor: '::',
+																				_0: _rtfeldman$elm_css$Css$resize(_rtfeldman$elm_css$Css$none),
+																				_1: {ctor: '[]'}
+																			}
+																		}),
+																	_1: {ctor: '[]'}
+																}
 															}),
 														_1: {ctor: '[]'}
 													}
@@ -19613,164 +19595,195 @@ var _user$project$BuilderCss$css = function (_p0) {
 											ctor: '::',
 											_0: A2(
 												_rtfeldman$elm_css$Css$class,
-												_user$project$BuilderCss$FlexItemCss,
+												_user$project$BuilderCss$FlexContainerCss,
 												{
 													ctor: '::',
-													_0: _rtfeldman$elm_css$Css$padding(
-														_rtfeldman$elm_css$Css$px(10)),
-													_1: {ctor: '[]'}
+													_0: _rtfeldman$elm_css$Css$displayFlex,
+													_1: {
+														ctor: '::',
+														_0: _rtfeldman$elm_css$Css$flexDirection(_rtfeldman$elm_css$Css$row),
+														_1: {
+															ctor: '::',
+															_0: _rtfeldman$elm_css$Css$children(
+																{
+																	ctor: '::',
+																	_0: A2(
+																		_rtfeldman$elm_css$Css$class,
+																		_user$project$BuilderCss$FlexItemCss,
+																		{
+																			ctor: '::',
+																			_0: _rtfeldman$elm_css$Css$flex(_rtfeldman$elm_css$Css$none),
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {ctor: '[]'}
+														}
+													}
 												}),
 											_1: {
 												ctor: '::',
 												_0: A2(
-													_rtfeldman$elm_css$Css$id,
-													_user$project$Types$AppHeaderPanel,
+													_rtfeldman$elm_css$Css$class,
+													_user$project$BuilderCss$FlexItemCss,
 													{
 														ctor: '::',
-														_0: _rtfeldman$elm_css$Css$fontFamilies(
-															{
-																ctor: '::',
-																_0: 'Source Code Pro',
-																_1: {
-																	ctor: '::',
-																	_0: 'monospace',
-																	_1: {ctor: '[]'}
-																}
-															}),
-														_1: {
-															ctor: '::',
-															_0: _rtfeldman$elm_css$Css$color(_user$project$BuilderCss$colorPalette.c1),
-															_1: {
-																ctor: '::',
-																_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c4),
-																_1: {
-																	ctor: '::',
-																	_0: A5(
-																		_rtfeldman$elm_css$Css$boxShadow5,
-																		_rtfeldman$elm_css$Css$px(0),
-																		_rtfeldman$elm_css$Css$px(0),
-																		_rtfeldman$elm_css$Css$px(10),
-																		_rtfeldman$elm_css$Css$px(2),
-																		A3(_rtfeldman$elm_css$Css$rgb, 100, 100, 100)),
-																	_1: {ctor: '[]'}
-																}
-															}
-														}
+														_0: _rtfeldman$elm_css$Css$padding(
+															_rtfeldman$elm_css$Css$px(10)),
+														_1: {ctor: '[]'}
 													}),
 												_1: {
 													ctor: '::',
 													_0: A2(
 														_rtfeldman$elm_css$Css$id,
-														_user$project$Types$BuildPanel,
+														_user$project$Types$AppHeaderPanel,
 														{
 															ctor: '::',
-															_0: _rtfeldman$elm_css$Css$paddingRight(
-																_rtfeldman$elm_css$Css$px(12)),
-															_1: {ctor: '[]'}
+															_0: _rtfeldman$elm_css$Css$fontFamilies(
+																{
+																	ctor: '::',
+																	_0: 'Source Code Pro',
+																	_1: {
+																		ctor: '::',
+																		_0: 'monospace',
+																		_1: {ctor: '[]'}
+																	}
+																}),
+															_1: {
+																ctor: '::',
+																_0: _rtfeldman$elm_css$Css$color(_user$project$BuilderCss$colorPalette.c1),
+																_1: {
+																	ctor: '::',
+																	_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c4),
+																	_1: {
+																		ctor: '::',
+																		_0: A5(
+																			_rtfeldman$elm_css$Css$boxShadow5,
+																			_rtfeldman$elm_css$Css$px(0),
+																			_rtfeldman$elm_css$Css$px(0),
+																			_rtfeldman$elm_css$Css$px(10),
+																			_rtfeldman$elm_css$Css$px(2),
+																			A3(_rtfeldman$elm_css$Css$rgb, 100, 100, 100)),
+																		_1: {ctor: '[]'}
+																	}
+																}
+															}
 														}),
 													_1: {
 														ctor: '::',
 														_0: A2(
 															_rtfeldman$elm_css$Css$id,
-															_user$project$Types$ExamplesPanel,
+															_user$project$Types$BuildPanel,
 															{
 																ctor: '::',
-																_0: _rtfeldman$elm_css$Css$textAlign(_rtfeldman$elm_css$Css$center),
+																_0: _rtfeldman$elm_css$Css$paddingRight(
+																	_rtfeldman$elm_css$Css$px(12)),
 																_1: {ctor: '[]'}
 															}),
 														_1: {
 															ctor: '::',
 															_0: A2(
 																_rtfeldman$elm_css$Css$id,
-																_user$project$Types$BuildingStatusPanel,
+																_user$project$Types$ExamplesPanel,
 																{
 																	ctor: '::',
 																	_0: _rtfeldman$elm_css$Css$textAlign(_rtfeldman$elm_css$Css$center),
-																	_1: {
-																		ctor: '::',
-																		_0: _rtfeldman$elm_css$Css$marginTop(
-																			_rtfeldman$elm_css$Css$px(-40)),
-																		_1: {
-																			ctor: '::',
-																			_0: _rtfeldman$elm_css$Css$marginLeft(
-																				_rtfeldman$elm_css$Css$px(-40)),
-																			_1: {ctor: '[]'}
-																		}
-																	}
+																	_1: {ctor: '[]'}
 																}),
 															_1: {
 																ctor: '::',
 																_0: A2(
 																	_rtfeldman$elm_css$Css$id,
-																	_user$project$Types$BuildHistoryPanel,
+																	_user$project$Types$BuildingStatusPanel,
 																	{
 																		ctor: '::',
-																		_0: _rtfeldman$elm_css$Css$children(
-																			{
+																		_0: _rtfeldman$elm_css$Css$textAlign(_rtfeldman$elm_css$Css$center),
+																		_1: {
+																			ctor: '::',
+																			_0: _rtfeldman$elm_css$Css$marginTop(
+																				_rtfeldman$elm_css$Css$px(-40)),
+																			_1: {
 																				ctor: '::',
-																				_0: _rtfeldman$elm_css$Css_Elements$table(
-																					{
-																						ctor: '::',
-																						_0: _rtfeldman$elm_css$Css$fontSize(
-																							_rtfeldman$elm_css$Css$pt(10)),
-																						_1: {ctor: '[]'}
-																					}),
-																				_1: {
+																				_0: _rtfeldman$elm_css$Css$marginLeft(
+																					_rtfeldman$elm_css$Css$px(-40)),
+																				_1: {ctor: '[]'}
+																			}
+																		}
+																	}),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_rtfeldman$elm_css$Css$id,
+																		_user$project$Types$BuildHistoryPanel,
+																		{
+																			ctor: '::',
+																			_0: _rtfeldman$elm_css$Css$children(
+																				{
 																					ctor: '::',
 																					_0: _rtfeldman$elm_css$Css_Elements$table(
 																						{
 																							ctor: '::',
-																							_0: _rtfeldman$elm_css$Css$children(
-																								{
-																									ctor: '::',
-																									_0: _rtfeldman$elm_css$Css_Elements$tbody(
-																										{
-																											ctor: '::',
-																											_0: _rtfeldman$elm_css$Css$children(
-																												{
-																													ctor: '::',
-																													_0: _rtfeldman$elm_css$Css_Elements$tr(
-																														{
-																															ctor: '::',
-																															_0: _rtfeldman$elm_css$Css$fontFamilies(
-																																{
-																																	ctor: '::',
-																																	_0: 'Source Code Pro',
-																																	_1: {
-																																		ctor: '::',
-																																		_0: 'monospace',
-																																		_1: {ctor: '[]'}
-																																	}
-																																}),
-																															_1: {
+																							_0: _rtfeldman$elm_css$Css$fontSize(
+																								_rtfeldman$elm_css$Css$pt(10)),
+																							_1: {ctor: '[]'}
+																						}),
+																					_1: {
+																						ctor: '::',
+																						_0: _rtfeldman$elm_css$Css_Elements$table(
+																							{
+																								ctor: '::',
+																								_0: _rtfeldman$elm_css$Css$children(
+																									{
+																										ctor: '::',
+																										_0: _rtfeldman$elm_css$Css_Elements$tbody(
+																											{
+																												ctor: '::',
+																												_0: _rtfeldman$elm_css$Css$children(
+																													{
+																														ctor: '::',
+																														_0: _rtfeldman$elm_css$Css_Elements$tr(
+																															{
 																																ctor: '::',
-																																_0: _rtfeldman$elm_css$Css$hover(
+																																_0: _rtfeldman$elm_css$Css$fontFamilies(
 																																	{
 																																		ctor: '::',
-																																		_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c3),
+																																		_0: 'Source Code Pro',
 																																		_1: {
 																																			ctor: '::',
-																																			_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$default),
+																																			_0: 'monospace',
 																																			_1: {ctor: '[]'}
 																																		}
 																																	}),
-																																_1: {ctor: '[]'}
-																															}
-																														}),
-																													_1: {ctor: '[]'}
-																												}),
-																											_1: {ctor: '[]'}
-																										}),
-																									_1: {ctor: '[]'}
-																								}),
-																							_1: {ctor: '[]'}
-																						}),
-																					_1: {ctor: '[]'}
-																				}
-																			}),
-																		_1: {ctor: '[]'}
-																	}),
-																_1: {ctor: '[]'}
+																																_1: {
+																																	ctor: '::',
+																																	_0: _rtfeldman$elm_css$Css$hover(
+																																		{
+																																			ctor: '::',
+																																			_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c3),
+																																			_1: {
+																																				ctor: '::',
+																																				_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$default),
+																																				_1: {ctor: '[]'}
+																																			}
+																																		}),
+																																	_1: {ctor: '[]'}
+																																}
+																															}),
+																														_1: {ctor: '[]'}
+																													}),
+																												_1: {ctor: '[]'}
+																											}),
+																										_1: {ctor: '[]'}
+																									}),
+																								_1: {ctor: '[]'}
+																							}),
+																						_1: {ctor: '[]'}
+																					}
+																				}),
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {ctor: '[]'}
+																}
 															}
 														}
 													}
@@ -20712,95 +20725,113 @@ var _user$project$BuildPanel$singleChainInputSection = function (_p19) {
 		},
 		A2(
 			_elm_lang$core$Basics_ops['++'],
-			A2(
-				_elm_lang$core$List$map,
-				_user$project$BuildPanel$singleParameterInput(_p22),
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					_user$project$BuildPanel$basicParameters(_p21),
-					_user$project$BuildPanel$advancedParameters(_p21))),
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h4,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'Chain ',
+								_elm_lang$core$Basics$toString(_p22))),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			},
 			A2(
 				_elm_lang$core$Basics_ops['++'],
-				{
-					ctor: '::',
-					_0: A3(
-						_user$project$BuildPanel$singleZShiftInput,
-						_p22,
-						{ctor: '_Tuple3', _0: 'Z-Shift', _1: _user$project$Types$ZShift, _2: _p21.zShift},
-						_elm_lang$core$Native_Utils.eq(_p21.linkedSuperHelRot, 'True') ? true : false),
-					_1: {ctor: '[]'}
-				},
+				A2(
+					_elm_lang$core$List$map,
+					_user$project$BuildPanel$singleParameterInput(_p22),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_user$project$BuildPanel$basicParameters(_p21),
+						_user$project$BuildPanel$advancedParameters(_p21))),
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					{
 						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$input,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onClick(
-										A3(_user$project$Types$EditSingleParameter, _user$project$Types$Orientation, _p22, '')),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$checked(
-											_elm_lang$core$Native_Utils.eq(_p21.antiParallel, 'True') ? true : false),
-										_1: {ctor: '[]'}
-									}
-								}
-							},
-							{ctor: '[]'}),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('Anti Parallel'),
-							_1: {ctor: '[]'}
-						}
+						_0: A3(
+							_user$project$BuildPanel$singleZShiftInput,
+							_p22,
+							{ctor: '_Tuple3', _0: 'Z-Shift', _1: _user$project$Types$ZShift, _2: _p21.zShift},
+							_elm_lang$core$Native_Utils.eq(_p21.linkedSuperHelRot, 'True') ? true : false),
+						_1: {ctor: '[]'}
 					},
 					A2(
 						_elm_lang$core$Basics_ops['++'],
 						{
 							ctor: '::',
 							_0: A2(
-								_user$project$BuildPanel$singleSequenceInput,
-								_p22,
-								{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: _p21.sequence, _3: _p21.register}),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$button,
+								_elm_lang$html$Html$input,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onClick(
-										_user$project$Types$CopyParameters(_p22)),
-									_1: {ctor: '[]'}
+									_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(
+											A3(_user$project$Types$EditSingleParameter, _user$project$Types$Orientation, _p22, '')),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$checked(
+												_elm_lang$core$Native_Utils.eq(_p21.antiParallel, 'True') ? true : false),
+											_1: {ctor: '[]'}
+										}
+									}
 								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('Copy'),
-									_1: {ctor: '[]'}
-								}),
+								{ctor: '[]'}),
 							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Anti Parallel'),
+								_1: {ctor: '[]'}
+							}
+						},
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							{
+								ctor: '::',
+								_0: A2(
+									_user$project$BuildPanel$singleSequenceInput,
+									_p22,
+									{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: _p21.sequence, _3: _p21.register}),
+								_1: {ctor: '[]'}
+							},
+							{
 								ctor: '::',
 								_0: A2(
 									_elm_lang$html$Html$button,
 									{
 										ctor: '::',
 										_0: _elm_lang$html$Html_Events$onClick(
-											_user$project$Types$PasteParameters(_p22)),
+											_user$project$Types$CopyParameters(_p22)),
 										_1: {ctor: '[]'}
 									},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text('Paste'),
+										_0: _elm_lang$html$Html$text('Copy'),
 										_1: {ctor: '[]'}
 									}),
-								_1: {ctor: '[]'}
-							}
-						})))));
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$button,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(
+												_user$project$Types$PasteParameters(_p22)),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Paste'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}))))));
 };
 var _user$project$BuildPanel$createParametersSections = function (currentInputChunk) {
 	return A2(

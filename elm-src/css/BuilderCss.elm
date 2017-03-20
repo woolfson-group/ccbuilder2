@@ -3,7 +3,7 @@ module BuilderCss exposing (..)
 import Css exposing (..)
 import Css.Namespace exposing (namespace)
 import Css.Elements exposing (
-    body, h1, h2, h3, table, tbody, tr, input, textarea)
+    body, h1, h2, h3, h4, table, tbody, tr, input, textarea)
 import Types exposing (Panel(..))
 
 
@@ -33,7 +33,10 @@ css =
         , margin (px 0)
         , paddingLeft (px 10)
         ]
-    , each [ h2, h3 ]
+    , h4
+        [ textDecoration underline 
+        ]
+    , each [ h2, h3, h4 ]
         [ marginTop (px 2)
         , marginBottom (px 0)
         ]

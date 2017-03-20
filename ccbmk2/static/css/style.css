@@ -10,7 +10,11 @@ h1 {
     padding-left: 10px;
 }
 
-h2, h3 {
+h4 {
+    text-decoration: underline;
+}
+
+h2, h3, h4 {
     margin-top: 2px;
     margin-bottom: 0px;
 }

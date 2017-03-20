@@ -216,18 +216,28 @@ createParametersSections currentInputChunk =
 
 singleChainInputSection : ( SectionID, InputValues ) -> Html Msg
 singleChainInputSection ( sectionID, currentInput ) =
-    List.map
-        (singleParameterInput sectionID)
-        ((basicParameters currentInput) ++ (advancedParameters currentInput))
+    [ h4 [] [ text ("Chain " ++ toString sectionID) ] ]
+        ++ List.map
+            (singleParameterInput sectionID)
+            ((basicParameters currentInput) ++ (advancedParameters currentInput))
         ++ [ singleZShiftInput
                 sectionID
                 ( "Z-Shift", ZShift, currentInput.zShift )
-                (if currentInput.linkedSuperHelRot == "True" then True else False)
+                (if currentInput.linkedSuperHelRot == "True" then
+                    True
+                 else
+                    False
+                )
            ]
         ++ [ input
                 [ type_ "checkbox"
                 , onClick (EditSingleParameter Orientation sectionID "")
-                , checked (if currentInput.antiParallel == "True" then True else False)
+                , checked
+                    (if currentInput.antiParallel == "True" then
+                        True
+                     else
+                        False
+                    )
                 ]
                 []
            , text "Anti Parallel"

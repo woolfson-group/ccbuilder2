@@ -22,9 +22,7 @@ This is the source code for a web application for building models of coiled coil
 
 ## TODO
 
-* Add chain labels to parameter boxes
 * Try horizontal model info
 * Convert advanced build to a table
 * Add additional camera and representation controls
-* Anti-parallel structures
 * Make empty model autofill parameters input and sectionid to avoid impossible states
