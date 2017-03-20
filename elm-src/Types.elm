@@ -89,6 +89,7 @@ type Panel
     | ExamplesPanel
     | BuildingStatusPanel
     | BuildHistoryPanel
+    | ViewerPanel
 
 
 emptyParameterRecord : ParameterRecord

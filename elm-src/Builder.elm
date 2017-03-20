@@ -90,6 +90,7 @@ type alias PanelVisibility =
     { buildPanel : Bool
     , examplesPanel : Bool
     , buildHistoryPanel : Bool
+    , viewerPanel : Bool
     }
 
 
@@ -124,7 +125,7 @@ emptyModel =
 
 defaultVisibility : PanelVisibility
 defaultVisibility =
-    PanelVisibility True False False
+    PanelVisibility True False False False
 
 
 
@@ -453,8 +454,15 @@ togglePanelVisibility panel currentVisibility =
         BuildHistoryPanel ->
             { currentVisibility
                 | buildHistoryPanel = not currentVisibility.buildHistoryPanel
+                , viewerPanel = False
             }
 
+        ViewerPanel ->
+            { currentVisibility
+                | buildHistoryPanel = False
+                , viewerPanel = not currentVisibility.viewerPanel
+            }
+        
         _ ->
             currentVisibility
 
@@ -554,6 +562,7 @@ topRightToggles : Html Msg
 topRightToggles =
     div [ styles topRightTogglesStyling ]
         [ toggleBuildHistoryPanel
+        , toggleViewerPanel
         ]
 
 
@@ -563,6 +572,7 @@ topRightTogglesStyling =
     , Css.right (Css.px 0)
     , Css.zIndex (Css.int 2)
     , Css.position Css.absolute
+    , Css.width (Css.px 30)
     ]
 
 
@@ -751,6 +761,18 @@ toggleBuildHistoryPanel =
         , onClick (TogglePanel BuildHistoryPanel)
         ]
         [ text "Build History" ]
+
+
+
+-- Viewer Panel
+
+toggleViewerPanel : Html Msg
+toggleViewerPanel =
+    div
+        [ class [ OverlayPanelCss, RightPanelToggleCss ]
+        , onClick (TogglePanel ViewerPanel)
+        ]
+        [ text "Viewer" ]
 
 
 
