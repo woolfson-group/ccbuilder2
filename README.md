@@ -22,6 +22,8 @@ This is the source code for a web application for building models of coiled coil
 
 ## TODO
 
+* Link representations together
+    * Spheres should turn off everything else etc.
 * Try horizontal model info
 * Convert advanced build to a table
 * Add additional camera and representation controls

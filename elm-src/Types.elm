@@ -21,6 +21,7 @@ type Msg
     | TogglePanel Panel
     | ExpandHistory HistoryID
     | ShowAxes
+    | EditRepresentation RepOption
 
 
 type alias SectionID = Int
@@ -91,6 +92,23 @@ type Panel
     | BuildingStatusPanel
     | BuildHistoryPanel
     | ViewerPanel
+
+
+type alias Representation =
+    { cartoon : Bool
+    , trace : Bool
+    , ballsAndSticks : Bool
+    , spheres : Bool
+    , points : Bool
+    }
+
+
+type RepOption
+    = Cartoon
+    | Trace
+    | BallsAndSticks
+    | Spheres
+    | Points
 
 
 emptyParameterRecord : ParameterRecord

@@ -36,6 +36,8 @@ import Types
         , Parameter(..)
         , BuildMode(..)
         , Panel(..)
+        , Representation
+        , RepOption(..)
         )
 
 
@@ -83,6 +85,7 @@ type alias Model =
     , modelHistory : Dict.Dict HistoryID ( ParametersDict, Bool )
     , nextHistoryID : HistoryID
     , panelVisibility : PanelVisibility
+    , currentRepresentation : Representation
     }
 
 
@@ -120,6 +123,7 @@ emptyModel =
     , modelHistory = Dict.empty
     , nextHistoryID = 1
     , panelVisibility = defaultVisibility
+    , currentRepresentation = Representation False True True False False
     }
 
 
@@ -135,10 +139,13 @@ defaultVisibility =
 port initialiseViewer : () -> Cmd msg
 
 
-port showStructure : String -> Cmd msg
+port showStructure : ( String, Representation ) -> Cmd msg
 
 
 port showAxes : () -> Cmd msg
+
+
+port newRepresentation : Representation -> Cmd msg
 
 
 port downloadPdb : ( String, String ) -> Cmd msg
@@ -211,16 +218,19 @@ update msg model =
 
         Build ->
             let
-                panelVisibility = model.panelVisibility
+                panelVisibility =
+                    model.panelVisibility
             in
                 if not model.building then
                     { model
                         | building = True
-                        , panelVisibility = 
+                        , panelVisibility =
                             { panelVisibility
-                                | buildPanel = False, examplesPanel = False }
+                                | buildPanel = False
+                                , examplesPanel = False
+                            }
                     }
-                    ! [ sendBuildCmd model.parameters ]
+                        ! [ sendBuildCmd model.parameters ]
                 else
                     model ! []
 
@@ -243,7 +253,7 @@ update msg model =
                         Dict.insert model.nextHistoryID ( model.parameters, False ) oldHistory
                     , nextHistoryID = model.nextHistoryID + 1
                 }
-                    ! [ showStructure pdbFile ]
+                    ! [ showStructure ( pdbFile, model.currentRepresentation ) ]
 
         ProcessModel (Err _) ->
             { model | building = False } ! []
@@ -345,9 +355,15 @@ update msg model =
 
                     Nothing ->
                         model ! []
-        
+
         ShowAxes ->
             model ! [ showAxes () ]
+
+        EditRepresentation repOption ->
+            let
+                newRep = updateRepresentation repOption model.currentRepresentation
+            in
+                { model | currentRepresentation = newRep } ! [ newRepresentation newRep ]
 
 
 msgToCommand : Msg -> Cmd Msg
@@ -428,7 +444,7 @@ parametersToInput parameterRecord =
 
         zsh =
             maybeNumberToString parameterRecord.zShift
-        
+
         lsh =
             toString parameterRecord.linkedSuperHelRot
     in
@@ -471,7 +487,7 @@ togglePanelVisibility panel currentVisibility =
                 | buildHistoryPanel = False
                 , viewerPanel = not currentVisibility.viewerPanel
             }
-        
+
         _ ->
             currentVisibility
 
@@ -785,7 +801,12 @@ viewerPanel =
         , styles <| panelStyling ++ viewerPanelStyling
         ]
         [ h3 [] [ text "Viewer Options" ]
-        , button [ onClick ShowAxes ] [ text "Show Axes" ]
+        , button [ onClick ShowAxes ] [ text "Axes" ]
+        , button [ onClick (EditRepresentation Cartoon) ] [ text "Cartoon" ]
+        , button [ onClick (EditRepresentation Trace) ] [ text "Trace" ]
+        , button [ onClick (EditRepresentation BallsAndSticks) ] [ text "Balls and Sticks" ]
+        , button [ onClick (EditRepresentation Spheres) ] [ text "Spheres" ]
+        , button [ onClick (EditRepresentation Points) ] [ text "Dots" ]
         ]
 
 
@@ -794,6 +815,25 @@ viewerPanelStyling =
     [ Css.top (Css.px 60)
     , Css.right (Css.px 35)
     ]
+
+
+updateRepresentation : RepOption -> Representation -> Representation
+updateRepresentation repOption oldRep =
+    case repOption of
+        Cartoon ->
+            { oldRep | cartoon = not oldRep.cartoon }
+        
+        Trace ->
+            { oldRep | trace = not oldRep.trace }
+
+        BallsAndSticks ->
+            { oldRep | ballsAndSticks = not oldRep.ballsAndSticks }
+        
+        Spheres ->
+            { oldRep | spheres = not oldRep.spheres }
+        
+        Points ->
+            { oldRep | points = not oldRep.points }
 
 
 toggleViewerPanel : Html Msg

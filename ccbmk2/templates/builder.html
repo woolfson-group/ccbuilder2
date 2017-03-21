@@ -18,6 +18,7 @@
     var node = document.getElementById('main');
     var app = Elm.Builder.embed(node);
     var viewer;
+    var currentStructure;
 
     // Elm handles the initialisation of the viewer to ensure the DOM element is available
     app.ports.initialiseViewer.subscribe(
@@ -37,20 +38,38 @@
     );
 
     app.ports.showStructure.subscribe(
-        function (pdbString) {
-            if (viewer.get('structure')) {
-                viewer.rm('structure');
-            }
-            var structure = pv.io.pdb(pdbString);
-            viewer.ballsAndSticks('structure', structure);
-            viewer.cartoon('structure', structure, { color: pv.color.byChain() });
-            viewer.fitTo(structure);
+        function (pdbString_repOpts) {
+            var pdbString = pdbString_repOpts[0];
+            var repOpts = pdbString_repOpts[1];
+            currentStructure = pv.io.pdb(pdbString);
+            viewer.fitTo(currentStructure);
+            showRepresentation(repOpts);
         }
     );
 
+    function showRepresentation(repOpts) {
+        viewer.clear();
+        viewer.lines('lines', currentStructure);
+        if (repOpts.cartoon) {
+            viewer.cartoon(
+                'cartoon', currentStructure, { color: pv.color.byChain() });
+        }
+        if (repOpts.trace) {
+            viewer.trace('trace', currentStructure, { color: pv.color.byChain() });
+        }
+        if (repOpts.ballsAndSticks) {
+            viewer.ballsAndSticks('ballsAndSticks', currentStructure);
+        }
+        if (repOpts.spheres) {
+            viewer.spheres('spheres', currentStructure);
+        }
+        if (repOpts.points) {
+            viewer.points('points', currentStructure);
+        }
+    }
+
     app.ports.showAxes.subscribe(
         function () {
-            console.log(viewer.get('axes'));
             if (viewer.get('axes')) {
                 viewer.rm('axes')
                 viewer.requestRedraw();
@@ -58,9 +77,22 @@
             else {
                 var axes = viewer.customMesh('axes');
                 axes.addTube([0, 0, 0], [10, 0, 0], 0.2, { cap : true, color: 'red' })
+                axes.addTube([10, 0, 0], [10, 0, 0.5], 0.2, { color: 'red' })
+                axes.addSphere([10, 0, 0.5], 0.2, { color: 'red' })
+                axes.addTube([10, 0, 0.5], [11, 0, 0], 0.2, { color: 'red' })
+                axes.addSphere([11, 0, 0], 0.2, { color: 'red' })
+                axes.addTube([11, 0, 0], [10, 0, -0.5], 0.2, { color: 'red' })
+                axes.addSphere([10, 0, -0.5], 0.2, { color: 'red' })
+                axes.addTube([10, 0, -0.5], [10, 0, 0], 0.2, { color: 'red' })
                 axes.addTube([0, 0, 0], [0, 10, 0], 0.2, { cap : true, color: 'blue' })
                 axes.addTube([0, 0, 0], [0, 0, 10], 0.2, { cap : true, color: 'green' })
             }
+        }
+    );
+
+    app.ports.newRepresentation.subscribe(
+        function (repOpts) {
+            showRepresentation(repOpts);
         }
     );
 
