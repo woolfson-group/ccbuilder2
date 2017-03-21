@@ -213,13 +213,16 @@ update msg model =
             let
                 panelVisibility = model.panelVisibility
             in
-                ( { model
-                    | building = True
-                    , panelVisibility = 
-                        { panelVisibility | buildPanel = False, examplesPanel = False }
-                }
-                , sendBuildCmd model.parameters
-                )
+                if not model.building then
+                    { model
+                        | building = True
+                        , panelVisibility = 
+                            { panelVisibility
+                                | buildPanel = False, examplesPanel = False }
+                    }
+                    ! [ sendBuildCmd model.parameters ]
+                else
+                    model ! []
 
         ProcessModel (Ok { pdbFile, score, residuesPerTurn }) ->
             let

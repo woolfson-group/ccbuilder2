@@ -23037,9 +23037,9 @@ var _user$project$Builder$update = F2(
 					{ctor: '[]'});
 			case 'Build':
 				var panelVisibility = model.panelVisibility;
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
+				return (!model.building) ? A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
 						model,
 						{
 							building: true,
@@ -23047,8 +23047,14 @@ var _user$project$Builder$update = F2(
 								panelVisibility,
 								{buildPanel: false, examplesPanel: false})
 						}),
-					_1: _user$project$Builder$sendBuildCmd(model.parameters)
-				};
+					{
+						ctor: '::',
+						_0: _user$project$Builder$sendBuildCmd(model.parameters),
+						_1: {ctor: '[]'}
+					}) : A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{ctor: '[]'});
 			case 'ProcessModel':
 				if (_p11._0.ctor === 'Ok') {
 					var _p16 = _p11._0._0.pdbFile;
