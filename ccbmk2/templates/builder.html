@@ -76,6 +76,7 @@
             }
             else {
                 var axes = viewer.customMesh('axes');
+                // X
                 axes.addTube([0, 0, 0], [10, 0, 0], 0.2, { cap : true, color: 'red' })
                 axes.addTube([10, 0, 0], [10, 0, 0.5], 0.2, { color: 'red' })
                 axes.addSphere([10, 0, 0.5], 0.2, { color: 'red' })
@@ -84,8 +85,24 @@
                 axes.addTube([11, 0, 0], [10, 0, -0.5], 0.2, { color: 'red' })
                 axes.addSphere([10, 0, -0.5], 0.2, { color: 'red' })
                 axes.addTube([10, 0, -0.5], [10, 0, 0], 0.2, { color: 'red' })
-                axes.addTube([0, 0, 0], [0, 10, 0], 0.2, { cap : true, color: 'blue' })
-                axes.addTube([0, 0, 0], [0, 0, 10], 0.2, { cap : true, color: 'green' })
+                // Y
+                axes.addTube([0, 0, 0], [0, 10, 0], 0.2, { cap : true, color: 'green' })
+                axes.addTube([0, 10, 0], [0, 10, 0.5], 0.2, { color: 'green' })
+                axes.addSphere([0, 10, 0.5], 0.2, { color: 'green' })
+                axes.addTube([0, 10, 0.5], [0, 11, 0], 0.2, { color: 'green' })
+                axes.addSphere([0, 11, 0], 0.2, { color: 'green' })
+                axes.addTube([0, 11, 0], [0, 10, -0.5], 0.2, { color: 'green' })
+                axes.addSphere([0, 10, -0.5], 0.2, { color: 'green' })
+                axes.addTube([0, 10, -0.5], [0, 10, 0], 0.2, { color: 'green' })
+                // Z
+                axes.addTube([0, 0, 0], [0, 0, 10], 0.2, { cap : true, color: 'blue' })
+                axes.addTube([0, 0, 10], [0.5, 0, 10], 0.2, { color: 'blue' })
+                axes.addSphere([0.5, 0, 10], 0.2, { color: 'blue' })
+                axes.addTube([0.5, 0, 10], [0, 0, 11], 0.2, { color: 'blue' })
+                axes.addSphere([0, 0, 11], 0.2, { color: 'blue' })
+                axes.addTube([0, 0, 11], [-0.5, 0, 10], 0.2, { color: 'blue' })
+                axes.addSphere([-0.5, 0, 10], 0.2, { color: 'blue' })
+                axes.addTube([-0.5, 0, 10], [0, 0, 10], 0.2, { color: 'blue' })
             }
         }
     );
