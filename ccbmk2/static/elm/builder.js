@@ -22773,79 +22773,82 @@ var _user$project$Builder$viewerPanel = A2(
 		_1: {
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$h3,
+				_elm_lang$html$Html$hr,
 				{ctor: '[]'},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('Representation'),
-					_1: {ctor: '[]'}
-				}),
+				{ctor: '[]'}),
 			_1: {
 				ctor: '::',
-				_0: _elm_lang$html$Html$text('Backbone'),
+				_0: A2(
+					_elm_lang$html$Html$h3,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Representation'),
+						_1: {ctor: '[]'}
+					}),
 				_1: {
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$br,
+						_elm_lang$html$Html$hr,
 						{ctor: '[]'},
 						{ctor: '[]'}),
 					_1: {
 						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$button,
-							{
+						_0: _elm_lang$html$Html$text('Backbone'),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$br,
+								{ctor: '[]'},
+								{ctor: '[]'}),
+							_1: {
 								ctor: '::',
-								_0: _user$project$Builder$class(
+								_0: A2(
+									_elm_lang$html$Html$button,
 									{
 										ctor: '::',
-										_0: _user$project$BuilderCss$CCBButtonCss,
+										_0: _user$project$Builder$class(
+											{
+												ctor: '::',
+												_0: _user$project$BuilderCss$CCBButtonCss,
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(
+												_user$project$Types$EditRepresentation(_user$project$Types$Cartoon)),
+											_1: {ctor: '[]'}
+										}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Cartoon'),
 										_1: {ctor: '[]'}
 									}),
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onClick(
-										_user$project$Types$EditRepresentation(_user$project$Types$Cartoon)),
-									_1: {ctor: '[]'}
-								}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('Cartoon'),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$button,
-								{
-									ctor: '::',
-									_0: _user$project$Builder$class(
+									_0: A2(
+										_elm_lang$html$Html$button,
 										{
 											ctor: '::',
-											_0: _user$project$BuilderCss$CCBButtonCss,
+											_0: _user$project$Builder$class(
+												{
+													ctor: '::',
+													_0: _user$project$BuilderCss$CCBButtonCss,
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(
+													_user$project$Types$EditRepresentation(_user$project$Types$Trace)),
+												_1: {ctor: '[]'}
+											}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Trace'),
 											_1: {ctor: '[]'}
 										}),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onClick(
-											_user$project$Types$EditRepresentation(_user$project$Types$Trace)),
-										_1: {ctor: '[]'}
-									}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('Trace'),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$br,
-									{ctor: '[]'},
-									{ctor: '[]'}),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('All Atoms'),
 									_1: {
 										ctor: '::',
 										_0: A2(
@@ -22854,52 +22857,13 @@ var _user$project$Builder$viewerPanel = A2(
 											{ctor: '[]'}),
 										_1: {
 											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html$button,
-												{
-													ctor: '::',
-													_0: _user$project$Builder$class(
-														{
-															ctor: '::',
-															_0: _user$project$BuilderCss$CCBButtonCss,
-															_1: {ctor: '[]'}
-														}),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$html$Html_Events$onClick(
-															_user$project$Types$EditRepresentation(_user$project$Types$BallsAndSticks)),
-														_1: {ctor: '[]'}
-													}
-												},
-												{
-													ctor: '::',
-													_0: _elm_lang$html$Html$text('Balls and Sticks'),
-													_1: {ctor: '[]'}
-												}),
+											_0: _elm_lang$html$Html$text('All Atoms'),
 											_1: {
 												ctor: '::',
 												_0: A2(
-													_elm_lang$html$Html$button,
-													{
-														ctor: '::',
-														_0: _user$project$Builder$class(
-															{
-																ctor: '::',
-																_0: _user$project$BuilderCss$CCBButtonCss,
-																_1: {ctor: '[]'}
-															}),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$html$Html_Events$onClick(
-																_user$project$Types$EditRepresentation(_user$project$Types$Spheres)),
-															_1: {ctor: '[]'}
-														}
-													},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('Spheres'),
-														_1: {ctor: '[]'}
-													}),
+													_elm_lang$html$Html$br,
+													{ctor: '[]'},
+													{ctor: '[]'}),
 												_1: {
 													ctor: '::',
 													_0: A2(
@@ -22915,55 +22879,112 @@ var _user$project$Builder$viewerPanel = A2(
 															_1: {
 																ctor: '::',
 																_0: _elm_lang$html$Html_Events$onClick(
-																	_user$project$Types$EditRepresentation(_user$project$Types$Points)),
+																	_user$project$Types$EditRepresentation(_user$project$Types$BallsAndSticks)),
 																_1: {ctor: '[]'}
 															}
 														},
 														{
 															ctor: '::',
-															_0: _elm_lang$html$Html$text('Dots'),
+															_0: _elm_lang$html$Html$text('Balls and Sticks'),
 															_1: {ctor: '[]'}
 														}),
 													_1: {
 														ctor: '::',
 														_0: A2(
-															_elm_lang$html$Html$br,
-															{ctor: '[]'},
-															{ctor: '[]'}),
+															_elm_lang$html$Html$button,
+															{
+																ctor: '::',
+																_0: _user$project$Builder$class(
+																	{
+																		ctor: '::',
+																		_0: _user$project$BuilderCss$CCBButtonCss,
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Events$onClick(
+																		_user$project$Types$EditRepresentation(_user$project$Types$Spheres)),
+																	_1: {ctor: '[]'}
+																}
+															},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('Spheres'),
+																_1: {ctor: '[]'}
+															}),
 														_1: {
 															ctor: '::',
 															_0: A2(
-																_elm_lang$html$Html$h3,
-																{ctor: '[]'},
+																_elm_lang$html$Html$button,
 																{
 																	ctor: '::',
-																	_0: _elm_lang$html$Html$text('Other Options'),
+																	_0: _user$project$Builder$class(
+																		{
+																			ctor: '::',
+																			_0: _user$project$BuilderCss$CCBButtonCss,
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$html$Html_Events$onClick(
+																			_user$project$Types$EditRepresentation(_user$project$Types$Points)),
+																		_1: {ctor: '[]'}
+																	}
+																},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text('Dots'),
 																	_1: {ctor: '[]'}
 																}),
 															_1: {
 																ctor: '::',
 																_0: A2(
-																	_elm_lang$html$Html$button,
-																	{
+																	_elm_lang$html$Html$hr,
+																	{ctor: '[]'},
+																	{ctor: '[]'}),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$html$Html$h3,
+																		{ctor: '[]'},
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$html$Html$text('Other Options'),
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {
 																		ctor: '::',
-																		_0: _user$project$Builder$class(
-																			{
-																				ctor: '::',
-																				_0: _user$project$BuilderCss$CCBButtonCss,
-																				_1: {ctor: '[]'}
-																			}),
+																		_0: A2(
+																			_elm_lang$html$Html$hr,
+																			{ctor: '[]'},
+																			{ctor: '[]'}),
 																		_1: {
 																			ctor: '::',
-																			_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$ShowAxes),
+																			_0: A2(
+																				_elm_lang$html$Html$button,
+																				{
+																					ctor: '::',
+																					_0: _user$project$Builder$class(
+																						{
+																							ctor: '::',
+																							_0: _user$project$BuilderCss$CCBButtonCss,
+																							_1: {ctor: '[]'}
+																						}),
+																					_1: {
+																						ctor: '::',
+																						_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$ShowAxes),
+																						_1: {ctor: '[]'}
+																					}
+																				},
+																				{
+																					ctor: '::',
+																					_0: _elm_lang$html$Html$text('Axes'),
+																					_1: {ctor: '[]'}
+																				}),
 																			_1: {ctor: '[]'}
 																		}
-																	},
-																	{
-																		ctor: '::',
-																		_0: _elm_lang$html$Html$text('Axes'),
-																		_1: {ctor: '[]'}
-																	}),
-																_1: {ctor: '[]'}
+																	}
+																}
 															}
 														}
 													}

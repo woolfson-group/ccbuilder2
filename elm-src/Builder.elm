@@ -812,7 +812,9 @@ viewerPanel =
         , styles <| panelStyling ++ viewerPanelStyling
         ]
         [ h2 [] [ text "Viewer Options" ]
+        , hr [] []
         , h3 [] [ text "Representation" ]
+        , hr [] []
         , text "Backbone"
         , br [] []
         , button
@@ -843,8 +845,9 @@ viewerPanel =
             , onClick (EditRepresentation Points)
             ]
             [ text "Dots" ]
-        , br [] []
+        , hr [] []
         , h3 [] [ text "Other Options" ]
+        , hr [] []
         , button
             [ class [ CCBButtonCss ]
             , onClick ShowAxes
