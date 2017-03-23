@@ -19,8 +19,10 @@ import ParameterValidation
         , editParameterValue
         , invalidParameterDict
         )
+import Process
 import String
 import Task
+import Time
 import Types
     exposing
         ( Msg(..)
@@ -214,7 +216,8 @@ update msg model =
                         _ ->
                             model.buildMode
             in
-                { model | buildMode = newBuildMode } ! []
+                { model | buildMode = newBuildMode }
+                ! [ Task.perform NoOp (Process.sleep (10 * Time.millisecond)) ]
 
         Build ->
             let
@@ -338,7 +341,10 @@ update msg model =
 
         TogglePanel panel ->
             { model | panelVisibility = togglePanelVisibility panel model.panelVisibility }
-                ! []
+                {-- This task is required to allow the DOM to be rendered 
+                if it isn't included then the drop down menus will show thead
+                incorrect option. --}
+                ! [ Task.perform NoOp (Process.sleep (10 * Time.millisecond)) ]
 
         ExpandHistory hID ->
             let
@@ -365,6 +371,9 @@ update msg model =
                     updateRepresentation repOption model.currentRepresentation
             in
                 { model | currentRepresentation = newRep } ! [ newRepresentation newRep ]
+        
+        NoOp _ ->
+            model ! []
 
 
 msgToCommand : Msg -> Cmd Msg

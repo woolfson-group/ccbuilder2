@@ -22,6 +22,7 @@ type Msg
     | ExpandHistory HistoryID
     | ShowAxes
     | EditRepresentation RepOption
+    | NoOp ()
 
 
 type alias SectionID = Int
