@@ -21788,23 +21788,23 @@ var _user$project$Builder$updateRepresentation = F2(
 			case 'Cartoon':
 				return _elm_lang$core$Native_Utils.update(
 					oldRep,
-					{cartoon: !oldRep.cartoon});
+					{cartoon: !oldRep.cartoon, trace: false});
 			case 'Trace':
 				return _elm_lang$core$Native_Utils.update(
 					oldRep,
-					{trace: !oldRep.trace});
+					{cartoon: false, trace: !oldRep.trace});
 			case 'BallsAndSticks':
 				return _elm_lang$core$Native_Utils.update(
 					oldRep,
-					{ballsAndSticks: !oldRep.ballsAndSticks});
+					{ballsAndSticks: !oldRep.ballsAndSticks, spheres: false, points: false});
 			case 'Spheres':
 				return _elm_lang$core$Native_Utils.update(
 					oldRep,
-					{spheres: !oldRep.spheres});
+					{ballsAndSticks: false, spheres: !oldRep.spheres, points: false});
 			default:
 				return _elm_lang$core$Native_Utils.update(
 					oldRep,
-					{points: !oldRep.points});
+					{ballsAndSticks: false, spheres: false, points: !oldRep.points});
 		}
 	});
 var _user$project$Builder$viewerPanelStyling = {
@@ -22776,33 +22776,13 @@ var _user$project$Builder$viewerPanel = A2(
 			}),
 		_1: {
 			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$button,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$ShowAxes),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('Axes'),
-					_1: {ctor: '[]'}
-				}),
+			_0: _elm_lang$html$Html$text('Backbone'),
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_elm_lang$html$Html$button,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Events$onClick(
-							_user$project$Types$EditRepresentation(_user$project$Types$Cartoon)),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text('Cartoon'),
-						_1: {ctor: '[]'}
-					}),
+					_elm_lang$html$Html$br,
+					{ctor: '[]'},
+					{ctor: '[]'}),
 				_1: {
 					ctor: '::',
 					_0: A2(
@@ -22810,12 +22790,12 @@ var _user$project$Builder$viewerPanel = A2(
 						{
 							ctor: '::',
 							_0: _elm_lang$html$Html_Events$onClick(
-								_user$project$Types$EditRepresentation(_user$project$Types$Trace)),
+								_user$project$Types$EditRepresentation(_user$project$Types$Cartoon)),
 							_1: {ctor: '[]'}
 						},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text('Trace'),
+							_0: _elm_lang$html$Html$text('Cartoon'),
 							_1: {ctor: '[]'}
 						}),
 					_1: {
@@ -22825,45 +22805,94 @@ var _user$project$Builder$viewerPanel = A2(
 							{
 								ctor: '::',
 								_0: _elm_lang$html$Html_Events$onClick(
-									_user$project$Types$EditRepresentation(_user$project$Types$BallsAndSticks)),
+									_user$project$Types$EditRepresentation(_user$project$Types$Trace)),
 								_1: {ctor: '[]'}
 							},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html$text('Balls and Sticks'),
+								_0: _elm_lang$html$Html$text('Trace'),
 								_1: {ctor: '[]'}
 							}),
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$button,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onClick(
-										_user$project$Types$EditRepresentation(_user$project$Types$Spheres)),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('Spheres'),
-									_1: {ctor: '[]'}
-								}),
+								_elm_lang$html$Html$br,
+								{ctor: '[]'},
+								{ctor: '[]'}),
 							_1: {
 								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$button,
-									{
+								_0: _elm_lang$html$Html$text('All Atoms'),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$br,
+										{ctor: '[]'},
+										{ctor: '[]'}),
+									_1: {
 										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onClick(
-											_user$project$Types$EditRepresentation(_user$project$Types$Points)),
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('Dots'),
-										_1: {ctor: '[]'}
-									}),
-								_1: {ctor: '[]'}
+										_0: A2(
+											_elm_lang$html$Html$button,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(
+													_user$project$Types$EditRepresentation(_user$project$Types$BallsAndSticks)),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Balls and Sticks'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$button,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onClick(
+														_user$project$Types$EditRepresentation(_user$project$Types$Spheres)),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Spheres'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$button,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onClick(
+															_user$project$Types$EditRepresentation(_user$project$Types$Points)),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Dots'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$button,
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$ShowAxes),
+															_1: {ctor: '[]'}
+														},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('Axes'),
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
 							}
 						}
 					}

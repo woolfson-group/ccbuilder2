@@ -800,13 +800,19 @@ viewerPanel =
         , id [ ViewerPanel ]
         , styles <| panelStyling ++ viewerPanelStyling
         ]
-        [ h3 [] [ text "Viewer Options" ]
-        , button [ onClick ShowAxes ] [ text "Axes" ]
+        [ h2 [] [ text "Viewer Options" ]
+        , h3 [] [ text "Representation" ]
+        , text "Backbone"
+        , br [] []
         , button [ onClick (EditRepresentation Cartoon) ] [ text "Cartoon" ]
         , button [ onClick (EditRepresentation Trace) ] [ text "Trace" ]
+        , br [] []
+        , text "All Atoms"
+        , br [] []
         , button [ onClick (EditRepresentation BallsAndSticks) ] [ text "Balls and Sticks" ]
         , button [ onClick (EditRepresentation Spheres) ] [ text "Spheres" ]
         , button [ onClick (EditRepresentation Points) ] [ text "Dots" ]
+        , button [ onClick ShowAxes ] [ text "Axes" ]
         ]
 
 
@@ -820,20 +826,35 @@ viewerPanelStyling =
 updateRepresentation : RepOption -> Representation -> Representation
 updateRepresentation repOption oldRep =
     case repOption of
+        -- Backbone representations
         Cartoon ->
-            { oldRep | cartoon = not oldRep.cartoon }
+            { oldRep
+                | cartoon = not oldRep.cartoon
+                , trace = False }
         
         Trace ->
-            { oldRep | trace = not oldRep.trace }
-
+            { oldRep
+                | cartoon = False
+                , trace = not oldRep.trace }
+        
+        -- All atom representations
         BallsAndSticks ->
-            { oldRep | ballsAndSticks = not oldRep.ballsAndSticks }
+            { oldRep
+                | ballsAndSticks = not oldRep.ballsAndSticks
+                , spheres = False
+                , points = False }
         
         Spheres ->
-            { oldRep | spheres = not oldRep.spheres }
+            { oldRep
+                | ballsAndSticks = False
+                , spheres = not oldRep.spheres
+                , points = False }
         
         Points ->
-            { oldRep | points = not oldRep.points }
+            { oldRep 
+                | ballsAndSticks = False
+                , spheres = False
+                , points = not oldRep.points }
 
 
 toggleViewerPanel : Html Msg
