@@ -361,7 +361,8 @@ update msg model =
 
         EditRepresentation repOption ->
             let
-                newRep = updateRepresentation repOption model.currentRepresentation
+                newRep =
+                    updateRepresentation repOption model.currentRepresentation
             in
                 { model | currentRepresentation = newRep } ! [ newRepresentation newRep ]
 
@@ -658,7 +659,12 @@ downloadStructureButton pdbFile =
             else
                 False
     in
-        button [ onClick DownloadPdb, disabled deactivated ] [ text "Download PDB" ]
+        button
+            [ class [ CCBButtonCss ]
+            , onClick DownloadPdb
+            , disabled deactivated
+            ]
+            [ text "Download PDB" ]
 
 
 
@@ -744,7 +750,12 @@ modelHistoryTopRow hID parameters inputParameters visible =
                 , inputParameters.sequence
                 , inputParameters.register
                 ]
-            ++ [ button [ onClick (SetParametersAndBuild parameters) ] [ text "Rebuild" ] ]
+            ++ [ button
+                    [ class [ CCBButtonCss ]
+                    , onClick (SetParametersAndBuild parameters)
+                    ]
+                    [ text "Rebuild" ]
+               ]
         )
 
 
@@ -804,15 +815,41 @@ viewerPanel =
         , h3 [] [ text "Representation" ]
         , text "Backbone"
         , br [] []
-        , button [ onClick (EditRepresentation Cartoon) ] [ text "Cartoon" ]
-        , button [ onClick (EditRepresentation Trace) ] [ text "Trace" ]
+        , button
+            [ class [ CCBButtonCss ]
+            , onClick (EditRepresentation Cartoon)
+            ]
+            [ text "Cartoon" ]
+        , button
+            [ class [ CCBButtonCss ]
+            , onClick (EditRepresentation Trace)
+            ]
+            [ text "Trace" ]
         , br [] []
         , text "All Atoms"
         , br [] []
-        , button [ onClick (EditRepresentation BallsAndSticks) ] [ text "Balls and Sticks" ]
-        , button [ onClick (EditRepresentation Spheres) ] [ text "Spheres" ]
-        , button [ onClick (EditRepresentation Points) ] [ text "Dots" ]
-        , button [ onClick ShowAxes ] [ text "Axes" ]
+        , button
+            [ class [ CCBButtonCss ]
+            , onClick (EditRepresentation BallsAndSticks)
+            ]
+            [ text "Balls and Sticks" ]
+        , button
+            [ class [ CCBButtonCss ]
+            , onClick (EditRepresentation Spheres)
+            ]
+            [ text "Spheres" ]
+        , button
+            [ class [ CCBButtonCss ]
+            , onClick (EditRepresentation Points)
+            ]
+            [ text "Dots" ]
+        , br [] []
+        , h3 [] [ text "Other Options" ]
+        , button
+            [ class [ CCBButtonCss ]
+            , onClick ShowAxes
+            ]
+            [ text "Axes" ]
         ]
 
 
@@ -830,31 +867,36 @@ updateRepresentation repOption oldRep =
         Cartoon ->
             { oldRep
                 | cartoon = not oldRep.cartoon
-                , trace = False }
-        
+                , trace = False
+            }
+
         Trace ->
             { oldRep
                 | cartoon = False
-                , trace = not oldRep.trace }
-        
+                , trace = not oldRep.trace
+            }
+
         -- All atom representations
         BallsAndSticks ->
             { oldRep
                 | ballsAndSticks = not oldRep.ballsAndSticks
                 , spheres = False
-                , points = False }
-        
+                , points = False
+            }
+
         Spheres ->
             { oldRep
                 | ballsAndSticks = False
                 , spheres = not oldRep.spheres
-                , points = False }
-        
+                , points = False
+            }
+
         Points ->
-            { oldRep 
+            { oldRep
                 | ballsAndSticks = False
                 , spheres = False
-                , points = not oldRep.points }
+                , points = not oldRep.points
+            }
 
 
 toggleViewerPanel : Html Msg

@@ -4,6 +4,7 @@ import Css exposing (..)
 import Css.Namespace exposing (namespace)
 import Css.Elements exposing (
     body, h1, h2, h3, h4, table, tbody, tr, input, textarea)
+import Hex
 import Types exposing (Panel(..))
 
 
@@ -18,6 +19,7 @@ type CssClasses
     | ParameterInputCss
     | FlexContainerCss
     | FlexItemCss
+    | CCBButtonCss
 
 
 css : Stylesheet
@@ -102,6 +104,20 @@ css =
         ]
     , class FlexItemCss
         [ padding (px 10)
+        ]
+    , class CCBButtonCss
+        [ property "webkit-border-radius" "5"
+        , property "moz-border-radius" "5"
+        , borderRadius (px 5)
+        , fontFamilies [ "Roboto", "sans-serif" ]
+        , backgroundColor colorPalette.c2
+        , textDecoration none
+        , marginRight (px 2)
+        , padding (px 2)
+        , hover
+            [ backgroundColor colorPalette.c3
+            , textDecoration none
+            ]
         ]
     , id AppHeaderPanel
         [ fontFamilies [ "Source Code Pro", "monospace" ]

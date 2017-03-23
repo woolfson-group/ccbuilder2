@@ -41,27 +41,15 @@ examplesPanel =
             [ hr [] []
             , h3 [] [ text "Basis Set" ]
             , hr [] []
-            , button
-                [ onClick <| SetParametersAndBuild basisSetDimer
-                , styles buttonStyling
-                ]
-                [ ccIcon 2 60 ]
+            , exampleButton 2 basisSetDimer
             , br [] []
             , text "CC Di"
             , br [] []
-            , button
-                [ onClick <| SetParametersAndBuild basisSetTrimer
-                , styles buttonStyling
-                ]
-                [ ccIcon 3 60 ]
+            , exampleButton 3 basisSetTrimer
             , br [] []
             , text "CC Tri"
             , br [] []
-            , button
-                [ onClick <| SetParametersAndBuild basisSetTetramer
-                , styles buttonStyling
-                ]
-                [ ccIcon 4 60 ]
+            , exampleButton 4 basisSetTetramer
             , br [] []
             , text "CC Tet"
             ]
@@ -69,109 +57,113 @@ examplesPanel =
             [ hr [] []
             , h3 [] [ text "α-Helical Barrels" ]
             , hr [] []
-            , button
-                [ onClick <| SetParametersAndBuild largermerCCPent
-                , styles buttonStyling
-                ]
-                [ ccIcon 5 60 ]
+            , exampleButton 5 largermerCCPent
             , br [] []
             , text "CC Pent"
             , br [] []
-            , button
-                [ onClick <| SetParametersAndBuild largermerCCHex
-                , styles buttonStyling
-                ]
-                [ ccIcon 6 60 ]
+            , exampleButton 6 largermerCCHex
             , br [] []
             , text "CC Hex"
             , br [] []
-            , button
-                [ onClick <| SetParametersAndBuild largermerCCHex2
-                , styles buttonStyling
-                ]
-                [ ccIcon 6 60 ]
+            , exampleButton 6 largermerCCHex2
             , br [] []
             , text "CC Hex2"
             , br [] []
-            , button
-                [ onClick <| SetParametersAndBuild largermerCCHex3
-                , styles buttonStyling
-                ]
-                [ ccIcon 6 60 ]
+            , exampleButton 6 largermerCCHex3
             , br [] []
             , text "CC Hex3"
             , br [] []
-            , button
-                [ onClick <| SetParametersAndBuild largermerCCHept
-                , styles buttonStyling
-                ]
-                [ ccIcon 7 60 ]
+            , exampleButton 7 largermerCCHept
             , br [] []
             , text "CC Hept"
             ]
         ]
 
 
+exampleButton : Int -> ParametersDict -> Html Msg
+exampleButton os exampleParameters =
+    button
+        [ class [ CCBButtonCss ]
+        , onClick <| SetParametersAndBuild exampleParameters
+        , styles buttonStyling
+        ]
+        [ ccIcon os 60 ]
+
+
 tau : Float
-tau = 2 * pi
+tau =
+    2 * pi
 
 
 toStringRound : Float -> String
-toStringRound = toString << round
+toStringRound =
+    toString << round
 
 
 x1f : Float -> Svg.Attribute msg
-x1f = SvgAtt.x1 << toStringRound
+x1f =
+    SvgAtt.x1 << toStringRound
 
 
 y1f : Float -> Svg.Attribute msg
-y1f = SvgAtt.y1 << toStringRound
+y1f =
+    SvgAtt.y1 << toStringRound
 
 
 x2f : Float -> Svg.Attribute msg
-x2f = SvgAtt.x2 << toStringRound
+x2f =
+    SvgAtt.x2 << toStringRound
 
 
 y2f : Float -> Svg.Attribute msg
-y2f = SvgAtt.y2 << toStringRound
+y2f =
+    SvgAtt.y2 << toStringRound
 
 
 cxf : Float -> Svg.Attribute msg
-cxf = SvgAtt.cx << toStringRound
+cxf =
+    SvgAtt.cx << toStringRound
 
 
 cyf : Float -> Svg.Attribute msg
-cyf = SvgAtt.cy << toStringRound
+cyf =
+    SvgAtt.cy << toStringRound
 
 
 rf : Float -> Svg.Attribute msg
-rf = SvgAtt.r << toStringRound
+rf =
+    SvgAtt.r << toStringRound
 
 
 ccIcon : Int -> Float -> Html msg
 ccIcon n widthAndHeight =
     let
-        r = widthAndHeight*0.5
-        deltaAngle = tau / (toFloat n)
+        r =
+            widthAndHeight * 0.5
+
+        deltaAngle =
+            tau / (toFloat n)
+
         frameCoordinates =
-            List.map (\v -> ((toFloat v) * deltaAngle) + (tau/4)) (List.range 0 n)
-            |> List.map (\a -> fromPolar (r * ( Basics.max 0.5 (0.11 * (toFloat n))), a))
-            |> List.map (\(x, y) -> (x + r, r - y))
-        coordinatePairs = makeCoordinatePairs frameCoordinates
+            List.map (\v -> ((toFloat v) * deltaAngle) + (tau / 4)) (List.range 0 n)
+                |> List.map (\a -> fromPolar ( r * (Basics.max 0.5 (0.11 * (toFloat n))), a ))
+                |> List.map (\( x, y ) -> ( x + r, r - y ))
+
+        coordinatePairs =
+            makeCoordinatePairs frameCoordinates
     in
         Svg.svg
             [ SvgAtt.width <| toString widthAndHeight
             , SvgAtt.height <| toString widthAndHeight
             , SvgAtt.display "block"
             ]
-            (
-                (List.map (drawHelixCircle 6) frameCoordinates)
+            ((List.map (drawHelixCircle 6) frameCoordinates)
                 |> List.append (List.map drawLine coordinatePairs)
             )
 
 
-drawHelixCircle : Float -> (Float, Float) -> Svg.Svg msg
-drawHelixCircle r (x, y) =
+drawHelixCircle : Float -> ( Float, Float ) -> Svg.Svg msg
+drawHelixCircle r ( x, y ) =
     Svg.circle
         [ cxf x
         , cyf y
@@ -183,18 +175,23 @@ drawHelixCircle r (x, y) =
         []
 
 
-makeCoordinatePairs : List (Float, Float) -> List ((Float, Float), (Float, Float))
+makeCoordinatePairs : List ( Float, Float ) -> List ( ( Float, Float ), ( Float, Float ) )
 makeCoordinatePairs helixCentres =
     let
-        hcl = List.length helixCentres
-        front = List.take (hcl - 1) helixCentres
-        back = Maybe.withDefault [] <| List.tail helixCentres
+        hcl =
+            List.length helixCentres
+
+        front =
+            List.take (hcl - 1) helixCentres
+
+        back =
+            Maybe.withDefault [] <| List.tail helixCentres
     in
         List.map2 (,) front back
 
 
-drawLine : ((Float, Float), (Float, Float)) -> Svg.Svg msg
-drawLine ((x1, y1), (x2, y2)) =
+drawLine : ( ( Float, Float ), ( Float, Float ) ) -> Svg.Svg msg
+drawLine ( ( x1, y1 ), ( x2, y2 ) ) =
     Svg.line
         [ x1f x1
         , y1f y1
@@ -339,16 +336,17 @@ largermerCCHept =
         , linkedSuperHelRot = True
         }
 
+
 makeHomoOligomerExample : Int -> ParameterRecord -> ParametersDict
 makeHomoOligomerExample oligomericState parameters =
     List.map2 (,) (List.range 1 oligomericState) (List.repeat oligomericState parameters)
-    |> Dict.fromList
+        |> Dict.fromList
 
 
 toggleExamplesPanel : Html Msg
 toggleExamplesPanel =
     div
-        [ class [ OverlayPanelCss, LeftPanelToggleCss  ]
+        [ class [ OverlayPanelCss, LeftPanelToggleCss ]
         , onClick (TogglePanel ExamplesPanel)
         ]
         [ text "Examples" ]

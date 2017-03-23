@@ -89,6 +89,22 @@ table {
     padding: 10px;
 }
 
+.builderCCBButtonCss {
+    webkit-border-radius: 5;
+    moz-border-radius: 5;
+    border-radius: 5px;
+    font-family: Roboto, sans-serif;
+    background-color: #ced0ce;
+    text-decoration: none;
+    margin-right: 2px;
+    padding: 2px;
+}
+
+.builderCCBButtonCss:hover {
+    background-color: #9fb8ad;
+    text-decoration: none;
+}
+
 #AppHeaderPanel {
     font-family: Source Code Pro, monospace;
     color: #e6e8e6;

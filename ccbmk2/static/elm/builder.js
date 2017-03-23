@@ -16231,116 +16231,88 @@ var _rtfeldman$elm_css$Css$withClass = function ($class) {
 			A2(_rtfeldman$elm_css_util$Css_Helpers$identifierToString, '', $class)));
 };
 var _rtfeldman$elm_css$Css$children = _rtfeldman$elm_css$Css_Preprocess$NestSnippet(_rtfeldman$elm_css$Css_Structure$Child);
-var _rtfeldman$elm_css$Css$selection = _rtfeldman$elm_css$Css_Preprocess$WithPseudoElement(
-	_rtfeldman$elm_css$Css_Structure$PseudoElement('selection'));
-var _rtfeldman$elm_css$Css$firstLine = _rtfeldman$elm_css$Css_Preprocess$WithPseudoElement(
-	_rtfeldman$elm_css$Css_Structure$PseudoElement('first-line'));
-var _rtfeldman$elm_css$Css$firstLetter = _rtfeldman$elm_css$Css_Preprocess$WithPseudoElement(
-	_rtfeldman$elm_css$Css_Structure$PseudoElement('first-letter'));
-var _rtfeldman$elm_css$Css$before = _rtfeldman$elm_css$Css_Preprocess$WithPseudoElement(
-	_rtfeldman$elm_css$Css_Structure$PseudoElement('before'));
-var _rtfeldman$elm_css$Css$after = _rtfeldman$elm_css$Css_Preprocess$WithPseudoElement(
-	_rtfeldman$elm_css$Css_Structure$PseudoElement('after'));
-var _rtfeldman$elm_css$Css$valid = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('valid'));
-var _rtfeldman$elm_css$Css$target = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('target'));
-var _rtfeldman$elm_css$Css$scope = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('scope'));
-var _rtfeldman$elm_css$Css$root = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('root'));
-var _rtfeldman$elm_css$Css$required = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('required'));
-var _rtfeldman$elm_css$Css$readWrite = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('read-write'));
-var _rtfeldman$elm_css$Css$outOfRange = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('out-of-range'));
-var _rtfeldman$elm_css$Css$optional = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('optional'));
-var _rtfeldman$elm_css$Css$onlyOfType = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('only-of-type'));
-var _rtfeldman$elm_css$Css$onlyChild = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('only-child'));
-var _rtfeldman$elm_css$Css$nthOfType = function (str) {
-	return _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-		_rtfeldman$elm_css$Css_Structure$PseudoClassSelector(
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				'nth-of-type(',
-				A2(_elm_lang$core$Basics_ops['++'], str, ')'))));
+var _rtfeldman$elm_css$Css$pseudoElement = function (element) {
+	return _rtfeldman$elm_css$Css_Preprocess$WithPseudoElement(
+		_rtfeldman$elm_css$Css_Structure$PseudoElement(element));
 };
-var _rtfeldman$elm_css$Css$nthLastOfType = function (str) {
+var _rtfeldman$elm_css$Css$after = _rtfeldman$elm_css$Css$pseudoElement('after');
+var _rtfeldman$elm_css$Css$before = _rtfeldman$elm_css$Css$pseudoElement('before');
+var _rtfeldman$elm_css$Css$firstLetter = _rtfeldman$elm_css$Css$pseudoElement('first-letter');
+var _rtfeldman$elm_css$Css$firstLine = _rtfeldman$elm_css$Css$pseudoElement('first-line');
+var _rtfeldman$elm_css$Css$selection = _rtfeldman$elm_css$Css$pseudoElement('selection');
+var _rtfeldman$elm_css$Css$pseudoClass = function ($class) {
 	return _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-		_rtfeldman$elm_css$Css_Structure$PseudoClassSelector(
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				'nth-last-of-type(',
-				A2(_elm_lang$core$Basics_ops['++'], str, ')'))));
+		_rtfeldman$elm_css$Css_Structure$PseudoClassSelector($class));
+};
+var _rtfeldman$elm_css$Css$active = _rtfeldman$elm_css$Css$pseudoClass('active');
+var _rtfeldman$elm_css$Css$any = function (str) {
+	return _rtfeldman$elm_css$Css$pseudoClass(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'any(',
+			A2(_elm_lang$core$Basics_ops['++'], str, ')')));
+};
+var _rtfeldman$elm_css$Css$checked = _rtfeldman$elm_css$Css$pseudoClass('checked');
+var _rtfeldman$elm_css$Css$disabled = _rtfeldman$elm_css$Css$pseudoClass('disabled');
+var _rtfeldman$elm_css$Css$empty = _rtfeldman$elm_css$Css$pseudoClass('empty');
+var _rtfeldman$elm_css$Css$enabled = _rtfeldman$elm_css$Css$pseudoClass('enabled');
+var _rtfeldman$elm_css$Css$first = _rtfeldman$elm_css$Css$pseudoClass('first');
+var _rtfeldman$elm_css$Css$firstChild = _rtfeldman$elm_css$Css$pseudoClass('first-child');
+var _rtfeldman$elm_css$Css$firstOfType = _rtfeldman$elm_css$Css$pseudoClass('first-of-type');
+var _rtfeldman$elm_css$Css$fullscreen = _rtfeldman$elm_css$Css$pseudoClass('fullscreen');
+var _rtfeldman$elm_css$Css$focus = _rtfeldman$elm_css$Css$pseudoClass('focus');
+var _rtfeldman$elm_css$Css$hover = _rtfeldman$elm_css$Css$pseudoClass('hover');
+var _rtfeldman$elm_css$Css$visited = _rtfeldman$elm_css$Css$pseudoClass('visited');
+var _rtfeldman$elm_css$Css$indeterminate = _rtfeldman$elm_css$Css$pseudoClass('indeterminate');
+var _rtfeldman$elm_css$Css$invalid = _rtfeldman$elm_css$Css$pseudoClass('invalid');
+var _rtfeldman$elm_css$Css$lang = function (str) {
+	return _rtfeldman$elm_css$Css$pseudoClass(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'lang(',
+			A2(_elm_lang$core$Basics_ops['++'], str, ')')));
+};
+var _rtfeldman$elm_css$Css$lastChild = _rtfeldman$elm_css$Css$pseudoClass('last-child');
+var _rtfeldman$elm_css$Css$lastOfType = _rtfeldman$elm_css$Css$pseudoClass('last-of-type');
+var _rtfeldman$elm_css$Css$link = _rtfeldman$elm_css$Css$pseudoClass('link');
+var _rtfeldman$elm_css$Css$nthChild = function (str) {
+	return _rtfeldman$elm_css$Css$pseudoClass(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'nth-child(',
+			A2(_elm_lang$core$Basics_ops['++'], str, ')')));
 };
 var _rtfeldman$elm_css$Css$nthLastChild = function (str) {
-	return _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-		_rtfeldman$elm_css$Css_Structure$PseudoClassSelector(
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				'nth-last-child(',
-				A2(_elm_lang$core$Basics_ops['++'], str, ')'))));
+	return _rtfeldman$elm_css$Css$pseudoClass(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'nth-last-child(',
+			A2(_elm_lang$core$Basics_ops['++'], str, ')')));
 };
-var _rtfeldman$elm_css$Css$nthChild = function (str) {
-	return _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-		_rtfeldman$elm_css$Css_Structure$PseudoClassSelector(
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				'nth-child(',
-				A2(_elm_lang$core$Basics_ops['++'], str, ')'))));
+var _rtfeldman$elm_css$Css$nthLastOfType = function (str) {
+	return _rtfeldman$elm_css$Css$pseudoClass(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'nth-last-of-type(',
+			A2(_elm_lang$core$Basics_ops['++'], str, ')')));
 };
-var _rtfeldman$elm_css$Css$link = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('link'));
-var _rtfeldman$elm_css$Css$lastOfType = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('last-of-type'));
-var _rtfeldman$elm_css$Css$lastChild = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('last-child'));
-var _rtfeldman$elm_css$Css$lang = function (str) {
-	return _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-		_rtfeldman$elm_css$Css_Structure$PseudoClassSelector(
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				'lang(',
-				A2(_elm_lang$core$Basics_ops['++'], str, ')'))));
+var _rtfeldman$elm_css$Css$nthOfType = function (str) {
+	return _rtfeldman$elm_css$Css$pseudoClass(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'nth-of-type(',
+			A2(_elm_lang$core$Basics_ops['++'], str, ')')));
 };
-var _rtfeldman$elm_css$Css$invalid = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('invalid'));
-var _rtfeldman$elm_css$Css$indeterminate = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('indeterminate'));
-var _rtfeldman$elm_css$Css$hover = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('hover'));
-var _rtfeldman$elm_css$Css$focus = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('focus'));
-var _rtfeldman$elm_css$Css$fullscreen = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('fullscreen'));
-var _rtfeldman$elm_css$Css$firstOfType = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('first-of-type'));
-var _rtfeldman$elm_css$Css$firstChild = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('first-child'));
-var _rtfeldman$elm_css$Css$first = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('first'));
-var _rtfeldman$elm_css$Css$enabled = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('enabled'));
-var _rtfeldman$elm_css$Css$empty = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('empty'));
-var _rtfeldman$elm_css$Css$disabled = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('disabled'));
-var _rtfeldman$elm_css$Css$checked = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('checked'));
-var _rtfeldman$elm_css$Css$any = function (str) {
-	return _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-		_rtfeldman$elm_css$Css_Structure$PseudoClassSelector(
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				'any(',
-				A2(_elm_lang$core$Basics_ops['++'], str, ')'))));
-};
-var _rtfeldman$elm_css$Css$active = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('active'));
+var _rtfeldman$elm_css$Css$onlyChild = _rtfeldman$elm_css$Css$pseudoClass('only-child');
+var _rtfeldman$elm_css$Css$onlyOfType = _rtfeldman$elm_css$Css$pseudoClass('only-of-type');
+var _rtfeldman$elm_css$Css$optional = _rtfeldman$elm_css$Css$pseudoClass('optional');
+var _rtfeldman$elm_css$Css$outOfRange = _rtfeldman$elm_css$Css$pseudoClass('out-of-range');
+var _rtfeldman$elm_css$Css$readWrite = _rtfeldman$elm_css$Css$pseudoClass('read-write');
+var _rtfeldman$elm_css$Css$required = _rtfeldman$elm_css$Css$pseudoClass('required');
+var _rtfeldman$elm_css$Css$root = _rtfeldman$elm_css$Css$pseudoClass('root');
+var _rtfeldman$elm_css$Css$scope = _rtfeldman$elm_css$Css$pseudoClass('scope');
+var _rtfeldman$elm_css$Css$target = _rtfeldman$elm_css$Css$pseudoClass('target');
+var _rtfeldman$elm_css$Css$valid = _rtfeldman$elm_css$Css$pseudoClass('valid');
 var _rtfeldman$elm_css$Css$directionalityToString = function (directionality) {
 	var _p2 = directionality;
 	if (_p2.ctor === 'Ltr') {
@@ -16350,15 +16322,14 @@ var _rtfeldman$elm_css$Css$directionalityToString = function (directionality) {
 	}
 };
 var _rtfeldman$elm_css$Css$dir = function (directionality) {
-	return _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-		_rtfeldman$elm_css$Css_Structure$PseudoClassSelector(
+	return _rtfeldman$elm_css$Css$pseudoClass(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'dir(',
 			A2(
 				_elm_lang$core$Basics_ops['++'],
-				'dir(',
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					_rtfeldman$elm_css$Css$directionalityToString(directionality),
-					')'))));
+				_rtfeldman$elm_css$Css$directionalityToString(directionality),
+				')')));
 };
 var _rtfeldman$elm_css$Css$propertyWithWarnings = F3(
 	function (warnings, key, value) {
@@ -19290,6 +19261,7 @@ var _user$project$BuilderCss$ColorPalette = F5(
 	function (a, b, c, d, e) {
 		return {c1: a, c2: b, c3: c, c4: d, c5: e};
 	});
+var _user$project$BuilderCss$CCBButtonCss = {ctor: 'CCBButtonCss'};
 var _user$project$BuilderCss$FlexItemCss = {ctor: 'FlexItemCss'};
 var _user$project$BuilderCss$FlexContainerCss = {ctor: 'FlexContainerCss'};
 var _user$project$BuilderCss$ParameterInputCss = {ctor: 'ParameterInputCss'};
@@ -19649,36 +19621,62 @@ var _user$project$BuilderCss$css = function (_p0) {
 												_1: {
 													ctor: '::',
 													_0: A2(
-														_rtfeldman$elm_css$Css$id,
-														_user$project$Types$AppHeaderPanel,
+														_rtfeldman$elm_css$Css$class,
+														_user$project$BuilderCss$CCBButtonCss,
 														{
 															ctor: '::',
-															_0: _rtfeldman$elm_css$Css$fontFamilies(
-																{
-																	ctor: '::',
-																	_0: 'Source Code Pro',
-																	_1: {
-																		ctor: '::',
-																		_0: 'monospace',
-																		_1: {ctor: '[]'}
-																	}
-																}),
+															_0: A2(_rtfeldman$elm_css$Css$property, 'webkit-border-radius', '5'),
 															_1: {
 																ctor: '::',
-																_0: _rtfeldman$elm_css$Css$color(_user$project$BuilderCss$colorPalette.c1),
+																_0: A2(_rtfeldman$elm_css$Css$property, 'moz-border-radius', '5'),
 																_1: {
 																	ctor: '::',
-																	_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c4),
+																	_0: _rtfeldman$elm_css$Css$borderRadius(
+																		_rtfeldman$elm_css$Css$px(5)),
 																	_1: {
 																		ctor: '::',
-																		_0: A5(
-																			_rtfeldman$elm_css$Css$boxShadow5,
-																			_rtfeldman$elm_css$Css$px(0),
-																			_rtfeldman$elm_css$Css$px(0),
-																			_rtfeldman$elm_css$Css$px(10),
-																			_rtfeldman$elm_css$Css$px(2),
-																			A3(_rtfeldman$elm_css$Css$rgb, 100, 100, 100)),
-																		_1: {ctor: '[]'}
+																		_0: _rtfeldman$elm_css$Css$fontFamilies(
+																			{
+																				ctor: '::',
+																				_0: 'Roboto',
+																				_1: {
+																					ctor: '::',
+																					_0: 'sans-serif',
+																					_1: {ctor: '[]'}
+																				}
+																			}),
+																		_1: {
+																			ctor: '::',
+																			_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c2),
+																			_1: {
+																				ctor: '::',
+																				_0: _rtfeldman$elm_css$Css$textDecoration(_rtfeldman$elm_css$Css$none),
+																				_1: {
+																					ctor: '::',
+																					_0: _rtfeldman$elm_css$Css$marginRight(
+																						_rtfeldman$elm_css$Css$px(2)),
+																					_1: {
+																						ctor: '::',
+																						_0: _rtfeldman$elm_css$Css$padding(
+																							_rtfeldman$elm_css$Css$px(2)),
+																						_1: {
+																							ctor: '::',
+																							_0: _rtfeldman$elm_css$Css$hover(
+																								{
+																									ctor: '::',
+																									_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c3),
+																									_1: {
+																										ctor: '::',
+																										_0: _rtfeldman$elm_css$Css$textDecoration(_rtfeldman$elm_css$Css$none),
+																										_1: {ctor: '[]'}
+																									}
+																								}),
+																							_1: {ctor: '[]'}
+																						}
+																					}
+																				}
+																			}
+																		}
 																	}
 																}
 															}
@@ -19687,116 +19685,154 @@ var _user$project$BuilderCss$css = function (_p0) {
 														ctor: '::',
 														_0: A2(
 															_rtfeldman$elm_css$Css$id,
-															_user$project$Types$BuildPanel,
+															_user$project$Types$AppHeaderPanel,
 															{
 																ctor: '::',
-																_0: _rtfeldman$elm_css$Css$paddingRight(
-																	_rtfeldman$elm_css$Css$px(12)),
-																_1: {ctor: '[]'}
+																_0: _rtfeldman$elm_css$Css$fontFamilies(
+																	{
+																		ctor: '::',
+																		_0: 'Source Code Pro',
+																		_1: {
+																			ctor: '::',
+																			_0: 'monospace',
+																			_1: {ctor: '[]'}
+																		}
+																	}),
+																_1: {
+																	ctor: '::',
+																	_0: _rtfeldman$elm_css$Css$color(_user$project$BuilderCss$colorPalette.c1),
+																	_1: {
+																		ctor: '::',
+																		_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c4),
+																		_1: {
+																			ctor: '::',
+																			_0: A5(
+																				_rtfeldman$elm_css$Css$boxShadow5,
+																				_rtfeldman$elm_css$Css$px(0),
+																				_rtfeldman$elm_css$Css$px(0),
+																				_rtfeldman$elm_css$Css$px(10),
+																				_rtfeldman$elm_css$Css$px(2),
+																				A3(_rtfeldman$elm_css$Css$rgb, 100, 100, 100)),
+																			_1: {ctor: '[]'}
+																		}
+																	}
+																}
 															}),
 														_1: {
 															ctor: '::',
 															_0: A2(
 																_rtfeldman$elm_css$Css$id,
-																_user$project$Types$ExamplesPanel,
+																_user$project$Types$BuildPanel,
 																{
 																	ctor: '::',
-																	_0: _rtfeldman$elm_css$Css$textAlign(_rtfeldman$elm_css$Css$center),
+																	_0: _rtfeldman$elm_css$Css$paddingRight(
+																		_rtfeldman$elm_css$Css$px(12)),
 																	_1: {ctor: '[]'}
 																}),
 															_1: {
 																ctor: '::',
 																_0: A2(
 																	_rtfeldman$elm_css$Css$id,
-																	_user$project$Types$BuildingStatusPanel,
+																	_user$project$Types$ExamplesPanel,
 																	{
 																		ctor: '::',
 																		_0: _rtfeldman$elm_css$Css$textAlign(_rtfeldman$elm_css$Css$center),
-																		_1: {
-																			ctor: '::',
-																			_0: _rtfeldman$elm_css$Css$marginTop(
-																				_rtfeldman$elm_css$Css$px(-40)),
-																			_1: {
-																				ctor: '::',
-																				_0: _rtfeldman$elm_css$Css$marginLeft(
-																					_rtfeldman$elm_css$Css$px(-40)),
-																				_1: {ctor: '[]'}
-																			}
-																		}
+																		_1: {ctor: '[]'}
 																	}),
 																_1: {
 																	ctor: '::',
 																	_0: A2(
 																		_rtfeldman$elm_css$Css$id,
-																		_user$project$Types$BuildHistoryPanel,
+																		_user$project$Types$BuildingStatusPanel,
 																		{
 																			ctor: '::',
-																			_0: _rtfeldman$elm_css$Css$children(
-																				{
+																			_0: _rtfeldman$elm_css$Css$textAlign(_rtfeldman$elm_css$Css$center),
+																			_1: {
+																				ctor: '::',
+																				_0: _rtfeldman$elm_css$Css$marginTop(
+																					_rtfeldman$elm_css$Css$px(-40)),
+																				_1: {
 																					ctor: '::',
-																					_0: _rtfeldman$elm_css$Css_Elements$table(
-																						{
-																							ctor: '::',
-																							_0: _rtfeldman$elm_css$Css$fontSize(
-																								_rtfeldman$elm_css$Css$pt(10)),
-																							_1: {ctor: '[]'}
-																						}),
-																					_1: {
+																					_0: _rtfeldman$elm_css$Css$marginLeft(
+																						_rtfeldman$elm_css$Css$px(-40)),
+																					_1: {ctor: '[]'}
+																				}
+																			}
+																		}),
+																	_1: {
+																		ctor: '::',
+																		_0: A2(
+																			_rtfeldman$elm_css$Css$id,
+																			_user$project$Types$BuildHistoryPanel,
+																			{
+																				ctor: '::',
+																				_0: _rtfeldman$elm_css$Css$children(
+																					{
 																						ctor: '::',
 																						_0: _rtfeldman$elm_css$Css_Elements$table(
 																							{
 																								ctor: '::',
-																								_0: _rtfeldman$elm_css$Css$children(
-																									{
-																										ctor: '::',
-																										_0: _rtfeldman$elm_css$Css_Elements$tbody(
-																											{
-																												ctor: '::',
-																												_0: _rtfeldman$elm_css$Css$children(
-																													{
-																														ctor: '::',
-																														_0: _rtfeldman$elm_css$Css_Elements$tr(
-																															{
-																																ctor: '::',
-																																_0: _rtfeldman$elm_css$Css$fontFamilies(
-																																	{
-																																		ctor: '::',
-																																		_0: 'Source Code Pro',
-																																		_1: {
-																																			ctor: '::',
-																																			_0: 'monospace',
-																																			_1: {ctor: '[]'}
-																																		}
-																																	}),
-																																_1: {
+																								_0: _rtfeldman$elm_css$Css$fontSize(
+																									_rtfeldman$elm_css$Css$pt(10)),
+																								_1: {ctor: '[]'}
+																							}),
+																						_1: {
+																							ctor: '::',
+																							_0: _rtfeldman$elm_css$Css_Elements$table(
+																								{
+																									ctor: '::',
+																									_0: _rtfeldman$elm_css$Css$children(
+																										{
+																											ctor: '::',
+																											_0: _rtfeldman$elm_css$Css_Elements$tbody(
+																												{
+																													ctor: '::',
+																													_0: _rtfeldman$elm_css$Css$children(
+																														{
+																															ctor: '::',
+																															_0: _rtfeldman$elm_css$Css_Elements$tr(
+																																{
 																																	ctor: '::',
-																																	_0: _rtfeldman$elm_css$Css$hover(
+																																	_0: _rtfeldman$elm_css$Css$fontFamilies(
 																																		{
 																																			ctor: '::',
-																																			_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c3),
+																																			_0: 'Source Code Pro',
 																																			_1: {
 																																				ctor: '::',
-																																				_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$default),
+																																				_0: 'monospace',
 																																				_1: {ctor: '[]'}
 																																			}
 																																		}),
-																																	_1: {ctor: '[]'}
-																																}
-																															}),
-																														_1: {ctor: '[]'}
-																													}),
-																												_1: {ctor: '[]'}
-																											}),
-																										_1: {ctor: '[]'}
-																									}),
-																								_1: {ctor: '[]'}
-																							}),
-																						_1: {ctor: '[]'}
-																					}
-																				}),
-																			_1: {ctor: '[]'}
-																		}),
-																	_1: {ctor: '[]'}
+																																	_1: {
+																																		ctor: '::',
+																																		_0: _rtfeldman$elm_css$Css$hover(
+																																			{
+																																				ctor: '::',
+																																				_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c3),
+																																				_1: {
+																																					ctor: '::',
+																																					_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$default),
+																																					_1: {ctor: '[]'}
+																																				}
+																																			}),
+																																		_1: {ctor: '[]'}
+																																	}
+																																}),
+																															_1: {ctor: '[]'}
+																														}),
+																													_1: {ctor: '[]'}
+																												}),
+																											_1: {ctor: '[]'}
+																										}),
+																									_1: {ctor: '[]'}
+																								}),
+																							_1: {ctor: '[]'}
+																						}
+																					}),
+																				_1: {ctor: '[]'}
+																			}),
+																		_1: {ctor: '[]'}
+																	}
 																}
 															}
 														}
@@ -20085,29 +20121,6 @@ var _user$project$ParameterValidation$invalidParameterDict = function (parameter
 			_elm_lang$core$Dict$values(parameters)));
 };
 
-var _user$project$BuildPanel$parameterSubmit = function (parameters) {
-	return A2(
-		_elm_lang$html$Html$input,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$type_('submit'),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$value('Submit'),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$Build),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$disabled(
-							_user$project$ParameterValidation$invalidParameterDict(parameters)),
-						_1: {ctor: '[]'}
-					}
-				}
-			}
-		},
-		{ctor: '[]'});
-};
 var _user$project$BuildPanel$inputStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$width(
@@ -20457,51 +20470,6 @@ var _user$project$BuildPanel$allChainInputSection = function (currentInput) {
 				_1: {ctor: '[]'}
 			}));
 };
-var _user$project$BuildPanel$basicParameterInputForm = F2(
-	function (parametersDict, currentInputDict) {
-		return A2(
-			_elm_lang$html$Html$div,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$h3,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text('Parameters'),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: _user$project$BuildPanel$allChainInputSection(
-						A2(
-							_elm_lang$core$Maybe$withDefault,
-							_user$project$Types$emptyInput,
-							A2(_elm_lang$core$Dict$get, 1, currentInputDict))),
-					_1: {
-						ctor: '::',
-						_0: _user$project$BuildPanel$parameterSubmit(parametersDict),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$button,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$Clear),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('Clear'),
-									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
-						}
-					}
-				}
-			});
-	});
 var _user$project$BuildPanel$singleParameterInput = F2(
 	function (sectionID, _p10) {
 		var _p11 = _p10;
@@ -20819,9 +20787,18 @@ var _user$project$BuildPanel$singleChainInputSection = function (_p19) {
 									_elm_lang$html$Html$button,
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onClick(
-											_user$project$Types$CopyParameters(_p22)),
-										_1: {ctor: '[]'}
+										_0: _user$project$BuildPanel$class(
+											{
+												ctor: '::',
+												_0: _user$project$BuilderCss$CCBButtonCss,
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(
+												_user$project$Types$CopyParameters(_p22)),
+											_1: {ctor: '[]'}
+										}
 									},
 									{
 										ctor: '::',
@@ -20834,9 +20811,18 @@ var _user$project$BuildPanel$singleChainInputSection = function (_p19) {
 										_elm_lang$html$Html$button,
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Events$onClick(
-												_user$project$Types$PasteParameters(_p22)),
-											_1: {ctor: '[]'}
+											_0: _user$project$BuildPanel$class(
+												{
+													ctor: '::',
+													_0: _user$project$BuilderCss$CCBButtonCss,
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(
+													_user$project$Types$PasteParameters(_p22)),
+												_1: {ctor: '[]'}
+											}
 										},
 										{
 											ctor: '::',
@@ -20862,6 +20848,88 @@ var _user$project$BuildPanel$createParametersSections = function (currentInputCh
 		},
 		A2(_elm_lang$core$List$map, _user$project$BuildPanel$singleChainInputSection, currentInputChunk));
 };
+var _user$project$BuildPanel$parameterSubmit = function (parameters) {
+	return A2(
+		_elm_lang$html$Html$button,
+		{
+			ctor: '::',
+			_0: _user$project$BuildPanel$class(
+				{
+					ctor: '::',
+					_0: _user$project$BuilderCss$CCBButtonCss,
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$Build),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$disabled(
+						_user$project$ParameterValidation$invalidParameterDict(parameters)),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text('Submit'),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$BuildPanel$basicParameterInputForm = F2(
+	function (parametersDict, currentInputDict) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h3,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Parameters'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _user$project$BuildPanel$allChainInputSection(
+						A2(
+							_elm_lang$core$Maybe$withDefault,
+							_user$project$Types$emptyInput,
+							A2(_elm_lang$core$Dict$get, 1, currentInputDict))),
+					_1: {
+						ctor: '::',
+						_0: _user$project$BuildPanel$parameterSubmit(parametersDict),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$button,
+								{
+									ctor: '::',
+									_0: _user$project$BuildPanel$class(
+										{
+											ctor: '::',
+											_0: _user$project$BuilderCss$CCBButtonCss,
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$Clear),
+										_1: {ctor: '[]'}
+									}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Clear'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			});
+	});
 var _user$project$BuildPanel$advancedParameterInputForm = F2(
 	function (parametersDict, currentInputDict) {
 		var inputChunks = A2(
@@ -20896,8 +20964,17 @@ var _user$project$BuildPanel$advancedParameterInputForm = F2(
 								_elm_lang$html$Html$button,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$Clear),
-									_1: {ctor: '[]'}
+									_0: _user$project$BuildPanel$class(
+										{
+											ctor: '::',
+											_0: _user$project$BuilderCss$CCBButtonCss,
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$Clear),
+										_1: {ctor: '[]'}
+									}
 								},
 								{
 									ctor: '::',
@@ -21341,6 +21418,35 @@ var _user$project$ExamplesPanel$_p15 = _rtfeldman$elm_css_helpers$Html_CssHelper
 var _user$project$ExamplesPanel$class = _user$project$ExamplesPanel$_p15.$class;
 var _user$project$ExamplesPanel$classList = _user$project$ExamplesPanel$_p15.classList;
 var _user$project$ExamplesPanel$id = _user$project$ExamplesPanel$_p15.id;
+var _user$project$ExamplesPanel$exampleButton = F2(
+	function (os, exampleParameters) {
+		return A2(
+			_elm_lang$html$Html$button,
+			{
+				ctor: '::',
+				_0: _user$project$ExamplesPanel$class(
+					{
+						ctor: '::',
+						_0: _user$project$BuilderCss$CCBButtonCss,
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(
+						_user$project$Types$SetParametersAndBuild(exampleParameters)),
+					_1: {
+						ctor: '::',
+						_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
+						_1: {ctor: '[]'}
+					}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A2(_user$project$ExamplesPanel$ccIcon, os, 60),
+				_1: {ctor: '[]'}
+			});
+	});
 var _user$project$ExamplesPanel$examplesPanel = A2(
 	_elm_lang$html$Html$div,
 	{
@@ -21406,23 +21512,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 								{ctor: '[]'}),
 							_1: {
 								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$button,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onClick(
-											_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetDimer)),
-										_1: {
-											ctor: '::',
-											_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
-											_1: {ctor: '[]'}
-										}
-									},
-									{
-										ctor: '::',
-										_0: A2(_user$project$ExamplesPanel$ccIcon, 2, 60),
-										_1: {ctor: '[]'}
-									}),
+								_0: A2(_user$project$ExamplesPanel$exampleButton, 2, _user$project$ExamplesPanel$basisSetDimer),
 								_1: {
 									ctor: '::',
 									_0: A2(
@@ -21440,23 +21530,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 												{ctor: '[]'}),
 											_1: {
 												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$button,
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html_Events$onClick(
-															_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetTrimer)),
-														_1: {
-															ctor: '::',
-															_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
-															_1: {ctor: '[]'}
-														}
-													},
-													{
-														ctor: '::',
-														_0: A2(_user$project$ExamplesPanel$ccIcon, 3, 60),
-														_1: {ctor: '[]'}
-													}),
+												_0: A2(_user$project$ExamplesPanel$exampleButton, 3, _user$project$ExamplesPanel$basisSetTrimer),
 												_1: {
 													ctor: '::',
 													_0: A2(
@@ -21474,23 +21548,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 																{ctor: '[]'}),
 															_1: {
 																ctor: '::',
-																_0: A2(
-																	_elm_lang$html$Html$button,
-																	{
-																		ctor: '::',
-																		_0: _elm_lang$html$Html_Events$onClick(
-																			_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetTetramer)),
-																		_1: {
-																			ctor: '::',
-																			_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
-																			_1: {ctor: '[]'}
-																		}
-																	},
-																	{
-																		ctor: '::',
-																		_0: A2(_user$project$ExamplesPanel$ccIcon, 4, 60),
-																		_1: {ctor: '[]'}
-																	}),
+																_0: A2(_user$project$ExamplesPanel$exampleButton, 4, _user$project$ExamplesPanel$basisSetTetramer),
 																_1: {
 																	ctor: '::',
 																	_0: A2(
@@ -21544,23 +21602,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 									{ctor: '[]'}),
 								_1: {
 									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$button,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Events$onClick(
-												_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCPent)),
-											_1: {
-												ctor: '::',
-												_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
-												_1: {ctor: '[]'}
-											}
-										},
-										{
-											ctor: '::',
-											_0: A2(_user$project$ExamplesPanel$ccIcon, 5, 60),
-											_1: {ctor: '[]'}
-										}),
+									_0: A2(_user$project$ExamplesPanel$exampleButton, 5, _user$project$ExamplesPanel$largermerCCPent),
 									_1: {
 										ctor: '::',
 										_0: A2(
@@ -21578,23 +21620,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 													{ctor: '[]'}),
 												_1: {
 													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$button,
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html_Events$onClick(
-																_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCHex)),
-															_1: {
-																ctor: '::',
-																_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
-																_1: {ctor: '[]'}
-															}
-														},
-														{
-															ctor: '::',
-															_0: A2(_user$project$ExamplesPanel$ccIcon, 6, 60),
-															_1: {ctor: '[]'}
-														}),
+													_0: A2(_user$project$ExamplesPanel$exampleButton, 6, _user$project$ExamplesPanel$largermerCCHex),
 													_1: {
 														ctor: '::',
 														_0: A2(
@@ -21612,23 +21638,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 																	{ctor: '[]'}),
 																_1: {
 																	ctor: '::',
-																	_0: A2(
-																		_elm_lang$html$Html$button,
-																		{
-																			ctor: '::',
-																			_0: _elm_lang$html$Html_Events$onClick(
-																				_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCHex2)),
-																			_1: {
-																				ctor: '::',
-																				_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
-																				_1: {ctor: '[]'}
-																			}
-																		},
-																		{
-																			ctor: '::',
-																			_0: A2(_user$project$ExamplesPanel$ccIcon, 6, 60),
-																			_1: {ctor: '[]'}
-																		}),
+																	_0: A2(_user$project$ExamplesPanel$exampleButton, 6, _user$project$ExamplesPanel$largermerCCHex2),
 																	_1: {
 																		ctor: '::',
 																		_0: A2(
@@ -21646,23 +21656,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 																					{ctor: '[]'}),
 																				_1: {
 																					ctor: '::',
-																					_0: A2(
-																						_elm_lang$html$Html$button,
-																						{
-																							ctor: '::',
-																							_0: _elm_lang$html$Html_Events$onClick(
-																								_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCHex3)),
-																							_1: {
-																								ctor: '::',
-																								_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
-																								_1: {ctor: '[]'}
-																							}
-																						},
-																						{
-																							ctor: '::',
-																							_0: A2(_user$project$ExamplesPanel$ccIcon, 6, 60),
-																							_1: {ctor: '[]'}
-																						}),
+																					_0: A2(_user$project$ExamplesPanel$exampleButton, 6, _user$project$ExamplesPanel$largermerCCHex3),
 																					_1: {
 																						ctor: '::',
 																						_0: A2(
@@ -21680,23 +21674,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 																									{ctor: '[]'}),
 																								_1: {
 																									ctor: '::',
-																									_0: A2(
-																										_elm_lang$html$Html$button,
-																										{
-																											ctor: '::',
-																											_0: _elm_lang$html$Html_Events$onClick(
-																												_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$largermerCCHept)),
-																											_1: {
-																												ctor: '::',
-																												_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
-																												_1: {ctor: '[]'}
-																											}
-																										},
-																										{
-																											ctor: '::',
-																											_0: A2(_user$project$ExamplesPanel$ccIcon, 7, 60),
-																											_1: {ctor: '[]'}
-																										}),
+																									_0: A2(_user$project$ExamplesPanel$exampleButton, 7, _user$project$ExamplesPanel$largermerCCHept),
 																									_1: {
 																										ctor: '::',
 																										_0: A2(
@@ -21880,101 +21858,6 @@ var _user$project$Builder$modelFoldedRow = function (inputParameters) {
 					}
 				})));
 };
-var _user$project$Builder$modelHistoryTopRow = F4(
-	function (hID, parameters, inputParameters, visible) {
-		return A2(
-			_elm_lang$html$Html$tr,
-			{ctor: '[]'},
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$div,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(
-								_user$project$Types$ExpandHistory(hID)),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: (!visible) ? _elm_lang$html$Html$text('▶') : _elm_lang$html$Html$text('▼'),
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				},
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					A2(
-						_elm_lang$core$List$map,
-						_user$project$Builder$makeParameterTh,
-						{
-							ctor: '::',
-							_0: inputParameters.radius,
-							_1: {
-								ctor: '::',
-								_0: inputParameters.pitch,
-								_1: {
-									ctor: '::',
-									_0: inputParameters.phiCA,
-									_1: {
-										ctor: '::',
-										_0: inputParameters.superHelRot,
-										_1: {
-											ctor: '::',
-											_0: inputParameters.zShift,
-											_1: {
-												ctor: '::',
-												_0: inputParameters.sequence,
-												_1: {
-													ctor: '::',
-													_0: inputParameters.register,
-													_1: {ctor: '[]'}
-												}
-											}
-										}
-									}
-								}
-							}
-						}),
-					{
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$button,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onClick(
-									_user$project$Types$SetParametersAndBuild(parameters)),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('Rebuild'),
-								_1: {ctor: '[]'}
-							}),
-						_1: {ctor: '[]'}
-					})));
-	});
-var _user$project$Builder$downloadStructureButton = function (pdbFile) {
-	var deactivated = _elm_lang$core$Native_Utils.eq(pdbFile, _elm_lang$core$Maybe$Nothing) ? true : false;
-	return A2(
-		_elm_lang$html$Html$button,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$DownloadPdb),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$disabled(deactivated),
-				_1: {ctor: '[]'}
-			}
-		},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text('Download PDB'),
-			_1: {ctor: '[]'}
-		});
-};
 var _user$project$Builder$roundToXDecPlaces = F2(
 	function (precision, num) {
 		var scaling = _elm_lang$core$Basics$toFloat(
@@ -22142,47 +22025,16 @@ var _user$project$Builder$parametersToInput = function (parameterRecord) {
 	var rad = _user$project$Builder$maybeNumberToString(parameterRecord.radius);
 	return A9(_user$project$Types$InputValues, rad, pit, phi, seq, reg, rot, ant, zsh, lsh);
 };
-var _user$project$Builder$modelParametersAsRow = function (_p3) {
-	var _p4 = _p3;
-	var _p7 = _p4._1._1;
-	var _p6 = _p4._1._0;
-	var _p5 = _p4._0;
-	var parameterRecords = _elm_lang$core$Dict$values(_p6);
-	var topRowParameters = _user$project$Builder$parametersToInput(
-		A2(
-			_elm_lang$core$Maybe$withDefault,
-			_user$project$Types$emptyParameterRecord,
-			_elm_lang$core$List$head(parameterRecords)));
-	var foldedRows = A2(
-		_elm_lang$core$List$map,
-		_user$project$Builder$modelFoldedRow,
-		A2(
-			_elm_lang$core$List$map,
-			_user$project$Builder$parametersToInput,
-			A2(
-				_elm_lang$core$Maybe$withDefault,
-				{ctor: '[]'},
-				_elm_lang$core$List$tail(parameterRecords))));
-	return (!_p7) ? {
-		ctor: '::',
-		_0: A4(_user$project$Builder$modelHistoryTopRow, _p5, _p6, topRowParameters, _p7),
-		_1: {ctor: '[]'}
-	} : {
-		ctor: '::',
-		_0: A4(_user$project$Builder$modelHistoryTopRow, _p5, _p6, topRowParameters, _p7),
-		_1: foldedRows
-	};
-};
 var _user$project$Builder$parametersDictToInputDict = function (parameters) {
 	return _elm_lang$core$Dict$fromList(
 		A2(
 			_elm_lang$core$List$map,
-			function (_p8) {
-				var _p9 = _p8;
+			function (_p3) {
+				var _p4 = _p3;
 				return {
 					ctor: '_Tuple2',
-					_0: _p9._0,
-					_1: _user$project$Builder$parametersToInput(_p9._1)
+					_0: _p4._0,
+					_1: _user$project$Builder$parametersToInput(_p4._1)
 				};
 			},
 			_elm_lang$core$Dict$toList(parameters)));
@@ -22302,9 +22154,9 @@ var _user$project$Builder$parameterRecordWithDefault = F2(
 			_user$project$Types$emptyParameterRecord,
 			A2(_elm_lang$core$Dict$get, pRID, parameters));
 	});
-var _user$project$Builder$styles = function (_p10) {
+var _user$project$Builder$styles = function (_p5) {
 	return _elm_lang$html$Html_Attributes$style(
-		_rtfeldman$elm_css$Css$asPairs(_p10));
+		_rtfeldman$elm_css$Css$asPairs(_p5));
 };
 var _user$project$Builder$topLeftToggles = A2(
 	_elm_lang$html$Html$div,
@@ -22484,10 +22336,10 @@ var _user$project$Builder$modelDetailTableHeader = A2(
 			}),
 		_1: {ctor: '[]'}
 	});
-var _user$project$Builder$_p11 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace(_user$project$BuilderCss$cssNamespace);
-var _user$project$Builder$class = _user$project$Builder$_p11.$class;
-var _user$project$Builder$classList = _user$project$Builder$_p11.classList;
-var _user$project$Builder$id = _user$project$Builder$_p11.id;
+var _user$project$Builder$_p6 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace(_user$project$BuilderCss$cssNamespace);
+var _user$project$Builder$class = _user$project$Builder$_p6.$class;
+var _user$project$Builder$classList = _user$project$Builder$_p6.classList;
+var _user$project$Builder$id = _user$project$Builder$_p6.id;
 var _user$project$Builder$siteHeader = A2(
 	_elm_lang$html$Html$div,
 	{
@@ -22524,6 +22376,34 @@ var _user$project$Builder$siteHeader = A2(
 			}),
 		_1: {ctor: '[]'}
 	});
+var _user$project$Builder$downloadStructureButton = function (pdbFile) {
+	var deactivated = _elm_lang$core$Native_Utils.eq(pdbFile, _elm_lang$core$Maybe$Nothing) ? true : false;
+	return A2(
+		_elm_lang$html$Html$button,
+		{
+			ctor: '::',
+			_0: _user$project$Builder$class(
+				{
+					ctor: '::',
+					_0: _user$project$BuilderCss$CCBButtonCss,
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$DownloadPdb),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$disabled(deactivated),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text('Download PDB'),
+			_1: {ctor: '[]'}
+		});
+};
 var _user$project$Builder$modelInfoPanel = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -22649,6 +22529,122 @@ var _user$project$Builder$modelInfoPanel = function (model) {
 			}
 		});
 };
+var _user$project$Builder$modelHistoryTopRow = F4(
+	function (hID, parameters, inputParameters, visible) {
+		return A2(
+			_elm_lang$html$Html$tr,
+			{ctor: '[]'},
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(
+								_user$project$Types$ExpandHistory(hID)),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: (!visible) ? _elm_lang$html$Html$text('▶') : _elm_lang$html$Html$text('▼'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				},
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					A2(
+						_elm_lang$core$List$map,
+						_user$project$Builder$makeParameterTh,
+						{
+							ctor: '::',
+							_0: inputParameters.radius,
+							_1: {
+								ctor: '::',
+								_0: inputParameters.pitch,
+								_1: {
+									ctor: '::',
+									_0: inputParameters.phiCA,
+									_1: {
+										ctor: '::',
+										_0: inputParameters.superHelRot,
+										_1: {
+											ctor: '::',
+											_0: inputParameters.zShift,
+											_1: {
+												ctor: '::',
+												_0: inputParameters.sequence,
+												_1: {
+													ctor: '::',
+													_0: inputParameters.register,
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							}
+						}),
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$button,
+							{
+								ctor: '::',
+								_0: _user$project$Builder$class(
+									{
+										ctor: '::',
+										_0: _user$project$BuilderCss$CCBButtonCss,
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(
+										_user$project$Types$SetParametersAndBuild(parameters)),
+									_1: {ctor: '[]'}
+								}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Rebuild'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					})));
+	});
+var _user$project$Builder$modelParametersAsRow = function (_p7) {
+	var _p8 = _p7;
+	var _p11 = _p8._1._1;
+	var _p10 = _p8._1._0;
+	var _p9 = _p8._0;
+	var parameterRecords = _elm_lang$core$Dict$values(_p10);
+	var topRowParameters = _user$project$Builder$parametersToInput(
+		A2(
+			_elm_lang$core$Maybe$withDefault,
+			_user$project$Types$emptyParameterRecord,
+			_elm_lang$core$List$head(parameterRecords)));
+	var foldedRows = A2(
+		_elm_lang$core$List$map,
+		_user$project$Builder$modelFoldedRow,
+		A2(
+			_elm_lang$core$List$map,
+			_user$project$Builder$parametersToInput,
+			A2(
+				_elm_lang$core$Maybe$withDefault,
+				{ctor: '[]'},
+				_elm_lang$core$List$tail(parameterRecords))));
+	return (!_p11) ? {
+		ctor: '::',
+		_0: A4(_user$project$Builder$modelHistoryTopRow, _p9, _p10, topRowParameters, _p11),
+		_1: {ctor: '[]'}
+	} : {
+		ctor: '::',
+		_0: A4(_user$project$Builder$modelHistoryTopRow, _p9, _p10, topRowParameters, _p11),
+		_1: foldedRows
+	};
+};
 var _user$project$Builder$buildHistoryPanel = function (modelHistory) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -22767,7 +22763,7 @@ var _user$project$Builder$viewerPanel = A2(
 	{
 		ctor: '::',
 		_0: A2(
-			_elm_lang$html$Html$h3,
+			_elm_lang$html$Html$h2,
 			{ctor: '[]'},
 			{
 				ctor: '::',
@@ -22776,86 +22772,108 @@ var _user$project$Builder$viewerPanel = A2(
 			}),
 		_1: {
 			ctor: '::',
-			_0: _elm_lang$html$Html$text('Backbone'),
+			_0: A2(
+				_elm_lang$html$Html$h3,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Representation'),
+					_1: {ctor: '[]'}
+				}),
 			_1: {
 				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$br,
-					{ctor: '[]'},
-					{ctor: '[]'}),
+				_0: _elm_lang$html$Html$text('Backbone'),
 				_1: {
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$button,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(
-								_user$project$Types$EditRepresentation(_user$project$Types$Cartoon)),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('Cartoon'),
-							_1: {ctor: '[]'}
-						}),
+						_elm_lang$html$Html$br,
+						{ctor: '[]'},
+						{ctor: '[]'}),
 					_1: {
 						ctor: '::',
 						_0: A2(
 							_elm_lang$html$Html$button,
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onClick(
-									_user$project$Types$EditRepresentation(_user$project$Types$Trace)),
-								_1: {ctor: '[]'}
+								_0: _user$project$Builder$class(
+									{
+										ctor: '::',
+										_0: _user$project$BuilderCss$CCBButtonCss,
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(
+										_user$project$Types$EditRepresentation(_user$project$Types$Cartoon)),
+									_1: {ctor: '[]'}
+								}
 							},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html$text('Trace'),
+								_0: _elm_lang$html$Html$text('Cartoon'),
 								_1: {ctor: '[]'}
 							}),
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$br,
-								{ctor: '[]'},
-								{ctor: '[]'}),
+								_elm_lang$html$Html$button,
+								{
+									ctor: '::',
+									_0: _user$project$Builder$class(
+										{
+											ctor: '::',
+											_0: _user$project$BuilderCss$CCBButtonCss,
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(
+											_user$project$Types$EditRepresentation(_user$project$Types$Trace)),
+										_1: {ctor: '[]'}
+									}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Trace'),
+									_1: {ctor: '[]'}
+								}),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html$text('All Atoms'),
+								_0: A2(
+									_elm_lang$html$Html$br,
+									{ctor: '[]'},
+									{ctor: '[]'}),
 								_1: {
 									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$br,
-										{ctor: '[]'},
-										{ctor: '[]'}),
+									_0: _elm_lang$html$Html$text('All Atoms'),
 									_1: {
 										ctor: '::',
 										_0: A2(
-											_elm_lang$html$Html$button,
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html_Events$onClick(
-													_user$project$Types$EditRepresentation(_user$project$Types$BallsAndSticks)),
-												_1: {ctor: '[]'}
-											},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text('Balls and Sticks'),
-												_1: {ctor: '[]'}
-											}),
+											_elm_lang$html$Html$br,
+											{ctor: '[]'},
+											{ctor: '[]'}),
 										_1: {
 											ctor: '::',
 											_0: A2(
 												_elm_lang$html$Html$button,
 												{
 													ctor: '::',
-													_0: _elm_lang$html$Html_Events$onClick(
-														_user$project$Types$EditRepresentation(_user$project$Types$Spheres)),
-													_1: {ctor: '[]'}
+													_0: _user$project$Builder$class(
+														{
+															ctor: '::',
+															_0: _user$project$BuilderCss$CCBButtonCss,
+															_1: {ctor: '[]'}
+														}),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onClick(
+															_user$project$Types$EditRepresentation(_user$project$Types$BallsAndSticks)),
+														_1: {ctor: '[]'}
+													}
 												},
 												{
 													ctor: '::',
-													_0: _elm_lang$html$Html$text('Spheres'),
+													_0: _elm_lang$html$Html$text('Balls and Sticks'),
 													_1: {ctor: '[]'}
 												}),
 											_1: {
@@ -22864,13 +22882,22 @@ var _user$project$Builder$viewerPanel = A2(
 													_elm_lang$html$Html$button,
 													{
 														ctor: '::',
-														_0: _elm_lang$html$Html_Events$onClick(
-															_user$project$Types$EditRepresentation(_user$project$Types$Points)),
-														_1: {ctor: '[]'}
+														_0: _user$project$Builder$class(
+															{
+																ctor: '::',
+																_0: _user$project$BuilderCss$CCBButtonCss,
+																_1: {ctor: '[]'}
+															}),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Events$onClick(
+																_user$project$Types$EditRepresentation(_user$project$Types$Spheres)),
+															_1: {ctor: '[]'}
+														}
 													},
 													{
 														ctor: '::',
-														_0: _elm_lang$html$Html$text('Dots'),
+														_0: _elm_lang$html$Html$text('Spheres'),
 														_1: {ctor: '[]'}
 													}),
 												_1: {
@@ -22879,15 +22906,67 @@ var _user$project$Builder$viewerPanel = A2(
 														_elm_lang$html$Html$button,
 														{
 															ctor: '::',
-															_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$ShowAxes),
-															_1: {ctor: '[]'}
+															_0: _user$project$Builder$class(
+																{
+																	ctor: '::',
+																	_0: _user$project$BuilderCss$CCBButtonCss,
+																	_1: {ctor: '[]'}
+																}),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$html$Html_Events$onClick(
+																	_user$project$Types$EditRepresentation(_user$project$Types$Points)),
+																_1: {ctor: '[]'}
+															}
 														},
 														{
 															ctor: '::',
-															_0: _elm_lang$html$Html$text('Axes'),
+															_0: _elm_lang$html$Html$text('Dots'),
 															_1: {ctor: '[]'}
 														}),
-													_1: {ctor: '[]'}
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$br,
+															{ctor: '[]'},
+															{ctor: '[]'}),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$h3,
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text('Other Options'),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$html$Html$button,
+																	{
+																		ctor: '::',
+																		_0: _user$project$Builder$class(
+																			{
+																				ctor: '::',
+																				_0: _user$project$BuilderCss$CCBButtonCss,
+																				_1: {ctor: '[]'}
+																			}),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$ShowAxes),
+																			_1: {ctor: '[]'}
+																		}
+																	},
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text('Axes'),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {ctor: '[]'}
+															}
+														}
+													}
 												}
 											}
 										}

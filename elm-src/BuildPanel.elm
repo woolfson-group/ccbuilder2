@@ -126,7 +126,11 @@ basicParameterInputForm parametersDict currentInputDict =
             |> Maybe.withDefault emptyInput
             |> allChainInputSection
         , parameterSubmit parametersDict
-        , button [ onClick Clear ] [ text "Clear" ]
+        , button
+            [ class [ CCBButtonCss ]
+            , onClick Clear
+            ]
+            [ text "Clear" ]
         ]
 
 
@@ -192,7 +196,11 @@ advancedParameterInputForm parametersDict currentInputDict =
                 []
                 (List.map createParametersSections inputChunks)
             , parameterSubmit parametersDict
-            , button [ onClick Clear ] [ text "Clear" ]
+            , button
+                [ class [ CCBButtonCss ]
+                , onClick Clear
+                ]
+                [ text "Clear" ]
             ]
 
 
@@ -245,8 +253,16 @@ singleChainInputSection ( sectionID, currentInput ) =
         ++ [ singleSequenceInput sectionID
                 ( "Sequence", Sequence, currentInput.sequence, currentInput.register )
            ]
-        ++ [ button [ onClick (CopyParameters sectionID) ] [ text "Copy" ]
-           , button [ onClick (PasteParameters sectionID) ] [ text "Paste" ]
+        ++ [ button
+                [ class [ CCBButtonCss ]
+                , onClick (CopyParameters sectionID)
+                ]
+                [ text "Copy" ]
+           , button
+                [ class [ CCBButtonCss ]
+                , onClick (PasteParameters sectionID)
+                ]
+                [ text "Paste" ]
            ]
         |> div [ class [ FlexItemCss ] ]
 
@@ -319,13 +335,12 @@ inputStyling =
 
 parameterSubmit : ParametersDict -> Html Msg
 parameterSubmit parameters =
-    input
-        [ type_ "submit"
-        , value "Submit"
+    button
+        [ class [ CCBButtonCss ]
         , onClick Build
         , disabled (invalidParameterDict parameters)
         ]
-        []
+        [ text "Submit" ]
 
 
 registerSelection : SectionID -> String -> Html Msg
