@@ -563,8 +563,21 @@ overlayPanels model =
 
 siteHeader : Html msg
 siteHeader =
-    div [ id [ AppHeaderPanel ], styles <| headerStyling ++ panelStyling ]
-        [ header [] [ h1 [] [ text "CCBuilder Mk.2" ] ] ]
+    div 
+        [ class [ FlexContainerCss]
+        , id [ AppHeaderPanel ]
+        , styles <| headerStyling ++ panelStyling
+        ]
+        [ header [ styles [ Css.width (Css.pct 50) ] ] [ h1 [] [ text "CCBuilder Mk.2" ] ]
+        , h3
+            [ styles 
+                [ Css.width (Css.pct 50)
+                , Css.textAlign Css.right
+                , Css.paddingRight (Css.px 10) ] ]
+            [ text "Powered by "
+            , a [ href "https://github.com/woolfson-group/isambard" ] [ text "ISAMBARD" ]
+            ]
+        ]
 
 
 headerStyling : List Css.Mixin

@@ -85,10 +85,6 @@ table {
     flex: none;
 }
 
-.builderFlexItemCss {
-    padding: 10px;
-}
-
 .builderCCBButtonCss {
     webkit-border-radius: 5;
     moz-border-radius: 5;

@@ -4,7 +4,6 @@ import Css exposing (..)
 import Css.Namespace exposing (namespace)
 import Css.Elements exposing (
     body, h1, h2, h3, h4, table, tbody, tr, input, textarea)
-import Hex
 import Types exposing (Panel(..))
 
 
@@ -101,9 +100,6 @@ css =
                 [ flex none
                 ]
             ]
-        ]
-    , class FlexItemCss
-        [ padding (px 10)
         ]
     , class CCBButtonCss
         [ property "webkit-border-radius" "5"
