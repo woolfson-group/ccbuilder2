@@ -86,8 +86,6 @@ table {
 }
 
 .builderCCBButtonCss {
-    webkit-border-radius: 5;
-    moz-border-radius: 5;
     border-radius: 5px;
     font-family: Roboto, sans-serif;
     background-color: #ced0ce;

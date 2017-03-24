@@ -19617,55 +19617,47 @@ var _user$project$BuilderCss$css = function (_p0) {
 													_user$project$BuilderCss$CCBButtonCss,
 													{
 														ctor: '::',
-														_0: A2(_rtfeldman$elm_css$Css$property, 'webkit-border-radius', '5'),
+														_0: _rtfeldman$elm_css$Css$borderRadius(
+															_rtfeldman$elm_css$Css$px(5)),
 														_1: {
 															ctor: '::',
-															_0: A2(_rtfeldman$elm_css$Css$property, 'moz-border-radius', '5'),
-															_1: {
-																ctor: '::',
-																_0: _rtfeldman$elm_css$Css$borderRadius(
-																	_rtfeldman$elm_css$Css$px(5)),
-																_1: {
+															_0: _rtfeldman$elm_css$Css$fontFamilies(
+																{
 																	ctor: '::',
-																	_0: _rtfeldman$elm_css$Css$fontFamilies(
-																		{
-																			ctor: '::',
-																			_0: 'Roboto',
-																			_1: {
-																				ctor: '::',
-																				_0: 'sans-serif',
-																				_1: {ctor: '[]'}
-																			}
-																		}),
+																	_0: 'Roboto',
 																	_1: {
 																		ctor: '::',
-																		_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c2),
+																		_0: 'sans-serif',
+																		_1: {ctor: '[]'}
+																	}
+																}),
+															_1: {
+																ctor: '::',
+																_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c2),
+																_1: {
+																	ctor: '::',
+																	_0: _rtfeldman$elm_css$Css$textDecoration(_rtfeldman$elm_css$Css$none),
+																	_1: {
+																		ctor: '::',
+																		_0: _rtfeldman$elm_css$Css$marginRight(
+																			_rtfeldman$elm_css$Css$px(2)),
 																		_1: {
 																			ctor: '::',
-																			_0: _rtfeldman$elm_css$Css$textDecoration(_rtfeldman$elm_css$Css$none),
+																			_0: _rtfeldman$elm_css$Css$padding(
+																				_rtfeldman$elm_css$Css$px(2)),
 																			_1: {
 																				ctor: '::',
-																				_0: _rtfeldman$elm_css$Css$marginRight(
-																					_rtfeldman$elm_css$Css$px(2)),
-																				_1: {
-																					ctor: '::',
-																					_0: _rtfeldman$elm_css$Css$padding(
-																						_rtfeldman$elm_css$Css$px(2)),
-																					_1: {
+																				_0: _rtfeldman$elm_css$Css$hover(
+																					{
 																						ctor: '::',
-																						_0: _rtfeldman$elm_css$Css$hover(
-																							{
-																								ctor: '::',
-																								_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c3),
-																								_1: {
-																									ctor: '::',
-																									_0: _rtfeldman$elm_css$Css$textDecoration(_rtfeldman$elm_css$Css$none),
-																									_1: {ctor: '[]'}
-																								}
-																							}),
-																						_1: {ctor: '[]'}
-																					}
-																				}
+																						_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c3),
+																						_1: {
+																							ctor: '::',
+																							_0: _rtfeldman$elm_css$Css$textDecoration(_rtfeldman$elm_css$Css$none),
+																							_1: {ctor: '[]'}
+																						}
+																					}),
+																				_1: {ctor: '[]'}
 																			}
 																		}
 																	}

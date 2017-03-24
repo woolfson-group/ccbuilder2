@@ -102,9 +102,7 @@ css =
             ]
         ]
     , class CCBButtonCss
-        [ property "webkit-border-radius" "5"
-        , property "moz-border-radius" "5"
-        , borderRadius (px 5)
+        [ borderRadius (px 5)
         , fontFamilies [ "Roboto", "sans-serif" ]
         , backgroundColor colorPalette.c2
         , textDecoration none
