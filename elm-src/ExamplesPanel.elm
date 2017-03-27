@@ -29,12 +29,13 @@ styles =
     Css.asPairs >> Html.Attributes.style
 
 
-examplesPanel : Html Msg
-examplesPanel =
+examplesPanel : Bool -> Html Msg
+examplesPanel visible =
     div
         [ class [ OverlayPanelCss ]
         , id [ ExamplesPanel ]
         , styles <| panelStyling ++ examplesPanelStyling
+        , hidden <| not visible
         ]
         [ h2 [] [ text "Examples" ]
         , div []

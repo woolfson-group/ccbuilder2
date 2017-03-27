@@ -461,7 +461,6 @@ update msg model =
         NoOp _ ->
             model ! []
 
-
 msgToCommand : Msg -> Cmd Msg
 msgToCommand msg =
     Task.perform identity (Task.succeed msg)
@@ -619,7 +618,7 @@ viewerStyling =
 overlayPanels : Model -> Html Msg
 overlayPanels model =
     let
-        defaultDivs =
+        panelDivs =
             [ siteHeader
             , topLeftToggles
             , topRightToggles
@@ -628,25 +627,14 @@ overlayPanels model =
                 model.parameters
                 model.currentInput
                 model.panelVisibility.buildPanel
+            , ExamplesPanel.examplesPanel model.panelVisibility.examplesPanel
             , buildingStatusPanel model
+            , buildHistoryPanel model.modelHistory model.panelVisibility.buildHistoryPanel
+            , viewerPanel model.panelVisibility.viewerPanel
             , modelInfoPanel model
             ]
-
-        optionalDivs =
-            [ ( model.panelVisibility.examplesPanel, ExamplesPanel.examplesPanel )
-            , ( model.panelVisibility.buildHistoryPanel, buildHistoryPanel model.modelHistory )
-            , ( model.panelVisibility.viewerPanel, viewerPanel )
-            ]
-
-        activeDivs =
-            List.filter (\opt -> Tuple.first opt) optionalDivs
-                |> List.unzip
-                |> Tuple.second
-
-        allDivs =
-            defaultDivs ++ activeDivs
     in
-        div [] allDivs
+        div [] panelDivs
 
 
 siteHeader : Html msg
@@ -802,12 +790,13 @@ downloadStructureButton pdbFile =
 -- Build History
 
 
-buildHistoryPanel : Dict.Dict Int ( ParametersDict, Bool ) -> Html Msg
-buildHistoryPanel modelHistory =
+buildHistoryPanel : Dict.Dict Int ( ParametersDict, Bool ) -> Bool -> Html Msg
+buildHistoryPanel modelHistory visible =
     div
         [ class [ OverlayPanelCss ]
         , id [ BuildHistoryPanel ]
         , styles <| panelStyling ++ buildHistoryPanelStyling
+        , hidden <| not visible
         ]
         [ h3 [] [ text "Build History" ]
         , table []
@@ -935,12 +924,13 @@ toggleBuildHistoryPanel =
 -- Viewer Panel
 
 
-viewerPanel : Html Msg
-viewerPanel =
+viewerPanel : Bool -> Html Msg
+viewerPanel visible =
     div
         [ class [ OverlayPanelCss ]
         , id [ ViewerPanel ]
         , styles <| panelStyling ++ viewerPanelStyling
+        , hidden <| not visible
         ]
         [ h2 [] [ text "Viewer Options" ]
         , hr [] []

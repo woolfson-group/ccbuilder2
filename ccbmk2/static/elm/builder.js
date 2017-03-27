@@ -21434,131 +21434,46 @@ var _user$project$ExamplesPanel$exampleButton = F2(
 				_1: {ctor: '[]'}
 			});
 	});
-var _user$project$ExamplesPanel$examplesPanel = A2(
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _user$project$ExamplesPanel$class(
-			{
-				ctor: '::',
-				_0: _user$project$BuilderCss$OverlayPanelCss,
-				_1: {ctor: '[]'}
-			}),
-		_1: {
+var _user$project$ExamplesPanel$examplesPanel = function (visible) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
 			ctor: '::',
-			_0: _user$project$ExamplesPanel$id(
+			_0: _user$project$ExamplesPanel$class(
 				{
 					ctor: '::',
-					_0: _user$project$Types$ExamplesPanel,
+					_0: _user$project$BuilderCss$OverlayPanelCss,
 					_1: {ctor: '[]'}
 				}),
 			_1: {
 				ctor: '::',
-				_0: _user$project$ExamplesPanel$styles(
-					A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$ExamplesPanel$examplesPanelStyling)),
-				_1: {ctor: '[]'}
+				_0: _user$project$ExamplesPanel$id(
+					{
+						ctor: '::',
+						_0: _user$project$Types$ExamplesPanel,
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _user$project$ExamplesPanel$styles(
+						A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$ExamplesPanel$examplesPanelStyling)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$hidden(!visible),
+						_1: {ctor: '[]'}
+					}
+				}
 			}
-		}
-	},
-	{
-		ctor: '::',
-		_0: A2(
-			_elm_lang$html$Html$h2,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text('Examples'),
-				_1: {ctor: '[]'}
-			}),
-		_1: {
+		},
+		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$div,
+				_elm_lang$html$Html$h2,
 				{ctor: '[]'},
 				{
 					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$hr,
-						{ctor: '[]'},
-						{ctor: '[]'}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$h3,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('Basis Set'),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$hr,
-								{ctor: '[]'},
-								{ctor: '[]'}),
-							_1: {
-								ctor: '::',
-								_0: A2(_user$project$ExamplesPanel$exampleButton, 2, _user$project$ExamplesPanel$basisSetDimer),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$br,
-										{ctor: '[]'},
-										{ctor: '[]'}),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('CC Di'),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html$br,
-												{ctor: '[]'},
-												{ctor: '[]'}),
-											_1: {
-												ctor: '::',
-												_0: A2(_user$project$ExamplesPanel$exampleButton, 3, _user$project$ExamplesPanel$basisSetTrimer),
-												_1: {
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$br,
-														{ctor: '[]'},
-														{ctor: '[]'}),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('CC Tri'),
-														_1: {
-															ctor: '::',
-															_0: A2(
-																_elm_lang$html$Html$br,
-																{ctor: '[]'},
-																{ctor: '[]'}),
-															_1: {
-																ctor: '::',
-																_0: A2(_user$project$ExamplesPanel$exampleButton, 4, _user$project$ExamplesPanel$basisSetTetramer),
-																_1: {
-																	ctor: '::',
-																	_0: A2(
-																		_elm_lang$html$Html$br,
-																		{ctor: '[]'},
-																		{ctor: '[]'}),
-																	_1: {
-																		ctor: '::',
-																		_0: _elm_lang$html$Html$text('CC Tet'),
-																		_1: {ctor: '[]'}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
+					_0: _elm_lang$html$Html$text('Examples'),
+					_1: {ctor: '[]'}
 				}),
 			_1: {
 				ctor: '::',
@@ -21578,7 +21493,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 								{ctor: '[]'},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('α-Helical Barrels'),
+									_0: _elm_lang$html$Html$text('Basis Set'),
 									_1: {ctor: '[]'}
 								}),
 							_1: {
@@ -21589,7 +21504,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 									{ctor: '[]'}),
 								_1: {
 									ctor: '::',
-									_0: A2(_user$project$ExamplesPanel$exampleButton, 5, _user$project$ExamplesPanel$largermerCCPent),
+									_0: A2(_user$project$ExamplesPanel$exampleButton, 2, _user$project$ExamplesPanel$basisSetDimer),
 									_1: {
 										ctor: '::',
 										_0: A2(
@@ -21598,7 +21513,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 											{ctor: '[]'}),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('CC Pent'),
+											_0: _elm_lang$html$Html$text('CC Di'),
 											_1: {
 												ctor: '::',
 												_0: A2(
@@ -21607,7 +21522,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 													{ctor: '[]'}),
 												_1: {
 													ctor: '::',
-													_0: A2(_user$project$ExamplesPanel$exampleButton, 6, _user$project$ExamplesPanel$largermerCCHex),
+													_0: A2(_user$project$ExamplesPanel$exampleButton, 3, _user$project$ExamplesPanel$basisSetTrimer),
 													_1: {
 														ctor: '::',
 														_0: A2(
@@ -21616,7 +21531,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 															{ctor: '[]'}),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html$text('CC Hex'),
+															_0: _elm_lang$html$Html$text('CC Tri'),
 															_1: {
 																ctor: '::',
 																_0: A2(
@@ -21625,7 +21540,7 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 																	{ctor: '[]'}),
 																_1: {
 																	ctor: '::',
-																	_0: A2(_user$project$ExamplesPanel$exampleButton, 6, _user$project$ExamplesPanel$largermerCCHex2),
+																	_0: A2(_user$project$ExamplesPanel$exampleButton, 4, _user$project$ExamplesPanel$basisSetTetramer),
 																	_1: {
 																		ctor: '::',
 																		_0: A2(
@@ -21634,44 +21549,135 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 																			{ctor: '[]'}),
 																		_1: {
 																			ctor: '::',
-																			_0: _elm_lang$html$Html$text('CC Hex2'),
+																			_0: _elm_lang$html$Html$text('CC Tet'),
+																			_1: {ctor: '[]'}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$hr,
+								{ctor: '[]'},
+								{ctor: '[]'}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$h3,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('α-Helical Barrels'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$hr,
+										{ctor: '[]'},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(_user$project$ExamplesPanel$exampleButton, 5, _user$project$ExamplesPanel$largermerCCPent),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$br,
+												{ctor: '[]'},
+												{ctor: '[]'}),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('CC Pent'),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$br,
+														{ctor: '[]'},
+														{ctor: '[]'}),
+													_1: {
+														ctor: '::',
+														_0: A2(_user$project$ExamplesPanel$exampleButton, 6, _user$project$ExamplesPanel$largermerCCHex),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$br,
+																{ctor: '[]'},
+																{ctor: '[]'}),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('CC Hex'),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$html$Html$br,
+																		{ctor: '[]'},
+																		{ctor: '[]'}),
+																	_1: {
+																		ctor: '::',
+																		_0: A2(_user$project$ExamplesPanel$exampleButton, 6, _user$project$ExamplesPanel$largermerCCHex2),
+																		_1: {
+																			ctor: '::',
+																			_0: A2(
+																				_elm_lang$html$Html$br,
+																				{ctor: '[]'},
+																				{ctor: '[]'}),
 																			_1: {
 																				ctor: '::',
-																				_0: A2(
-																					_elm_lang$html$Html$br,
-																					{ctor: '[]'},
-																					{ctor: '[]'}),
+																				_0: _elm_lang$html$Html$text('CC Hex2'),
 																				_1: {
 																					ctor: '::',
-																					_0: A2(_user$project$ExamplesPanel$exampleButton, 6, _user$project$ExamplesPanel$largermerCCHex3),
+																					_0: A2(
+																						_elm_lang$html$Html$br,
+																						{ctor: '[]'},
+																						{ctor: '[]'}),
 																					_1: {
 																						ctor: '::',
-																						_0: A2(
-																							_elm_lang$html$Html$br,
-																							{ctor: '[]'},
-																							{ctor: '[]'}),
+																						_0: A2(_user$project$ExamplesPanel$exampleButton, 6, _user$project$ExamplesPanel$largermerCCHex3),
 																						_1: {
 																							ctor: '::',
-																							_0: _elm_lang$html$Html$text('CC Hex3'),
+																							_0: A2(
+																								_elm_lang$html$Html$br,
+																								{ctor: '[]'},
+																								{ctor: '[]'}),
 																							_1: {
 																								ctor: '::',
-																								_0: A2(
-																									_elm_lang$html$Html$br,
-																									{ctor: '[]'},
-																									{ctor: '[]'}),
+																								_0: _elm_lang$html$Html$text('CC Hex3'),
 																								_1: {
 																									ctor: '::',
-																									_0: A2(_user$project$ExamplesPanel$exampleButton, 7, _user$project$ExamplesPanel$largermerCCHept),
+																									_0: A2(
+																										_elm_lang$html$Html$br,
+																										{ctor: '[]'},
+																										{ctor: '[]'}),
 																									_1: {
 																										ctor: '::',
-																										_0: A2(
-																											_elm_lang$html$Html$br,
-																											{ctor: '[]'},
-																											{ctor: '[]'}),
+																										_0: A2(_user$project$ExamplesPanel$exampleButton, 7, _user$project$ExamplesPanel$largermerCCHept),
 																										_1: {
 																											ctor: '::',
-																											_0: _elm_lang$html$Html$text('CC Hept'),
-																											_1: {ctor: '[]'}
+																											_0: A2(
+																												_elm_lang$html$Html$br,
+																												{ctor: '[]'},
+																												{ctor: '[]'}),
+																											_1: {
+																												ctor: '::',
+																												_0: _elm_lang$html$Html$text('CC Hept'),
+																												_1: {ctor: '[]'}
+																											}
 																										}
 																									}
 																								}
@@ -21692,12 +21698,12 @@ var _user$project$ExamplesPanel$examplesPanel = A2(
 									}
 								}
 							}
-						}
-					}),
-				_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
 			}
-		}
-	});
+		});
+};
 var _user$project$ExamplesPanel$toggleExamplesPanel = A2(
 	_elm_lang$html$Html$div,
 	{
@@ -22815,69 +22821,74 @@ var _user$project$Builder$modelParametersAsRow = function (_p11) {
 		_1: foldedRows
 	};
 };
-var _user$project$Builder$buildHistoryPanel = function (modelHistory) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _user$project$Builder$class(
-				{
-					ctor: '::',
-					_0: _user$project$BuilderCss$OverlayPanelCss,
-					_1: {ctor: '[]'}
-				}),
-			_1: {
+var _user$project$Builder$buildHistoryPanel = F2(
+	function (modelHistory, visible) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
 				ctor: '::',
-				_0: _user$project$Builder$id(
+				_0: _user$project$Builder$class(
 					{
 						ctor: '::',
-						_0: _user$project$Types$BuildHistoryPanel,
+						_0: _user$project$BuilderCss$OverlayPanelCss,
 						_1: {ctor: '[]'}
 					}),
 				_1: {
 					ctor: '::',
-					_0: _user$project$Builder$styles(
-						A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$Builder$buildHistoryPanelStyling)),
-					_1: {ctor: '[]'}
+					_0: _user$project$Builder$id(
+						{
+							ctor: '::',
+							_0: _user$project$Types$BuildHistoryPanel,
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: _user$project$Builder$styles(
+							A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$Builder$buildHistoryPanelStyling)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$hidden(!visible),
+							_1: {ctor: '[]'}
+						}
+					}
 				}
-			}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$h3,
-				{ctor: '[]'},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('Build History'),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
+			},
+			{
 				ctor: '::',
 				_0: A2(
-					_elm_lang$html$Html$table,
+					_elm_lang$html$Html$h3,
 					{ctor: '[]'},
 					{
 						ctor: '::',
-						_0: _user$project$Builder$modelDetailTableHeader,
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$tbody,
-								{ctor: '[]'},
-								_elm_lang$core$List$concat(
-									A2(
-										_elm_lang$core$List$map,
-										_user$project$Builder$modelParametersAsRow,
-										_elm_lang$core$List$reverse(
-											_elm_lang$core$Dict$toList(modelHistory))))),
-							_1: {ctor: '[]'}
-						}
+						_0: _elm_lang$html$Html$text('Build History'),
+						_1: {ctor: '[]'}
 					}),
-				_1: {ctor: '[]'}
-			}
-		});
-};
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$table,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _user$project$Builder$modelDetailTableHeader,
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$tbody,
+									{ctor: '[]'},
+									_elm_lang$core$List$concat(
+										A2(
+											_elm_lang$core$List$map,
+											_user$project$Builder$modelParametersAsRow,
+											_elm_lang$core$List$reverse(
+												_elm_lang$core$Dict$toList(modelHistory))))),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
 var _user$project$Builder$toggleBuildHistoryPanel = A2(
 	_elm_lang$html$Html$div,
 	{
@@ -22904,97 +22915,78 @@ var _user$project$Builder$toggleBuildHistoryPanel = A2(
 		_0: _elm_lang$html$Html$text('Build History'),
 		_1: {ctor: '[]'}
 	});
-var _user$project$Builder$viewerPanel = A2(
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _user$project$Builder$class(
-			{
-				ctor: '::',
-				_0: _user$project$BuilderCss$OverlayPanelCss,
-				_1: {ctor: '[]'}
-			}),
-		_1: {
+var _user$project$Builder$viewerPanel = function (visible) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
 			ctor: '::',
-			_0: _user$project$Builder$id(
+			_0: _user$project$Builder$class(
 				{
 					ctor: '::',
-					_0: _user$project$Types$ViewerPanel,
+					_0: _user$project$BuilderCss$OverlayPanelCss,
 					_1: {ctor: '[]'}
 				}),
 			_1: {
 				ctor: '::',
-				_0: _user$project$Builder$styles(
-					A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$Builder$viewerPanelStyling)),
-				_1: {ctor: '[]'}
-			}
-		}
-	},
-	{
-		ctor: '::',
-		_0: A2(
-			_elm_lang$html$Html$h2,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text('Viewer Options'),
-				_1: {ctor: '[]'}
-			}),
-		_1: {
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$hr,
-				{ctor: '[]'},
-				{ctor: '[]'}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$h3,
-					{ctor: '[]'},
+				_0: _user$project$Builder$id(
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html$text('Representation'),
+						_0: _user$project$Types$ViewerPanel,
 						_1: {ctor: '[]'}
 					}),
 				_1: {
 					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$hr,
-						{ctor: '[]'},
-						{ctor: '[]'}),
+					_0: _user$project$Builder$styles(
+						A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$Builder$viewerPanelStyling)),
 					_1: {
 						ctor: '::',
-						_0: _elm_lang$html$Html$text('Backbone'),
+						_0: _elm_lang$html$Html_Attributes$hidden(!visible),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h2,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Viewer Options'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$hr,
+					{ctor: '[]'},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$h3,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Representation'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$hr,
+							{ctor: '[]'},
+							{ctor: '[]'}),
 						_1: {
 							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$br,
-								{ctor: '[]'},
-								{ctor: '[]'}),
+							_0: _elm_lang$html$Html$text('Backbone'),
 							_1: {
 								ctor: '::',
 								_0: A2(
-									_elm_lang$html$Html$button,
-									{
-										ctor: '::',
-										_0: _user$project$Builder$class(
-											{
-												ctor: '::',
-												_0: _user$project$BuilderCss$CCBButtonCss,
-												_1: {ctor: '[]'}
-											}),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html_Events$onClick(
-												_user$project$Types$EditRepresentation(_user$project$Types$Cartoon)),
-											_1: {ctor: '[]'}
-										}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('Cartoon'),
-										_1: {ctor: '[]'}
-									}),
+									_elm_lang$html$Html$br,
+									{ctor: '[]'},
+									{ctor: '[]'}),
 								_1: {
 									ctor: '::',
 									_0: A2(
@@ -23010,54 +23002,54 @@ var _user$project$Builder$viewerPanel = A2(
 											_1: {
 												ctor: '::',
 												_0: _elm_lang$html$Html_Events$onClick(
-													_user$project$Types$EditRepresentation(_user$project$Types$Trace)),
+													_user$project$Types$EditRepresentation(_user$project$Types$Cartoon)),
 												_1: {ctor: '[]'}
 											}
 										},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('Trace'),
+											_0: _elm_lang$html$Html$text('Cartoon'),
 											_1: {ctor: '[]'}
 										}),
 									_1: {
 										ctor: '::',
 										_0: A2(
-											_elm_lang$html$Html$br,
-											{ctor: '[]'},
-											{ctor: '[]'}),
+											_elm_lang$html$Html$button,
+											{
+												ctor: '::',
+												_0: _user$project$Builder$class(
+													{
+														ctor: '::',
+														_0: _user$project$BuilderCss$CCBButtonCss,
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onClick(
+														_user$project$Types$EditRepresentation(_user$project$Types$Trace)),
+													_1: {ctor: '[]'}
+												}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Trace'),
+												_1: {ctor: '[]'}
+											}),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('All Atoms'),
+											_0: A2(
+												_elm_lang$html$Html$br,
+												{ctor: '[]'},
+												{ctor: '[]'}),
 											_1: {
 												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$br,
-													{ctor: '[]'},
-													{ctor: '[]'}),
+												_0: _elm_lang$html$Html$text('All Atoms'),
 												_1: {
 													ctor: '::',
 													_0: A2(
-														_elm_lang$html$Html$button,
-														{
-															ctor: '::',
-															_0: _user$project$Builder$class(
-																{
-																	ctor: '::',
-																	_0: _user$project$BuilderCss$CCBButtonCss,
-																	_1: {ctor: '[]'}
-																}),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$html$Html_Events$onClick(
-																	_user$project$Types$EditRepresentation(_user$project$Types$BallsAndSticks)),
-																_1: {ctor: '[]'}
-															}
-														},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text('Balls and Sticks'),
-															_1: {ctor: '[]'}
-														}),
+														_elm_lang$html$Html$br,
+														{ctor: '[]'},
+														{ctor: '[]'}),
 													_1: {
 														ctor: '::',
 														_0: A2(
@@ -23073,13 +23065,13 @@ var _user$project$Builder$viewerPanel = A2(
 																_1: {
 																	ctor: '::',
 																	_0: _elm_lang$html$Html_Events$onClick(
-																		_user$project$Types$EditRepresentation(_user$project$Types$Spheres)),
+																		_user$project$Types$EditRepresentation(_user$project$Types$BallsAndSticks)),
 																	_1: {ctor: '[]'}
 																}
 															},
 															{
 																ctor: '::',
-																_0: _elm_lang$html$Html$text('Spheres'),
+																_0: _elm_lang$html$Html$text('Balls and Sticks'),
 																_1: {ctor: '[]'}
 															}),
 														_1: {
@@ -23097,64 +23089,89 @@ var _user$project$Builder$viewerPanel = A2(
 																	_1: {
 																		ctor: '::',
 																		_0: _elm_lang$html$Html_Events$onClick(
-																			_user$project$Types$EditRepresentation(_user$project$Types$Points)),
+																			_user$project$Types$EditRepresentation(_user$project$Types$Spheres)),
 																		_1: {ctor: '[]'}
 																	}
 																},
 																{
 																	ctor: '::',
-																	_0: _elm_lang$html$Html$text('Dots'),
+																	_0: _elm_lang$html$Html$text('Spheres'),
 																	_1: {ctor: '[]'}
 																}),
 															_1: {
 																ctor: '::',
 																_0: A2(
-																	_elm_lang$html$Html$hr,
-																	{ctor: '[]'},
-																	{ctor: '[]'}),
+																	_elm_lang$html$Html$button,
+																	{
+																		ctor: '::',
+																		_0: _user$project$Builder$class(
+																			{
+																				ctor: '::',
+																				_0: _user$project$BuilderCss$CCBButtonCss,
+																				_1: {ctor: '[]'}
+																			}),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$html$Html_Events$onClick(
+																				_user$project$Types$EditRepresentation(_user$project$Types$Points)),
+																			_1: {ctor: '[]'}
+																		}
+																	},
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text('Dots'),
+																		_1: {ctor: '[]'}
+																	}),
 																_1: {
 																	ctor: '::',
 																	_0: A2(
-																		_elm_lang$html$Html$h3,
+																		_elm_lang$html$Html$hr,
 																		{ctor: '[]'},
-																		{
-																			ctor: '::',
-																			_0: _elm_lang$html$Html$text('Other Options'),
-																			_1: {ctor: '[]'}
-																		}),
+																		{ctor: '[]'}),
 																	_1: {
 																		ctor: '::',
 																		_0: A2(
-																			_elm_lang$html$Html$hr,
+																			_elm_lang$html$Html$h3,
 																			{ctor: '[]'},
-																			{ctor: '[]'}),
+																			{
+																				ctor: '::',
+																				_0: _elm_lang$html$Html$text('Other Options'),
+																				_1: {ctor: '[]'}
+																			}),
 																		_1: {
 																			ctor: '::',
 																			_0: A2(
-																				_elm_lang$html$Html$button,
-																				{
-																					ctor: '::',
-																					_0: _user$project$Builder$class(
-																						{
-																							ctor: '::',
-																							_0: _user$project$BuilderCss$CCBButtonCss,
-																							_1: {ctor: '[]'}
-																						}),
-																					_1: {
-																						ctor: '::',
-																						_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$ShowAxes),
-																						_1: {ctor: '[]'}
-																					}
-																				},
-																				{
-																					ctor: '::',
-																					_0: _elm_lang$html$Html$text('Axes'),
-																					_1: {ctor: '[]'}
-																				}),
+																				_elm_lang$html$Html$hr,
+																				{ctor: '[]'},
+																				{ctor: '[]'}),
 																			_1: {
 																				ctor: '::',
-																				_0: _elm_lang$html$Html$text(' (xyz = rgb)'),
-																				_1: {ctor: '[]'}
+																				_0: A2(
+																					_elm_lang$html$Html$button,
+																					{
+																						ctor: '::',
+																						_0: _user$project$Builder$class(
+																							{
+																								ctor: '::',
+																								_0: _user$project$BuilderCss$CCBButtonCss,
+																								_1: {ctor: '[]'}
+																							}),
+																						_1: {
+																							ctor: '::',
+																							_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$ShowAxes),
+																							_1: {ctor: '[]'}
+																						}
+																					},
+																					{
+																						ctor: '::',
+																						_0: _elm_lang$html$Html$text('Axes'),
+																						_1: {ctor: '[]'}
+																					}),
+																				_1: {
+																					ctor: '::',
+																					_0: _elm_lang$html$Html$text(' (xyz = rgb)'),
+																					_1: {ctor: '[]'}
+																				}
 																			}
 																		}
 																	}
@@ -23172,8 +23189,8 @@ var _user$project$Builder$viewerPanel = A2(
 					}
 				}
 			}
-		}
-	});
+		});
+};
 var _user$project$Builder$toggleViewerPanel = A2(
 	_elm_lang$html$Html$div,
 	{
@@ -23277,32 +23294,7 @@ var _user$project$Builder$buildingStatusPanel = function (model) {
 		{ctor: '[]'});
 };
 var _user$project$Builder$overlayPanels = function (model) {
-	var optionalDivs = {
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: model.panelVisibility.examplesPanel, _1: _user$project$ExamplesPanel$examplesPanel},
-		_1: {
-			ctor: '::',
-			_0: {
-				ctor: '_Tuple2',
-				_0: model.panelVisibility.buildHistoryPanel,
-				_1: _user$project$Builder$buildHistoryPanel(model.modelHistory)
-			},
-			_1: {
-				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: model.panelVisibility.viewerPanel, _1: _user$project$Builder$viewerPanel},
-				_1: {ctor: '[]'}
-			}
-		}
-	};
-	var activeDivs = _elm_lang$core$Tuple$second(
-		_elm_lang$core$List$unzip(
-			A2(
-				_elm_lang$core$List$filter,
-				function (opt) {
-					return _elm_lang$core$Tuple$first(opt);
-				},
-				optionalDivs)));
-	var defaultDivs = {
+	var panelDivs = {
 		ctor: '::',
 		_0: _user$project$Builder$siteHeader,
 		_1: {
@@ -23316,22 +23308,33 @@ var _user$project$Builder$overlayPanels = function (model) {
 					_0: A4(_user$project$BuildPanel$buildPanel, model.buildMode, model.parameters, model.currentInput, model.panelVisibility.buildPanel),
 					_1: {
 						ctor: '::',
-						_0: _user$project$Builder$buildingStatusPanel(model),
+						_0: _user$project$ExamplesPanel$examplesPanel(model.panelVisibility.examplesPanel),
 						_1: {
 							ctor: '::',
-							_0: _user$project$Builder$modelInfoPanel(model),
-							_1: {ctor: '[]'}
+							_0: _user$project$Builder$buildingStatusPanel(model),
+							_1: {
+								ctor: '::',
+								_0: A2(_user$project$Builder$buildHistoryPanel, model.modelHistory, model.panelVisibility.buildHistoryPanel),
+								_1: {
+									ctor: '::',
+									_0: _user$project$Builder$viewerPanel(model.panelVisibility.viewerPanel),
+									_1: {
+										ctor: '::',
+										_0: _user$project$Builder$modelInfoPanel(model),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
 						}
 					}
 				}
 			}
 		}
 	};
-	var allDivs = A2(_elm_lang$core$Basics_ops['++'], defaultDivs, activeDivs);
 	return A2(
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
-		allDivs);
+		panelDivs);
 };
 var _user$project$Builder$view = function (model) {
 	return A2(
