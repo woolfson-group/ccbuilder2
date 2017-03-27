@@ -22463,18 +22463,7 @@ var _user$project$Builder$siteHeader = A2(
 																ctor: '::',
 																_0: _rtfeldman$elm_css$Css$borderRadius(
 																	_rtfeldman$elm_css$Css$px(3)),
-																_1: {
-																	ctor: '::',
-																	_0: A6(
-																		_rtfeldman$elm_css$Css$boxShadow6,
-																		_rtfeldman$elm_css$Css$inset,
-																		_rtfeldman$elm_css$Css$px(0),
-																		_rtfeldman$elm_css$Css$px(0),
-																		_rtfeldman$elm_css$Css$px(10),
-																		_rtfeldman$elm_css$Css$px(2),
-																		A3(_rtfeldman$elm_css$Css$rgb, 100, 100, 100)),
-																	_1: {ctor: '[]'}
-																}
+																_1: {ctor: '[]'}
 															}
 														}
 													}
@@ -23100,7 +23089,11 @@ var _user$project$Builder$viewerPanel = A2(
 																					_0: _elm_lang$html$Html$text('Axes'),
 																					_1: {ctor: '[]'}
 																				}),
-																			_1: {ctor: '[]'}
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$html$Html$text(' (xyz = rgb)'),
+																				_1: {ctor: '[]'}
+																			}
 																		}
 																	}
 																}

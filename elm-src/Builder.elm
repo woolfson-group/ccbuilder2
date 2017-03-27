@@ -899,6 +899,7 @@ viewerPanel =
             , onClick ShowAxes
             ]
             [ text "Axes" ]
+        , text " (xyz = rgb)"
         ]
 
 
