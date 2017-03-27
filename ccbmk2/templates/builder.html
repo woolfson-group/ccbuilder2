@@ -15,10 +15,18 @@
 </body>
 <div id="main"></div>
 <script type="text/javascript">
+    var storedState = localStorage.getItem('ccbmk2-save');
+    var startingState = storedState ? JSON.parse(storedState) : null;
+
     var node = document.getElementById('main');
-    var app = Elm.Builder.embed(node);
+    var app = Elm.Builder.embed(node, startingState);
     var viewer;
     var currentStructure;
+
+    // Stores the state of the app in local storage
+    app.ports.setStorage.subscribe(function(state) {
+        localStorage.setItem('ccbmk2-save', JSON.stringify(state));
+    });
 
     // Elm handles the initialisation of the viewer to ensure the DOM element is available
     app.ports.initialiseViewer.subscribe(

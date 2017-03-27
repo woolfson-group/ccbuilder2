@@ -15,6 +15,7 @@ This is the source code for a web application for building models of coiled coil
 * Coolors
     * https://coolors.co/e6e8e6-ced0ce-9fb8ad-475841-3f403f
 * `List.map (\v -> (toFloat v) * delta) (List.range 0 (n-1))`
+* chrome://settings/cookies#cont
 
 ## Style Guide
 
@@ -22,6 +23,8 @@ This is the source code for a web application for building models of coiled coil
 
 ## TODO
 
+* Warning for long build time
+* Fix basic build mode when increasing oligomer state
 * Link representations together
     * Spheres should turn off everything else etc.
 * Try horizontal model info

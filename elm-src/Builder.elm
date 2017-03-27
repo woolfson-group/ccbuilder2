@@ -52,9 +52,9 @@ styles =
     Css.asPairs >> Html.Attributes.style
 
 
-main : Program Never Model Msg
+main : Program (Maybe ExportableModel) Model Msg
 main =
-    program
+    programWithFlags
         { init = init
         , view = view
         , update = update
@@ -62,12 +62,26 @@ main =
         }
 
 
-init : ( Model, Cmd Msg )
-init =
-    emptyModel
-        ! [ initialiseViewer ()
-          , msgToCommand (SetParametersAndBuild ExamplesPanel.basisSetDimer)
-          ]
+
+-- Ports
+
+
+port setStorage : ExportableModel -> Cmd msg
+
+
+port initialiseViewer : () -> Cmd msg
+
+
+port showStructure : ( String, Representation ) -> Cmd msg
+
+
+port showAxes : () -> Cmd msg
+
+
+port newRepresentation : Representation -> Cmd msg
+
+
+port downloadPdb : ( String, String ) -> Cmd msg
 
 
 
@@ -89,6 +103,29 @@ type alias Model =
     , panelVisibility : PanelVisibility
     , currentRepresentation : Representation
     }
+
+
+init : Maybe ExportableModel -> ( Model, Cmd Msg )
+init storedModel =
+    let
+        showDefaultModel =
+            if storedModel == Nothing then
+                True
+            else
+                False
+
+        model =
+            storedModel
+                |> Maybe.map exportableToModel
+                |> Maybe.withDefault emptyModel
+    in
+        model
+            ! ([ initialiseViewer () ]
+                ++ if showDefaultModel then
+                    [ msgToCommand (SetParametersAndBuild ExamplesPanel.basisSetDimer) ]
+                   else
+                    [ msgToCommand Build ]
+              )
 
 
 type alias PanelVisibility =
@@ -134,23 +171,61 @@ defaultVisibility =
     PanelVisibility True False False False
 
 
+type alias ExportableModel =
+    { parameters : List ( SectionID, ParameterRecord )
+    , currentInput : List ( SectionID, InputValues )
+    , parameterClipBoard : Maybe ParameterRecord
+    , oligomericState : Int
+    , pdbFile : Maybe String
+    , score : Maybe Float
+    , residuesPerTurn : Maybe Float
+    , building : Bool
+    , modelHistory : List ( HistoryID, ( List ( SectionID, ParameterRecord ), Bool ) )
+    , nextHistoryID : HistoryID
+    , panelVisibility : PanelVisibility
+    , currentRepresentation : Representation
+    }
 
--- Ports
+
+modelToExportable : Model -> ExportableModel
+modelToExportable model =
+    { parameters = Dict.toList model.parameters
+    , currentInput = Dict.toList model.currentInput
+    , parameterClipBoard = model.parameterClipBoard
+    , oligomericState = model.oligomericState
+    , pdbFile = model.pdbFile
+    , score = model.score
+    , residuesPerTurn = model.residuesPerTurn
+    , building = False
+    , modelHistory =
+        model.modelHistory
+            |> Dict.toList
+            |> List.map (\( hid, ( params, vis ) ) -> ( hid, ( Dict.toList params, vis ) ))
+    , nextHistoryID = model.nextHistoryID
+    , panelVisibility = model.panelVisibility
+    , currentRepresentation = model.currentRepresentation
+    }
 
 
-port initialiseViewer : () -> Cmd msg
-
-
-port showStructure : ( String, Representation ) -> Cmd msg
-
-
-port showAxes : () -> Cmd msg
-
-
-port newRepresentation : Representation -> Cmd msg
-
-
-port downloadPdb : ( String, String ) -> Cmd msg
+exportableToModel : ExportableModel -> Model
+exportableToModel exportableModel =
+    { parameters = Dict.fromList exportableModel.parameters
+    , currentInput = Dict.fromList exportableModel.currentInput
+    , parameterClipBoard = exportableModel.parameterClipBoard
+    , oligomericState = exportableModel.oligomericState
+    , buildMode = Basic
+    , pdbFile = exportableModel.pdbFile
+    , score = exportableModel.score
+    , residuesPerTurn = exportableModel.residuesPerTurn
+    , building = False
+    , modelHistory =
+        exportableModel.modelHistory
+            |> List.map (\( hid, ( params, vis ) ) -> ( hid, ( Dict.fromList params, vis ) ))
+            |> Dict.fromList
+    , nextHistoryID = exportableModel.nextHistoryID
+    , panelVisibility = exportableModel.panelVisibility
+    , currentRepresentation = exportableModel.currentRepresentation
+    }
 
 
 
@@ -256,7 +331,9 @@ update msg model =
                         Dict.insert model.nextHistoryID ( model.parameters, False ) oldHistory
                     , nextHistoryID = model.nextHistoryID + 1
                 }
-                    ! [ showStructure ( pdbFile, model.currentRepresentation ) ]
+                    ! [ showStructure ( pdbFile, model.currentRepresentation )
+                      , setStorage <| modelToExportable model
+                      ]
 
         ProcessModel (Err _) ->
             { model | building = False } ! []
@@ -272,12 +349,20 @@ update msg model =
                     { model
                         | parameters =
                             List.range (model.oligomericState + 1) oligomericState
-                                |> List.map (\k -> ( k, emptyParameterRecord ))
+                                |> List.map
+                                    (\k ->
+                                        ( k
+                                        , parameterRecordWithDefault 1 model.parameters
+                                        )
+                                    )
                                 |> List.append (Dict.toList model.parameters)
                                 |> Dict.fromList
                         , currentInput =
                             List.range (model.oligomericState + 1) oligomericState
-                                |> List.map (\k -> ( k, emptyInput ))
+                                |> List.map
+                                    (\k ->
+                                        ( k, inputRecordWithDefault 1 model.currentInput )
+                                    )
                                 |> List.append (Dict.toList model.currentInput)
                                 |> Dict.fromList
                         , oligomericState = oligomericState
