@@ -20970,8 +20970,8 @@ var _user$project$BuildPanel$advancedParameterInputForm = F2(
 				}
 			});
 	});
-var _user$project$BuildPanel$buildPanel = F3(
-	function (buildMode, parametersDict, currentInputDict) {
+var _user$project$BuildPanel$buildPanel = F4(
+	function (buildMode, parametersDict, currentInputDict, visible) {
 		var panelView = function () {
 			var _p23 = buildMode;
 			if (_p23.ctor === 'Basic') {
@@ -21002,7 +21002,11 @@ var _user$project$BuildPanel$buildPanel = F3(
 						ctor: '::',
 						_0: _user$project$BuildPanel$styles(
 							A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$BuildPanel$buildPanelStyling)),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$hidden(!visible),
+							_1: {ctor: '[]'}
+						}
 					}
 				}
 			},
@@ -22379,7 +22383,7 @@ var _user$project$Builder$siteHeader = A2(
 		_1: {
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$h3,
+				_elm_lang$html$Html$div,
 				{
 					ctor: '::',
 					_0: _user$project$Builder$styles(
@@ -22402,7 +22406,28 @@ var _user$project$Builder$siteHeader = A2(
 				},
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html$text('Powered by '),
+					_0: A2(
+						_elm_lang$html$Html$h3,
+						{
+							ctor: '::',
+							_0: _user$project$Builder$styles(
+								{
+									ctor: '::',
+									_0: _rtfeldman$elm_css$Css$position(_rtfeldman$elm_css$Css$absolute),
+									_1: {
+										ctor: '::',
+										_0: _rtfeldman$elm_css$Css$right(
+											_rtfeldman$elm_css$Css$px(50)),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Powered by'),
+							_1: {ctor: '[]'}
+						}),
 					_1: {
 						ctor: '::',
 						_0: A2(
@@ -22414,7 +22439,54 @@ var _user$project$Builder$siteHeader = A2(
 							},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html$text('ISAMBARD'),
+								_0: A2(
+									_elm_lang$html$Html$img,
+									{
+										ctor: '::',
+										_0: _user$project$Builder$styles(
+											{
+												ctor: '::',
+												_0: _rtfeldman$elm_css$Css$height(
+													_rtfeldman$elm_css$Css$pct(80)),
+												_1: {
+													ctor: '::',
+													_0: _rtfeldman$elm_css$Css$position(_rtfeldman$elm_css$Css$absolute),
+													_1: {
+														ctor: '::',
+														_0: _rtfeldman$elm_css$Css$top(
+															_rtfeldman$elm_css$Css$pct(10)),
+														_1: {
+															ctor: '::',
+															_0: _rtfeldman$elm_css$Css$right(
+																_rtfeldman$elm_css$Css$px(3)),
+															_1: {
+																ctor: '::',
+																_0: _rtfeldman$elm_css$Css$borderRadius(
+																	_rtfeldman$elm_css$Css$px(3)),
+																_1: {
+																	ctor: '::',
+																	_0: A6(
+																		_rtfeldman$elm_css$Css$boxShadow6,
+																		_rtfeldman$elm_css$Css$inset,
+																		_rtfeldman$elm_css$Css$px(0),
+																		_rtfeldman$elm_css$Css$px(0),
+																		_rtfeldman$elm_css$Css$px(10),
+																		_rtfeldman$elm_css$Css$px(2),
+																		A3(_rtfeldman$elm_css$Css$rgb, 100, 100, 100)),
+																	_1: {ctor: '[]'}
+																}
+															}
+														}
+													}
+												}
+											}),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$src('static/images/logo_small.png'),
+											_1: {ctor: '[]'}
+										}
+									},
+									{ctor: '[]'}),
 								_1: {ctor: '[]'}
 							}),
 						_1: {ctor: '[]'}
@@ -23152,26 +23224,18 @@ var _user$project$Builder$buildingStatusPanel = function (model) {
 var _user$project$Builder$overlayPanels = function (model) {
 	var optionalDivs = {
 		ctor: '::',
-		_0: {
-			ctor: '_Tuple2',
-			_0: model.panelVisibility.buildPanel,
-			_1: A3(_user$project$BuildPanel$buildPanel, model.buildMode, model.parameters, model.currentInput)
-		},
+		_0: {ctor: '_Tuple2', _0: model.panelVisibility.examplesPanel, _1: _user$project$ExamplesPanel$examplesPanel},
 		_1: {
 			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: model.panelVisibility.examplesPanel, _1: _user$project$ExamplesPanel$examplesPanel},
+			_0: {
+				ctor: '_Tuple2',
+				_0: model.panelVisibility.buildHistoryPanel,
+				_1: _user$project$Builder$buildHistoryPanel(model.modelHistory)
+			},
 			_1: {
 				ctor: '::',
-				_0: {
-					ctor: '_Tuple2',
-					_0: model.panelVisibility.buildHistoryPanel,
-					_1: _user$project$Builder$buildHistoryPanel(model.modelHistory)
-				},
-				_1: {
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: model.panelVisibility.viewerPanel, _1: _user$project$Builder$viewerPanel},
-					_1: {ctor: '[]'}
-				}
+				_0: {ctor: '_Tuple2', _0: model.panelVisibility.viewerPanel, _1: _user$project$Builder$viewerPanel},
+				_1: {ctor: '[]'}
 			}
 		}
 	};
@@ -23194,11 +23258,15 @@ var _user$project$Builder$overlayPanels = function (model) {
 				_0: _user$project$Builder$topRightToggles,
 				_1: {
 					ctor: '::',
-					_0: _user$project$Builder$buildingStatusPanel(model),
+					_0: A4(_user$project$BuildPanel$buildPanel, model.buildMode, model.parameters, model.currentInput, model.panelVisibility.buildPanel),
 					_1: {
 						ctor: '::',
-						_0: _user$project$Builder$modelInfoPanel(model),
-						_1: {ctor: '[]'}
+						_0: _user$project$Builder$buildingStatusPanel(model),
+						_1: {
+							ctor: '::',
+							_0: _user$project$Builder$modelInfoPanel(model),
+							_1: {ctor: '[]'}
+						}
 					}
 				}
 			}

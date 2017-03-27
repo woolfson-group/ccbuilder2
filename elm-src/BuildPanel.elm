@@ -38,8 +38,8 @@ styles =
     Css.asPairs >> Html.Attributes.style
 
 
-buildPanel : BuildMode -> ParametersDict -> InputValuesDict -> Html Msg
-buildPanel buildMode parametersDict currentInputDict =
+buildPanel : BuildMode -> ParametersDict -> InputValuesDict -> Bool -> Html Msg
+buildPanel buildMode parametersDict currentInputDict visible =
     let
         panelView =
             case buildMode of
@@ -53,6 +53,7 @@ buildPanel buildMode parametersDict currentInputDict =
             [ class [ OverlayPanelCss ]
             , id [ BuildPanel ]
             , styles <| panelStyling ++ buildPanelStyling
+            , hidden <| not visible
             ]
             [ h2 [] [ text "Build" ]
             , selectBuildMode buildMode

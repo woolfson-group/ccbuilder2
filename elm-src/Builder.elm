@@ -217,7 +217,7 @@ update msg model =
                             model.buildMode
             in
                 { model | buildMode = newBuildMode }
-                ! [ Task.perform NoOp (Process.sleep (10 * Time.millisecond)) ]
+                    ! [ Task.perform NoOp (Process.sleep (10 * Time.millisecond)) ]
 
         Build ->
             let
@@ -341,10 +341,11 @@ update msg model =
 
         TogglePanel panel ->
             { model | panelVisibility = togglePanelVisibility panel model.panelVisibility }
-                {-- This task is required to allow the DOM to be rendered 
+                {--This task is required to allow the DOM to be rendered
                 if it isn't included then the drop down menus will show thead
                 incorrect option. --}
-                ! [ Task.perform NoOp (Process.sleep (10 * Time.millisecond)) ]
+                !
+                    [ Task.perform NoOp (Process.sleep (10 * Time.millisecond)) ]
 
         ExpandHistory hID ->
             let
@@ -371,7 +372,7 @@ update msg model =
                     updateRepresentation repOption model.currentRepresentation
             in
                 { model | currentRepresentation = newRep } ! [ newRepresentation newRep ]
-        
+
         NoOp _ ->
             model ! []
 
@@ -537,15 +538,17 @@ overlayPanels model =
             [ siteHeader
             , topLeftToggles
             , topRightToggles
+            , BuildPanel.buildPanel
+                model.buildMode
+                model.parameters
+                model.currentInput
+                model.panelVisibility.buildPanel
             , buildingStatusPanel model
             , modelInfoPanel model
             ]
 
         optionalDivs =
-            [ ( model.panelVisibility.buildPanel
-              , BuildPanel.buildPanel model.buildMode model.parameters model.currentInput
-              )
-            , ( model.panelVisibility.examplesPanel, ExamplesPanel.examplesPanel )
+            [ ( model.panelVisibility.examplesPanel, ExamplesPanel.examplesPanel )
             , ( model.panelVisibility.buildHistoryPanel, buildHistoryPanel model.modelHistory )
             , ( model.panelVisibility.viewerPanel, viewerPanel )
             ]
@@ -563,19 +566,40 @@ overlayPanels model =
 
 siteHeader : Html msg
 siteHeader =
-    div 
-        [ class [ FlexContainerCss]
+    div
+        [ class [ FlexContainerCss ]
         , id [ AppHeaderPanel ]
         , styles <| headerStyling ++ panelStyling
         ]
         [ header [ styles [ Css.width (Css.pct 50) ] ] [ h1 [] [ text "CCBuilder Mk.2" ] ]
-        , h3
-            [ styles 
+        , div
+            [ styles
                 [ Css.width (Css.pct 50)
                 , Css.textAlign Css.right
-                , Css.paddingRight (Css.px 10) ] ]
-            [ text "Powered by "
-            , a [ href "https://github.com/woolfson-group/isambard" ] [ text "ISAMBARD" ]
+                , Css.paddingRight (Css.px 10)
+                ]
+            ]
+            [ h3
+                [ styles
+                    [ Css.position Css.absolute
+                    , Css.right (Css.px 50)
+                    ]
+                ]
+                [ text "Powered by" ]
+            , a
+                [ href "https://github.com/woolfson-group/isambard" ]
+                [ img
+                    [ styles
+                        [ Css.height (Css.pct 80)
+                        , Css.position Css.absolute
+                        , Css.top (Css.pct 10)
+                        , Css.right (Css.px 3)
+                        , Css.borderRadius (Css.px 3)
+                        ]
+                    , src "static/images/logo_small.png"
+                    ]
+                    []
+                ]
             ]
         ]
 
