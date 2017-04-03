@@ -12,6 +12,7 @@ type Msg
     | PasteParameters SectionID
     | ChangeBuildMode String
     | Build
+    | Optimise
     | ProcessModel (Result Http.Error ModellingResults)
     | SetOligomericState String
     | Clear
@@ -26,6 +27,7 @@ type Msg
 
 
 type alias SectionID = Int
+
 
 type alias HistoryID = Int
 
@@ -90,6 +92,7 @@ type Panel
     = AppHeaderPanel
     | BuildPanel
     | ExamplesPanel
+    | OptimisePanel
     | BuildingStatusPanel
     | BuildHistoryPanel
     | ViewerPanel

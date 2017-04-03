@@ -131,6 +131,7 @@ init storedModel =
 type alias PanelVisibility =
     { buildPanel : Bool
     , examplesPanel : Bool
+    , optimisePanel : Bool
     , buildHistoryPanel : Bool
     , viewerPanel : Bool
     }
@@ -168,7 +169,7 @@ emptyModel =
 
 defaultVisibility : PanelVisibility
 defaultVisibility =
-    PanelVisibility True False False False
+    PanelVisibility True False False False False
 
 
 type alias ExportableModel =
@@ -309,6 +310,24 @@ update msg model =
                             }
                     }
                         ! [ sendBuildCmd model.parameters ]
+                else
+                    model ! []
+        
+        Optimise ->
+            let
+                panelVisibility =
+                    model.panelVisibility
+            in
+                if not model.building then
+                    { model
+                        | building = True
+                        , panelVisibility =
+                            { panelVisibility
+                                | buildPanel = False
+                                , examplesPanel = False
+                            }
+                    }
+                        ! [ sendOptimiseCmd model.parameters ]
                 else
                     model ! []
 
@@ -470,7 +489,7 @@ sendBuildCmd : ParametersDict -> Cmd Msg
 sendBuildCmd parameters =
     Http.send ProcessModel <|
         Http.post
-            "/builder/api/build/coiled-coil"
+            "/builder/api/v0.1/build/coiled-coil"
             (Dict.values parameters
                 |> List.map parameterRecordJson
                 |> Json.Encode.list
@@ -486,6 +505,19 @@ modellingResultsDecoder =
         (field "pdb" string)
         (field "score" float)
         (field "mean_rpt_value" float)
+
+
+sendOptimiseCmd : ParametersDict -> Cmd Msg
+sendOptimiseCmd parameters =
+    Http.send ProcessModel <|
+        Http.post
+            "/builder/api/v0.1/optimise/coiled-coil"
+            (Dict.values parameters
+                |> List.map parameterRecordJson
+                |> Json.Encode.list
+                |> Http.jsonBody
+            )
+            modellingResultsDecoder
 
 
 parameterRecordJson : ParameterRecord -> Json.Encode.Value
@@ -562,13 +594,22 @@ togglePanelVisibility panel currentVisibility =
         BuildPanel ->
             { currentVisibility
                 | buildPanel = not currentVisibility.buildPanel
+                , optimisePanel = False
                 , examplesPanel = False
             }
 
         ExamplesPanel ->
             { currentVisibility
                 | buildPanel = False
+                , optimisePanel = False
                 , examplesPanel = not currentVisibility.examplesPanel
+            }
+        
+        OptimisePanel ->
+            { currentVisibility
+                | buildPanel = False
+                , optimisePanel = not currentVisibility.optimisePanel
+                , examplesPanel = False
             }
 
         BuildHistoryPanel ->
@@ -627,6 +668,7 @@ overlayPanels model =
                 model.parameters
                 model.currentInput
                 model.panelVisibility.buildPanel
+            , optimisePanel model.panelVisibility.optimisePanel
             , ExamplesPanel.examplesPanel model.panelVisibility.examplesPanel
             , buildingStatusPanel model
             , buildHistoryPanel model.modelHistory model.panelVisibility.buildHistoryPanel
@@ -692,6 +734,7 @@ topLeftToggles =
     div [ styles topLeftTogglesStyling ]
         [ BuildPanel.toggleBuildPanel
         , ExamplesPanel.toggleExamplesPanel
+        , toggleOptimisePanel
         ]
 
 
@@ -721,6 +764,35 @@ topRightTogglesStyling =
     , Css.width (Css.px 30)
     ]
 
+
+-- Optimise Panel
+
+
+optimisePanel : Bool -> Html Msg
+optimisePanel visible =
+    div
+        [ class [ OverlayPanelCss ]
+        , styles <| panelStyling ++ optimisePanelStyling
+        , hidden <| not visible
+        ]
+        [ h3 [] [ text "Optimise Parameters" ]
+        , button [ onClick Optimise ] [ text "Optimise Model" ]
+        ]
+
+
+optimisePanelStyling : List Css.Mixin
+optimisePanelStyling =
+    [ Css.top (Css.px 60)
+    , Css.left (Css.px 35)
+    ]
+
+toggleOptimisePanel : Html Msg
+toggleOptimisePanel =
+    div
+        [ class [ OverlayPanelCss, LeftPanelToggleCss ]
+        , onClick (TogglePanel OptimisePanel)
+        ]
+        [ text "Optimise" ]
 
 
 -- Model Info

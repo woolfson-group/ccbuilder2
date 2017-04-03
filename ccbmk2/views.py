@@ -8,7 +8,7 @@ from flask import jsonify, render_template, request
 import pymongo
 
 from ccbmk2 import app
-from ccbmk2.model_building import build_coiled_coil
+from ccbmk2.model_building import build_coiled_coil, optimise_coiled_coil
 
 
 client = pymongo.MongoClient('db', 27017)
@@ -30,9 +30,9 @@ def builder():
     return render_template('builder.html')
 
 
-@app.route('/builder/api/build/coiled-coil', methods=['POST'])
+@app.route('/builder/api/v0.1/build/coiled-coil', methods=['POST'])
 def build_coiled_coil_model():
-    """Processes commands passed to the builder module."""
+    """Passes to the build commands to the model_building module."""
     (request_log_id, save_model) = store_request(request.json)
     model = model_store.find_one({'_id': request_log_id})
     if model is None:
@@ -49,6 +49,16 @@ def build_coiled_coil_model():
             'score': model['score'],
             'mean_rpt_value': model['mean_rpt_value']
             }
+    return jsonify(pdb_and_score)
+
+
+@app.route('/builder/api/v0.1/optimise/coiled-coil', methods=['POST'])
+def optimise_coiled_coil_model():
+    """Runs a parameter optimisation for a supplied model."""
+    build_start_time = datetime.datetime.now()
+    pdb_and_score = optimise_coiled_coil(request.json)
+    build_start_end = datetime.datetime.now()
+    build_time = build_start_end - build_start_time
     return jsonify(pdb_and_score)
 
 

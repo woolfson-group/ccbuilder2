@@ -19201,6 +19201,7 @@ var _user$project$Types$SetOligomericState = function (a) {
 var _user$project$Types$ProcessModel = function (a) {
 	return {ctor: 'ProcessModel', _0: a};
 };
+var _user$project$Types$Optimise = {ctor: 'Optimise'};
 var _user$project$Types$Build = {ctor: 'Build'};
 var _user$project$Types$ChangeBuildMode = function (a) {
 	return {ctor: 'ChangeBuildMode', _0: a};
@@ -19233,6 +19234,7 @@ var _user$project$Types$Basic = {ctor: 'Basic'};
 var _user$project$Types$ViewerPanel = {ctor: 'ViewerPanel'};
 var _user$project$Types$BuildHistoryPanel = {ctor: 'BuildHistoryPanel'};
 var _user$project$Types$BuildingStatusPanel = {ctor: 'BuildingStatusPanel'};
+var _user$project$Types$OptimisePanel = {ctor: 'OptimisePanel'};
 var _user$project$Types$ExamplesPanel = {ctor: 'ExamplesPanel'};
 var _user$project$Types$BuildPanel = {ctor: 'BuildPanel'};
 var _user$project$Types$AppHeaderPanel = {ctor: 'AppHeaderPanel'};
@@ -21876,6 +21878,17 @@ var _user$project$Builder$modelInfoPanelStyling = {
 		_1: {ctor: '[]'}
 	}
 };
+var _user$project$Builder$optimisePanelStyling = {
+	ctor: '::',
+	_0: _rtfeldman$elm_css$Css$top(
+		_rtfeldman$elm_css$Css$px(60)),
+	_1: {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css$left(
+			_rtfeldman$elm_css$Css$px(35)),
+		_1: {ctor: '[]'}
+	}
+};
 var _user$project$Builder$topRightTogglesStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$top(
@@ -21981,11 +21994,15 @@ var _user$project$Builder$togglePanelVisibility = F2(
 			case 'BuildPanel':
 				return _elm_lang$core$Native_Utils.update(
 					currentVisibility,
-					{buildPanel: !currentVisibility.buildPanel, examplesPanel: false});
+					{buildPanel: !currentVisibility.buildPanel, optimisePanel: false, examplesPanel: false});
 			case 'ExamplesPanel':
 				return _elm_lang$core$Native_Utils.update(
 					currentVisibility,
-					{buildPanel: false, examplesPanel: !currentVisibility.examplesPanel});
+					{buildPanel: false, optimisePanel: false, examplesPanel: !currentVisibility.examplesPanel});
+			case 'OptimisePanel':
+				return _elm_lang$core$Native_Utils.update(
+					currentVisibility,
+					{buildPanel: false, optimisePanel: !currentVisibility.optimisePanel, examplesPanel: false});
 			case 'BuildHistoryPanel':
 				return _elm_lang$core$Native_Utils.update(
 					currentVisibility,
@@ -22112,13 +22129,28 @@ var _user$project$Builder$modellingResultsDecoder = A4(
 	A2(_elm_lang$core$Json_Decode$field, 'pdb', _elm_lang$core$Json_Decode$string),
 	A2(_elm_lang$core$Json_Decode$field, 'score', _elm_lang$core$Json_Decode$float),
 	A2(_elm_lang$core$Json_Decode$field, 'mean_rpt_value', _elm_lang$core$Json_Decode$float));
+var _user$project$Builder$sendOptimiseCmd = function (parameters) {
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$Types$ProcessModel,
+		A3(
+			_elm_lang$http$Http$post,
+			'/builder/api/v0.1/optimise/coiled-coil',
+			_elm_lang$http$Http$jsonBody(
+				_elm_lang$core$Json_Encode$list(
+					A2(
+						_elm_lang$core$List$map,
+						_user$project$Builder$parameterRecordJson,
+						_elm_lang$core$Dict$values(parameters)))),
+			_user$project$Builder$modellingResultsDecoder));
+};
 var _user$project$Builder$sendBuildCmd = function (parameters) {
 	return A2(
 		_elm_lang$http$Http$send,
 		_user$project$Types$ProcessModel,
 		A3(
 			_elm_lang$http$Http$post,
-			'/builder/api/build/coiled-coil',
+			'/builder/api/v0.1/build/coiled-coil',
 			_elm_lang$http$Http$jsonBody(
 				_elm_lang$core$Json_Encode$list(
 					A2(
@@ -22213,22 +22245,6 @@ var _user$project$Builder$styles = function (_p9) {
 	return _elm_lang$html$Html_Attributes$style(
 		_rtfeldman$elm_css$Css$asPairs(_p9));
 };
-var _user$project$Builder$topLeftToggles = A2(
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _user$project$Builder$styles(_user$project$Builder$topLeftTogglesStyling),
-		_1: {ctor: '[]'}
-	},
-	{
-		ctor: '::',
-		_0: _user$project$BuildPanel$toggleBuildPanel,
-		_1: {
-			ctor: '::',
-			_0: _user$project$ExamplesPanel$toggleExamplesPanel,
-			_1: {ctor: '[]'}
-		}
-	});
 var _user$project$Builder$modelDetailTableHeader = A2(
 	_elm_lang$html$Html$thead,
 	{ctor: '[]'},
@@ -22550,6 +22566,102 @@ var _user$project$Builder$siteHeader = A2(
 					}
 				}),
 			_1: {ctor: '[]'}
+		}
+	});
+var _user$project$Builder$optimisePanel = function (visible) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _user$project$Builder$class(
+				{
+					ctor: '::',
+					_0: _user$project$BuilderCss$OverlayPanelCss,
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _user$project$Builder$styles(
+					A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$Builder$optimisePanelStyling)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$hidden(!visible),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h3,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Optimise Parameters'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$button,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$Optimise),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Optimise Model'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _user$project$Builder$toggleOptimisePanel = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _user$project$Builder$class(
+			{
+				ctor: '::',
+				_0: _user$project$BuilderCss$OverlayPanelCss,
+				_1: {
+					ctor: '::',
+					_0: _user$project$BuilderCss$LeftPanelToggleCss,
+					_1: {ctor: '[]'}
+				}
+			}),
+		_1: {
+			ctor: '::',
+			_0: _elm_lang$html$Html_Events$onClick(
+				_user$project$Types$TogglePanel(_user$project$Types$OptimisePanel)),
+			_1: {ctor: '[]'}
+		}
+	},
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html$text('Optimise'),
+		_1: {ctor: '[]'}
+	});
+var _user$project$Builder$topLeftToggles = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _user$project$Builder$styles(_user$project$Builder$topLeftTogglesStyling),
+		_1: {ctor: '[]'}
+	},
+	{
+		ctor: '::',
+		_0: _user$project$BuildPanel$toggleBuildPanel,
+		_1: {
+			ctor: '::',
+			_0: _user$project$ExamplesPanel$toggleExamplesPanel,
+			_1: {
+				ctor: '::',
+				_0: _user$project$Builder$toggleOptimisePanel,
+				_1: {ctor: '[]'}
+			}
 		}
 	});
 var _user$project$Builder$downloadStructureButton = function (pdbFile) {
@@ -23308,20 +23420,24 @@ var _user$project$Builder$overlayPanels = function (model) {
 					_0: A4(_user$project$BuildPanel$buildPanel, model.buildMode, model.parameters, model.currentInput, model.panelVisibility.buildPanel),
 					_1: {
 						ctor: '::',
-						_0: _user$project$ExamplesPanel$examplesPanel(model.panelVisibility.examplesPanel),
+						_0: _user$project$Builder$optimisePanel(model.panelVisibility.optimisePanel),
 						_1: {
 							ctor: '::',
-							_0: _user$project$Builder$buildingStatusPanel(model),
+							_0: _user$project$ExamplesPanel$examplesPanel(model.panelVisibility.examplesPanel),
 							_1: {
 								ctor: '::',
-								_0: A2(_user$project$Builder$buildHistoryPanel, model.modelHistory, model.panelVisibility.buildHistoryPanel),
+								_0: _user$project$Builder$buildingStatusPanel(model),
 								_1: {
 									ctor: '::',
-									_0: _user$project$Builder$viewerPanel(model.panelVisibility.viewerPanel),
+									_0: A2(_user$project$Builder$buildHistoryPanel, model.modelHistory, model.panelVisibility.buildHistoryPanel),
 									_1: {
 										ctor: '::',
-										_0: _user$project$Builder$modelInfoPanel(model),
-										_1: {ctor: '[]'}
+										_0: _user$project$Builder$viewerPanel(model.panelVisibility.viewerPanel),
+										_1: {
+											ctor: '::',
+											_0: _user$project$Builder$modelInfoPanel(model),
+											_1: {ctor: '[]'}
+										}
 									}
 								}
 							}
@@ -23425,7 +23541,7 @@ var _user$project$Builder$setStorage = _elm_lang$core$Native_Platform.outgoingPo
 					];
 				}),
 			nextHistoryID: v.nextHistoryID,
-			panelVisibility: {buildPanel: v.panelVisibility.buildPanel, examplesPanel: v.panelVisibility.examplesPanel, buildHistoryPanel: v.panelVisibility.buildHistoryPanel, viewerPanel: v.panelVisibility.viewerPanel},
+			panelVisibility: {buildPanel: v.panelVisibility.buildPanel, examplesPanel: v.panelVisibility.examplesPanel, optimisePanel: v.panelVisibility.optimisePanel, buildHistoryPanel: v.panelVisibility.buildHistoryPanel, viewerPanel: v.panelVisibility.viewerPanel},
 			currentRepresentation: {cartoon: v.currentRepresentation.cartoon, trace: v.currentRepresentation.trace, ballsAndSticks: v.currentRepresentation.ballsAndSticks, spheres: v.currentRepresentation.spheres, points: v.currentRepresentation.points}
 		};
 	});
@@ -23560,6 +23676,26 @@ var _user$project$Builder$update = F2(
 					{
 						ctor: '::',
 						_0: _user$project$Builder$sendBuildCmd(model.parameters),
+						_1: {ctor: '[]'}
+					}) : A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{ctor: '[]'});
+			case 'Optimise':
+				var panelVisibility = model.panelVisibility;
+				return (!model.building) ? A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							building: true,
+							panelVisibility: _elm_lang$core$Native_Utils.update(
+								panelVisibility,
+								{buildPanel: false, examplesPanel: false})
+						}),
+					{
+						ctor: '::',
+						_0: _user$project$Builder$sendOptimiseCmd(model.parameters),
 						_1: {ctor: '[]'}
 					}) : A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
@@ -23838,11 +23974,11 @@ var _user$project$Builder$Model = function (a) {
 		};
 	};
 };
-var _user$project$Builder$PanelVisibility = F4(
-	function (a, b, c, d) {
-		return {buildPanel: a, examplesPanel: b, buildHistoryPanel: c, viewerPanel: d};
+var _user$project$Builder$PanelVisibility = F5(
+	function (a, b, c, d, e) {
+		return {buildPanel: a, examplesPanel: b, optimisePanel: c, buildHistoryPanel: d, viewerPanel: e};
 	});
-var _user$project$Builder$defaultVisibility = A4(_user$project$Builder$PanelVisibility, true, false, false, false);
+var _user$project$Builder$defaultVisibility = A5(_user$project$Builder$PanelVisibility, true, false, false, false, false);
 var _user$project$Builder$emptyModel = {
 	parameters: _elm_lang$core$Dict$fromList(
 		{
@@ -24283,11 +24419,16 @@ var _user$project$Builder$main = _elm_lang$html$Html$programWithFlags(
 																								function (examplesPanel) {
 																									return A2(
 																										_elm_lang$core$Json_Decode$andThen,
-																										function (viewerPanel) {
-																											return _elm_lang$core$Json_Decode$succeed(
-																												{buildHistoryPanel: buildHistoryPanel, buildPanel: buildPanel, examplesPanel: examplesPanel, viewerPanel: viewerPanel});
+																										function (optimisePanel) {
+																											return A2(
+																												_elm_lang$core$Json_Decode$andThen,
+																												function (viewerPanel) {
+																													return _elm_lang$core$Json_Decode$succeed(
+																														{buildHistoryPanel: buildHistoryPanel, buildPanel: buildPanel, examplesPanel: examplesPanel, optimisePanel: optimisePanel, viewerPanel: viewerPanel});
+																												},
+																												A2(_elm_lang$core$Json_Decode$field, 'viewerPanel', _elm_lang$core$Json_Decode$bool));
 																										},
-																										A2(_elm_lang$core$Json_Decode$field, 'viewerPanel', _elm_lang$core$Json_Decode$bool));
+																										A2(_elm_lang$core$Json_Decode$field, 'optimisePanel', _elm_lang$core$Json_Decode$bool));
 																								},
 																								A2(_elm_lang$core$Json_Decode$field, 'examplesPanel', _elm_lang$core$Json_Decode$bool));
 																						},
@@ -24596,7 +24737,7 @@ var _user$project$Builder$ExportableModel = function (a) {
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"ChangeBuildMode":["String"],"Build":[],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"SetParametersAndBuild":["Types.ParametersDict"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ExamplesPanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ pdbFile : String, score : Float, residuesPerTurn : Float }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"ChangeBuildMode":["String"],"Build":[],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"SetParametersAndBuild":["Types.ParametersDict"],"Optimise":[],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ExamplesPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ pdbFile : String, score : Float, residuesPerTurn : Float }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

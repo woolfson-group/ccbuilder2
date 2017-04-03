@@ -23,7 +23,7 @@ This is the source code for a web application for building models of coiled coil
 
 ## TODO
 
-* Hide divs to allow info to be maintained
+* `ProcessModel` should update the `currentInput` record
 * Warning for long build time
 * Try horizontal model info
 * Convert advanced build to a table
