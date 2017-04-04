@@ -963,73 +963,74 @@ modelDetailTableHeader =
 modelParametersAsRow : ( HistoryID, ( ParametersDict, Bool ) ) -> List (Html Msg)
 modelParametersAsRow ( hID, ( parameters, visible ) ) =
     let
-        parameterRecords =
-            Dict.values parameters
-
-        topRowParameters =
-            List.head parameterRecords
-                |> Maybe.withDefault emptyParameterRecord
-                |> parametersToInput
-
         foldedRows =
-            List.tail parameterRecords
+            Dict.values parameters
+                |> List.tail
                 |> Maybe.withDefault []
-                |> List.map parametersToInput
                 |> List.map modelFoldedRow
     in
         if not visible then
-            [ modelHistoryTopRow hID parameters topRowParameters visible ]
+            [ modelHistoryTopRow hID parameters visible ]
         else
-            (modelHistoryTopRow hID parameters topRowParameters visible)
+            (modelHistoryTopRow hID parameters visible)
                 :: foldedRows
 
 
-modelHistoryTopRow : HistoryID -> ParametersDict -> InputValues -> Bool -> Html Msg
-modelHistoryTopRow hID parameters inputParameters visible =
-    tr
-        []
-        ([ div
-            [ onClick (ExpandHistory hID) ]
-            [ if (not visible) then
-                text "▶"
-              else
-                text "▼"
-            ]
-         ]
-            ++ List.map makeParameterTh
-                [ inputParameters.radius
-                , inputParameters.pitch
-                , inputParameters.phiCA
-                , inputParameters.superHelRot
-                , inputParameters.zShift
-                , inputParameters.sequence
-                , inputParameters.register
+modelHistoryTopRow : HistoryID -> ParametersDict -> Bool -> Html Msg
+modelHistoryTopRow hID parameters visible =
+    let
+        topRowParameters =
+            Dict.values parameters
+                |> List.head
+                |> Maybe.withDefault emptyParameterRecord
+    in
+        tr
+            []
+            ([ div
+                [ onClick (ExpandHistory hID) ]
+                [ if (not visible) then
+                    text "▶"
+                else
+                    text "▼"
                 ]
-            ++ [ button
-                    [ class [ CCBButtonCss ]
-                    , onClick (SetParametersAndBuild parameters)
-                    ]
-                    [ text "Rebuild" ]
-               ]
-        )
+            ]
+                ++ List.map makeParameterTh
+                    (parametersToRow topRowParameters)
+                ++ [ button
+                        [ class [ CCBButtonCss ]
+                        , onClick (SetParametersAndBuild parameters)
+                        ]
+                        [ text "Rebuild" ]
+                ]
+            )
 
 
-modelFoldedRow : InputValues -> Html Msg
-modelFoldedRow inputParameters =
+modelFoldedRow : ParameterRecord -> Html Msg
+modelFoldedRow parameters =
     tr
         []
         ([ text " ┋"
          ]
             ++ List.map makeParameterTh
-                [ inputParameters.radius
-                , inputParameters.pitch
-                , inputParameters.phiCA
-                , inputParameters.superHelRot
-                , inputParameters.zShift
-                , inputParameters.sequence
-                , inputParameters.register
-                ]
+                (parametersToRow parameters)
         )
+
+
+parametersToRow : ParameterRecord -> List String
+parametersToRow parameters =
+    [ parameters.radius 
+        |> Maybe.withDefault 0 |> roundToXDecPlaces 1 |> toString
+    , parameters.pitch
+        |> Maybe.withDefault 0 |> round |> toString
+    , parameters.phiCA 
+        |> Maybe.withDefault 0 |> roundToXDecPlaces 1 |> toString
+    , parameters.superHelRot 
+        |> Maybe.withDefault 0 |> roundToXDecPlaces 1 |> toString
+    , parameters.zShift
+        |> Maybe.withDefault 0 |> roundToXDecPlaces 1 |> toString
+    , parameters.sequence |> Maybe.withDefault ""
+    , parameters.register
+    ]
 
 
 makeParameterTh : String -> Html Msg

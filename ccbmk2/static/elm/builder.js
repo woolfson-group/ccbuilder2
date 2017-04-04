@@ -21816,50 +21816,6 @@ var _user$project$Builder$makeParameterTh = function (pString) {
 		_elm_lang$core$List$singleton(
 			_elm_lang$html$Html$text(pString)));
 };
-var _user$project$Builder$modelFoldedRow = function (inputParameters) {
-	return A2(
-		_elm_lang$html$Html$tr,
-		{ctor: '[]'},
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(' ┋'),
-				_1: {ctor: '[]'}
-			},
-			A2(
-				_elm_lang$core$List$map,
-				_user$project$Builder$makeParameterTh,
-				{
-					ctor: '::',
-					_0: inputParameters.radius,
-					_1: {
-						ctor: '::',
-						_0: inputParameters.pitch,
-						_1: {
-							ctor: '::',
-							_0: inputParameters.phiCA,
-							_1: {
-								ctor: '::',
-								_0: inputParameters.superHelRot,
-								_1: {
-									ctor: '::',
-									_0: inputParameters.zShift,
-									_1: {
-										ctor: '::',
-										_0: inputParameters.sequence,
-										_1: {
-											ctor: '::',
-											_0: inputParameters.register,
-											_1: {ctor: '[]'}
-										}
-									}
-								}
-							}
-						}
-					}
-				})));
-};
 var _user$project$Builder$roundToXDecPlaces = F2(
 	function (precision, num) {
 		var scaling = _elm_lang$core$Basics$toFloat(
@@ -21874,6 +21830,71 @@ var _user$project$Builder$roundToXDecPlaces = F2(
 			_elm_lang$core$Basics$toFloat(
 				_elm_lang$core$Basics$round(num * scaling)));
 	});
+var _user$project$Builder$parametersToRow = function (parameters) {
+	return {
+		ctor: '::',
+		_0: _elm_lang$core$Basics$toString(
+			A2(
+				_user$project$Builder$roundToXDecPlaces,
+				1,
+				A2(_elm_lang$core$Maybe$withDefault, 0, parameters.radius))),
+		_1: {
+			ctor: '::',
+			_0: _elm_lang$core$Basics$toString(
+				_elm_lang$core$Basics$round(
+					A2(_elm_lang$core$Maybe$withDefault, 0, parameters.pitch))),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$core$Basics$toString(
+					A2(
+						_user$project$Builder$roundToXDecPlaces,
+						1,
+						A2(_elm_lang$core$Maybe$withDefault, 0, parameters.phiCA))),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(
+						A2(
+							_user$project$Builder$roundToXDecPlaces,
+							1,
+							A2(_elm_lang$core$Maybe$withDefault, 0, parameters.superHelRot))),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(
+							A2(
+								_user$project$Builder$roundToXDecPlaces,
+								1,
+								A2(_elm_lang$core$Maybe$withDefault, 0, parameters.zShift))),
+						_1: {
+							ctor: '::',
+							_0: A2(_elm_lang$core$Maybe$withDefault, '', parameters.sequence),
+							_1: {
+								ctor: '::',
+								_0: parameters.register,
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		}
+	};
+};
+var _user$project$Builder$modelFoldedRow = function (parameters) {
+	return A2(
+		_elm_lang$html$Html$tr,
+		{ctor: '[]'},
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(' ┋'),
+				_1: {ctor: '[]'}
+			},
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$Builder$makeParameterTh,
+				_user$project$Builder$parametersToRow(parameters))));
+};
 var _user$project$Builder$modelInfoPanelStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$bottom(
@@ -22851,8 +22872,13 @@ var _user$project$Builder$modelInfoPanel = function (model) {
 			}
 		});
 };
-var _user$project$Builder$modelHistoryTopRow = F4(
-	function (hID, parameters, inputParameters, visible) {
+var _user$project$Builder$modelHistoryTopRow = F3(
+	function (hID, parameters, visible) {
+		var topRowParameters = A2(
+			_elm_lang$core$Maybe$withDefault,
+			_user$project$Types$emptyParameterRecord,
+			_elm_lang$core$List$head(
+				_elm_lang$core$Dict$values(parameters)));
 		return A2(
 			_elm_lang$html$Html$tr,
 			{ctor: '[]'},
@@ -22880,35 +22906,7 @@ var _user$project$Builder$modelHistoryTopRow = F4(
 					A2(
 						_elm_lang$core$List$map,
 						_user$project$Builder$makeParameterTh,
-						{
-							ctor: '::',
-							_0: inputParameters.radius,
-							_1: {
-								ctor: '::',
-								_0: inputParameters.pitch,
-								_1: {
-									ctor: '::',
-									_0: inputParameters.phiCA,
-									_1: {
-										ctor: '::',
-										_0: inputParameters.superHelRot,
-										_1: {
-											ctor: '::',
-											_0: inputParameters.zShift,
-											_1: {
-												ctor: '::',
-												_0: inputParameters.sequence,
-												_1: {
-													ctor: '::',
-													_0: inputParameters.register,
-													_1: {ctor: '[]'}
-												}
-											}
-										}
-									}
-								}
-							}
-						}),
+						_user$project$Builder$parametersToRow(topRowParameters)),
 					{
 						ctor: '::',
 						_0: A2(
@@ -22941,29 +22939,21 @@ var _user$project$Builder$modelParametersAsRow = function (_p11) {
 	var _p15 = _p12._1._1;
 	var _p14 = _p12._1._0;
 	var _p13 = _p12._0;
-	var parameterRecords = _elm_lang$core$Dict$values(_p14);
-	var topRowParameters = _user$project$Builder$parametersToInput(
-		A2(
-			_elm_lang$core$Maybe$withDefault,
-			_user$project$Types$emptyParameterRecord,
-			_elm_lang$core$List$head(parameterRecords)));
 	var foldedRows = A2(
 		_elm_lang$core$List$map,
 		_user$project$Builder$modelFoldedRow,
 		A2(
-			_elm_lang$core$List$map,
-			_user$project$Builder$parametersToInput,
-			A2(
-				_elm_lang$core$Maybe$withDefault,
-				{ctor: '[]'},
-				_elm_lang$core$List$tail(parameterRecords))));
+			_elm_lang$core$Maybe$withDefault,
+			{ctor: '[]'},
+			_elm_lang$core$List$tail(
+				_elm_lang$core$Dict$values(_p14))));
 	return (!_p15) ? {
 		ctor: '::',
-		_0: A4(_user$project$Builder$modelHistoryTopRow, _p13, _p14, topRowParameters, _p15),
+		_0: A3(_user$project$Builder$modelHistoryTopRow, _p13, _p14, _p15),
 		_1: {ctor: '[]'}
 	} : {
 		ctor: '::',
-		_0: A4(_user$project$Builder$modelHistoryTopRow, _p13, _p14, topRowParameters, _p15),
+		_0: A3(_user$project$Builder$modelHistoryTopRow, _p13, _p14, _p15),
 		_1: foldedRows
 	};
 };
