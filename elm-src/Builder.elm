@@ -35,6 +35,7 @@ import Types
         , InputValuesDict
         , emptyInput
         , ModellingResults
+        , OptimisationResults
         , Parameter(..)
         , BuildMode(..)
         , Panel(..)
@@ -312,7 +313,7 @@ update msg model =
                         ! [ sendBuildCmd model.parameters ]
                 else
                     model ! []
-        
+
         Optimise ->
             let
                 panelVisibility =
@@ -356,6 +357,23 @@ update msg model =
 
         ProcessModel (Err _) ->
             { model | building = False } ! []
+
+        ProcessOptimisation (Ok { parameters, modellingResults }) ->
+            let
+                parametersDict =
+                    List.map2 (,)
+                        (List.range 1 model.oligomericState)
+                        (List.repeat model.oligomericState parameters)
+                    |> Dict.fromList
+            in
+                { model
+                    | parameters = parametersDict
+                    , currentInput = parametersDictToInputDict parametersDict
+                }
+                    ! [ msgToCommand (ProcessModel (Ok modellingResults) ) ]
+
+        ProcessOptimisation (Err error) ->
+            model ! [ msgToCommand (ProcessModel (Err error)) ]
 
         SetOligomericState n ->
             let
@@ -480,9 +498,14 @@ update msg model =
         NoOp _ ->
             model ! []
 
+
 msgToCommand : Msg -> Cmd Msg
 msgToCommand msg =
     Task.perform identity (Task.succeed msg)
+
+
+
+-- Build Cmd
 
 
 sendBuildCmd : ParametersDict -> Cmd Msg
@@ -507,19 +530,6 @@ modellingResultsDecoder =
         (field "mean_rpt_value" float)
 
 
-sendOptimiseCmd : ParametersDict -> Cmd Msg
-sendOptimiseCmd parameters =
-    Http.send ProcessModel <|
-        Http.post
-            "/builder/api/v0.1/optimise/coiled-coil"
-            (Dict.values parameters
-                |> List.map parameterRecordJson
-                |> Json.Encode.list
-                |> Http.jsonBody
-            )
-            modellingResultsDecoder
-
-
 parameterRecordJson : ParameterRecord -> Json.Encode.Value
 parameterRecordJson parameters =
     Json.Encode.object
@@ -536,6 +546,56 @@ parameterRecordJson parameters =
         , ( "Orientation", parameters.antiParallel |> Json.Encode.bool )
         , ( "Z-Shift", parameters.zShift |> Maybe.withDefault 0 |> Json.Encode.float )
         ]
+
+
+
+-- Optimisation Cmd
+
+
+sendOptimiseCmd : ParametersDict -> Cmd Msg
+sendOptimiseCmd parameters =
+    Http.send ProcessOptimisation <|
+        Http.post
+            "/builder/api/v0.1/optimise/coiled-coil"
+            (Dict.values parameters
+                |> List.map parameterRecordJson
+                |> Json.Encode.list
+                |> Http.jsonBody
+            )
+            optimisationResultsDecoder
+
+
+optimisationResultsDecoder : Json.Decode.Decoder OptimisationResults
+optimisationResultsDecoder =
+    Json.Decode.map2
+        OptimisationResults
+        (field "parameters" basicParameterJsonDecoder)
+        (field "modellingResults" modellingResultsDecoder)
+
+
+basicParameterJsonDecoder : Json.Decode.Decoder ParameterRecord
+basicParameterJsonDecoder =
+    Json.Decode.map5
+        basicParametersToRecord
+        (field "radius" float)
+        (field "pitch" float)
+        (field "radius" float)
+        (field "sequence" string)
+        (field "register" string)
+
+
+basicParametersToRecord : Float -> Float -> Float -> String -> String -> ParameterRecord
+basicParametersToRecord radius pitch phiCA sequence register =
+    { radius = Just radius
+    , pitch = Just pitch
+    , phiCA = Just phiCA
+    , sequence = Just sequence
+    , register = register
+    , superHelRot = Nothing
+    , antiParallel = False
+    , zShift = Nothing
+    , linkedSuperHelRot = True
+    }
 
 
 parametersDictToInputDict : ParametersDict -> InputValuesDict
@@ -604,7 +664,7 @@ togglePanelVisibility panel currentVisibility =
                 , optimisePanel = False
                 , examplesPanel = not currentVisibility.examplesPanel
             }
-        
+
         OptimisePanel ->
             { currentVisibility
                 | buildPanel = False
@@ -765,6 +825,7 @@ topRightTogglesStyling =
     ]
 
 
+
 -- Optimise Panel
 
 
@@ -786,6 +847,7 @@ optimisePanelStyling =
     , Css.left (Css.px 35)
     ]
 
+
 toggleOptimisePanel : Html Msg
 toggleOptimisePanel =
     div
@@ -793,6 +855,7 @@ toggleOptimisePanel =
         , onClick (TogglePanel OptimisePanel)
         ]
         [ text "Optimise" ]
+
 
 
 -- Model Info

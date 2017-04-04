@@ -23,6 +23,7 @@ This is the source code for a web application for building models of coiled coil
 
 ## TODO
 
+* Add error messages for failed builds
 * `ProcessModel` should update the `currentInput` record
 * Warning for long build time
 * Try horizontal model info

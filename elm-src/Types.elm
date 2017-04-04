@@ -14,6 +14,7 @@ type Msg
     | Build
     | Optimise
     | ProcessModel (Result Http.Error ModellingResults)
+    | ProcessOptimisation (Result Http.Error OptimisationResults)
     | SetOligomericState String
     | Clear
     | DownloadPdb
@@ -68,6 +69,12 @@ type alias ModellingResults =
     { pdbFile : String
     , score : Float
     , residuesPerTurn : Float
+    }
+
+
+type alias OptimisationResults =
+    { parameters : ParameterRecord
+    , modellingResults : ModellingResults
     }
 
 

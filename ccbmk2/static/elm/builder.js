@@ -19170,6 +19170,10 @@ var _user$project$Types$ModellingResults = F3(
 	function (a, b, c) {
 		return {pdbFile: a, score: b, residuesPerTurn: c};
 	});
+var _user$project$Types$OptimisationResults = F2(
+	function (a, b) {
+		return {parameters: a, modellingResults: b};
+	});
 var _user$project$Types$Representation = F5(
 	function (a, b, c, d, e) {
 		return {cartoon: a, trace: b, ballsAndSticks: c, spheres: d, points: e};
@@ -19197,6 +19201,9 @@ var _user$project$Types$DownloadPdb = {ctor: 'DownloadPdb'};
 var _user$project$Types$Clear = {ctor: 'Clear'};
 var _user$project$Types$SetOligomericState = function (a) {
 	return {ctor: 'SetOligomericState', _0: a};
+};
+var _user$project$Types$ProcessOptimisation = function (a) {
+	return {ctor: 'ProcessOptimisation', _0: a};
 };
 var _user$project$Types$ProcessModel = function (a) {
 	return {ctor: 'ProcessModel', _0: a};
@@ -22049,6 +22056,28 @@ var _user$project$Builder$parametersDictToInputDict = function (parameters) {
 			},
 			_elm_lang$core$Dict$toList(parameters)));
 };
+var _user$project$Builder$basicParametersToRecord = F5(
+	function (radius, pitch, phiCA, sequence, register) {
+		return {
+			radius: _elm_lang$core$Maybe$Just(radius),
+			pitch: _elm_lang$core$Maybe$Just(pitch),
+			phiCA: _elm_lang$core$Maybe$Just(phiCA),
+			sequence: _elm_lang$core$Maybe$Just(sequence),
+			register: register,
+			superHelRot: _elm_lang$core$Maybe$Nothing,
+			antiParallel: false,
+			zShift: _elm_lang$core$Maybe$Nothing,
+			linkedSuperHelRot: true
+		};
+	});
+var _user$project$Builder$basicParameterJsonDecoder = A6(
+	_elm_lang$core$Json_Decode$map5,
+	_user$project$Builder$basicParametersToRecord,
+	A2(_elm_lang$core$Json_Decode$field, 'radius', _elm_lang$core$Json_Decode$float),
+	A2(_elm_lang$core$Json_Decode$field, 'pitch', _elm_lang$core$Json_Decode$float),
+	A2(_elm_lang$core$Json_Decode$field, 'radius', _elm_lang$core$Json_Decode$float),
+	A2(_elm_lang$core$Json_Decode$field, 'sequence', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'register', _elm_lang$core$Json_Decode$string));
 var _user$project$Builder$parameterRecordJson = function (parameters) {
 	return _elm_lang$core$Json_Encode$object(
 		{
@@ -22129,10 +22158,15 @@ var _user$project$Builder$modellingResultsDecoder = A4(
 	A2(_elm_lang$core$Json_Decode$field, 'pdb', _elm_lang$core$Json_Decode$string),
 	A2(_elm_lang$core$Json_Decode$field, 'score', _elm_lang$core$Json_Decode$float),
 	A2(_elm_lang$core$Json_Decode$field, 'mean_rpt_value', _elm_lang$core$Json_Decode$float));
+var _user$project$Builder$optimisationResultsDecoder = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_user$project$Types$OptimisationResults,
+	A2(_elm_lang$core$Json_Decode$field, 'parameters', _user$project$Builder$basicParameterJsonDecoder),
+	A2(_elm_lang$core$Json_Decode$field, 'modellingResults', _user$project$Builder$modellingResultsDecoder));
 var _user$project$Builder$sendOptimiseCmd = function (parameters) {
 	return A2(
 		_elm_lang$http$Http$send,
-		_user$project$Types$ProcessModel,
+		_user$project$Types$ProcessOptimisation,
 		A3(
 			_elm_lang$http$Http$post,
 			'/builder/api/v0.1/optimise/coiled-coil',
@@ -22142,7 +22176,7 @@ var _user$project$Builder$sendOptimiseCmd = function (parameters) {
 						_elm_lang$core$List$map,
 						_user$project$Builder$parameterRecordJson,
 						_elm_lang$core$Dict$values(parameters)))),
-			_user$project$Builder$modellingResultsDecoder));
+			_user$project$Builder$optimisationResultsDecoder));
 };
 var _user$project$Builder$sendBuildCmd = function (parameters) {
 	return A2(
@@ -23747,6 +23781,44 @@ var _user$project$Builder$update = F2(
 							{building: false}),
 						{ctor: '[]'});
 				}
+			case 'ProcessOptimisation':
+				if (_p16._0.ctor === 'Ok') {
+					var parametersDict = _elm_lang$core$Dict$fromList(
+						A3(
+							_elm_lang$core$List$map2,
+							F2(
+								function (v0, v1) {
+									return {ctor: '_Tuple2', _0: v0, _1: v1};
+								}),
+							A2(_elm_lang$core$List$range, 1, model.oligomericState),
+							A2(_elm_lang$core$List$repeat, model.oligomericState, _p16._0._0.parameters)));
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								parameters: parametersDict,
+								currentInput: _user$project$Builder$parametersDictToInputDict(parametersDict)
+							}),
+						{
+							ctor: '::',
+							_0: _user$project$Builder$msgToCommand(
+								_user$project$Types$ProcessModel(
+									_elm_lang$core$Result$Ok(_p16._0._0.modellingResults))),
+							_1: {ctor: '[]'}
+						});
+				} else {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						model,
+						{
+							ctor: '::',
+							_0: _user$project$Builder$msgToCommand(
+								_user$project$Types$ProcessModel(
+									_elm_lang$core$Result$Err(_p16._0._0))),
+							_1: {ctor: '[]'}
+						});
+				}
 			case 'SetOligomericState':
 				var oligomericState = A2(
 					_elm_lang$core$Maybe$withDefault,
@@ -24737,7 +24809,7 @@ var _user$project$Builder$ExportableModel = function (a) {
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"ChangeBuildMode":["String"],"Build":[],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"SetParametersAndBuild":["Types.ParametersDict"],"Optimise":[],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ExamplesPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ pdbFile : String, score : Float, residuesPerTurn : Float }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"ChangeBuildMode":["String"],"Build":[],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"SetParametersAndBuild":["Types.ParametersDict"],"Optimise":[],"ProcessOptimisation":["Result.Result Http.Error Types.OptimisationResults"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ExamplesPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ pdbFile : String, score : Float, residuesPerTurn : Float }"},"Types.OptimisationResults":{"args":[],"type":"{ parameters : Types.ParameterRecord , modellingResults : Types.ModellingResults }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

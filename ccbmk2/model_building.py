@@ -83,12 +83,19 @@ def optimise_coiled_coil(parameters):
         )
     opt.run_opt(20, 5, 1)
     top_model = opt.best_model
+    optimised_parameters = {
+        'radius' : top_model.major_radii[0],
+        'pitch' : top_model.major_pitches[0],
+        'phiCA' : top_model.phi_c_alphas[0],
+        'sequence' : top_model[0].sequence,
+        'register' : parameters[0]['Register']
+    }
     model_data = {
         'pdb': top_model.pdb,
         'mean_rpt_value': calculate_average_rpt(top_model),
         'score': top_model.buff_interaction_energy.total_energy
         }
-    return model_data
+    return { 'parameters' : optimised_parameters, 'modellingResults' : model_data }
 
 
 def calculate_average_rpt(ampal):
