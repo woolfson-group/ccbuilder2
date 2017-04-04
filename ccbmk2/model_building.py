@@ -71,13 +71,12 @@ def optimise_coiled_coil(parameters):
     """
     oligomer_state = len(parameters)
     radius_centre = parameters[0]['Radius']
-    pitch_centre = parameters[0]['Pitch']
     phi_centre = parameters[0]['Interface Angle'] + registerAdjust[parameters[0]['Register']]
     opt = isambard.optimisation.GA_Opt(
         isambard.specifications.CoiledCoil.from_parameters)
     opt.parameters(
         [parameters[0]['Sequence']] * oligomer_state,
-        [radius_centre, pitch_centre, phi_centre],
+        [radius_centre, 200, phi_centre],
         [2, 100, 20],
         [oligomer_state, len(parameters[0]['Sequence']), 'var0', 'var1', 'var2' ]
         )
