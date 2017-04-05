@@ -38,8 +38,8 @@ styles =
     Css.asPairs >> Html.Attributes.style
 
 
-buildPanel : BuildMode -> ParametersDict -> InputValuesDict -> Bool -> Html Msg
-buildPanel buildMode parametersDict currentInputDict visible =
+buildPanel : BuildMode -> ParametersDict -> InputValuesDict -> Bool -> Bool -> Html Msg
+buildPanel buildMode parametersDict currentInputDict building visible =
     let
         panelView =
             case buildMode of
@@ -61,6 +61,12 @@ buildPanel buildMode parametersDict currentInputDict visible =
             , h3 [] [ text "Oligomeric State" ]
             , selectOligomericState (Dict.toList parametersDict |> List.length)
             , panelView parametersDict currentInputDict
+            , parameterSubmit building parametersDict
+            , button
+                [ class [ CCBButtonCss ]
+                , onClick Clear
+                ]
+                [ text "Clear" ]
             ]
 
 
@@ -126,12 +132,6 @@ basicParameterInputForm parametersDict currentInputDict =
         , Dict.get 1 currentInputDict
             |> Maybe.withDefault emptyInput
             |> allChainInputSection
-        , parameterSubmit parametersDict
-        , button
-            [ class [ CCBButtonCss ]
-            , onClick Clear
-            ]
-            [ text "Clear" ]
         ]
 
 
@@ -196,12 +196,6 @@ advancedParameterInputForm parametersDict currentInputDict =
             , Html.div
                 []
                 (List.map createParametersSections inputChunks)
-            , parameterSubmit parametersDict
-            , button
-                [ class [ CCBButtonCss ]
-                , onClick Clear
-                ]
-                [ text "Clear" ]
             ]
 
 
@@ -334,12 +328,12 @@ inputStyling =
     [ Css.width (Css.pct 100) ]
 
 
-parameterSubmit : ParametersDict -> Html Msg
-parameterSubmit parameters =
+parameterSubmit : Bool -> ParametersDict -> Html Msg
+parameterSubmit building parameters =
     button
         [ class [ CCBButtonCss ]
         , onClick Build
-        , disabled (invalidParameterDict parameters)
+        , disabled ((invalidParameterDict parameters) || building)
         ]
         [ text "Submit" ]
 

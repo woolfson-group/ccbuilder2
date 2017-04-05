@@ -23,6 +23,7 @@ This is the source code for a web application for building models of coiled coil
 
 ## TODO
 
+* Add oligomeric state and score to history
 * Put limit on size of model to be optimised
 * Make a Monte Carlo based optimisation algorithm
 * Add BUFF score to build history

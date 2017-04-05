@@ -99,6 +99,7 @@ type alias Model =
     , score : Maybe Float
     , residuesPerTurn : Maybe Float
     , building : Bool
+    , optimising : Bool
     , modelHistory : Dict.Dict HistoryID ( ParametersDict, Bool )
     , nextHistoryID : HistoryID
     , panelVisibility : PanelVisibility
@@ -161,6 +162,7 @@ emptyModel =
     , score = Nothing
     , residuesPerTurn = Nothing
     , building = False
+    , optimising = False
     , modelHistory = Dict.empty
     , nextHistoryID = 1
     , panelVisibility = defaultVisibility
@@ -182,6 +184,7 @@ type alias ExportableModel =
     , score : Maybe Float
     , residuesPerTurn : Maybe Float
     , building : Bool
+    , optimising : Bool
     , modelHistory : List ( HistoryID, ( List ( SectionID, ParameterRecord ), Bool ) )
     , nextHistoryID : HistoryID
     , panelVisibility : PanelVisibility
@@ -199,6 +202,7 @@ modelToExportable model =
     , score = model.score
     , residuesPerTurn = model.residuesPerTurn
     , building = False
+    , optimising = False
     , modelHistory =
         model.modelHistory
             |> Dict.toList
@@ -220,6 +224,7 @@ exportableToModel exportableModel =
     , score = exportableModel.score
     , residuesPerTurn = exportableModel.residuesPerTurn
     , building = False
+    , optimising = False
     , modelHistory =
         exportableModel.modelHistory
             |> List.map (\( hid, ( params, vis ) ) -> ( hid, ( Dict.fromList params, vis ) ))
@@ -322,6 +327,7 @@ update msg model =
                 if not model.building then
                     { model
                         | building = True
+                        , optimising = True
                         , panelVisibility =
                             { panelVisibility
                                 | buildPanel = False
@@ -369,11 +375,12 @@ update msg model =
                 { model
                     | parameters = parametersDict
                     , currentInput = parametersDictToInputDict parametersDict
+                    , optimising = False
                 }
                     ! [ msgToCommand (ProcessModel (Ok modellingResults) ) ]
 
         ProcessOptimisation (Err error) ->
-            model ! [ msgToCommand (ProcessModel (Err error)) ]
+            { model | optimising = False } ! [ msgToCommand (ProcessModel (Err error)) ]
 
         SetOligomericState n ->
             let
@@ -727,10 +734,11 @@ overlayPanels model =
                 model.buildMode
                 model.parameters
                 model.currentInput
+                model.building
                 model.panelVisibility.buildPanel
-            , optimisePanel model.panelVisibility.optimisePanel
+            , optimisePanel model.optimising model.panelVisibility.optimisePanel
             , ExamplesPanel.examplesPanel model.panelVisibility.examplesPanel
-            , buildingStatusPanel model
+            , statusPanel model.building model.optimising
             , buildHistoryPanel model.modelHistory model.panelVisibility.buildHistoryPanel
             , viewerPanel model.panelVisibility.viewerPanel
             , modelInfoPanel model
@@ -829,15 +837,17 @@ topRightTogglesStyling =
 -- Optimise Panel
 
 
-optimisePanel : Bool -> Html Msg
-optimisePanel visible =
+optimisePanel : Bool -> Bool -> Html Msg
+optimisePanel optimising visible =
     div
         [ class [ OverlayPanelCss ]
         , styles <| panelStyling ++ optimisePanelStyling
         , hidden <| not visible
         ]
         [ h3 [] [ text "Optimise Parameters" ]
-        , button [ onClick Optimise ] [ text "Optimise Model" ]
+        , button
+            [ onClick Optimise, disabled optimising ]
+            [ text "Optimise Model" ]
         ]
 
 
@@ -1173,22 +1183,19 @@ toggleViewerPanel =
 -- Building Status
 
 
-buildingStatusPanel : Model -> Html msg
-buildingStatusPanel model =
-    let
-        commonAttr =
-            [ class [ OverlayPanelCss ]
-            , id [ BuildingStatusPanel ]
-            , styles <| buildingStatusStyling ++ panelStyling
-            ]
-    in
-        if model.building then
-            div commonAttr
-                [ text "Building..."
-                , img [ src "static/css/infinity.gif", width 80, height 80 ] []
-                ]
-        else
-            div (hidden True :: commonAttr) []
+statusPanel : Bool -> Bool -> Html msg
+statusPanel building optimising =
+    div [ class [ OverlayPanelCss ]
+        , id [ BuildingStatusPanel ]
+        , styles <| buildingStatusStyling ++ panelStyling
+        , hidden ((not building) && (not optimising))
+        ]
+        [ if optimising then
+            text "Optimising"
+          else
+            text "Building"
+        , img [ src "static/css/infinity.gif", width 80, height 80 ] []
+        ]
 
 
 buildingStatusStyling : List Css.Mixin

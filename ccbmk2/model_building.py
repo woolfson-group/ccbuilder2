@@ -80,7 +80,7 @@ def optimise_coiled_coil(parameters):
         [2, 100, 20],
         [oligomer_state, len(parameters[0]['Sequence']), 'var0', 'var1', 'var2' ]
         )
-    opt.run_opt(20, 5, 1)
+    opt.run_opt(20, 5, 2)
     top_model = opt.best_model
     optimised_parameters = {
         'radius' : top_model.major_radii[0],
