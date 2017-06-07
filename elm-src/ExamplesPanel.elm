@@ -29,8 +29,8 @@ styles =
     Css.asPairs >> Html.Attributes.style
 
 
-examplesPanel : Bool -> Html Msg
-examplesPanel visible =
+examplesPanel : Bool -> Bool -> Html Msg
+examplesPanel building visible =
     div
         [ class [ OverlayPanelCss ]
         , id [ ExamplesPanel ]
@@ -42,15 +42,15 @@ examplesPanel visible =
             [ hr [] []
             , h3 [] [ text "Basis Set" ]
             , hr [] []
-            , exampleButton 2 basisSetDimer
+            , exampleButton 2 basisSetDimer building
             , br [] []
             , text "CC Di"
             , br [] []
-            , exampleButton 3 basisSetTrimer
+            , exampleButton 3 basisSetTrimer building
             , br [] []
             , text "CC Tri"
             , br [] []
-            , exampleButton 4 basisSetTetramer
+            , exampleButton 4 basisSetTetramer building
             , br [] []
             , text "CC Tet"
             ]
@@ -58,35 +58,36 @@ examplesPanel visible =
             [ hr [] []
             , h3 [] [ text "α-Helical Barrels" ]
             , hr [] []
-            , exampleButton 5 largermerCCPent
+            , exampleButton 5 largermerCCPent building
             , br [] []
             , text "CC Pent"
             , br [] []
-            , exampleButton 6 largermerCCHex
+            , exampleButton 6 largermerCCHex building
             , br [] []
             , text "CC Hex"
             , br [] []
-            , exampleButton 6 largermerCCHex2
+            , exampleButton 6 largermerCCHex2 building
             , br [] []
             , text "CC Hex2"
             , br [] []
-            , exampleButton 6 largermerCCHex3
+            , exampleButton 6 largermerCCHex3 building
             , br [] []
             , text "CC Hex3"
             , br [] []
-            , exampleButton 7 largermerCCHept
+            , exampleButton 7 largermerCCHept building
             , br [] []
             , text "CC Hept"
             ]
         ]
 
 
-exampleButton : Int -> ParametersDict -> Html Msg
-exampleButton os exampleParameters =
+exampleButton : Int -> ParametersDict -> Bool -> Html Msg
+exampleButton os exampleParameters building =
     button
         [ class [ CCBButtonCss ]
         , onClick <| SetParametersAndBuild exampleParameters
         , styles buttonStyling
+        , disabled building
         ]
         [ ccIcon os 60 ]
 

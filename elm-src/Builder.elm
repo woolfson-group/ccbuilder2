@@ -737,9 +737,12 @@ overlayPanels model =
                 model.building
                 model.panelVisibility.buildPanel
             , optimisePanel model.optimising model.panelVisibility.optimisePanel
-            , ExamplesPanel.examplesPanel model.panelVisibility.examplesPanel
+            , ExamplesPanel.examplesPanel model.building model.panelVisibility.examplesPanel
             , statusPanel model.building model.optimising
-            , buildHistoryPanel model.modelHistory model.panelVisibility.buildHistoryPanel
+            , buildHistoryPanel
+                model.modelHistory
+                model.building
+                model.panelVisibility.buildHistoryPanel
             , viewerPanel model.panelVisibility.viewerPanel
             , modelInfoPanel model
             ]
@@ -935,8 +938,8 @@ downloadStructureButton pdbFile =
 -- Build History
 
 
-buildHistoryPanel : Dict.Dict Int ( ParametersDict, Bool ) -> Bool -> Html Msg
-buildHistoryPanel modelHistory visible =
+buildHistoryPanel : Dict.Dict Int ( ParametersDict, Bool ) -> Bool -> Bool -> Html Msg
+buildHistoryPanel modelHistory building visible =
     div
         [ class [ OverlayPanelCss ]
         , id [ BuildHistoryPanel ]
@@ -946,7 +949,9 @@ buildHistoryPanel modelHistory visible =
         [ h3 [] [ text "Build History" ]
         , table []
             [ modelDetailTableHeader
-            , List.map modelParametersAsRow (Dict.toList modelHistory |> List.reverse)
+            , List.map2 modelParametersAsRow 
+                (Dict.toList modelHistory |> List.reverse)
+                (List.repeat (List.length <| Dict.toList modelHistory) building)
                 |> List.concat
                 |> tbody []
             ]
@@ -970,8 +975,8 @@ modelDetailTableHeader =
         ]
 
 
-modelParametersAsRow : ( HistoryID, ( ParametersDict, Bool ) ) -> List (Html Msg)
-modelParametersAsRow ( hID, ( parameters, visible ) ) =
+modelParametersAsRow : ( HistoryID, ( ParametersDict, Bool ) ) -> Bool -> List (Html Msg)
+modelParametersAsRow ( hID, ( parameters, visible ) ) building =
     let
         foldedRows =
             Dict.values parameters
@@ -980,14 +985,14 @@ modelParametersAsRow ( hID, ( parameters, visible ) ) =
                 |> List.map modelFoldedRow
     in
         if not visible then
-            [ modelHistoryTopRow hID parameters visible ]
+            [ modelHistoryTopRow hID parameters building visible ]
         else
-            (modelHistoryTopRow hID parameters visible)
+            (modelHistoryTopRow hID parameters building visible)
                 :: foldedRows
 
 
-modelHistoryTopRow : HistoryID -> ParametersDict -> Bool -> Html Msg
-modelHistoryTopRow hID parameters visible =
+modelHistoryTopRow : HistoryID -> ParametersDict -> Bool -> Bool -> Html Msg
+modelHistoryTopRow hID parameters building visible =
     let
         topRowParameters =
             Dict.values parameters
@@ -1009,6 +1014,7 @@ modelHistoryTopRow hID parameters visible =
                 ++ [ button
                         [ class [ CCBButtonCss ]
                         , onClick (SetParametersAndBuild parameters)
+                        , disabled building
                         ]
                         [ text "Rebuild" ]
                 ]
