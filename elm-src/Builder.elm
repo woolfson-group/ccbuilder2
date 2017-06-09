@@ -124,9 +124,13 @@ init storedModel =
         model
             ! ([ initialiseViewer () ]
                 ++ if showDefaultModel then
-                    [ msgToCommand (SetParametersAndBuild ExamplesPanel.basisSetDimer) ]
+                    [ toCommand (SetParametersAndBuild ExamplesPanel.basisSetDimer) ]
                    else
-                    [ msgToCommand Build ]
+                    [ showStructure
+                        ( Maybe.withDefault "" model.pdbFile
+                        , model.currentRepresentation
+                        )
+                    ]
               )
 
 
@@ -275,7 +279,7 @@ update msg model =
                 ! (List.range 1 model.oligomericState
                     |> List.map (EditSingleParameter parameter)
                     |> List.map2 (\v m -> m v) (List.repeat model.oligomericState newValue)
-                    |> List.map msgToCommand
+                    |> List.map toCommand
                   )
 
         CopyParameters sectionID ->
@@ -350,10 +354,13 @@ update msg model =
 
         ProcessModel (Ok { pdbFile, score, residuesPerTurn }) ->
             let
+                historyLength = 10
                 oldHistory =
-                    if (Dict.toList model.modelHistory |> List.length) == 10 then
+                    if (Dict.toList model.modelHistory |> List.length) == historyLength then
                         Dict.toList model.modelHistory
-                            |> List.take 9
+                            |> List.reverse
+                            |> List.take (historyLength - 1)
+                            |> List.reverse
                             |> Dict.fromList
                     else
                         model.modelHistory
@@ -368,7 +375,7 @@ update msg model =
                     , nextHistoryID = model.nextHistoryID + 1
                 }
                     ! [ showStructure ( pdbFile, model.currentRepresentation )
-                      , setStorage <| modelToExportable model
+                      , toCommand StoreModel
                       ]
 
         ProcessModel (Err _) ->
@@ -387,10 +394,10 @@ update msg model =
                     , currentInput = parametersDictToInputDict parametersDict
                     , optimising = False
                 }
-                    ! [ msgToCommand (ProcessModel (Ok modellingResults)) ]
+                    ! [ toCommand (ProcessModel (Ok modellingResults)) ]
 
         ProcessOptimisation (Err error) ->
-            { model | optimising = False } ! [ msgToCommand (ProcessModel (Err error)) ]
+            { model | optimising = False } ! [ toCommand (ProcessModel (Err error)) ]
 
         SetOligomericState n ->
             let
@@ -465,7 +472,7 @@ update msg model =
                     , currentInput = parametersDictToInputDict parameters
                     , oligomericState = Dict.toList parameters |> List.length
                 }
-                    ! [ msgToCommand Build ]
+                    ! [ toCommand Build ]
 
         KeyMsg keyCode ->
             case keyCode of
@@ -473,7 +480,7 @@ update msg model =
                     if invalidParameterDict model.parameters then
                         model ! []
                     else
-                        model ! [ msgToCommand Build ]
+                        model ! [ toCommand Build ]
 
                 _ ->
                     model ! []
@@ -511,13 +518,16 @@ update msg model =
                     updateRepresentation repOption model.currentRepresentation
             in
                 { model | currentRepresentation = newRep } ! [ newRepresentation newRep ]
+        
+        StoreModel ->
+            model ! [ setStorage <| modelToExportable model ]
 
         NoOp _ ->
             model ! []
 
 
-msgToCommand : Msg -> Cmd Msg
-msgToCommand msg =
+toCommand : Msg -> Cmd Msg
+toCommand msg =
     Task.perform identity (Task.succeed msg)
 
 

@@ -24,6 +24,7 @@ type Msg
     | ExpandHistory HistoryID
     | ShowAxes
     | EditRepresentation RepOption
+    | StoreModel
     | NoOp ()
 
 
