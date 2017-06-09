@@ -100,6 +100,7 @@ type alias Model =
     , residuesPerTurn : Maybe Float
     , building : Bool
     , optimising : Bool
+    , heat : Int
     , modelHistory : Dict.Dict HistoryID ( ParametersDict, Bool, Float )
     , nextHistoryID : HistoryID
     , panelVisibility : PanelVisibility
@@ -167,6 +168,7 @@ emptyModel =
     , residuesPerTurn = Nothing
     , building = False
     , optimising = False
+    , heat = 298
     , modelHistory = Dict.empty
     , nextHistoryID = 1
     , panelVisibility = defaultVisibility
@@ -189,6 +191,7 @@ type alias ExportableModel =
     , residuesPerTurn : Maybe Float
     , building : Bool
     , optimising : Bool
+    , heat : Int
     , modelHistory : List ( HistoryID, ( List ( SectionID, ParameterRecord ), Bool, Float ) )
     , nextHistoryID : HistoryID
     , panelVisibility : PanelVisibility
@@ -207,6 +210,7 @@ modelToExportable model =
     , residuesPerTurn = model.residuesPerTurn
     , building = False
     , optimising = False
+    , heat = model.heat
     , modelHistory =
         model.modelHistory
             |> Dict.toList
@@ -234,6 +238,7 @@ exportableToModel exportableModel =
     , residuesPerTurn = exportableModel.residuesPerTurn
     , building = False
     , optimising = False
+    , heat = exportableModel.heat
     , modelHistory =
         exportableModel.modelHistory
             |> List.map
@@ -348,13 +353,15 @@ update msg model =
                                 , examplesPanel = False
                             }
                     }
-                        ! [ sendOptimiseCmd model.parameters ]
+                        ! [ sendOptimiseCmd model.parameters model.heat ]
                 else
                     model ! []
 
         ProcessModel (Ok { pdbFile, score, residuesPerTurn }) ->
             let
-                historyLength = 10
+                historyLength =
+                    10
+
                 oldHistory =
                     if (Dict.toList model.modelHistory |> List.length) == historyLength then
                         Dict.toList model.modelHistory
@@ -380,6 +387,9 @@ update msg model =
 
         ProcessModel (Err _) ->
             { model | building = False } ! []
+
+        SetHeat heat ->
+            { model | heat = String.toInt heat |> Result.withDefault 298 } ! []
 
         ProcessOptimisation (Ok { parameters, modellingResults }) ->
             let
@@ -518,7 +528,7 @@ update msg model =
                     updateRepresentation repOption model.currentRepresentation
             in
                 { model | currentRepresentation = newRep } ! [ newRepresentation newRep ]
-        
+
         StoreModel ->
             model ! [ setStorage <| modelToExportable model ]
 
@@ -540,9 +550,7 @@ sendBuildCmd parameters =
     Http.send ProcessModel <|
         Http.post
             "/builder/api/v0.1/build/coiled-coil"
-            (Dict.values parameters
-                |> List.map parameterRecordJson
-                |> Json.Encode.list
+            (parametersDictToListJson parameters
                 |> Http.jsonBody
             )
             modellingResultsDecoder
@@ -575,18 +583,31 @@ parameterRecordJson parameters =
         ]
 
 
+parametersDictToListJson : ParametersDict -> Json.Encode.Value
+parametersDictToListJson parameters =
+    Dict.values parameters
+        |> List.map parameterRecordJson
+        |> Json.Encode.list
+
+
 
 -- Optimisation Cmd
 
 
-sendOptimiseCmd : ParametersDict -> Cmd Msg
-sendOptimiseCmd parameters =
+optimisationJson : ParametersDict -> Int -> Json.Encode.Value
+optimisationJson parameters heat =
+    Json.Encode.object
+        [ ( "Parameters", parametersDictToListJson parameters )
+        , ( "Heat", Json.Encode.int heat )
+        ]
+
+
+sendOptimiseCmd : ParametersDict -> Int -> Cmd Msg
+sendOptimiseCmd parameters heat =
     Http.send ProcessOptimisation <|
         Http.post
             "/builder/api/v0.1/optimise/coiled-coil"
-            (Dict.values parameters
-                |> List.map parameterRecordJson
-                |> Json.Encode.list
+            (optimisationJson parameters heat
                 |> Http.jsonBody
             )
             optimisationResultsDecoder
@@ -756,7 +777,7 @@ overlayPanels model =
                 model.currentInput
                 model.building
                 model.panelVisibility.buildPanel
-            , optimisePanel model.optimising model.panelVisibility.optimisePanel
+            , optimisePanel model.optimising model.panelVisibility.optimisePanel model.heat
             , ExamplesPanel.examplesPanel model.building model.panelVisibility.examplesPanel
             , statusPanel model.building model.optimising
             , buildHistoryPanel
@@ -860,14 +881,23 @@ topRightTogglesStyling =
 -- Optimise Panel
 
 
-optimisePanel : Bool -> Bool -> Html Msg
-optimisePanel optimising visible =
+optimisePanel : Bool -> Bool -> Int -> Html Msg
+optimisePanel optimising visible heat =
     div
         [ class [ OverlayPanelCss ]
         , styles <| panelStyling ++ optimisePanelStyling
         , hidden <| not visible
         ]
         [ h3 [] [ text "Optimise Parameters" ]
+        , input
+            [ type_ "range"
+            , Html.Attributes.min "0"
+            , Html.Attributes.max "2000"
+            , value (toString heat)
+            , onInput SetHeat
+            ]
+            []
+        , br [] []
         , button
             [ onClick Optimise, disabled optimising ]
             [ text "Optimise Model" ]
