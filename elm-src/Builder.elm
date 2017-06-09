@@ -889,6 +889,8 @@ optimisePanel optimising visible heat =
         , hidden <| not visible
         ]
         [ h3 [] [ text "Optimise Parameters" ]
+        , text "Heat"
+        , br [] []
         , input
             [ type_ "range"
             , Html.Attributes.min "0"

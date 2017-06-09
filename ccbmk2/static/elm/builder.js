@@ -22685,31 +22685,7 @@ var _user$project$Builder$optimisePanel = F3(
 					}),
 				_1: {
 					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$input,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$type_('range'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$min('0'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$max('2000'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$value(
-											_elm_lang$core$Basics$toString(heat)),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html_Events$onInput(_user$project$Types$SetHeat),
-											_1: {ctor: '[]'}
-										}
-									}
-								}
-							}
-						},
-						{ctor: '[]'}),
+					_0: _elm_lang$html$Html$text('Heat'),
 					_1: {
 						ctor: '::',
 						_0: A2(
@@ -22719,22 +22695,57 @@ var _user$project$Builder$optimisePanel = F3(
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$button,
+								_elm_lang$html$Html$input,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$Optimise),
+									_0: _elm_lang$html$Html_Attributes$type_('range'),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$disabled(optimising),
-										_1: {ctor: '[]'}
+										_0: _elm_lang$html$Html_Attributes$min('0'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$max('2000'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$value(
+													_elm_lang$core$Basics$toString(heat)),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onInput(_user$project$Types$SetHeat),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
 									}
 								},
-								{
+								{ctor: '[]'}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$br,
+									{ctor: '[]'},
+									{ctor: '[]'}),
+								_1: {
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('Optimise Model'),
+									_0: A2(
+										_elm_lang$html$Html$button,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$Optimise),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$disabled(optimising),
+												_1: {ctor: '[]'}
+											}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Optimise Model'),
+											_1: {ctor: '[]'}
+										}),
 									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
+								}
+							}
 						}
 					}
 				}
