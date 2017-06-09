@@ -100,7 +100,7 @@ type alias Model =
     , residuesPerTurn : Maybe Float
     , building : Bool
     , optimising : Bool
-    , modelHistory : Dict.Dict HistoryID ( ParametersDict, Bool )
+    , modelHistory : Dict.Dict HistoryID ( ParametersDict, Bool, Float )
     , nextHistoryID : HistoryID
     , panelVisibility : PanelVisibility
     , currentRepresentation : Representation
@@ -185,7 +185,7 @@ type alias ExportableModel =
     , residuesPerTurn : Maybe Float
     , building : Bool
     , optimising : Bool
-    , modelHistory : List ( HistoryID, ( List ( SectionID, ParameterRecord ), Bool ) )
+    , modelHistory : List ( HistoryID, ( List ( SectionID, ParameterRecord ), Bool, Float ) )
     , nextHistoryID : HistoryID
     , panelVisibility : PanelVisibility
     , currentRepresentation : Representation
@@ -206,7 +206,12 @@ modelToExportable model =
     , modelHistory =
         model.modelHistory
             |> Dict.toList
-            |> List.map (\( hid, ( params, vis ) ) -> ( hid, ( Dict.toList params, vis ) ))
+            |> List.map
+                (\( hid, ( params, vis, score ) ) ->
+                    ( hid
+                    , ( Dict.toList params, vis, score )
+                    )
+                )
     , nextHistoryID = model.nextHistoryID
     , panelVisibility = model.panelVisibility
     , currentRepresentation = model.currentRepresentation
@@ -227,7 +232,12 @@ exportableToModel exportableModel =
     , optimising = False
     , modelHistory =
         exportableModel.modelHistory
-            |> List.map (\( hid, ( params, vis ) ) -> ( hid, ( Dict.fromList params, vis ) ))
+            |> List.map
+                (\( hid, ( params, vis, score ) ) ->
+                    ( hid
+                    , ( Dict.fromList params, vis, score )
+                    )
+                )
             |> Dict.fromList
     , nextHistoryID = exportableModel.nextHistoryID
     , panelVisibility = exportableModel.panelVisibility
@@ -354,7 +364,7 @@ update msg model =
                     , residuesPerTurn = Just residuesPerTurn
                     , building = False
                     , modelHistory =
-                        Dict.insert model.nextHistoryID ( model.parameters, False ) oldHistory
+                        Dict.insert model.nextHistoryID ( model.parameters, False, score ) oldHistory
                     , nextHistoryID = model.nextHistoryID + 1
                 }
                     ! [ showStructure ( pdbFile, model.currentRepresentation )
@@ -370,14 +380,14 @@ update msg model =
                     List.map2 (,)
                         (List.range 1 model.oligomericState)
                         (List.repeat model.oligomericState parameters)
-                    |> Dict.fromList
+                        |> Dict.fromList
             in
                 { model
                     | parameters = parametersDict
                     , currentInput = parametersDictToInputDict parametersDict
                     , optimising = False
                 }
-                    ! [ msgToCommand (ProcessModel (Ok modellingResults) ) ]
+                    ! [ msgToCommand (ProcessModel (Ok modellingResults)) ]
 
         ProcessOptimisation (Err error) ->
             { model | optimising = False } ! [ msgToCommand (ProcessModel (Err error)) ]
@@ -482,10 +492,10 @@ update msg model =
                     Dict.get hID model.modelHistory
             in
                 case oldEntry of
-                    Just ( parametersDict, visible ) ->
+                    Just ( parametersDict, visible, score ) ->
                         { model
                             | modelHistory =
-                                Dict.insert hID ( parametersDict, not visible ) model.modelHistory
+                                Dict.insert hID ( parametersDict, not visible, score ) model.modelHistory
                         }
                             ! []
 
@@ -938,7 +948,7 @@ downloadStructureButton pdbFile =
 -- Build History
 
 
-buildHistoryPanel : Dict.Dict Int ( ParametersDict, Bool ) -> Bool -> Bool -> Html Msg
+buildHistoryPanel : Dict.Dict Int ( ParametersDict, Bool, Float ) -> Bool -> Bool -> Html Msg
 buildHistoryPanel modelHistory building visible =
     div
         [ class [ OverlayPanelCss ]
@@ -949,7 +959,7 @@ buildHistoryPanel modelHistory building visible =
         [ h3 [] [ text "Build History" ]
         , table []
             [ modelDetailTableHeader
-            , List.map2 modelParametersAsRow 
+            , List.map2 modelParametersAsRow
                 (Dict.toList modelHistory |> List.reverse)
                 (List.repeat (List.length <| Dict.toList modelHistory) building)
                 |> List.concat
@@ -970,29 +980,30 @@ modelDetailTableHeader =
             , th [ styles [ Css.width (Css.em 6) ] ] [ text "Z-Shift" ]
             , th [] [ text "Sequence" ]
             , th [ styles [ Css.width (Css.em 6) ] ] [ text "Register" ]
+            , th [] [ text "BUDE Score" ]
             , th [] []
             ]
         ]
 
 
-modelParametersAsRow : ( HistoryID, ( ParametersDict, Bool ) ) -> Bool -> List (Html Msg)
-modelParametersAsRow ( hID, ( parameters, visible ) ) building =
+modelParametersAsRow : ( HistoryID, ( ParametersDict, Bool, Float ) ) -> Bool -> List (Html Msg)
+modelParametersAsRow ( hID, ( parameters, visible, score ) ) building =
     let
         foldedRows =
             Dict.values parameters
                 |> List.tail
                 |> Maybe.withDefault []
-                |> List.map modelFoldedRow
+                |> List.map (modelFoldedRow score)
     in
         if not visible then
-            [ modelHistoryTopRow hID parameters building visible ]
+            [ modelHistoryTopRow hID parameters building visible score ]
         else
-            (modelHistoryTopRow hID parameters building visible)
+            (modelHistoryTopRow hID parameters building visible score)
                 :: foldedRows
 
 
-modelHistoryTopRow : HistoryID -> ParametersDict -> Bool -> Bool -> Html Msg
-modelHistoryTopRow hID parameters building visible =
+modelHistoryTopRow : HistoryID -> ParametersDict -> Bool -> Bool -> Float -> Html Msg
+modelHistoryTopRow hID parameters building visible score =
     let
         topRowParameters =
             Dict.values parameters
@@ -1005,47 +1016,58 @@ modelHistoryTopRow hID parameters building visible =
                 [ onClick (ExpandHistory hID) ]
                 [ if (not visible) then
                     text "▶"
-                else
+                  else
                     text "▼"
                 ]
-            ]
+             ]
                 ++ List.map makeParameterTh
-                    (parametersToRow topRowParameters)
+                    (parametersToRow topRowParameters score)
                 ++ [ button
                         [ class [ CCBButtonCss ]
                         , onClick (SetParametersAndBuild parameters)
                         , disabled building
                         ]
                         [ text "Rebuild" ]
-                ]
+                   ]
             )
 
 
-modelFoldedRow : ParameterRecord -> Html Msg
-modelFoldedRow parameters =
+modelFoldedRow : Float -> ParameterRecord -> Html Msg
+modelFoldedRow score parameters =
     tr
         []
         ([ text " ┋"
          ]
             ++ List.map makeParameterTh
-                (parametersToRow parameters)
+                (parametersToRow parameters score)
         )
 
 
-parametersToRow : ParameterRecord -> List String
-parametersToRow parameters =
-    [ parameters.radius 
-        |> Maybe.withDefault 0 |> roundToXDecPlaces 1 |> toString
+parametersToRow : ParameterRecord -> Float -> List String
+parametersToRow parameters score =
+    [ parameters.radius
+        |> Maybe.withDefault 0
+        |> roundToXDecPlaces 1
+        |> toString
     , parameters.pitch
-        |> Maybe.withDefault 0 |> round |> toString
-    , parameters.phiCA 
-        |> Maybe.withDefault 0 |> roundToXDecPlaces 1 |> toString
-    , parameters.superHelRot 
-        |> Maybe.withDefault 0 |> roundToXDecPlaces 1 |> toString
+        |> Maybe.withDefault 0
+        |> round
+        |> toString
+    , parameters.phiCA
+        |> Maybe.withDefault 0
+        |> roundToXDecPlaces 1
+        |> toString
+    , parameters.superHelRot
+        |> Maybe.withDefault 0
+        |> roundToXDecPlaces 1
+        |> toString
     , parameters.zShift
-        |> Maybe.withDefault 0 |> roundToXDecPlaces 1 |> toString
+        |> Maybe.withDefault 0
+        |> roundToXDecPlaces 1
+        |> toString
     , parameters.sequence |> Maybe.withDefault ""
     , parameters.register
+    , toString <| roundToXDecPlaces 2 score
     ]
 
 
@@ -1191,7 +1213,8 @@ toggleViewerPanel =
 
 statusPanel : Bool -> Bool -> Html msg
 statusPanel building optimising =
-    div [ class [ OverlayPanelCss ]
+    div
+        [ class [ OverlayPanelCss ]
         , id [ BuildingStatusPanel ]
         , styles <| buildingStatusStyling ++ panelStyling
         , hidden ((not building) && (not optimising))

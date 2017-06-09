@@ -21808,71 +21808,78 @@ var _user$project$Builder$roundToXDecPlaces = F2(
 			_elm_lang$core$Basics$toFloat(
 				_elm_lang$core$Basics$round(num * scaling)));
 	});
-var _user$project$Builder$parametersToRow = function (parameters) {
-	return {
-		ctor: '::',
-		_0: _elm_lang$core$Basics$toString(
-			A2(
-				_user$project$Builder$roundToXDecPlaces,
-				1,
-				A2(_elm_lang$core$Maybe$withDefault, 0, parameters.radius))),
-		_1: {
+var _user$project$Builder$parametersToRow = F2(
+	function (parameters, score) {
+		return {
 			ctor: '::',
 			_0: _elm_lang$core$Basics$toString(
-				_elm_lang$core$Basics$round(
-					A2(_elm_lang$core$Maybe$withDefault, 0, parameters.pitch))),
+				A2(
+					_user$project$Builder$roundToXDecPlaces,
+					1,
+					A2(_elm_lang$core$Maybe$withDefault, 0, parameters.radius))),
 			_1: {
 				ctor: '::',
 				_0: _elm_lang$core$Basics$toString(
-					A2(
-						_user$project$Builder$roundToXDecPlaces,
-						1,
-						A2(_elm_lang$core$Maybe$withDefault, 0, parameters.phiCA))),
+					_elm_lang$core$Basics$round(
+						A2(_elm_lang$core$Maybe$withDefault, 0, parameters.pitch))),
 				_1: {
 					ctor: '::',
 					_0: _elm_lang$core$Basics$toString(
 						A2(
 							_user$project$Builder$roundToXDecPlaces,
 							1,
-							A2(_elm_lang$core$Maybe$withDefault, 0, parameters.superHelRot))),
+							A2(_elm_lang$core$Maybe$withDefault, 0, parameters.phiCA))),
 					_1: {
 						ctor: '::',
 						_0: _elm_lang$core$Basics$toString(
 							A2(
 								_user$project$Builder$roundToXDecPlaces,
 								1,
-								A2(_elm_lang$core$Maybe$withDefault, 0, parameters.zShift))),
+								A2(_elm_lang$core$Maybe$withDefault, 0, parameters.superHelRot))),
 						_1: {
 							ctor: '::',
-							_0: A2(_elm_lang$core$Maybe$withDefault, '', parameters.sequence),
+							_0: _elm_lang$core$Basics$toString(
+								A2(
+									_user$project$Builder$roundToXDecPlaces,
+									1,
+									A2(_elm_lang$core$Maybe$withDefault, 0, parameters.zShift))),
 							_1: {
 								ctor: '::',
-								_0: parameters.register,
-								_1: {ctor: '[]'}
+								_0: A2(_elm_lang$core$Maybe$withDefault, '', parameters.sequence),
+								_1: {
+									ctor: '::',
+									_0: parameters.register,
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$core$Basics$toString(
+											A2(_user$project$Builder$roundToXDecPlaces, 2, score)),
+										_1: {ctor: '[]'}
+									}
+								}
 							}
 						}
 					}
 				}
 			}
-		}
-	};
-};
-var _user$project$Builder$modelFoldedRow = function (parameters) {
-	return A2(
-		_elm_lang$html$Html$tr,
-		{ctor: '[]'},
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(' ┋'),
-				_1: {ctor: '[]'}
-			},
+		};
+	});
+var _user$project$Builder$modelFoldedRow = F2(
+	function (score, parameters) {
+		return A2(
+			_elm_lang$html$Html$tr,
+			{ctor: '[]'},
 			A2(
-				_elm_lang$core$List$map,
-				_user$project$Builder$makeParameterTh,
-				_user$project$Builder$parametersToRow(parameters))));
-};
+				_elm_lang$core$Basics_ops['++'],
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(' ┋'),
+					_1: {ctor: '[]'}
+				},
+				A2(
+					_elm_lang$core$List$map,
+					_user$project$Builder$makeParameterTh,
+					A2(_user$project$Builder$parametersToRow, parameters, score))));
+	});
 var _user$project$Builder$modelInfoPanelStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$bottom(
@@ -22219,9 +22226,10 @@ var _user$project$Builder$exportableToModel = function (exportableModel) {
 						ctor: '_Tuple2',
 						_0: _p6._0,
 						_1: {
-							ctor: '_Tuple2',
+							ctor: '_Tuple3',
 							_0: _elm_lang$core$Dict$fromList(_p6._1._0),
-							_1: _p6._1._1
+							_1: _p6._1._1,
+							_2: _p6._1._2
 						}
 					};
 				},
@@ -22250,9 +22258,10 @@ var _user$project$Builder$modelToExportable = function (model) {
 					ctor: '_Tuple2',
 					_0: _p8._0,
 					_1: {
-						ctor: '_Tuple2',
+						ctor: '_Tuple3',
 						_0: _elm_lang$core$Dict$toList(_p8._1._0),
-						_1: _p8._1._1
+						_1: _p8._1._1,
+						_2: _p8._1._2
 					}
 				};
 			},
@@ -22429,8 +22438,19 @@ var _user$project$Builder$modelDetailTableHeader = A2(
 												_0: A2(
 													_elm_lang$html$Html$th,
 													{ctor: '[]'},
-													{ctor: '[]'}),
-												_1: {ctor: '[]'}
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('BUDE Score'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$th,
+														{ctor: '[]'},
+														{ctor: '[]'}),
+													_1: {ctor: '[]'}
+												}
 											}
 										}
 									}
@@ -22857,8 +22877,8 @@ var _user$project$Builder$modelInfoPanel = function (model) {
 			}
 		});
 };
-var _user$project$Builder$modelHistoryTopRow = F4(
-	function (hID, parameters, building, visible) {
+var _user$project$Builder$modelHistoryTopRow = F5(
+	function (hID, parameters, building, visible, score) {
 		var topRowParameters = A2(
 			_elm_lang$core$Maybe$withDefault,
 			_user$project$Types$emptyParameterRecord,
@@ -22891,7 +22911,7 @@ var _user$project$Builder$modelHistoryTopRow = F4(
 					A2(
 						_elm_lang$core$List$map,
 						_user$project$Builder$makeParameterTh,
-						_user$project$Builder$parametersToRow(topRowParameters)),
+						A2(_user$project$Builder$parametersToRow, topRowParameters, score)),
 					{
 						ctor: '::',
 						_0: A2(
@@ -22926,24 +22946,25 @@ var _user$project$Builder$modelHistoryTopRow = F4(
 var _user$project$Builder$modelParametersAsRow = F2(
 	function (_p11, building) {
 		var _p12 = _p11;
-		var _p15 = _p12._1._1;
+		var _p16 = _p12._1._1;
+		var _p15 = _p12._1._2;
 		var _p14 = _p12._1._0;
 		var _p13 = _p12._0;
 		var foldedRows = A2(
 			_elm_lang$core$List$map,
-			_user$project$Builder$modelFoldedRow,
+			_user$project$Builder$modelFoldedRow(_p15),
 			A2(
 				_elm_lang$core$Maybe$withDefault,
 				{ctor: '[]'},
 				_elm_lang$core$List$tail(
 					_elm_lang$core$Dict$values(_p14))));
-		return (!_p15) ? {
+		return (!_p16) ? {
 			ctor: '::',
-			_0: A4(_user$project$Builder$modelHistoryTopRow, _p13, _p14, building, _p15),
+			_0: A5(_user$project$Builder$modelHistoryTopRow, _p13, _p14, building, _p16, _p15),
 			_1: {ctor: '[]'}
 		} : {
 			ctor: '::',
-			_0: A4(_user$project$Builder$modelHistoryTopRow, _p13, _p14, building, _p15),
+			_0: A5(_user$project$Builder$modelHistoryTopRow, _p13, _p14, building, _p16, _p15),
 			_1: foldedRows
 		};
 	});
@@ -23553,7 +23574,8 @@ var _user$project$Builder$setStorage = _elm_lang$core$Native_Platform.outgoingPo
 							}
 							];
 						}),
-						v._1._1
+						v._1._1,
+						v._1._2
 					]
 					];
 				}),
@@ -23592,22 +23614,22 @@ var _user$project$Builder$downloadPdb = _elm_lang$core$Native_Platform.outgoingP
 	});
 var _user$project$Builder$update = F2(
 	function (msg, model) {
-		var _p16 = msg;
-		switch (_p16.ctor) {
+		var _p17 = msg;
+		switch (_p17.ctor) {
 			case 'EditSingleParameter':
-				var _p18 = _p16._1;
-				var input = A2(_user$project$Builder$inputRecordWithDefault, _p18, model.currentInput);
-				var params = A2(_user$project$Builder$parameterRecordWithDefault, _p18, model.parameters);
-				var _p17 = A4(_user$project$ParameterValidation$editParameterValue, params, input, _p16._0, _p16._2);
-				var p = _p17._0;
-				var i = _p17._1;
+				var _p19 = _p17._1;
+				var input = A2(_user$project$Builder$inputRecordWithDefault, _p19, model.currentInput);
+				var params = A2(_user$project$Builder$parameterRecordWithDefault, _p19, model.parameters);
+				var _p18 = A4(_user$project$ParameterValidation$editParameterValue, params, input, _p17._0, _p17._2);
+				var p = _p18._0;
+				var i = _p18._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parameters: A3(_elm_lang$core$Dict$insert, _p18, p, model.parameters),
-							currentInput: A3(_elm_lang$core$Dict$insert, _p18, i, model.currentInput)
+							parameters: A3(_elm_lang$core$Dict$insert, _p19, p, model.parameters),
+							currentInput: A3(_elm_lang$core$Dict$insert, _p19, i, model.currentInput)
 						}),
 					{ctor: '[]'});
 			case 'EditAllParameters':
@@ -23623,10 +23645,10 @@ var _user$project$Builder$update = F2(
 								function (v, m) {
 									return m(v);
 								}),
-							A2(_elm_lang$core$List$repeat, model.oligomericState, _p16._1),
+							A2(_elm_lang$core$List$repeat, model.oligomericState, _p17._1),
 							A2(
 								_elm_lang$core$List$map,
-								_user$project$Types$EditSingleParameter(_p16._0),
+								_user$project$Types$EditSingleParameter(_p17._0),
 								A2(_elm_lang$core$List$range, 1, model.oligomericState)))));
 			case 'CopyParameters':
 				return A2(
@@ -23634,29 +23656,29 @@ var _user$project$Builder$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parameterClipBoard: A2(_elm_lang$core$Dict$get, _p16._0, model.parameters)
+							parameterClipBoard: A2(_elm_lang$core$Dict$get, _p17._0, model.parameters)
 						}),
 					{ctor: '[]'});
 			case 'PasteParameters':
-				var _p19 = _p16._0;
+				var _p20 = _p17._0;
 				var pastedParameters = A2(_elm_lang$core$Maybe$withDefault, _user$project$Types$emptyParameterRecord, model.parameterClipBoard);
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parameters: A3(_elm_lang$core$Dict$insert, _p19, pastedParameters, model.parameters),
+							parameters: A3(_elm_lang$core$Dict$insert, _p20, pastedParameters, model.parameters),
 							currentInput: A3(
 								_elm_lang$core$Dict$insert,
-								_p19,
+								_p20,
 								_user$project$Builder$parametersToInput(pastedParameters),
 								model.currentInput)
 						}),
 					{ctor: '[]'});
 			case 'ChangeBuildMode':
 				var newBuildMode = function () {
-					var _p20 = _p16._0;
-					switch (_p20) {
+					var _p21 = _p17._0;
+					switch (_p21) {
 						case 'Basic':
 							return _user$project$Types$Basic;
 						case 'Advanced':
@@ -23720,8 +23742,9 @@ var _user$project$Builder$update = F2(
 					model,
 					{ctor: '[]'});
 			case 'ProcessModel':
-				if (_p16._0.ctor === 'Ok') {
-					var _p21 = _p16._0._0.pdbFile;
+				if (_p17._0.ctor === 'Ok') {
+					var _p23 = _p17._0._0.score;
+					var _p22 = _p17._0._0.pdbFile;
 					var oldHistory = _elm_lang$core$Native_Utils.eq(
 						_elm_lang$core$List$length(
 							_elm_lang$core$Dict$toList(model.modelHistory)),
@@ -23735,21 +23758,21 @@ var _user$project$Builder$update = F2(
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								pdbFile: _elm_lang$core$Maybe$Just(_p21),
-								score: _elm_lang$core$Maybe$Just(_p16._0._0.score),
-								residuesPerTurn: _elm_lang$core$Maybe$Just(_p16._0._0.residuesPerTurn),
+								pdbFile: _elm_lang$core$Maybe$Just(_p22),
+								score: _elm_lang$core$Maybe$Just(_p23),
+								residuesPerTurn: _elm_lang$core$Maybe$Just(_p17._0._0.residuesPerTurn),
 								building: false,
 								modelHistory: A3(
 									_elm_lang$core$Dict$insert,
 									model.nextHistoryID,
-									{ctor: '_Tuple2', _0: model.parameters, _1: false},
+									{ctor: '_Tuple3', _0: model.parameters, _1: false, _2: _p23},
 									oldHistory),
 								nextHistoryID: model.nextHistoryID + 1
 							}),
 						{
 							ctor: '::',
 							_0: _user$project$Builder$showStructure(
-								{ctor: '_Tuple2', _0: _p21, _1: model.currentRepresentation}),
+								{ctor: '_Tuple2', _0: _p22, _1: model.currentRepresentation}),
 							_1: {
 								ctor: '::',
 								_0: _user$project$Builder$setStorage(
@@ -23766,7 +23789,7 @@ var _user$project$Builder$update = F2(
 						{ctor: '[]'});
 				}
 			case 'ProcessOptimisation':
-				if (_p16._0.ctor === 'Ok') {
+				if (_p17._0.ctor === 'Ok') {
 					var parametersDict = _elm_lang$core$Dict$fromList(
 						A3(
 							_elm_lang$core$List$map2,
@@ -23775,7 +23798,7 @@ var _user$project$Builder$update = F2(
 									return {ctor: '_Tuple2', _0: v0, _1: v1};
 								}),
 							A2(_elm_lang$core$List$range, 1, model.oligomericState),
-							A2(_elm_lang$core$List$repeat, model.oligomericState, _p16._0._0.parameters)));
+							A2(_elm_lang$core$List$repeat, model.oligomericState, _p17._0._0.parameters)));
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
@@ -23789,7 +23812,7 @@ var _user$project$Builder$update = F2(
 							ctor: '::',
 							_0: _user$project$Builder$msgToCommand(
 								_user$project$Types$ProcessModel(
-									_elm_lang$core$Result$Ok(_p16._0._0.modellingResults))),
+									_elm_lang$core$Result$Ok(_p17._0._0.modellingResults))),
 							_1: {ctor: '[]'}
 						});
 				} else {
@@ -23802,7 +23825,7 @@ var _user$project$Builder$update = F2(
 							ctor: '::',
 							_0: _user$project$Builder$msgToCommand(
 								_user$project$Types$ProcessModel(
-									_elm_lang$core$Result$Err(_p16._0._0))),
+									_elm_lang$core$Result$Err(_p17._0._0))),
 							_1: {ctor: '[]'}
 						});
 				}
@@ -23811,7 +23834,7 @@ var _user$project$Builder$update = F2(
 					_elm_lang$core$Maybe$withDefault,
 					2,
 					_elm_lang$core$Result$toMaybe(
-						_elm_lang$core$String$toInt(_p16._0)));
+						_elm_lang$core$String$toInt(_p17._0)));
 				return (_elm_lang$core$Native_Utils.cmp(oligomericState, model.oligomericState) > 0) ? A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -23899,8 +23922,8 @@ var _user$project$Builder$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'SetParametersAndBuild':
-				var _p22 = _p16._0;
-				return _user$project$ParameterValidation$invalidParameterDict(_p22) ? A2(
+				var _p24 = _p17._0;
+				return _user$project$ParameterValidation$invalidParameterDict(_p24) ? A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
 					{ctor: '[]'}) : A2(
@@ -23908,10 +23931,10 @@ var _user$project$Builder$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parameters: _p22,
-							currentInput: _user$project$Builder$parametersDictToInputDict(_p22),
+							parameters: _p24,
+							currentInput: _user$project$Builder$parametersDictToInputDict(_p24),
 							oligomericState: _elm_lang$core$List$length(
-								_elm_lang$core$Dict$toList(_p22))
+								_elm_lang$core$Dict$toList(_p24))
 						}),
 					{
 						ctor: '::',
@@ -23919,8 +23942,8 @@ var _user$project$Builder$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'KeyMsg':
-				var _p23 = _p16._0;
-				if (_p23 === 13) {
+				var _p25 = _p17._0;
+				if (_p25 === 13) {
 					return _user$project$ParameterValidation$invalidParameterDict(model.parameters) ? A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						model,
@@ -23944,7 +23967,7 @@ var _user$project$Builder$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							panelVisibility: A2(_user$project$Builder$togglePanelVisibility, _p16._0, model.panelVisibility)
+							panelVisibility: A2(_user$project$Builder$togglePanelVisibility, _p17._0, model.panelVisibility)
 						}),
 					{
 						ctor: '::',
@@ -23955,10 +23978,10 @@ var _user$project$Builder$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'ExpandHistory':
-				var _p25 = _p16._0;
-				var oldEntry = A2(_elm_lang$core$Dict$get, _p25, model.modelHistory);
-				var _p24 = oldEntry;
-				if (_p24.ctor === 'Just') {
+				var _p27 = _p17._0;
+				var oldEntry = A2(_elm_lang$core$Dict$get, _p27, model.modelHistory);
+				var _p26 = oldEntry;
+				if (_p26.ctor === 'Just') {
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
@@ -23966,8 +23989,8 @@ var _user$project$Builder$update = F2(
 							{
 								modelHistory: A3(
 									_elm_lang$core$Dict$insert,
-									_p25,
-									{ctor: '_Tuple2', _0: _p24._0._0, _1: !_p24._0._1},
+									_p27,
+									{ctor: '_Tuple3', _0: _p26._0._0, _1: !_p26._0._1, _2: _p26._0._2},
 									model.modelHistory)
 							}),
 						{ctor: '[]'});
@@ -23988,7 +24011,7 @@ var _user$project$Builder$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'EditRepresentation':
-				var newRep = A2(_user$project$Builder$updateRepresentation, _p16._0, model.currentRepresentation);
+				var newRep = A2(_user$project$Builder$updateRepresentation, _p17._0, model.currentRepresentation);
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -24529,8 +24552,13 @@ var _user$project$Builder$main = _elm_lang$html$Html$programWithFlags(
 																				return A2(
 																					_elm_lang$core$Json_Decode$andThen,
 																					function (x1) {
-																						return _elm_lang$core$Json_Decode$succeed(
-																							{ctor: '_Tuple2', _0: x0, _1: x1});
+																						return A2(
+																							_elm_lang$core$Json_Decode$andThen,
+																							function (x2) {
+																								return _elm_lang$core$Json_Decode$succeed(
+																									{ctor: '_Tuple3', _0: x0, _1: x1, _2: x2});
+																							},
+																							A2(_elm_lang$core$Json_Decode$index, 2, _elm_lang$core$Json_Decode$float));
 																					},
 																					A2(_elm_lang$core$Json_Decode$index, 1, _elm_lang$core$Json_Decode$bool));
 																			},
