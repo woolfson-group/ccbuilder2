@@ -22208,7 +22208,7 @@ var _user$project$Builder$sendOptimiseCmd = F2(
 			_user$project$Types$ProcessOptimisation,
 			A3(
 				_elm_lang$http$Http$post,
-				'/builder/api/v0.1/optimise/coiled-coil',
+				'builder/api/v0.1/optimise/coiled-coil',
 				_elm_lang$http$Http$jsonBody(
 					A2(_user$project$Builder$optimisationJson, parameters, heat)),
 				_user$project$Builder$optimisationResultsDecoder));
@@ -22219,7 +22219,7 @@ var _user$project$Builder$sendBuildCmd = function (parameters) {
 		_user$project$Types$ProcessModel,
 		A3(
 			_elm_lang$http$Http$post,
-			'/builder/api/v0.1/build/coiled-coil',
+			'builder/api/v0.1/build/coiled-coil',
 			_elm_lang$http$Http$jsonBody(
 				_user$project$Builder$parametersDictToListJson(parameters)),
 			_user$project$Builder$modellingResultsDecoder));
