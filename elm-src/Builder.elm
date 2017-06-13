@@ -549,7 +549,7 @@ sendBuildCmd : ParametersDict -> Cmd Msg
 sendBuildCmd parameters =
     Http.send ProcessModel <|
         Http.post
-            "ccbmk2/builder/api/v0.1/build/coiled-coil"
+            "/builder/api/v0.1/build/coiled-coil"
             (parametersDictToListJson parameters
                 |> Http.jsonBody
             )
@@ -606,7 +606,7 @@ sendOptimiseCmd : ParametersDict -> Int -> Cmd Msg
 sendOptimiseCmd parameters heat =
     Http.send ProcessOptimisation <|
         Http.post
-            "ccbmk2/builder/api/v0.1/optimise/coiled-coil"
+            "/builder/api/v0.1/optimise/coiled-coil"
             (optimisationJson parameters heat
                 |> Http.jsonBody
             )
