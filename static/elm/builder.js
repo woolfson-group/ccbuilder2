@@ -23689,6 +23689,110 @@ var _user$project$Builder$downloadPdb = _elm_lang$core$Native_Platform.outgoingP
 	function (v) {
 		return [v._0, v._1];
 	});
+var _user$project$Builder$Model = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return function (k) {
+											return function (l) {
+												return function (m) {
+													return function (n) {
+														return function (o) {
+															return {parameters: a, currentInput: b, parameterClipBoard: c, oligomericState: d, buildMode: e, pdbFile: f, score: g, residuesPerTurn: h, building: i, optimising: j, heat: k, modelHistory: l, nextHistoryID: m, panelVisibility: n, currentRepresentation: o};
+														};
+													};
+												};
+											};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+var _user$project$Builder$PanelVisibility = F5(
+	function (a, b, c, d, e) {
+		return {buildPanel: a, examplesPanel: b, optimisePanel: c, buildHistoryPanel: d, viewerPanel: e};
+	});
+var _user$project$Builder$defaultVisibility = A5(_user$project$Builder$PanelVisibility, true, false, false, false, false);
+var _user$project$Builder$emptyModel = {
+	parameters: _elm_lang$core$Dict$fromList(
+		{
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 1, _1: _user$project$Types$emptyParameterRecord},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 2, _1: _user$project$Types$emptyParameterRecord},
+				_1: {ctor: '[]'}
+			}
+		}),
+	currentInput: _elm_lang$core$Dict$fromList(
+		{
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 1, _1: _user$project$Types$emptyInput},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 2, _1: _user$project$Types$emptyInput},
+				_1: {ctor: '[]'}
+			}
+		}),
+	parameterClipBoard: _elm_lang$core$Maybe$Nothing,
+	oligomericState: 2,
+	buildMode: _user$project$Types$Basic,
+	pdbFile: _elm_lang$core$Maybe$Nothing,
+	score: _elm_lang$core$Maybe$Nothing,
+	residuesPerTurn: _elm_lang$core$Maybe$Nothing,
+	building: false,
+	optimising: false,
+	heat: 298,
+	modelHistory: _elm_lang$core$Dict$empty,
+	nextHistoryID: 1,
+	panelVisibility: _user$project$Builder$defaultVisibility,
+	currentRepresentation: A5(_user$project$Types$Representation, false, true, true, false, false)
+};
+var _user$project$Builder$init = function (storedModel) {
+	var model = A2(
+		_elm_lang$core$Maybe$withDefault,
+		_user$project$Builder$emptyModel,
+		A2(_elm_lang$core$Maybe$map, _user$project$Builder$exportableToModel, storedModel));
+	var showDefaultModel = _elm_lang$core$Native_Utils.eq(storedModel, _elm_lang$core$Maybe$Nothing) ? true : false;
+	return A2(
+		_elm_lang$core$Platform_Cmd_ops['!'],
+		model,
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			{
+				ctor: '::',
+				_0: _user$project$Builder$initialiseViewer(
+					{ctor: '_Tuple0'}),
+				_1: {ctor: '[]'}
+			},
+			showDefaultModel ? {
+				ctor: '::',
+				_0: _user$project$Builder$toCommand(
+					_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetDimer)),
+				_1: {ctor: '[]'}
+			} : {
+				ctor: '::',
+				_0: _user$project$Builder$showStructure(
+					{
+						ctor: '_Tuple2',
+						_0: A2(_elm_lang$core$Maybe$withDefault, '', model.pdbFile),
+						_1: model.currentRepresentation
+					}),
+				_1: {ctor: '[]'}
+			}));
+};
 var _user$project$Builder$update = F2(
 	function (msg, model) {
 		var _p17 = msg;
@@ -23785,9 +23889,7 @@ var _user$project$Builder$update = F2(
 						model,
 						{
 							building: true,
-							panelVisibility: _elm_lang$core$Native_Utils.update(
-								panelVisibility,
-								{buildPanel: false, examplesPanel: false})
+							panelVisibility: A5(_user$project$Builder$PanelVisibility, false, false, false, false, false)
 						}),
 					{
 						ctor: '::',
@@ -24138,110 +24240,6 @@ var _user$project$Builder$update = F2(
 					{ctor: '[]'});
 		}
 	});
-var _user$project$Builder$Model = function (a) {
-	return function (b) {
-		return function (c) {
-			return function (d) {
-				return function (e) {
-					return function (f) {
-						return function (g) {
-							return function (h) {
-								return function (i) {
-									return function (j) {
-										return function (k) {
-											return function (l) {
-												return function (m) {
-													return function (n) {
-														return function (o) {
-															return {parameters: a, currentInput: b, parameterClipBoard: c, oligomericState: d, buildMode: e, pdbFile: f, score: g, residuesPerTurn: h, building: i, optimising: j, heat: k, modelHistory: l, nextHistoryID: m, panelVisibility: n, currentRepresentation: o};
-														};
-													};
-												};
-											};
-										};
-									};
-								};
-							};
-						};
-					};
-				};
-			};
-		};
-	};
-};
-var _user$project$Builder$PanelVisibility = F5(
-	function (a, b, c, d, e) {
-		return {buildPanel: a, examplesPanel: b, optimisePanel: c, buildHistoryPanel: d, viewerPanel: e};
-	});
-var _user$project$Builder$defaultVisibility = A5(_user$project$Builder$PanelVisibility, true, false, false, false, false);
-var _user$project$Builder$emptyModel = {
-	parameters: _elm_lang$core$Dict$fromList(
-		{
-			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 1, _1: _user$project$Types$emptyParameterRecord},
-			_1: {
-				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 2, _1: _user$project$Types$emptyParameterRecord},
-				_1: {ctor: '[]'}
-			}
-		}),
-	currentInput: _elm_lang$core$Dict$fromList(
-		{
-			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 1, _1: _user$project$Types$emptyInput},
-			_1: {
-				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 2, _1: _user$project$Types$emptyInput},
-				_1: {ctor: '[]'}
-			}
-		}),
-	parameterClipBoard: _elm_lang$core$Maybe$Nothing,
-	oligomericState: 2,
-	buildMode: _user$project$Types$Basic,
-	pdbFile: _elm_lang$core$Maybe$Nothing,
-	score: _elm_lang$core$Maybe$Nothing,
-	residuesPerTurn: _elm_lang$core$Maybe$Nothing,
-	building: false,
-	optimising: false,
-	heat: 298,
-	modelHistory: _elm_lang$core$Dict$empty,
-	nextHistoryID: 1,
-	panelVisibility: _user$project$Builder$defaultVisibility,
-	currentRepresentation: A5(_user$project$Types$Representation, false, true, true, false, false)
-};
-var _user$project$Builder$init = function (storedModel) {
-	var model = A2(
-		_elm_lang$core$Maybe$withDefault,
-		_user$project$Builder$emptyModel,
-		A2(_elm_lang$core$Maybe$map, _user$project$Builder$exportableToModel, storedModel));
-	var showDefaultModel = _elm_lang$core$Native_Utils.eq(storedModel, _elm_lang$core$Maybe$Nothing) ? true : false;
-	return A2(
-		_elm_lang$core$Platform_Cmd_ops['!'],
-		model,
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			{
-				ctor: '::',
-				_0: _user$project$Builder$initialiseViewer(
-					{ctor: '_Tuple0'}),
-				_1: {ctor: '[]'}
-			},
-			showDefaultModel ? {
-				ctor: '::',
-				_0: _user$project$Builder$toCommand(
-					_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetDimer)),
-				_1: {ctor: '[]'}
-			} : {
-				ctor: '::',
-				_0: _user$project$Builder$showStructure(
-					{
-						ctor: '_Tuple2',
-						_0: A2(_elm_lang$core$Maybe$withDefault, '', model.pdbFile),
-						_1: model.currentRepresentation
-					}),
-				_1: {ctor: '[]'}
-			}));
-};
 var _user$project$Builder$main = _elm_lang$html$Html$programWithFlags(
 	{init: _user$project$Builder$init, view: _user$project$Builder$view, update: _user$project$Builder$update, subscriptions: _user$project$Builder$subscriptions})(
 	_elm_lang$core$Json_Decode$oneOf(

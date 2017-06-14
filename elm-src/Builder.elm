@@ -329,10 +329,7 @@ update msg model =
                     { model
                         | building = True
                         , panelVisibility =
-                            { panelVisibility
-                                | buildPanel = False
-                                , examplesPanel = False
-                            }
+                            PanelVisibility False False False False False
                     }
                         ! [ sendBuildCmd model.parameters ]
                 else
