@@ -3,7 +3,7 @@ services:
   web:
     build: .
     ports:
-      - "80:80"
+      - "1801:80"
     volumes:
       - .:/app
     depends_on:

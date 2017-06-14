@@ -32,7 +32,9 @@ def build_coiled_coil(parameters):
         A dictionary containing information about the model that has
         been produced.
     """
+    print(parameters, file=sys.stderr)
     coiled_coil = isambard.specifications.CoiledCoil(len(parameters), auto_build=False)
+    coiled_coil.aas = [len(p['Sequence']) for p in parameters]
     coiled_coil.major_radii = [p['Radius'] for p in parameters]
     coiled_coil.major_pitches = [p['Pitch'] for p in parameters]
     raw_phi = [p['Interface Angle'] for p in parameters]

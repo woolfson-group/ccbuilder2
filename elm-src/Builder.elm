@@ -325,7 +325,7 @@ update msg model =
                 panelVisibility =
                     model.panelVisibility
             in
-                if not model.building then
+                if not model.building || invalidParameterDict model.parameters then
                     { model
                         | building = True
                         , panelVisibility =
@@ -373,7 +373,8 @@ update msg model =
                         model.modelHistory
             in
                 { model
-                    | pdbFile = Just pdbFile
+                    | currentInput = parametersDictToInputDict model.parameters
+                    , pdbFile = Just pdbFile
                     , score = Just score
                     , residuesPerTurn = Just residuesPerTurn
                     , building = False
@@ -490,7 +491,11 @@ update msg model =
                     if invalidParameterDict model.parameters then
                         model ! []
                     else
-                        model ! [ toCommand Build ]
+                        model
+                            ! [ Process.sleep (1 * Time.millisecond)
+                                    |> Task.andThen (always <| Task.succeed Build)
+                                    |> Task.perform identity
+                              ]
 
                 _ ->
                     model ! []

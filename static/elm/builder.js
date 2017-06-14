@@ -19940,15 +19940,19 @@ var _user$project$ParameterValidation$validateSuperHelicalRot = function (superH
 	return _user$project$ParameterValidation$isNotNaN(superHelRot) ? _elm_lang$core$Maybe$Just(superHelRot) : _elm_lang$core$Maybe$Nothing;
 };
 var _user$project$ParameterValidation$validateSequence = function (sequence) {
+	var processedSequence = A2(
+		_elm_lang$core$String$join,
+		'',
+		_elm_lang$core$String$words(
+			_elm_lang$core$String$trim(
+				_elm_lang$core$String$toUpper(sequence))));
 	var allValidChars = A2(
 		_elm_lang$core$List$all,
 		_user$project$ParameterValidation$isAllowedSeqChar,
-		_elm_lang$core$String$toList(
-			_elm_lang$core$String$toUpper(sequence)));
+		_elm_lang$core$String$toList(processedSequence));
 	return (allValidChars && (_elm_lang$core$Native_Utils.cmp(
-		_elm_lang$core$String$length(sequence),
-		0) > 0)) ? _elm_lang$core$Maybe$Just(
-		_elm_lang$core$String$toUpper(sequence)) : _elm_lang$core$Maybe$Nothing;
+		_elm_lang$core$String$length(processedSequence),
+		0) > 0)) ? _elm_lang$core$Maybe$Just(processedSequence) : _elm_lang$core$Maybe$Nothing;
 };
 var _user$project$ParameterValidation$validatePhiCA = function (phica) {
 	return _user$project$ParameterValidation$isNotNaN(phica) ? _elm_lang$core$Maybe$Just(phica) : _elm_lang$core$Maybe$Nothing;
@@ -20006,11 +20010,10 @@ var _user$project$ParameterValidation$editParameterValue = F4(
 				var newInput = _elm_lang$core$Native_Utils.update(
 					currentInput,
 					{sequence: newValue});
+				var validatedSequence = _user$project$ParameterValidation$validateSequence(newValue);
 				var newParameters = _elm_lang$core$Native_Utils.update(
 					parameters,
-					{
-						sequence: _user$project$ParameterValidation$validateSequence(newValue)
-					});
+					{sequence: validatedSequence});
 				return {ctor: '_Tuple2', _0: newParameters, _1: newInput};
 			case 'Register':
 				var newInput = _elm_lang$core$Native_Utils.update(
@@ -23776,7 +23779,7 @@ var _user$project$Builder$update = F2(
 					});
 			case 'Build':
 				var panelVisibility = model.panelVisibility;
-				return (!model.building) ? A2(
+				return ((!model.building) || _user$project$ParameterValidation$invalidParameterDict(model.parameters)) ? A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
@@ -23835,6 +23838,7 @@ var _user$project$Builder$update = F2(
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
+								currentInput: _user$project$Builder$parametersDictToInputDict(model.parameters),
 								pdbFile: _elm_lang$core$Maybe$Just(_p22),
 								score: _elm_lang$core$Maybe$Just(_p23),
 								residuesPerTurn: _elm_lang$core$Maybe$Just(_p17._0._0.residuesPerTurn),
@@ -24040,7 +24044,14 @@ var _user$project$Builder$update = F2(
 						model,
 						{
 							ctor: '::',
-							_0: _user$project$Builder$toCommand(_user$project$Types$Build),
+							_0: A2(
+								_elm_lang$core$Task$perform,
+								_elm_lang$core$Basics$identity,
+								A2(
+									_elm_lang$core$Task$andThen,
+									_elm_lang$core$Basics$always(
+										_elm_lang$core$Task$succeed(_user$project$Types$Build)),
+									_elm_lang$core$Process$sleep(1 * _elm_lang$core$Time$millisecond))),
 							_1: {ctor: '[]'}
 						});
 				} else {

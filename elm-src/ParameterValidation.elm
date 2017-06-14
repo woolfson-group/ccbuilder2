@@ -37,12 +37,12 @@ containsInvalidParameter { radius, pitch, phiCA, sequence, superHelRot, zShift }
 
         vSeq =
             sequence /= Nothing
-        
-        vSuperHelRot
-            = superHelRot /= Nothing
-        
-        vZShift
-            = zShift /= Nothing
+
+        vSuperHelRot =
+            superHelRot /= Nothing
+
+        vZShift =
+            zShift /= Nothing
     in
         List.member False [ vRadius, vPitch, vPhiCA, vSeq, vSuperHelRot, vZShift ]
 
@@ -97,8 +97,11 @@ editParameterValue parameters currentInput parameter newValue =
 
         Sequence ->
             let
+                validatedSequence =
+                    validateSequence newValue
+
                 newParameters =
-                    { parameters | sequence = validateSequence newValue }
+                    { parameters | sequence = validatedSequence }
 
                 newInput =
                     { currentInput | sequence = newValue }
@@ -114,7 +117,7 @@ editParameterValue parameters currentInput parameter newValue =
                     { currentInput | register = newValue }
             in
                 ( newParameters, newInput )
-        
+
         SuperHelicalRotation ->
             let
                 postValSHR =
@@ -129,7 +132,7 @@ editParameterValue parameters currentInput parameter newValue =
                     { currentInput | superHelRot = newValue }
             in
                 ( newParameters, newInput )
-        
+
         Orientation ->
             let
                 newParameters =
@@ -139,7 +142,7 @@ editParameterValue parameters currentInput parameter newValue =
                     { currentInput | antiParallel = toString newParameters.antiParallel }
             in
                 ( newParameters, newInput )
-        
+
         ZShift ->
             let
                 postValZShift =
@@ -154,16 +157,18 @@ editParameterValue parameters currentInput parameter newValue =
                     { currentInput | zShift = newValue }
             in
                 ( newParameters, newInput )
-        
+
         LinkedSuperHelRot ->
             let
                 newParameters =
                     { parameters
-                        | linkedSuperHelRot = not parameters.antiParallel }
+                        | linkedSuperHelRot = not parameters.antiParallel
+                    }
 
                 newInput =
-                    { currentInput 
-                        | linkedSuperHelRot = toString newParameters.linkedSuperHelRot }
+                    { currentInput
+                        | linkedSuperHelRot = toString newParameters.linkedSuperHelRot
+                    }
             in
                 ( newParameters, newInput )
 
@@ -195,13 +200,20 @@ validatePhiCA phica =
 validateSequence : String -> Maybe String
 validateSequence sequence =
     let
+        processedSequence =
+            sequence
+                |> String.toUpper
+                |> String.trim
+                |> String.words
+                |> String.join ""
+
         allValidChars =
-            String.toUpper sequence
+            processedSequence
                 |> String.toList
                 |> List.all isAllowedSeqChar
     in
-        if allValidChars && (String.length sequence > 0) then
-            Just (String.toUpper sequence)
+        if allValidChars && (String.length processedSequence > 0) then
+            Just (processedSequence)
         else
             Nothing
 
