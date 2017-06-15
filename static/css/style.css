@@ -83,6 +83,7 @@ table {
 
 .builderFlexContainerCss > .builderFlexItemCss {
     flex: none;
+    margin: 10px;
 }
 
 .builderCCBButtonCss {

@@ -932,6 +932,7 @@ modelInfoPanel : Model -> Html Msg
 modelInfoPanel model =
     div
         [ class [ OverlayPanelCss ]
+        , id [ ModelInfoPanel ]
         , styles <| panelStyling ++ modelInfoPanelStyling
         ]
         [ h3 [] [ text "Model Information" ]

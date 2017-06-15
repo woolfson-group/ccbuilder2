@@ -98,6 +98,7 @@ css =
         , children
             [ class FlexItemCss
                 [ flex none
+                , margin (px 10)
                 ]
             ]
         ]

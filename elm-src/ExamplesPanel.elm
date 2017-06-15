@@ -209,6 +209,9 @@ examplesPanelStyling : List Css.Mixin
 examplesPanelStyling =
     [ Css.top (Css.px 60)
     , Css.left (Css.px 35)
+    , Css.overflow Css.auto
+    , Css.maxHeight (Css.pct 80)
+    , Css.zIndex (Css.int 2)
     ]
 
 

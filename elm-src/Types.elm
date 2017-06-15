@@ -102,6 +102,7 @@ type Panel
     | BuildPanel
     | ExamplesPanel
     | OptimisePanel
+    | ModelInfoPanel
     | BuildingStatusPanel
     | BuildHistoryPanel
     | ViewerPanel
