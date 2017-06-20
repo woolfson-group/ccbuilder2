@@ -9,7 +9,7 @@ This is the source code for a web application for building models of coiled coil
 * When rebuilding the image, you need to:
     * Rebuild the images using `docker build -t ccbmk2 .`
     * Delete the old `docker-compose` image using `docker-compose rm`
-* `docker exec -i -t ccmbmk2_web_1 /bin/bash`
+* `docker exec -i -t ccbmk2_web_1 /bin/bash`
 * `docker stop $(docker ps -a -q)` to stop all images
 * `docker rm $(docker ps -a -q)` to remove all images
 * Coolors
