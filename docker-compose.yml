@@ -1,12 +1,20 @@
 version: '2'
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: ./docker-files/Dockerfile.web
     ports:
       - "1801:80"
     volumes:
       - .:/app
     depends_on:
       - db
+  optimisation:
+    build:
+      context: .
+      dockerfile: ./docker-files/Dockerfile.optimisation
+    volumes:
+      - .:/app
   db:
     image: mongo
