@@ -19147,6 +19147,15 @@ var _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace = function (name) {
 		name: name
 	};
 };
+var _rtfeldman$elm_css_helpers$Html_CssHelpers$withClass = F3(
+	function (className, makeElem, attrs) {
+		return makeElem(
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class(className),
+				_1: attrs
+			});
+	});
 var _rtfeldman$elm_css_helpers$Html_CssHelpers$Helpers = F3(
 	function (a, b, c) {
 		return {$class: a, classList: b, id: c};
