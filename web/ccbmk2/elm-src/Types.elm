@@ -68,7 +68,8 @@ type alias InputValues =
 
 
 type alias ModellingResults =
-    { pdbFile : String
+    { model_id : String
+    , pdbFile : String
     , score : Float
     , residuesPerTurn : Float
     }

@@ -552,7 +552,9 @@ sendBuildCmd parameters =
     Http.send ProcessModel <|
         Http.post
             "builder/api/v0.1/build/coiled-coil"
-            (parametersDictToListJson parameters
+            (Json.Encode.object
+                [ ( "Parameters", parametersDictToListJson parameters )
+                ]
                 |> Http.jsonBody
             )
             modellingResultsDecoder
@@ -560,8 +562,9 @@ sendBuildCmd parameters =
 
 modellingResultsDecoder : Json.Decode.Decoder ModellingResults
 modellingResultsDecoder =
-    Json.Decode.map3
+    Json.Decode.map4
         ModellingResults
+        (field "model_id" string)
         (field "pdb" string)
         (field "score" float)
         (field "mean_rpt_value" float)

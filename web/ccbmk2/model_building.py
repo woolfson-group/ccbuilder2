@@ -52,12 +52,9 @@ def build_coiled_coil(parameters, debug=False):
     coiled_coil.z_shifts = [p['Z-Shift'] for p in parameters]
     coiled_coil.build()
     coiled_coil.pack_new_sequences(sequences)
-    model_data = {
-        'pdb': coiled_coil.pdb,
-        'mean_rpt_value': calculate_average_rpt(coiled_coil),
-        'score': coiled_coil.buff_interaction_energy.total_energy
-    }
-    return model_data
+    mean_rpt_value = calculate_average_rpt(coiled_coil)
+    score = coiled_coil.buff_interaction_energy.total_energy
+    return coiled_coil.pdb, score, mean_rpt_value
 
 
 def optimise_coiled_coil(parameters, debug=False):

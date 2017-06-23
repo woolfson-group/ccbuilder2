@@ -7,7 +7,7 @@ from flask import jsonify, render_template, request
 
 from ccbmk2 import app
 from ccbmk2 import database
-from ccbmk2.model_building import build_coiled_coil, optimise_coiled_coil
+from ccbmk2 import model_building
 
 
 @app.route('/')
@@ -25,23 +25,32 @@ def builder():
 @app.route('/builder/api/v0.1/build/coiled-coil', methods=['POST'])
 def build_coiled_coil_model():
     """Passes to the build commands to the model_building module."""
-    (request_log_id, save_model) = store_request(request.json)
-    model = database.model_store.find_one({'_id': request_log_id})
-    if model is None:
+    parameters_list = request.json['Parameters']
+    (build_request_id, save_model) = database.store_build_request(
+        parameters_list)
+    model_record = database.models.find_one({'_id': build_request_id})
+    if model_record is None:
         build_start_time = datetime.datetime.now()
-        pdb_and_score = build_coiled_coil(request.json, debug=app.debug)
+        pdb, score, rpt = model_building.build_coiled_coil(
+            parameters_list, debug=app.debug)
         build_start_end = datetime.datetime.now()
         build_time = build_start_end - build_start_time
-        log_build_info(request, build_time, request_log_id)
-        if save_model:
-            store_model(request_log_id, pdb_and_score)
-    else:
-        pdb_and_score = {
-            'pdb': model['pdb'],
-            'score': model['score'],
-            'mean_rpt_value': model['mean_rpt_value']
+        database.log_build_info(request, build_time, build_request_id)
+        model_id = database.store_model(build_request_id, pdb, score, rpt)
+        model_and_info = {
+            'model_id': str(model_id),
+            'pdb': pdb,
+            'score': score,
+            'mean_rpt_value': rpt,
         }
-    return jsonify(pdb_and_score)
+    else:
+        model_and_info = {
+            'model_id': str(model_record['_id']),
+            'pdb': model_record['pdb'],
+            'score': model_record['score'],
+            'mean_rpt_value': model_record['mean_rpt_value'],
+        }
+    return jsonify(model_and_info)
 
 
 @app.route('/builder/api/v0.1/optimise/coiled-coil', methods=['POST'])
@@ -49,118 +58,8 @@ def optimise_coiled_coil_model():
     """Runs a parameter optimisation for a supplied model."""
     build_start_time = datetime.datetime.now()
     opt_id = create_opt_job_entry(request.json)
-    optimisation_result = optimise_coiled_coil(
+    optimisation_result = model_building.optimise_coiled_coil(
         request.json['Parameters'], debug=app.debug)
     build_start_end = datetime.datetime.now()
     build_time = build_start_end - build_start_time
     return jsonify(optimisation_result)
-
-
-def store_request(request, number_for_save=5):
-    """Saves the requested parameters in the database.
-
-    An additional 'requested' field is added to the request before
-    it is logged in the database, which is an integer that is
-    incremented whenever the same parameters are requested again.
-
-    Parameters
-    ----------
-
-    request : dict
-        Json body of the Http request that contains the build
-        parameters.
-
-    number_for_save : int
-        The number of times the model must be requested before
-        it is cached in the models database.
-
-    Returns
-    -------
-
-    request_log_id : bson.ObjectID
-        The id of the parameters, this will be passed to the build
-        log to be stored to avoid duplication.
-
-    save_model : Bool
-        Indicates whether the parameters have been requested enough
-        to make it desirable to save the model in the model
-        collection.
-    """
-    chain_ids = list(map(get_chain_parameters_id, request))
-    request_log = database.request_store.find_one(
-        {'parameter_ids': chain_ids})
-    if request_log is None:
-        request_log = {'parameter_ids': chain_ids}
-        request_log['requested'] = 1
-        request_log_id = database.request_store.insert_one(
-            request_log).inserted_id
-    else:
-        request_log['requested'] += 1
-        request_log_id = request_log['_id']
-        database.request_store.update_one(
-            {'_id': request_log_id},
-            {'$set': {'requested': request_log['requested']}})
-    if request_log['requested'] == number_for_save:
-        save_model = True
-    else:
-        save_model = False
-    return request_log_id, save_model
-
-
-def get_chain_parameters_id(chain_parameters):
-    parameter_record = database.parameters_store.find_one(
-        chain_parameters)
-    if parameter_record:
-        pr_id = parameter_record['_id']
-    else:
-        pr_id = database.parameters_store.insert_one(
-            chain_parameters).inserted_id
-    return pr_id
-
-
-def log_build_info(request, build_time, request_log_id):
-    """Saves informations about the build process to the database."""
-    build_info = {
-        'ip': request.remote_addr,
-        'date': datetime.datetime.now(),
-        'build_time': build_time.total_seconds(),
-        'parameters_id': request_log_id
-    }
-    database.build_log.insert_one(build_info)
-    return
-
-
-def store_model(request_log_id, pdb_and_score):
-    """Stores a model in the database."""
-    model = {'_id': request_log_id}
-    model['pdb'] = pdb_and_score['pdb']
-    model['score'] = pdb_and_score['score']
-    model['mean_rpt_value'] = pdb_and_score['mean_rpt_value']
-    database.model_store.insert_one(model)
-    return
-
-
-def create_opt_job_entry(request):
-    """Creates and stores a optimisation job in the database.
-
-    Parameters
-    ----------
-    request : Dict
-        Contains the Parameters and Heat required for the optimisation.
-
-    Returns
-    -------
-    opt_job_id : ObjectId
-        ID for the submitted optimsation job.
-    """
-    opt_job = {
-        'initial_parameter_ids':
-            [get_chain_parameters_id(p) for p in request['Parameters']],
-        'heat': request['Heat'],
-        'status': database.JobStatus.SUBMITTED.name,
-        'time_submitted': datetime.datetime.now(),
-        'time_finished': None,
-        'model_id': None
-    }
-    opt_job_id = database.opt_jobs.insert_one(opt_job).inserted_id
-    return opt_job_id
