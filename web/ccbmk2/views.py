@@ -48,7 +48,7 @@ def build_coiled_coil_model():
 def optimise_coiled_coil_model():
     """Runs a parameter optimisation for a supplied model."""
     build_start_time = datetime.datetime.now()
-    opt_id = database.opt_jobs.insert_one(request.json).inserted_id
+    opt_id = create_opt_job_entry(request.json)
     optimisation_result = optimise_coiled_coil(
         request.json['Parameters'], debug=app.debug)
     build_start_end = datetime.datetime.now()
@@ -138,3 +138,29 @@ def store_model(request_log_id, pdb_and_score):
     model['mean_rpt_value'] = pdb_and_score['mean_rpt_value']
     database.model_store.insert_one(model)
     return
+
+
+def create_opt_job_entry(request):
+    """Creates and stores a optimisation job in the database.
+
+    Parameters
+    ----------
+    request : Dict
+        Contains the Parameters and Heat required for the optimisation.
+
+    Returns
+    -------
+    opt_job_id : ObjectId
+        ID for the submitted optimsation job.
+    """
+    opt_job = {
+        'initial_parameter_ids':
+            [get_chain_parameters_id(p) for p in request['Parameters']],
+        'heat': request['Heat'],
+        'status': database.JobStatus.SUBMITTED.name,
+        'time_submitted': datetime.datetime.now(),
+        'time_finished': None,
+        'model_id': None
+    }
+    opt_job_id = database.opt_jobs.insert_one(opt_job).inserted_id
+    return opt_job_id

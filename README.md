@@ -10,8 +10,9 @@ This is the source code for a web application for building models of coiled coil
     * Rebuild the images using `docker build -t ccbmk2 .`
     * Delete the old `docker-compose` image using `docker-compose rm`
 * `docker exec -i -t ccbmk2_web_1 /bin/bash`
-* `docker stop $(docker ps -a -q)` to stop all images
-* `docker rm $(docker ps -a -q)` to remove all images
+* `docker stop $(docker ps -a -q)` to stop all containers
+* `docker rm $(docker ps -a -q)` to remove all containers
+* `docker rmi $(docker images -f dangling=true -q)` remove dangling
 * Coolors
     * https://coolors.co/e6e8e6-ced0ce-9fb8ad-475841-3f403f
 * `List.map (\v -> (toFloat v) * delta) (List.range 0 (n-1))`
