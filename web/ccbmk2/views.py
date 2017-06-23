@@ -57,9 +57,5 @@ def build_coiled_coil_model():
 def optimise_coiled_coil_model():
     """Runs a parameter optimisation for a supplied model."""
     build_start_time = datetime.datetime.now()
-    opt_id = create_opt_job_entry(request.json)
-    optimisation_result = model_building.optimise_coiled_coil(
-        request.json['Parameters'], debug=app.debug)
-    build_start_end = datetime.datetime.now()
-    build_time = build_start_end - build_start_time
-    return jsonify(optimisation_result)
+    opt_id = database.create_opt_job_entry(request.json)
+    return jsonify(str(opt_id))

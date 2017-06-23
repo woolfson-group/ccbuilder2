@@ -50,7 +50,6 @@ def get_and_process_opt_jobs(opt_job_queue, job_collection):
                 {'_id': job_id},
                 {'$set': {'status': database.JobStatus.RUNNING.name}})
         build_start_time = datetime.datetime.now()
-        opt_id = create_opt_job_entry(request.json)
         optimisation_result = optimise_coiled_coil(
             request.json['Parameters'], debug=app.debug)
         build_start_end = datetime.datetime.now()

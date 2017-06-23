@@ -19215,6 +19215,9 @@ var _user$project$Types$SetOligomericState = function (a) {
 var _user$project$Types$ProcessOptimisation = function (a) {
 	return {ctor: 'ProcessOptimisation', _0: a};
 };
+var _user$project$Types$OptimisationSubmitted = function (a) {
+	return {ctor: 'OptimisationSubmitted', _0: a};
+};
 var _user$project$Types$SetHeat = function (a) {
 	return {ctor: 'SetHeat', _0: a};
 };
@@ -22227,6 +22230,18 @@ var _user$project$Builder$optimisationJson = F2(
 				}
 			});
 	});
+var _user$project$Builder$sendOptimiseCmd = F2(
+	function (parameters, heat) {
+		return A2(
+			_elm_lang$http$Http$send,
+			_user$project$Types$OptimisationSubmitted,
+			A3(
+				_elm_lang$http$Http$post,
+				'builder/api/v0.1/optimise/coiled-coil',
+				_elm_lang$http$Http$jsonBody(
+					A2(_user$project$Builder$optimisationJson, parameters, heat)),
+				_elm_lang$core$Json_Decode$string));
+	});
 var _user$project$Builder$modellingResultsDecoder = A5(
 	_elm_lang$core$Json_Decode$map4,
 	_user$project$Types$ModellingResults,
@@ -22238,19 +22253,7 @@ var _user$project$Builder$optimisationResultsDecoder = A3(
 	_elm_lang$core$Json_Decode$map2,
 	_user$project$Types$OptimisationResults,
 	A2(_elm_lang$core$Json_Decode$field, 'parameters', _user$project$Builder$basicParameterJsonDecoder),
-	A2(_elm_lang$core$Json_Decode$field, 'modellingResults', _user$project$Builder$modellingResultsDecoder));
-var _user$project$Builder$sendOptimiseCmd = F2(
-	function (parameters, heat) {
-		return A2(
-			_elm_lang$http$Http$send,
-			_user$project$Types$ProcessOptimisation,
-			A3(
-				_elm_lang$http$Http$post,
-				'builder/api/v0.1/optimise/coiled-coil',
-				_elm_lang$http$Http$jsonBody(
-					A2(_user$project$Builder$optimisationJson, parameters, heat)),
-				_user$project$Builder$optimisationResultsDecoder));
-	});
+	A2(_elm_lang$core$Json_Decode$field, 'model_and_info', _user$project$Builder$modellingResultsDecoder));
 var _user$project$Builder$sendBuildCmd = function (parameters) {
 	return A2(
 		_elm_lang$http$Http$send,
@@ -22289,6 +22292,7 @@ var _user$project$Builder$exportableToModel = function (exportableModel) {
 		residuesPerTurn: exportableModel.residuesPerTurn,
 		building: false,
 		optimising: false,
+		optJobs: exportableModel.optJobs,
 		heat: exportableModel.heat,
 		modelHistory: _elm_lang$core$Dict$fromList(
 			A2(
@@ -22323,6 +22327,7 @@ var _user$project$Builder$modelToExportable = function (model) {
 		residuesPerTurn: model.residuesPerTurn,
 		building: false,
 		optimising: false,
+		optJobs: model.optJobs,
 		heat: model.heat,
 		modelHistory: A2(
 			_elm_lang$core$List$map,
@@ -23681,6 +23686,10 @@ var _user$project$Builder$setStorage = _elm_lang$core$Native_Platform.outgoingPo
 			residuesPerTurn: (v.residuesPerTurn.ctor === 'Nothing') ? null : v.residuesPerTurn._0,
 			building: v.building,
 			optimising: v.optimising,
+			optJobs: _elm_lang$core$Native_List.toArray(v.optJobs).map(
+				function (v) {
+					return v;
+				}),
 			heat: v.heat,
 			modelHistory: _elm_lang$core$Native_List.toArray(v.modelHistory).map(
 				function (v) {
@@ -23757,7 +23766,9 @@ var _user$project$Builder$Model = function (a) {
 												return function (m) {
 													return function (n) {
 														return function (o) {
-															return {parameters: a, currentInput: b, parameterClipBoard: c, oligomericState: d, buildMode: e, pdbFile: f, score: g, residuesPerTurn: h, building: i, optimising: j, heat: k, modelHistory: l, nextHistoryID: m, panelVisibility: n, currentRepresentation: o};
+															return function (p) {
+																return {parameters: a, currentInput: b, parameterClipBoard: c, oligomericState: d, buildMode: e, pdbFile: f, score: g, residuesPerTurn: h, building: i, optimising: j, optJobs: k, heat: l, modelHistory: m, nextHistoryID: n, panelVisibility: o, currentRepresentation: p};
+															};
 														};
 													};
 												};
@@ -23807,6 +23818,7 @@ var _user$project$Builder$emptyModel = {
 	residuesPerTurn: _elm_lang$core$Maybe$Nothing,
 	building: false,
 	optimising: false,
+	optJobs: {ctor: '[]'},
 	heat: 298,
 	modelHistory: _elm_lang$core$Dict$empty,
 	nextHistoryID: 1,
@@ -23959,8 +23971,6 @@ var _user$project$Builder$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							building: true,
-							optimising: true,
 							panelVisibility: _elm_lang$core$Native_Utils.update(
 								panelVisibility,
 								{buildPanel: false, examplesPanel: false})
@@ -23973,6 +23983,22 @@ var _user$project$Builder$update = F2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
 					{ctor: '[]'});
+			case 'OptimisationSubmitted':
+				if (_p17._0.ctor === 'Ok') {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								optJobs: {ctor: '::', _0: _p17._0._0, _1: model.optJobs}
+							}),
+						{ctor: '[]'});
+				} else {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						model,
+						{ctor: '[]'});
+				}
 			case 'ProcessModel':
 				if (_p17._0.ctor === 'Ok') {
 					var _p23 = _p17._0._0.score;
@@ -24327,31 +24353,48 @@ var _user$project$Builder$main = _elm_lang$html$Html$programWithFlags(
 																		function (oligomericState) {
 																			return A2(
 																				_elm_lang$core$Json_Decode$andThen,
-																				function (optimising) {
+																				function (optJobs) {
 																					return A2(
 																						_elm_lang$core$Json_Decode$andThen,
-																						function (panelVisibility) {
+																						function (optimising) {
 																							return A2(
 																								_elm_lang$core$Json_Decode$andThen,
-																								function (parameterClipBoard) {
+																								function (panelVisibility) {
 																									return A2(
 																										_elm_lang$core$Json_Decode$andThen,
-																										function (parameters) {
+																										function (parameterClipBoard) {
 																											return A2(
 																												_elm_lang$core$Json_Decode$andThen,
-																												function (pdbFile) {
+																												function (parameters) {
 																													return A2(
 																														_elm_lang$core$Json_Decode$andThen,
-																														function (residuesPerTurn) {
+																														function (pdbFile) {
 																															return A2(
 																																_elm_lang$core$Json_Decode$andThen,
-																																function (score) {
-																																	return _elm_lang$core$Json_Decode$succeed(
-																																		{building: building, currentInput: currentInput, currentRepresentation: currentRepresentation, heat: heat, modelHistory: modelHistory, nextHistoryID: nextHistoryID, oligomericState: oligomericState, optimising: optimising, panelVisibility: panelVisibility, parameterClipBoard: parameterClipBoard, parameters: parameters, pdbFile: pdbFile, residuesPerTurn: residuesPerTurn, score: score});
+																																function (residuesPerTurn) {
+																																	return A2(
+																																		_elm_lang$core$Json_Decode$andThen,
+																																		function (score) {
+																																			return _elm_lang$core$Json_Decode$succeed(
+																																				{building: building, currentInput: currentInput, currentRepresentation: currentRepresentation, heat: heat, modelHistory: modelHistory, nextHistoryID: nextHistoryID, oligomericState: oligomericState, optJobs: optJobs, optimising: optimising, panelVisibility: panelVisibility, parameterClipBoard: parameterClipBoard, parameters: parameters, pdbFile: pdbFile, residuesPerTurn: residuesPerTurn, score: score});
+																																		},
+																																		A2(
+																																			_elm_lang$core$Json_Decode$field,
+																																			'score',
+																																			_elm_lang$core$Json_Decode$oneOf(
+																																				{
+																																					ctor: '::',
+																																					_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
+																																					_1: {
+																																						ctor: '::',
+																																						_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
+																																						_1: {ctor: '[]'}
+																																					}
+																																				})));
 																																},
 																																A2(
 																																	_elm_lang$core$Json_Decode$field,
-																																	'score',
+																																	'residuesPerTurn',
 																																	_elm_lang$core$Json_Decode$oneOf(
 																																		{
 																																			ctor: '::',
@@ -24365,81 +24408,81 @@ var _user$project$Builder$main = _elm_lang$html$Html$programWithFlags(
 																														},
 																														A2(
 																															_elm_lang$core$Json_Decode$field,
-																															'residuesPerTurn',
+																															'pdbFile',
 																															_elm_lang$core$Json_Decode$oneOf(
 																																{
 																																	ctor: '::',
 																																	_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
 																																	_1: {
 																																		ctor: '::',
-																																		_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
+																																		_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$string),
 																																		_1: {ctor: '[]'}
 																																	}
 																																})));
 																												},
 																												A2(
 																													_elm_lang$core$Json_Decode$field,
-																													'pdbFile',
-																													_elm_lang$core$Json_Decode$oneOf(
-																														{
-																															ctor: '::',
-																															_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
-																															_1: {
-																																ctor: '::',
-																																_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$string),
-																																_1: {ctor: '[]'}
-																															}
-																														})));
-																										},
-																										A2(
-																											_elm_lang$core$Json_Decode$field,
-																											'parameters',
-																											_elm_lang$core$Json_Decode$list(
-																												A2(
-																													_elm_lang$core$Json_Decode$andThen,
-																													function (x0) {
-																														return A2(
+																													'parameters',
+																													_elm_lang$core$Json_Decode$list(
+																														A2(
 																															_elm_lang$core$Json_Decode$andThen,
-																															function (x1) {
-																																return _elm_lang$core$Json_Decode$succeed(
-																																	{ctor: '_Tuple2', _0: x0, _1: x1});
-																															},
-																															A2(
-																																_elm_lang$core$Json_Decode$index,
-																																1,
-																																A2(
+																															function (x0) {
+																																return A2(
 																																	_elm_lang$core$Json_Decode$andThen,
-																																	function (antiParallel) {
-																																		return A2(
+																																	function (x1) {
+																																		return _elm_lang$core$Json_Decode$succeed(
+																																			{ctor: '_Tuple2', _0: x0, _1: x1});
+																																	},
+																																	A2(
+																																		_elm_lang$core$Json_Decode$index,
+																																		1,
+																																		A2(
 																																			_elm_lang$core$Json_Decode$andThen,
-																																			function (linkedSuperHelRot) {
+																																			function (antiParallel) {
 																																				return A2(
 																																					_elm_lang$core$Json_Decode$andThen,
-																																					function (phiCA) {
+																																					function (linkedSuperHelRot) {
 																																						return A2(
 																																							_elm_lang$core$Json_Decode$andThen,
-																																							function (pitch) {
+																																							function (phiCA) {
 																																								return A2(
 																																									_elm_lang$core$Json_Decode$andThen,
-																																									function (radius) {
+																																									function (pitch) {
 																																										return A2(
 																																											_elm_lang$core$Json_Decode$andThen,
-																																											function (register) {
+																																											function (radius) {
 																																												return A2(
 																																													_elm_lang$core$Json_Decode$andThen,
-																																													function (sequence) {
+																																													function (register) {
 																																														return A2(
 																																															_elm_lang$core$Json_Decode$andThen,
-																																															function (superHelRot) {
+																																															function (sequence) {
 																																																return A2(
 																																																	_elm_lang$core$Json_Decode$andThen,
-																																																	function (zShift) {
-																																																		return _elm_lang$core$Json_Decode$succeed(
-																																																			{antiParallel: antiParallel, linkedSuperHelRot: linkedSuperHelRot, phiCA: phiCA, pitch: pitch, radius: radius, register: register, sequence: sequence, superHelRot: superHelRot, zShift: zShift});
+																																																	function (superHelRot) {
+																																																		return A2(
+																																																			_elm_lang$core$Json_Decode$andThen,
+																																																			function (zShift) {
+																																																				return _elm_lang$core$Json_Decode$succeed(
+																																																					{antiParallel: antiParallel, linkedSuperHelRot: linkedSuperHelRot, phiCA: phiCA, pitch: pitch, radius: radius, register: register, sequence: sequence, superHelRot: superHelRot, zShift: zShift});
+																																																			},
+																																																			A2(
+																																																				_elm_lang$core$Json_Decode$field,
+																																																				'zShift',
+																																																				_elm_lang$core$Json_Decode$oneOf(
+																																																					{
+																																																						ctor: '::',
+																																																						_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
+																																																						_1: {
+																																																							ctor: '::',
+																																																							_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
+																																																							_1: {ctor: '[]'}
+																																																						}
+																																																					})));
 																																																	},
 																																																	A2(
 																																																		_elm_lang$core$Json_Decode$field,
-																																																		'zShift',
+																																																		'superHelRot',
 																																																		_elm_lang$core$Json_Decode$oneOf(
 																																																			{
 																																																				ctor: '::',
@@ -24453,37 +24496,37 @@ var _user$project$Builder$main = _elm_lang$html$Html$programWithFlags(
 																																															},
 																																															A2(
 																																																_elm_lang$core$Json_Decode$field,
-																																																'superHelRot',
+																																																'sequence',
 																																																_elm_lang$core$Json_Decode$oneOf(
 																																																	{
 																																																		ctor: '::',
 																																																		_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
 																																																		_1: {
 																																																			ctor: '::',
-																																																			_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
+																																																			_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$string),
 																																																			_1: {ctor: '[]'}
 																																																		}
 																																																	})));
 																																													},
-																																													A2(
-																																														_elm_lang$core$Json_Decode$field,
-																																														'sequence',
-																																														_elm_lang$core$Json_Decode$oneOf(
-																																															{
-																																																ctor: '::',
-																																																_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
-																																																_1: {
-																																																	ctor: '::',
-																																																	_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$string),
-																																																	_1: {ctor: '[]'}
-																																																}
-																																															})));
+																																													A2(_elm_lang$core$Json_Decode$field, 'register', _elm_lang$core$Json_Decode$string));
 																																											},
-																																											A2(_elm_lang$core$Json_Decode$field, 'register', _elm_lang$core$Json_Decode$string));
+																																											A2(
+																																												_elm_lang$core$Json_Decode$field,
+																																												'radius',
+																																												_elm_lang$core$Json_Decode$oneOf(
+																																													{
+																																														ctor: '::',
+																																														_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
+																																														_1: {
+																																															ctor: '::',
+																																															_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
+																																															_1: {ctor: '[]'}
+																																														}
+																																													})));
 																																									},
 																																									A2(
 																																										_elm_lang$core$Json_Decode$field,
-																																										'radius',
+																																										'pitch',
 																																										_elm_lang$core$Json_Decode$oneOf(
 																																											{
 																																												ctor: '::',
@@ -24497,7 +24540,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$programWithFlags(
 																																							},
 																																							A2(
 																																								_elm_lang$core$Json_Decode$field,
-																																								'pitch',
+																																								'phiCA',
 																																								_elm_lang$core$Json_Decode$oneOf(
 																																									{
 																																										ctor: '::',
@@ -24509,71 +24552,71 @@ var _user$project$Builder$main = _elm_lang$html$Html$programWithFlags(
 																																										}
 																																									})));
 																																					},
-																																					A2(
-																																						_elm_lang$core$Json_Decode$field,
-																																						'phiCA',
-																																						_elm_lang$core$Json_Decode$oneOf(
-																																							{
-																																								ctor: '::',
-																																								_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
-																																								_1: {
-																																									ctor: '::',
-																																									_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
-																																									_1: {ctor: '[]'}
-																																								}
-																																							})));
+																																					A2(_elm_lang$core$Json_Decode$field, 'linkedSuperHelRot', _elm_lang$core$Json_Decode$bool));
 																																			},
-																																			A2(_elm_lang$core$Json_Decode$field, 'linkedSuperHelRot', _elm_lang$core$Json_Decode$bool));
-																																	},
-																																	A2(_elm_lang$core$Json_Decode$field, 'antiParallel', _elm_lang$core$Json_Decode$bool))));
-																													},
-																													A2(_elm_lang$core$Json_Decode$index, 0, _elm_lang$core$Json_Decode$int)))));
-																								},
-																								A2(
-																									_elm_lang$core$Json_Decode$field,
-																									'parameterClipBoard',
-																									_elm_lang$core$Json_Decode$oneOf(
-																										{
-																											ctor: '::',
-																											_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
-																											_1: {
-																												ctor: '::',
-																												_0: A2(
-																													_elm_lang$core$Json_Decode$map,
-																													_elm_lang$core$Maybe$Just,
-																													A2(
-																														_elm_lang$core$Json_Decode$andThen,
-																														function (antiParallel) {
-																															return A2(
+																																			A2(_elm_lang$core$Json_Decode$field, 'antiParallel', _elm_lang$core$Json_Decode$bool))));
+																															},
+																															A2(_elm_lang$core$Json_Decode$index, 0, _elm_lang$core$Json_Decode$int)))));
+																										},
+																										A2(
+																											_elm_lang$core$Json_Decode$field,
+																											'parameterClipBoard',
+																											_elm_lang$core$Json_Decode$oneOf(
+																												{
+																													ctor: '::',
+																													_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
+																													_1: {
+																														ctor: '::',
+																														_0: A2(
+																															_elm_lang$core$Json_Decode$map,
+																															_elm_lang$core$Maybe$Just,
+																															A2(
 																																_elm_lang$core$Json_Decode$andThen,
-																																function (linkedSuperHelRot) {
+																																function (antiParallel) {
 																																	return A2(
 																																		_elm_lang$core$Json_Decode$andThen,
-																																		function (phiCA) {
+																																		function (linkedSuperHelRot) {
 																																			return A2(
 																																				_elm_lang$core$Json_Decode$andThen,
-																																				function (pitch) {
+																																				function (phiCA) {
 																																					return A2(
 																																						_elm_lang$core$Json_Decode$andThen,
-																																						function (radius) {
+																																						function (pitch) {
 																																							return A2(
 																																								_elm_lang$core$Json_Decode$andThen,
-																																								function (register) {
+																																								function (radius) {
 																																									return A2(
 																																										_elm_lang$core$Json_Decode$andThen,
-																																										function (sequence) {
+																																										function (register) {
 																																											return A2(
 																																												_elm_lang$core$Json_Decode$andThen,
-																																												function (superHelRot) {
+																																												function (sequence) {
 																																													return A2(
 																																														_elm_lang$core$Json_Decode$andThen,
-																																														function (zShift) {
-																																															return _elm_lang$core$Json_Decode$succeed(
-																																																{antiParallel: antiParallel, linkedSuperHelRot: linkedSuperHelRot, phiCA: phiCA, pitch: pitch, radius: radius, register: register, sequence: sequence, superHelRot: superHelRot, zShift: zShift});
+																																														function (superHelRot) {
+																																															return A2(
+																																																_elm_lang$core$Json_Decode$andThen,
+																																																function (zShift) {
+																																																	return _elm_lang$core$Json_Decode$succeed(
+																																																		{antiParallel: antiParallel, linkedSuperHelRot: linkedSuperHelRot, phiCA: phiCA, pitch: pitch, radius: radius, register: register, sequence: sequence, superHelRot: superHelRot, zShift: zShift});
+																																																},
+																																																A2(
+																																																	_elm_lang$core$Json_Decode$field,
+																																																	'zShift',
+																																																	_elm_lang$core$Json_Decode$oneOf(
+																																																		{
+																																																			ctor: '::',
+																																																			_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
+																																																			_1: {
+																																																				ctor: '::',
+																																																				_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
+																																																				_1: {ctor: '[]'}
+																																																			}
+																																																		})));
 																																														},
 																																														A2(
 																																															_elm_lang$core$Json_Decode$field,
-																																															'zShift',
+																																															'superHelRot',
 																																															_elm_lang$core$Json_Decode$oneOf(
 																																																{
 																																																	ctor: '::',
@@ -24587,37 +24630,37 @@ var _user$project$Builder$main = _elm_lang$html$Html$programWithFlags(
 																																												},
 																																												A2(
 																																													_elm_lang$core$Json_Decode$field,
-																																													'superHelRot',
+																																													'sequence',
 																																													_elm_lang$core$Json_Decode$oneOf(
 																																														{
 																																															ctor: '::',
 																																															_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
 																																															_1: {
 																																																ctor: '::',
-																																																_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
+																																																_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$string),
 																																																_1: {ctor: '[]'}
 																																															}
 																																														})));
 																																										},
-																																										A2(
-																																											_elm_lang$core$Json_Decode$field,
-																																											'sequence',
-																																											_elm_lang$core$Json_Decode$oneOf(
-																																												{
-																																													ctor: '::',
-																																													_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
-																																													_1: {
-																																														ctor: '::',
-																																														_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$string),
-																																														_1: {ctor: '[]'}
-																																													}
-																																												})));
+																																										A2(_elm_lang$core$Json_Decode$field, 'register', _elm_lang$core$Json_Decode$string));
 																																								},
-																																								A2(_elm_lang$core$Json_Decode$field, 'register', _elm_lang$core$Json_Decode$string));
+																																								A2(
+																																									_elm_lang$core$Json_Decode$field,
+																																									'radius',
+																																									_elm_lang$core$Json_Decode$oneOf(
+																																										{
+																																											ctor: '::',
+																																											_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
+																																											_1: {
+																																												ctor: '::',
+																																												_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
+																																												_1: {ctor: '[]'}
+																																											}
+																																										})));
 																																						},
 																																						A2(
 																																							_elm_lang$core$Json_Decode$field,
-																																							'radius',
+																																							'pitch',
 																																							_elm_lang$core$Json_Decode$oneOf(
 																																								{
 																																									ctor: '::',
@@ -24631,7 +24674,7 @@ var _user$project$Builder$main = _elm_lang$html$Html$programWithFlags(
 																																				},
 																																				A2(
 																																					_elm_lang$core$Json_Decode$field,
-																																					'pitch',
+																																					'phiCA',
 																																					_elm_lang$core$Json_Decode$oneOf(
 																																						{
 																																							ctor: '::',
@@ -24643,59 +24686,50 @@ var _user$project$Builder$main = _elm_lang$html$Html$programWithFlags(
 																																							}
 																																						})));
 																																		},
-																																		A2(
-																																			_elm_lang$core$Json_Decode$field,
-																																			'phiCA',
-																																			_elm_lang$core$Json_Decode$oneOf(
-																																				{
-																																					ctor: '::',
-																																					_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
-																																					_1: {
-																																						ctor: '::',
-																																						_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
-																																						_1: {ctor: '[]'}
-																																					}
-																																				})));
+																																		A2(_elm_lang$core$Json_Decode$field, 'linkedSuperHelRot', _elm_lang$core$Json_Decode$bool));
 																																},
-																																A2(_elm_lang$core$Json_Decode$field, 'linkedSuperHelRot', _elm_lang$core$Json_Decode$bool));
-																														},
-																														A2(_elm_lang$core$Json_Decode$field, 'antiParallel', _elm_lang$core$Json_Decode$bool))),
-																												_1: {ctor: '[]'}
-																											}
-																										})));
-																						},
-																						A2(
-																							_elm_lang$core$Json_Decode$field,
-																							'panelVisibility',
-																							A2(
-																								_elm_lang$core$Json_Decode$andThen,
-																								function (buildHistoryPanel) {
-																									return A2(
+																																A2(_elm_lang$core$Json_Decode$field, 'antiParallel', _elm_lang$core$Json_Decode$bool))),
+																														_1: {ctor: '[]'}
+																													}
+																												})));
+																								},
+																								A2(
+																									_elm_lang$core$Json_Decode$field,
+																									'panelVisibility',
+																									A2(
 																										_elm_lang$core$Json_Decode$andThen,
-																										function (buildPanel) {
+																										function (buildHistoryPanel) {
 																											return A2(
 																												_elm_lang$core$Json_Decode$andThen,
-																												function (examplesPanel) {
+																												function (buildPanel) {
 																													return A2(
 																														_elm_lang$core$Json_Decode$andThen,
-																														function (optimisePanel) {
+																														function (examplesPanel) {
 																															return A2(
 																																_elm_lang$core$Json_Decode$andThen,
-																																function (viewerPanel) {
-																																	return _elm_lang$core$Json_Decode$succeed(
-																																		{buildHistoryPanel: buildHistoryPanel, buildPanel: buildPanel, examplesPanel: examplesPanel, optimisePanel: optimisePanel, viewerPanel: viewerPanel});
+																																function (optimisePanel) {
+																																	return A2(
+																																		_elm_lang$core$Json_Decode$andThen,
+																																		function (viewerPanel) {
+																																			return _elm_lang$core$Json_Decode$succeed(
+																																				{buildHistoryPanel: buildHistoryPanel, buildPanel: buildPanel, examplesPanel: examplesPanel, optimisePanel: optimisePanel, viewerPanel: viewerPanel});
+																																		},
+																																		A2(_elm_lang$core$Json_Decode$field, 'viewerPanel', _elm_lang$core$Json_Decode$bool));
 																																},
-																																A2(_elm_lang$core$Json_Decode$field, 'viewerPanel', _elm_lang$core$Json_Decode$bool));
+																																A2(_elm_lang$core$Json_Decode$field, 'optimisePanel', _elm_lang$core$Json_Decode$bool));
 																														},
-																														A2(_elm_lang$core$Json_Decode$field, 'optimisePanel', _elm_lang$core$Json_Decode$bool));
+																														A2(_elm_lang$core$Json_Decode$field, 'examplesPanel', _elm_lang$core$Json_Decode$bool));
 																												},
-																												A2(_elm_lang$core$Json_Decode$field, 'examplesPanel', _elm_lang$core$Json_Decode$bool));
+																												A2(_elm_lang$core$Json_Decode$field, 'buildPanel', _elm_lang$core$Json_Decode$bool));
 																										},
-																										A2(_elm_lang$core$Json_Decode$field, 'buildPanel', _elm_lang$core$Json_Decode$bool));
-																								},
-																								A2(_elm_lang$core$Json_Decode$field, 'buildHistoryPanel', _elm_lang$core$Json_Decode$bool))));
+																										A2(_elm_lang$core$Json_Decode$field, 'buildHistoryPanel', _elm_lang$core$Json_Decode$bool))));
+																						},
+																						A2(_elm_lang$core$Json_Decode$field, 'optimising', _elm_lang$core$Json_Decode$bool));
 																				},
-																				A2(_elm_lang$core$Json_Decode$field, 'optimising', _elm_lang$core$Json_Decode$bool));
+																				A2(
+																					_elm_lang$core$Json_Decode$field,
+																					'optJobs',
+																					_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string)));
 																		},
 																		A2(_elm_lang$core$Json_Decode$field, 'oligomericState', _elm_lang$core$Json_Decode$int));
 																},
@@ -24990,7 +25024,9 @@ var _user$project$Builder$ExportableModel = function (a) {
 											return function (l) {
 												return function (m) {
 													return function (n) {
-														return {parameters: a, currentInput: b, parameterClipBoard: c, oligomericState: d, pdbFile: e, score: f, residuesPerTurn: g, building: h, optimising: i, heat: j, modelHistory: k, nextHistoryID: l, panelVisibility: m, currentRepresentation: n};
+														return function (o) {
+															return {parameters: a, currentInput: b, parameterClipBoard: c, oligomericState: d, pdbFile: e, score: f, residuesPerTurn: g, building: h, optimising: i, optJobs: j, heat: k, modelHistory: l, nextHistoryID: m, panelVisibility: n, currentRepresentation: o};
+														};
 													};
 												};
 											};
@@ -25009,7 +25045,7 @@ var _user$project$Builder$ExportableModel = function (a) {
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"SetHeat":["String"],"ChangeBuildMode":["String"],"Build":[],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"SetParametersAndBuild":["Types.ParametersDict"],"StoreModel":[],"Optimise":[],"ProcessOptimisation":["Result.Result Http.Error Types.OptimisationResults"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ModelInfoPanel":[],"ExamplesPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ model_id : String , pdbFile : String , score : Float , residuesPerTurn : Float }"},"Types.OptimisationResults":{"args":[],"type":"{ parameters : Types.ParameterRecord , modellingResults : Types.ModellingResults }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"SetHeat":["String"],"ChangeBuildMode":["String"],"Build":[],"OptimisationSubmitted":["Result.Result Http.Error String"],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"SetParametersAndBuild":["Types.ParametersDict"],"StoreModel":[],"Optimise":[],"ProcessOptimisation":["Result.Result Http.Error Types.OptimisationResults"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ModelInfoPanel":[],"ExamplesPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ model_id : String , pdbFile : String , score : Float , residuesPerTurn : Float }"},"Types.OptimisationResults":{"args":[],"type":"{ parameters : Types.ParameterRecord , modellingResults : Types.ModellingResults }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

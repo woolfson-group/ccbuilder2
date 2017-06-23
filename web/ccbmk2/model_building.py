@@ -96,12 +96,12 @@ def optimise_coiled_coil(parameters, debug=False):
         'sequence': top_model[0].sequence,
         'register': parameters[0]['Register']
     }
-    model_data = {
+    model_and_info = {
         'pdb': top_model.pdb,
         'mean_rpt_value': calculate_average_rpt(top_model),
         'score': top_model.buff_interaction_energy.total_energy
     }
-    return {'parameters': optimised_parameters, 'modellingResults': model_data}
+    return optimised_parameters, model_and_info
 
 
 def calculate_average_rpt(ampal):

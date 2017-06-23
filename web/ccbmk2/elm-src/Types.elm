@@ -15,6 +15,7 @@ type Msg
     | Optimise
     | ProcessModel (Result Http.Error ModellingResults)
     | SetHeat String
+    | OptimisationSubmitted (Result Http.Error String)
     | ProcessOptimisation (Result Http.Error OptimisationResults)
     | SetOligomericState String
     | Clear

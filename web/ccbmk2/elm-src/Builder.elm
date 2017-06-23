@@ -100,6 +100,7 @@ type alias Model =
     , residuesPerTurn : Maybe Float
     , building : Bool
     , optimising : Bool
+    , optJobs : List String
     , heat : Int
     , modelHistory : Dict.Dict HistoryID ( ParametersDict, Bool, Float )
     , nextHistoryID : HistoryID
@@ -168,6 +169,7 @@ emptyModel =
     , residuesPerTurn = Nothing
     , building = False
     , optimising = False
+    , optJobs = []
     , heat = 298
     , modelHistory = Dict.empty
     , nextHistoryID = 1
@@ -191,6 +193,7 @@ type alias ExportableModel =
     , residuesPerTurn : Maybe Float
     , building : Bool
     , optimising : Bool
+    , optJobs : List String
     , heat : Int
     , modelHistory : List ( HistoryID, ( List ( SectionID, ParameterRecord ), Bool, Float ) )
     , nextHistoryID : HistoryID
@@ -210,6 +213,7 @@ modelToExportable model =
     , residuesPerTurn = model.residuesPerTurn
     , building = False
     , optimising = False
+    , optJobs = model.optJobs
     , heat = model.heat
     , modelHistory =
         model.modelHistory
@@ -238,6 +242,7 @@ exportableToModel exportableModel =
     , residuesPerTurn = exportableModel.residuesPerTurn
     , building = False
     , optimising = False
+    , optJobs = exportableModel.optJobs
     , heat = exportableModel.heat
     , modelHistory =
         exportableModel.modelHistory
@@ -342,9 +347,7 @@ update msg model =
             in
                 if not model.building then
                     { model
-                        | building = True
-                        , optimising = True
-                        , panelVisibility =
+                        | panelVisibility =
                             { panelVisibility
                                 | buildPanel = False
                                 , examplesPanel = False
@@ -353,6 +356,12 @@ update msg model =
                         ! [ sendOptimiseCmd model.parameters model.heat ]
                 else
                     model ! []
+
+        OptimisationSubmitted (Ok optJobID) ->
+            { model | optJobs = optJobID :: model.optJobs } ! []
+
+        OptimisationSubmitted (Err optJobID) ->
+            model ! []
 
         ProcessModel (Ok { pdbFile, score, residuesPerTurn }) ->
             let
@@ -609,13 +618,13 @@ optimisationJson parameters heat =
 
 sendOptimiseCmd : ParametersDict -> Int -> Cmd Msg
 sendOptimiseCmd parameters heat =
-    Http.send ProcessOptimisation <|
+    Http.send OptimisationSubmitted <|
         Http.post
             "builder/api/v0.1/optimise/coiled-coil"
             (optimisationJson parameters heat
                 |> Http.jsonBody
             )
-            optimisationResultsDecoder
+            Json.Decode.string
 
 
 optimisationResultsDecoder : Json.Decode.Decoder OptimisationResults
@@ -623,7 +632,7 @@ optimisationResultsDecoder =
     Json.Decode.map2
         OptimisationResults
         (field "parameters" basicParameterJsonDecoder)
-        (field "modellingResults" modellingResultsDecoder)
+        (field "model_and_info" modellingResultsDecoder)
 
 
 basicParameterJsonDecoder : Json.Decode.Decoder ParameterRecord
