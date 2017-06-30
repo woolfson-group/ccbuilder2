@@ -11,12 +11,6 @@ from ccbmk2 import model_building
 
 
 @app.route('/')
-def welcome():
-    """Welcome to CCBuilder splash screen."""
-    return render_template('welcome.html')
-
-
-@app.route('/builder')
 def builder():
     """Main view for the builder interface."""
     return render_template('builder.html')
