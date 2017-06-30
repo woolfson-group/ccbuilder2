@@ -3,7 +3,7 @@
 import datetime
 import sys
 
-from flask import jsonify, render_template, request
+from flask import jsonify, redirect, render_template, request
 
 from ccbmk2 import app
 from ccbmk2 import database
@@ -11,6 +11,12 @@ from ccbmk2 import model_building
 
 
 @app.route('/')
+def welcome():
+    """Welcome to CCBuilder splash screen."""
+    return redirect('/builder')
+
+
+@app.route('/builder')
 def builder():
     """Main view for the builder interface."""
     return render_template('builder.html')
