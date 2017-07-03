@@ -1,7 +1,10 @@
 """Contains code for managing and processing optimisation requests."""
 
+import datetime
+import importlib
 import multiprocessing as mp
 import time
+import os
 import sys
 
 import database
@@ -9,21 +12,22 @@ import model_building
 
 
 def main():
-    processes = 1
+    """Establishes the manager and listener subprocesses"""
+    processes = int(os.getenv(key='OPT_PROCS', default='1'))
     queue = mp.Queue()
     listeners = [
         mp.Process(target=get_and_process_opt_jobs,
-                   args=(queue, database.opt_jobs))
+                   args=(queue, ))
         for _ in range(processes)
     ]
     for listener in listeners:
         listener.start()
 
     while True:
-        jobs = database.opt_jobs.find(
-            {'status': database.JobStatus.SUBMITTED.name})
         for job in database.opt_jobs.find():
             print('{_id}, {status}'.format(**job))
+        jobs = database.opt_jobs.find(
+            {'status': database.JobStatus.SUBMITTED.name})
         for job in sorted(jobs, key=lambda x: x['time_submitted']):
             queue.put(job['_id'])
             database.opt_jobs.update_one(
@@ -33,7 +37,7 @@ def main():
     return
 
 
-def get_and_process_opt_jobs(opt_job_queue, job_collection):
+def get_and_process_opt_jobs(opt_job_queue):
     """Collect and run optimisation jobs from queue.
 
     Used by the the OptimizationManager to initialise Processes.
@@ -43,27 +47,52 @@ def get_and_process_opt_jobs(opt_job_queue, job_collection):
     opt_job_queue : multiprocessing.Queue
         Optimisation job queue.
     """
+    # The module is reloaded to establish a new connection
+    # to the database for the process fork
+    importlib.reload(database)
     while True:
         job_id = opt_job_queue.get()
         print("Got opt job {}!".format(job_id), file=sys.stderr)
-        database.opt_jobs.update_one(
-                {'_id': job_id},
-                {'$set': {'status': database.JobStatus.RUNNING.name}})
-        build_start_time = datetime.datetime.now()
-        optimisation_result = optimise_coiled_coil(
-            request.json['Parameters'], debug=app.debug)
-        build_start_end = datetime.datetime.now()
-        build_time = build_start_end - build_start_time
-        return jsonify(optimisation_result)
+        opt_job = database.opt_jobs.find_one(job_id)
+        parameters = list(map(
+            database.parameters_store.find_one,
+            opt_job['initial_parameter_ids']))
+        update_job_status(job_id, database.JobStatus.RUNNING)
+        print("Running opt job {}!".format(job_id), file=sys.stderr)
+        model_id = run_optimisation(job_id, parameters)
+        '''except:
+            print("Failed opt job {}!".format(job_id), file=sys.stderr)
+            update_job_status(job_id, database.JobStatus.FAILED)'''
+        print("Finished opt job {}!".format(job_id), file=sys.stderr)
     return
 
 
-def run_optimisation(parameters):
-    build_start_time = datetime.datetime.now()
-    optimisation_result = optimise_coiled_coil(
-        parameters, debug=app.debug)
-    build_start_end = datetime.datetime.now()
-    return model_id
+def update_job_status(opt_job_id, status):
+    """Updates status in database entry for optimisation job."""
+    database.opt_jobs.update_one(
+        {'_id': opt_job_id},
+        {'$set': {'status': status.name}})
+    return
+
+
+def run_optimisation(opt_job_id, parameters):
+    """"""
+    optimised_parameters, model_and_info = model_building.optimise_coiled_coil(
+        parameters, debug=True)
+    model_id = database.store_model(
+        opt_job_id, model_and_info['pdb'],
+        model_and_info['score'], model_and_info['mean_rpt_value'])
+    database.opt_jobs.update_one(
+        {'_id': opt_job_id},
+        {'$set': {
+            'final_parameters': optimised_parameters,
+            'status': database.JobStatus.SUCCESS.name,
+            'time_finished': datetime.datetime.now(),
+            'model_id': model_id
+        },
+        })
+    return
+
 
 if __name__ == '__main__':
     main()

@@ -116,6 +116,7 @@ def create_opt_job_entry(request):
     opt_job = {
         'initial_parameter_ids':
             [get_chain_parameters_id(p) for p in request['Parameters']],
+        'final_parameter_ids': None,
         'heat': request['Heat'],
         'status': JobStatus.SUBMITTED.name,
         'time_submitted': datetime.datetime.now(),
@@ -130,4 +131,5 @@ class JobStatus(enum.Enum):
     SUBMITTED = 1
     QUEUED = 2
     RUNNING = 3
-    FINISHED = 4
+    SUCCESS = 4
+    FAILED = 5
