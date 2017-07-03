@@ -3,6 +3,7 @@ module Types exposing (..)
 import Dict
 import Keyboard
 import Http
+import Time
 
 
 type Msg
@@ -16,6 +17,8 @@ type Msg
     | ProcessModel (Result Http.Error ModellingResults)
     | SetHeat String
     | OptimisationSubmitted (Result Http.Error String)
+    | CheckOptJobs Time.Time
+    | OptJobStatus (Result Http.Error (String, String))
     | ProcessOptimisation (Result Http.Error OptimisationResults)
     | SetOligomericState String
     | Clear
@@ -110,6 +113,14 @@ type Panel
     | ViewerPanel
 
 
+type OptStatus
+    = Submitted
+    | Queued
+    | Running
+    | Succeeded
+    | Failed 
+
+
 type alias Representation =
     { cartoon : Bool
     , trace : Bool
@@ -125,6 +136,38 @@ type RepOption
     | BallsAndSticks
     | Spheres
     | Points
+
+
+optStatusToString : OptStatus -> String
+optStatusToString status =
+    case status of
+        Submitted ->
+            "SUBMITTED"
+        Queued ->
+            "QUEUED"
+        Running ->
+            "RUNNING"
+        Succeeded ->
+            "SUCCEEDED"
+        Failed ->
+            "FAILED"
+
+
+stringToOptStatus : String -> Result String OptStatus
+stringToOptStatus statusString =
+    case statusString of
+        "SUBMITTED" ->
+            Ok Submitted
+        "QUEUED" ->
+            Ok Queued
+        "RUNNING" ->
+            Ok Running
+        "SUCCEEDED" ->
+            Ok Succeeded
+        "FAILED" ->
+            Ok Failed
+        _ ->
+            Err "String could not be converted to OptStatus."
 
 
 emptyParameterRecord : ParameterRecord

@@ -38,6 +38,9 @@ import Types
         , OptimisationResults
         , Parameter(..)
         , BuildMode(..)
+        , OptStatus(..)
+        , optStatusToString
+        , stringToOptStatus
         , Panel(..)
         , Representation
         , RepOption(..)
@@ -100,7 +103,7 @@ type alias Model =
     , residuesPerTurn : Maybe Float
     , building : Bool
     , optimising : Bool
-    , optJobs : List String
+    , optJobs : List ( String, OptStatus )
     , heat : Int
     , modelHistory : Dict.Dict HistoryID ( ParametersDict, Bool, Float )
     , nextHistoryID : HistoryID
@@ -193,7 +196,7 @@ type alias ExportableModel =
     , residuesPerTurn : Maybe Float
     , building : Bool
     , optimising : Bool
-    , optJobs : List String
+    , optJobs : List ( String, String )
     , heat : Int
     , modelHistory : List ( HistoryID, ( List ( SectionID, ParameterRecord ), Bool, Float ) )
     , nextHistoryID : HistoryID
@@ -213,7 +216,7 @@ modelToExportable model =
     , residuesPerTurn = model.residuesPerTurn
     , building = False
     , optimising = False
-    , optJobs = model.optJobs
+    , optJobs = exportableOptJobs model.optJobs
     , heat = model.heat
     , modelHistory =
         model.modelHistory
@@ -242,7 +245,7 @@ exportableToModel exportableModel =
     , residuesPerTurn = exportableModel.residuesPerTurn
     , building = False
     , optimising = False
-    , optJobs = exportableModel.optJobs
+    , optJobs = modelOptJobs exportableModel.optJobs
     , heat = exportableModel.heat
     , modelHistory =
         exportableModel.modelHistory
@@ -257,6 +260,22 @@ exportableToModel exportableModel =
     , panelVisibility = exportableModel.panelVisibility
     , currentRepresentation = exportableModel.currentRepresentation
     }
+
+
+exportableOptJobs : List ( String, OptStatus ) -> List ( String, String )
+exportableOptJobs optJobs =
+    List.map (\( ojid, status ) -> ( ojid, optStatusToString status )) optJobs
+
+
+modelOptJobs : List ( String, String ) -> List ( String, OptStatus )
+modelOptJobs optJobs =
+    List.map
+        (\( ojid, statusString ) ->
+            ( ojid
+            , Result.withDefault Failed (stringToOptStatus statusString)
+            )
+        )
+        optJobs
 
 
 
@@ -358,9 +377,28 @@ update msg model =
                     model ! []
 
         OptimisationSubmitted (Ok optJobID) ->
-            { model | optJobs = optJobID :: model.optJobs } ! []
+            { model | optJobs = ( optJobID, Submitted ) :: model.optJobs } ! []
 
         OptimisationSubmitted (Err optJobID) ->
+            model ! []
+
+        CheckOptJobs _ ->
+            model
+                ! (List.map Tuple.first model.optJobs
+                |> List.map checkJobStatus)
+
+        OptJobStatus (Ok ( ojid, status )) ->
+            let
+                newOptJobs =
+                    Dict.fromList model.optJobs
+                        |> Dict.insert
+                            ojid
+                            (Result.withDefault Failed (stringToOptStatus status))
+                        |> Dict.toList
+            in
+                { model | optJobs = newOptJobs } ! []
+
+        OptJobStatus (Err _) ->
             model ! []
 
         ProcessModel (Ok { pdbFile, score, residuesPerTurn }) ->
@@ -627,6 +665,22 @@ sendOptimiseCmd parameters heat =
             Json.Decode.string
 
 
+checkJobStatus : String -> Cmd Msg
+checkJobStatus optJobId =
+    Http.send OptJobStatus <|
+        Http.get
+            ("builder/api/v0.1/optimise/check-job-status?opt-job-id=" ++ optJobId)
+            jobStatusDecoder
+
+
+jobStatusDecoder : Json.Decode.Decoder ( String, String )
+jobStatusDecoder =
+    Json.Decode.map2
+        (,)
+        (field "_id" Json.Decode.string)
+        (field "status" Json.Decode.string)
+
+
 optimisationResultsDecoder : Json.Decode.Decoder OptimisationResults
 optimisationResultsDecoder =
     Json.Decode.map2
@@ -756,7 +810,10 @@ togglePanelVisibility panel currentVisibility =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Keyboard.presses KeyMsg
+    Sub.batch
+        [ Time.every Time.second CheckOptJobs
+        , Keyboard.presses KeyMsg
+        ]
 
 
 
@@ -791,7 +848,10 @@ overlayPanels model =
                 model.currentInput
                 model.building
                 model.panelVisibility.buildPanel
-            , optimisePanel model.optimising model.panelVisibility.optimisePanel model.heat
+            , optimisePanel model.buildMode
+                model.optJobs
+                model.panelVisibility.optimisePanel
+                model.heat
             , ExamplesPanel.examplesPanel model.building model.panelVisibility.examplesPanel
             , statusPanel model.building model.optimising
             , buildHistoryPanel
@@ -801,6 +861,10 @@ overlayPanels model =
             , viewerPanel model.panelVisibility.viewerPanel
             , modelInfoPanel model
             ]
+                ++ (List.length model.optJobs
+                        |> List.range 1
+                        |> List.map2 optJobStatus model.optJobs
+                   )
     in
         div [] panelDivs
 
@@ -895,29 +959,47 @@ topRightTogglesStyling =
 -- Optimise Panel
 
 
-optimisePanel : Bool -> Bool -> Int -> Html Msg
-optimisePanel optimising visible heat =
-    div
-        [ class [ OverlayPanelCss ]
-        , styles <| panelStyling ++ optimisePanelStyling
-        , hidden <| not visible
-        ]
-        [ h3 [] [ text "Optimise Parameters" ]
-        , text "Heat"
-        , br [] []
-        , input
-            [ type_ "range"
-            , Html.Attributes.min "0"
-            , Html.Attributes.max "2000"
-            , value (toString heat)
-            , onInput SetHeat
+optimisePanel : BuildMode -> List ( String, OptStatus ) -> Bool -> Int -> Html Msg
+optimisePanel buildMode optJobs visible heat =
+    let
+        advancedBuild =
+            case buildMode of
+                Basic ->
+                    False
+
+                Advanced ->
+                    True
+
+        optimising =
+            if List.length optJobs > 1 then
+                True
+            else
+                False
+
+        disabledOpt =
+            advancedBuild || optimising
+    in
+        div
+            [ class [ OverlayPanelCss ]
+            , styles <| panelStyling ++ optimisePanelStyling
+            , hidden <| not visible
             ]
-            []
-        , br [] []
-        , button
-            [ onClick Optimise, disabled optimising ]
-            [ text "Optimise Model" ]
-        ]
+            [ h3 [] [ text "Optimise Parameters" ]
+            , text "Heat"
+            , br [] []
+            , input
+                [ type_ "range"
+                , Html.Attributes.min "0"
+                , Html.Attributes.max "2000"
+                , value (toString heat)
+                , onInput SetHeat
+                ]
+                []
+            , br [] []
+            , button
+                [ onClick Optimise, disabled disabledOpt ]
+                [ text "Optimise Model" ]
+            ]
 
 
 optimisePanelStyling : List Css.Mixin
@@ -1290,4 +1372,27 @@ buildingStatusStyling =
     , Css.left (Css.pct 50)
     , Css.width (Css.px 80)
     , Css.height (Css.px 80)
+    ]
+
+
+
+-- Optimisation Job
+
+
+optJobStatus : ( String, OptStatus ) -> Int -> Html msg
+optJobStatus ( optID, status ) position =
+    div
+        [ class [ OverlayPanelCss ]
+        , styles <| optJobStatusStyling position ++ panelStyling
+        ]
+        [ text optID
+        , br [] []
+        , text (optStatusToString status)
+        ]
+
+
+optJobStatusStyling : Int -> List Css.Mixin
+optJobStatusStyling position =
+    [ Css.bottom (Css.px 20)
+    , Css.left (Css.px <| toFloat (200 * position))
     ]

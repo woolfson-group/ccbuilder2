@@ -19165,6 +19165,21 @@ var _rtfeldman$elm_css_helpers$Html_CssHelpers$Namespace = F4(
 		return {$class: a, classList: b, id: c, name: d};
 	});
 
+var _user$project$Types$optStatusToString = function (status) {
+	var _p0 = status;
+	switch (_p0.ctor) {
+		case 'Submitted':
+			return 'SUBMITTED';
+		case 'Queued':
+			return 'QUEUED';
+		case 'Running':
+			return 'RUNNING';
+		case 'Succeeded':
+			return 'SUCCEEDED';
+		default:
+			return 'FAILED';
+	}
+};
 var _user$project$Types$ParameterRecord = F9(
 	function (a, b, c, d, e, f, g, h, i) {
 		return {radius: a, pitch: b, phiCA: c, sequence: d, register: e, superHelRot: f, antiParallel: g, zShift: h, linkedSuperHelRot: i};
@@ -19215,6 +19230,12 @@ var _user$project$Types$SetOligomericState = function (a) {
 var _user$project$Types$ProcessOptimisation = function (a) {
 	return {ctor: 'ProcessOptimisation', _0: a};
 };
+var _user$project$Types$OptJobStatus = function (a) {
+	return {ctor: 'OptJobStatus', _0: a};
+};
+var _user$project$Types$CheckOptJobs = function (a) {
+	return {ctor: 'CheckOptJobs', _0: a};
+};
 var _user$project$Types$OptimisationSubmitted = function (a) {
 	return {ctor: 'OptimisationSubmitted', _0: a};
 };
@@ -19262,6 +19283,28 @@ var _user$project$Types$OptimisePanel = {ctor: 'OptimisePanel'};
 var _user$project$Types$ExamplesPanel = {ctor: 'ExamplesPanel'};
 var _user$project$Types$BuildPanel = {ctor: 'BuildPanel'};
 var _user$project$Types$AppHeaderPanel = {ctor: 'AppHeaderPanel'};
+var _user$project$Types$Failed = {ctor: 'Failed'};
+var _user$project$Types$Succeeded = {ctor: 'Succeeded'};
+var _user$project$Types$Running = {ctor: 'Running'};
+var _user$project$Types$Queued = {ctor: 'Queued'};
+var _user$project$Types$Submitted = {ctor: 'Submitted'};
+var _user$project$Types$stringToOptStatus = function (statusString) {
+	var _p1 = statusString;
+	switch (_p1) {
+		case 'SUBMITTED':
+			return _elm_lang$core$Result$Ok(_user$project$Types$Submitted);
+		case 'QUEUED':
+			return _elm_lang$core$Result$Ok(_user$project$Types$Queued);
+		case 'RUNNING':
+			return _elm_lang$core$Result$Ok(_user$project$Types$Running);
+		case 'SUCCEEDED':
+			return _elm_lang$core$Result$Ok(_user$project$Types$Succeeded);
+		case 'FAILED':
+			return _elm_lang$core$Result$Ok(_user$project$Types$Failed);
+		default:
+			return _elm_lang$core$Result$Err('String could not be converted to OptStatus.');
+	}
+};
 var _user$project$Types$Points = {ctor: 'Points'};
 var _user$project$Types$Spheres = {ctor: 'Spheres'};
 var _user$project$Types$BallsAndSticks = {ctor: 'BallsAndSticks'};
@@ -21762,6 +21805,20 @@ var _user$project$ExamplesPanel$toggleExamplesPanel = A2(
 		_1: {ctor: '[]'}
 	});
 
+var _user$project$Builder$optJobStatusStyling = function (position) {
+	return {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css$bottom(
+			_rtfeldman$elm_css$Css$px(20)),
+		_1: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css$left(
+				_rtfeldman$elm_css$Css$px(
+					_elm_lang$core$Basics$toFloat(200 * position))),
+			_1: {ctor: '[]'}
+		}
+	};
+};
 var _user$project$Builder$buildingStatusStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$top(
@@ -22042,7 +22099,16 @@ var _user$project$Builder$viewerStyling = {
 	}
 };
 var _user$project$Builder$subscriptions = function (model) {
-	return _elm_lang$keyboard$Keyboard$presses(_user$project$Types$KeyMsg);
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: A2(_elm_lang$core$Time$every, _elm_lang$core$Time$second, _user$project$Types$CheckOptJobs),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$keyboard$Keyboard$presses(_user$project$Types$KeyMsg),
+				_1: {ctor: '[]'}
+			}
+		});
 };
 var _user$project$Builder$togglePanelVisibility = F2(
 	function (panel, currentVisibility) {
@@ -22128,6 +22194,23 @@ var _user$project$Builder$basicParameterJsonDecoder = A6(
 	A2(_elm_lang$core$Json_Decode$field, 'radius', _elm_lang$core$Json_Decode$float),
 	A2(_elm_lang$core$Json_Decode$field, 'sequence', _elm_lang$core$Json_Decode$string),
 	A2(_elm_lang$core$Json_Decode$field, 'register', _elm_lang$core$Json_Decode$string));
+var _user$project$Builder$jobStatusDecoder = A3(
+	_elm_lang$core$Json_Decode$map2,
+	F2(
+		function (v0, v1) {
+			return {ctor: '_Tuple2', _0: v0, _1: v1};
+		}),
+	A2(_elm_lang$core$Json_Decode$field, '_id', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'status', _elm_lang$core$Json_Decode$string));
+var _user$project$Builder$checkJobStatus = function (optJobId) {
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$Types$OptJobStatus,
+		A2(
+			_elm_lang$http$Http$get,
+			A2(_elm_lang$core$Basics_ops['++'], 'builder/api/v0.1/optimise/check-job-status?opt-job-id=', optJobId),
+			_user$project$Builder$jobStatusDecoder));
+};
 var _user$project$Builder$parameterRecordJson = function (parameters) {
 	return _elm_lang$core$Json_Encode$object(
 		{
@@ -22280,6 +22363,35 @@ var _user$project$Builder$toCommand = function (msg) {
 		_elm_lang$core$Basics$identity,
 		_elm_lang$core$Task$succeed(msg));
 };
+var _user$project$Builder$modelOptJobs = function (optJobs) {
+	return A2(
+		_elm_lang$core$List$map,
+		function (_p5) {
+			var _p6 = _p5;
+			return {
+				ctor: '_Tuple2',
+				_0: _p6._0,
+				_1: A2(
+					_elm_lang$core$Result$withDefault,
+					_user$project$Types$Failed,
+					_user$project$Types$stringToOptStatus(_p6._1))
+			};
+		},
+		optJobs);
+};
+var _user$project$Builder$exportableOptJobs = function (optJobs) {
+	return A2(
+		_elm_lang$core$List$map,
+		function (_p7) {
+			var _p8 = _p7;
+			return {
+				ctor: '_Tuple2',
+				_0: _p8._0,
+				_1: _user$project$Types$optStatusToString(_p8._1)
+			};
+		},
+		optJobs);
+};
 var _user$project$Builder$exportableToModel = function (exportableModel) {
 	return {
 		parameters: _elm_lang$core$Dict$fromList(exportableModel.parameters),
@@ -22292,21 +22404,21 @@ var _user$project$Builder$exportableToModel = function (exportableModel) {
 		residuesPerTurn: exportableModel.residuesPerTurn,
 		building: false,
 		optimising: false,
-		optJobs: exportableModel.optJobs,
+		optJobs: _user$project$Builder$modelOptJobs(exportableModel.optJobs),
 		heat: exportableModel.heat,
 		modelHistory: _elm_lang$core$Dict$fromList(
 			A2(
 				_elm_lang$core$List$map,
-				function (_p5) {
-					var _p6 = _p5;
+				function (_p9) {
+					var _p10 = _p9;
 					return {
 						ctor: '_Tuple2',
-						_0: _p6._0,
+						_0: _p10._0,
 						_1: {
 							ctor: '_Tuple3',
-							_0: _elm_lang$core$Dict$fromList(_p6._1._0),
-							_1: _p6._1._1,
-							_2: _p6._1._2
+							_0: _elm_lang$core$Dict$fromList(_p10._1._0),
+							_1: _p10._1._1,
+							_2: _p10._1._2
 						}
 					};
 				},
@@ -22327,20 +22439,20 @@ var _user$project$Builder$modelToExportable = function (model) {
 		residuesPerTurn: model.residuesPerTurn,
 		building: false,
 		optimising: false,
-		optJobs: model.optJobs,
+		optJobs: _user$project$Builder$exportableOptJobs(model.optJobs),
 		heat: model.heat,
 		modelHistory: A2(
 			_elm_lang$core$List$map,
-			function (_p7) {
-				var _p8 = _p7;
+			function (_p11) {
+				var _p12 = _p11;
 				return {
 					ctor: '_Tuple2',
-					_0: _p8._0,
+					_0: _p12._0,
 					_1: {
 						ctor: '_Tuple3',
-						_0: _elm_lang$core$Dict$toList(_p8._1._0),
-						_1: _p8._1._1,
-						_2: _p8._1._2
+						_0: _elm_lang$core$Dict$toList(_p12._1._0),
+						_1: _p12._1._1,
+						_2: _p12._1._2
 					}
 				};
 			},
@@ -22364,9 +22476,9 @@ var _user$project$Builder$parameterRecordWithDefault = F2(
 			_user$project$Types$emptyParameterRecord,
 			A2(_elm_lang$core$Dict$get, pRID, parameters));
 	});
-var _user$project$Builder$styles = function (_p9) {
+var _user$project$Builder$styles = function (_p13) {
 	return _elm_lang$html$Html_Attributes$style(
-		_rtfeldman$elm_css$Css$asPairs(_p9));
+		_rtfeldman$elm_css$Css$asPairs(_p13));
 };
 var _user$project$Builder$modelDetailTableHeader = A2(
 	_elm_lang$html$Html$thead,
@@ -22541,10 +22653,10 @@ var _user$project$Builder$modelDetailTableHeader = A2(
 			}),
 		_1: {ctor: '[]'}
 	});
-var _user$project$Builder$_p10 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace(_user$project$BuilderCss$cssNamespace);
-var _user$project$Builder$class = _user$project$Builder$_p10.$class;
-var _user$project$Builder$classList = _user$project$Builder$_p10.classList;
-var _user$project$Builder$id = _user$project$Builder$_p10.id;
+var _user$project$Builder$_p14 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace(_user$project$BuilderCss$cssNamespace);
+var _user$project$Builder$class = _user$project$Builder$_p14.$class;
+var _user$project$Builder$classList = _user$project$Builder$_p14.classList;
+var _user$project$Builder$id = _user$project$Builder$_p14.id;
 var _user$project$Builder$siteHeader = A2(
 	_elm_lang$html$Html$div,
 	{
@@ -22702,8 +22814,20 @@ var _user$project$Builder$siteHeader = A2(
 			_1: {ctor: '[]'}
 		}
 	});
-var _user$project$Builder$optimisePanel = F3(
-	function (optimising, visible, heat) {
+var _user$project$Builder$optimisePanel = F4(
+	function (buildMode, optJobs, visible, heat) {
+		var optimising = (_elm_lang$core$Native_Utils.cmp(
+			_elm_lang$core$List$length(optJobs),
+			1) > 0) ? true : false;
+		var advancedBuild = function () {
+			var _p15 = buildMode;
+			if (_p15.ctor === 'Basic') {
+				return false;
+			} else {
+				return true;
+			}
+		}();
+		var disabledOpt = advancedBuild || optimising;
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -22786,7 +22910,7 @@ var _user$project$Builder$optimisePanel = F3(
 											_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$Optimise),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$disabled(optimising),
+												_0: _elm_lang$html$Html_Attributes$disabled(disabledOpt),
 												_1: {ctor: '[]'}
 											}
 										},
@@ -23078,27 +23202,27 @@ var _user$project$Builder$modelHistoryTopRow = F5(
 					})));
 	});
 var _user$project$Builder$modelParametersAsRow = F2(
-	function (_p11, building) {
-		var _p12 = _p11;
-		var _p16 = _p12._1._1;
-		var _p15 = _p12._1._2;
-		var _p14 = _p12._1._0;
-		var _p13 = _p12._0;
+	function (_p16, building) {
+		var _p17 = _p16;
+		var _p21 = _p17._1._1;
+		var _p20 = _p17._1._2;
+		var _p19 = _p17._1._0;
+		var _p18 = _p17._0;
 		var foldedRows = A2(
 			_elm_lang$core$List$map,
-			_user$project$Builder$modelFoldedRow(_p15),
+			_user$project$Builder$modelFoldedRow(_p20),
 			A2(
 				_elm_lang$core$Maybe$withDefault,
 				{ctor: '[]'},
 				_elm_lang$core$List$tail(
-					_elm_lang$core$Dict$values(_p14))));
-		return (!_p16) ? {
+					_elm_lang$core$Dict$values(_p19))));
+		return (!_p21) ? {
 			ctor: '::',
-			_0: A5(_user$project$Builder$modelHistoryTopRow, _p13, _p14, building, _p16, _p15),
+			_0: A5(_user$project$Builder$modelHistoryTopRow, _p18, _p19, building, _p21, _p20),
 			_1: {ctor: '[]'}
 		} : {
 			ctor: '::',
-			_0: A5(_user$project$Builder$modelHistoryTopRow, _p13, _p14, building, _p16, _p15),
+			_0: A5(_user$project$Builder$modelHistoryTopRow, _p18, _p19, building, _p21, _p20),
 			_1: foldedRows
 		};
 	});
@@ -23576,38 +23700,82 @@ var _user$project$Builder$statusPanel = F2(
 				}
 			});
 	});
-var _user$project$Builder$overlayPanels = function (model) {
-	var panelDivs = {
-		ctor: '::',
-		_0: _user$project$Builder$siteHeader,
-		_1: {
-			ctor: '::',
-			_0: _user$project$Builder$topLeftToggles,
-			_1: {
+var _user$project$Builder$optJobStatus = F2(
+	function (_p22, position) {
+		var _p23 = _p22;
+		return A2(
+			_elm_lang$html$Html$div,
+			{
 				ctor: '::',
-				_0: _user$project$Builder$topRightToggles,
+				_0: _user$project$Builder$class(
+					{
+						ctor: '::',
+						_0: _user$project$BuilderCss$OverlayPanelCss,
+						_1: {ctor: '[]'}
+					}),
 				_1: {
 					ctor: '::',
-					_0: A5(_user$project$BuildPanel$buildPanel, model.buildMode, model.parameters, model.currentInput, model.building, model.panelVisibility.buildPanel),
+					_0: _user$project$Builder$styles(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_user$project$Builder$optJobStatusStyling(position),
+							_user$project$BuilderCss$panelStyling)),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(_p23._0),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$br,
+						{ctor: '[]'},
+						{ctor: '[]'}),
 					_1: {
 						ctor: '::',
-						_0: A3(_user$project$Builder$optimisePanel, model.optimising, model.panelVisibility.optimisePanel, model.heat),
+						_0: _elm_lang$html$Html$text(
+							_user$project$Types$optStatusToString(_p23._1)),
+						_1: {ctor: '[]'}
+					}
+				}
+			});
+	});
+var _user$project$Builder$overlayPanels = function (model) {
+	var panelDivs = A2(
+		_elm_lang$core$Basics_ops['++'],
+		{
+			ctor: '::',
+			_0: _user$project$Builder$siteHeader,
+			_1: {
+				ctor: '::',
+				_0: _user$project$Builder$topLeftToggles,
+				_1: {
+					ctor: '::',
+					_0: _user$project$Builder$topRightToggles,
+					_1: {
+						ctor: '::',
+						_0: A5(_user$project$BuildPanel$buildPanel, model.buildMode, model.parameters, model.currentInput, model.building, model.panelVisibility.buildPanel),
 						_1: {
 							ctor: '::',
-							_0: A2(_user$project$ExamplesPanel$examplesPanel, model.building, model.panelVisibility.examplesPanel),
+							_0: A4(_user$project$Builder$optimisePanel, model.buildMode, model.optJobs, model.panelVisibility.optimisePanel, model.heat),
 							_1: {
 								ctor: '::',
-								_0: A2(_user$project$Builder$statusPanel, model.building, model.optimising),
+								_0: A2(_user$project$ExamplesPanel$examplesPanel, model.building, model.panelVisibility.examplesPanel),
 								_1: {
 									ctor: '::',
-									_0: A3(_user$project$Builder$buildHistoryPanel, model.modelHistory, model.building, model.panelVisibility.buildHistoryPanel),
+									_0: A2(_user$project$Builder$statusPanel, model.building, model.optimising),
 									_1: {
 										ctor: '::',
-										_0: _user$project$Builder$viewerPanel(model.panelVisibility.viewerPanel),
+										_0: A3(_user$project$Builder$buildHistoryPanel, model.modelHistory, model.building, model.panelVisibility.buildHistoryPanel),
 										_1: {
 											ctor: '::',
-											_0: _user$project$Builder$modelInfoPanel(model),
-											_1: {ctor: '[]'}
+											_0: _user$project$Builder$viewerPanel(model.panelVisibility.viewerPanel),
+											_1: {
+												ctor: '::',
+												_0: _user$project$Builder$modelInfoPanel(model),
+												_1: {ctor: '[]'}
+											}
 										}
 									}
 								}
@@ -23616,8 +23784,15 @@ var _user$project$Builder$overlayPanels = function (model) {
 					}
 				}
 			}
-		}
-	};
+		},
+		A3(
+			_elm_lang$core$List$map2,
+			_user$project$Builder$optJobStatus,
+			model.optJobs,
+			A2(
+				_elm_lang$core$List$range,
+				1,
+				_elm_lang$core$List$length(model.optJobs))));
 	return A2(
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
@@ -23688,7 +23863,7 @@ var _user$project$Builder$setStorage = _elm_lang$core$Native_Platform.outgoingPo
 			optimising: v.optimising,
 			optJobs: _elm_lang$core$Native_List.toArray(v.optJobs).map(
 				function (v) {
-					return v;
+					return [v._0, v._1];
 				}),
 			heat: v.heat,
 			modelHistory: _elm_lang$core$Native_List.toArray(v.modelHistory).map(
@@ -23860,22 +24035,22 @@ var _user$project$Builder$init = function (storedModel) {
 };
 var _user$project$Builder$update = F2(
 	function (msg, model) {
-		var _p17 = msg;
-		switch (_p17.ctor) {
+		var _p24 = msg;
+		switch (_p24.ctor) {
 			case 'EditSingleParameter':
-				var _p19 = _p17._1;
-				var input = A2(_user$project$Builder$inputRecordWithDefault, _p19, model.currentInput);
-				var params = A2(_user$project$Builder$parameterRecordWithDefault, _p19, model.parameters);
-				var _p18 = A4(_user$project$ParameterValidation$editParameterValue, params, input, _p17._0, _p17._2);
-				var p = _p18._0;
-				var i = _p18._1;
+				var _p26 = _p24._1;
+				var input = A2(_user$project$Builder$inputRecordWithDefault, _p26, model.currentInput);
+				var params = A2(_user$project$Builder$parameterRecordWithDefault, _p26, model.parameters);
+				var _p25 = A4(_user$project$ParameterValidation$editParameterValue, params, input, _p24._0, _p24._2);
+				var p = _p25._0;
+				var i = _p25._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parameters: A3(_elm_lang$core$Dict$insert, _p19, p, model.parameters),
-							currentInput: A3(_elm_lang$core$Dict$insert, _p19, i, model.currentInput)
+							parameters: A3(_elm_lang$core$Dict$insert, _p26, p, model.parameters),
+							currentInput: A3(_elm_lang$core$Dict$insert, _p26, i, model.currentInput)
 						}),
 					{ctor: '[]'});
 			case 'EditAllParameters':
@@ -23891,10 +24066,10 @@ var _user$project$Builder$update = F2(
 								function (v, m) {
 									return m(v);
 								}),
-							A2(_elm_lang$core$List$repeat, model.oligomericState, _p17._1),
+							A2(_elm_lang$core$List$repeat, model.oligomericState, _p24._1),
 							A2(
 								_elm_lang$core$List$map,
-								_user$project$Types$EditSingleParameter(_p17._0),
+								_user$project$Types$EditSingleParameter(_p24._0),
 								A2(_elm_lang$core$List$range, 1, model.oligomericState)))));
 			case 'CopyParameters':
 				return A2(
@@ -23902,29 +24077,29 @@ var _user$project$Builder$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parameterClipBoard: A2(_elm_lang$core$Dict$get, _p17._0, model.parameters)
+							parameterClipBoard: A2(_elm_lang$core$Dict$get, _p24._0, model.parameters)
 						}),
 					{ctor: '[]'});
 			case 'PasteParameters':
-				var _p20 = _p17._0;
+				var _p27 = _p24._0;
 				var pastedParameters = A2(_elm_lang$core$Maybe$withDefault, _user$project$Types$emptyParameterRecord, model.parameterClipBoard);
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parameters: A3(_elm_lang$core$Dict$insert, _p20, pastedParameters, model.parameters),
+							parameters: A3(_elm_lang$core$Dict$insert, _p27, pastedParameters, model.parameters),
 							currentInput: A3(
 								_elm_lang$core$Dict$insert,
-								_p20,
+								_p27,
 								_user$project$Builder$parametersToInput(pastedParameters),
 								model.currentInput)
 						}),
 					{ctor: '[]'});
 			case 'ChangeBuildMode':
 				var newBuildMode = function () {
-					var _p21 = _p17._0;
-					switch (_p21) {
+					var _p28 = _p24._0;
+					switch (_p28) {
 						case 'Basic':
 							return _user$project$Types$Basic;
 						case 'Advanced':
@@ -23984,13 +24159,17 @@ var _user$project$Builder$update = F2(
 					model,
 					{ctor: '[]'});
 			case 'OptimisationSubmitted':
-				if (_p17._0.ctor === 'Ok') {
+				if (_p24._0.ctor === 'Ok') {
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								optJobs: {ctor: '::', _0: _p17._0._0, _1: model.optJobs}
+								optJobs: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: _p24._0._0, _1: _user$project$Types$Submitted},
+									_1: model.optJobs
+								}
 							}),
 						{ctor: '[]'});
 				} else {
@@ -23999,10 +24178,41 @@ var _user$project$Builder$update = F2(
 						model,
 						{ctor: '[]'});
 				}
+			case 'CheckOptJobs':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					A2(
+						_elm_lang$core$List$map,
+						_user$project$Builder$checkJobStatus,
+						A2(_elm_lang$core$List$map, _elm_lang$core$Tuple$first, model.optJobs)));
+			case 'OptJobStatus':
+				if (_p24._0.ctor === 'Ok') {
+					var newOptJobs = _elm_lang$core$Dict$toList(
+						A3(
+							_elm_lang$core$Dict$insert,
+							_p24._0._0._0,
+							A2(
+								_elm_lang$core$Result$withDefault,
+								_user$project$Types$Failed,
+								_user$project$Types$stringToOptStatus(_p24._0._0._1)),
+							_elm_lang$core$Dict$fromList(model.optJobs)));
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{optJobs: newOptJobs}),
+						{ctor: '[]'});
+				} else {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						model,
+						{ctor: '[]'});
+				}
 			case 'ProcessModel':
-				if (_p17._0.ctor === 'Ok') {
-					var _p23 = _p17._0._0.score;
-					var _p22 = _p17._0._0.pdbFile;
+				if (_p24._0.ctor === 'Ok') {
+					var _p30 = _p24._0._0.score;
+					var _p29 = _p24._0._0.pdbFile;
 					var historyLength = 10;
 					var oldHistory = _elm_lang$core$Native_Utils.eq(
 						_elm_lang$core$List$length(
@@ -24020,21 +24230,21 @@ var _user$project$Builder$update = F2(
 							model,
 							{
 								currentInput: _user$project$Builder$parametersDictToInputDict(model.parameters),
-								pdbFile: _elm_lang$core$Maybe$Just(_p22),
-								score: _elm_lang$core$Maybe$Just(_p23),
-								residuesPerTurn: _elm_lang$core$Maybe$Just(_p17._0._0.residuesPerTurn),
+								pdbFile: _elm_lang$core$Maybe$Just(_p29),
+								score: _elm_lang$core$Maybe$Just(_p30),
+								residuesPerTurn: _elm_lang$core$Maybe$Just(_p24._0._0.residuesPerTurn),
 								building: false,
 								modelHistory: A3(
 									_elm_lang$core$Dict$insert,
 									model.nextHistoryID,
-									{ctor: '_Tuple3', _0: model.parameters, _1: false, _2: _p23},
+									{ctor: '_Tuple3', _0: model.parameters, _1: false, _2: _p30},
 									oldHistory),
 								nextHistoryID: model.nextHistoryID + 1
 							}),
 						{
 							ctor: '::',
 							_0: _user$project$Builder$showStructure(
-								{ctor: '_Tuple2', _0: _p22, _1: model.currentRepresentation}),
+								{ctor: '_Tuple2', _0: _p29, _1: model.currentRepresentation}),
 							_1: {
 								ctor: '::',
 								_0: _user$project$Builder$toCommand(_user$project$Types$StoreModel),
@@ -24058,11 +24268,11 @@ var _user$project$Builder$update = F2(
 							heat: A2(
 								_elm_lang$core$Result$withDefault,
 								298,
-								_elm_lang$core$String$toInt(_p17._0))
+								_elm_lang$core$String$toInt(_p24._0))
 						}),
 					{ctor: '[]'});
 			case 'ProcessOptimisation':
-				if (_p17._0.ctor === 'Ok') {
+				if (_p24._0.ctor === 'Ok') {
 					var parametersDict = _elm_lang$core$Dict$fromList(
 						A3(
 							_elm_lang$core$List$map2,
@@ -24071,7 +24281,7 @@ var _user$project$Builder$update = F2(
 									return {ctor: '_Tuple2', _0: v0, _1: v1};
 								}),
 							A2(_elm_lang$core$List$range, 1, model.oligomericState),
-							A2(_elm_lang$core$List$repeat, model.oligomericState, _p17._0._0.parameters)));
+							A2(_elm_lang$core$List$repeat, model.oligomericState, _p24._0._0.parameters)));
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
@@ -24085,7 +24295,7 @@ var _user$project$Builder$update = F2(
 							ctor: '::',
 							_0: _user$project$Builder$toCommand(
 								_user$project$Types$ProcessModel(
-									_elm_lang$core$Result$Ok(_p17._0._0.modellingResults))),
+									_elm_lang$core$Result$Ok(_p24._0._0.modellingResults))),
 							_1: {ctor: '[]'}
 						});
 				} else {
@@ -24098,7 +24308,7 @@ var _user$project$Builder$update = F2(
 							ctor: '::',
 							_0: _user$project$Builder$toCommand(
 								_user$project$Types$ProcessModel(
-									_elm_lang$core$Result$Err(_p17._0._0))),
+									_elm_lang$core$Result$Err(_p24._0._0))),
 							_1: {ctor: '[]'}
 						});
 				}
@@ -24107,7 +24317,7 @@ var _user$project$Builder$update = F2(
 					_elm_lang$core$Maybe$withDefault,
 					2,
 					_elm_lang$core$Result$toMaybe(
-						_elm_lang$core$String$toInt(_p17._0)));
+						_elm_lang$core$String$toInt(_p24._0)));
 				return (_elm_lang$core$Native_Utils.cmp(oligomericState, model.oligomericState) > 0) ? A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -24195,8 +24405,8 @@ var _user$project$Builder$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'SetParametersAndBuild':
-				var _p24 = _p17._0;
-				return _user$project$ParameterValidation$invalidParameterDict(_p24) ? A2(
+				var _p31 = _p24._0;
+				return _user$project$ParameterValidation$invalidParameterDict(_p31) ? A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
 					{ctor: '[]'}) : A2(
@@ -24204,10 +24414,10 @@ var _user$project$Builder$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parameters: _p24,
-							currentInput: _user$project$Builder$parametersDictToInputDict(_p24),
+							parameters: _p31,
+							currentInput: _user$project$Builder$parametersDictToInputDict(_p31),
 							oligomericState: _elm_lang$core$List$length(
-								_elm_lang$core$Dict$toList(_p24))
+								_elm_lang$core$Dict$toList(_p31))
 						}),
 					{
 						ctor: '::',
@@ -24215,8 +24425,8 @@ var _user$project$Builder$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'KeyMsg':
-				var _p25 = _p17._0;
-				if (_p25 === 13) {
+				var _p32 = _p24._0;
+				if (_p32 === 13) {
 					return _user$project$ParameterValidation$invalidParameterDict(model.parameters) ? A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						model,
@@ -24247,7 +24457,7 @@ var _user$project$Builder$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							panelVisibility: A2(_user$project$Builder$togglePanelVisibility, _p17._0, model.panelVisibility)
+							panelVisibility: A2(_user$project$Builder$togglePanelVisibility, _p24._0, model.panelVisibility)
 						}),
 					{
 						ctor: '::',
@@ -24258,10 +24468,10 @@ var _user$project$Builder$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'ExpandHistory':
-				var _p27 = _p17._0;
-				var oldEntry = A2(_elm_lang$core$Dict$get, _p27, model.modelHistory);
-				var _p26 = oldEntry;
-				if (_p26.ctor === 'Just') {
+				var _p34 = _p24._0;
+				var oldEntry = A2(_elm_lang$core$Dict$get, _p34, model.modelHistory);
+				var _p33 = oldEntry;
+				if (_p33.ctor === 'Just') {
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
@@ -24269,8 +24479,8 @@ var _user$project$Builder$update = F2(
 							{
 								modelHistory: A3(
 									_elm_lang$core$Dict$insert,
-									_p27,
-									{ctor: '_Tuple3', _0: _p26._0._0, _1: !_p26._0._1, _2: _p26._0._2},
+									_p34,
+									{ctor: '_Tuple3', _0: _p33._0._0, _1: !_p33._0._1, _2: _p33._0._2},
 									model.modelHistory)
 							}),
 						{ctor: '[]'});
@@ -24291,7 +24501,7 @@ var _user$project$Builder$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'EditRepresentation':
-				var newRep = A2(_user$project$Builder$updateRepresentation, _p17._0, model.currentRepresentation);
+				var newRep = A2(_user$project$Builder$updateRepresentation, _p24._0, model.currentRepresentation);
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -24729,7 +24939,19 @@ var _user$project$Builder$main = _elm_lang$html$Html$programWithFlags(
 																				A2(
 																					_elm_lang$core$Json_Decode$field,
 																					'optJobs',
-																					_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string)));
+																					_elm_lang$core$Json_Decode$list(
+																						A2(
+																							_elm_lang$core$Json_Decode$andThen,
+																							function (x0) {
+																								return A2(
+																									_elm_lang$core$Json_Decode$andThen,
+																									function (x1) {
+																										return _elm_lang$core$Json_Decode$succeed(
+																											{ctor: '_Tuple2', _0: x0, _1: x1});
+																									},
+																									A2(_elm_lang$core$Json_Decode$index, 1, _elm_lang$core$Json_Decode$string));
+																							},
+																							A2(_elm_lang$core$Json_Decode$index, 0, _elm_lang$core$Json_Decode$string)))));
 																		},
 																		A2(_elm_lang$core$Json_Decode$field, 'oligomericState', _elm_lang$core$Json_Decode$int));
 																},
@@ -25045,7 +25267,7 @@ var _user$project$Builder$ExportableModel = function (a) {
 var Elm = {};
 Elm['Builder'] = Elm['Builder'] || {};
 if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"SetHeat":["String"],"ChangeBuildMode":["String"],"Build":[],"OptimisationSubmitted":["Result.Result Http.Error String"],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"SetParametersAndBuild":["Types.ParametersDict"],"StoreModel":[],"Optimise":[],"ProcessOptimisation":["Result.Result Http.Error Types.OptimisationResults"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ModelInfoPanel":[],"ExamplesPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ model_id : String , pdbFile : String , score : Float , residuesPerTurn : Float }"},"Types.OptimisationResults":{"args":[],"type":"{ parameters : Types.ParameterRecord , modellingResults : Types.ModellingResults }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"SetHeat":["String"],"OptJobStatus":["Result.Result Http.Error ( String, String )"],"ChangeBuildMode":["String"],"Build":[],"OptimisationSubmitted":["Result.Result Http.Error String"],"CheckOptJobs":["Time.Time"],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"SetParametersAndBuild":["Types.ParametersDict"],"StoreModel":[],"Optimise":[],"ProcessOptimisation":["Result.Result Http.Error Types.OptimisationResults"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ModelInfoPanel":[],"ExamplesPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ model_id : String , pdbFile : String , score : Float , residuesPerTurn : Float }"},"Types.OptimisationResults":{"args":[],"type":"{ parameters : Types.ParameterRecord , modellingResults : Types.ModellingResults }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

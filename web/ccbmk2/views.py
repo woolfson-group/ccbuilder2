@@ -67,7 +67,7 @@ def get_optimisation_status():
     """Get the status of an optimisation job."""
     opt_job_id = request.args.get('opt-job-id')
     opt_job = database.opt_jobs.find_one({'_id': ObjectId(opt_job_id)})
-    return jsonify(opt_job['status'])
+    return jsonify({'_id': opt_job_id, 'status': opt_job['status']})
 
 
 @app.route('/builder/api/v0.1/optimise/retrieve-opt-job', methods=['GET'])
