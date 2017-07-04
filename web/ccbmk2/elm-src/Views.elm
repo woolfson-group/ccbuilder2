@@ -27,7 +27,6 @@ import Types
         )
 
 
-
 { class, classList, id } =
     Html.CssHelpers.withNamespace cssNamespace
 
