@@ -556,12 +556,17 @@ buildingStatusStyling =
 -- Optimisation Job
 
 
-optJobStatus : ( String, OptStatus ) -> Int -> Html msg
+optJobStatus : ( String, OptStatus ) -> Int -> Html Msg
 optJobStatus ( optID, status ) position =
     div
-        [ class [ OverlayPanelCss ]
-        , styles <| optJobStatusStyling position ++ panelStyling
-        ]
+        ([ class [ OverlayPanelCss ]
+         , styles <| optJobStatusStyling position ++ panelStyling
+         ]
+            ++ if status == Complete then
+                [ onClick (RetrieveOptimisation optID) ]
+               else
+                []
+        )
         [ text optID
         , br [] []
         , text (optStatusToString status)

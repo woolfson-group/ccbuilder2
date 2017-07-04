@@ -174,6 +174,13 @@ update msg model =
         OptJobStatus (Err _) ->
             model ! []
 
+        RetrieveOptimisation optJobId ->
+            { model
+                | optJobs =
+                    List.filter (\( ojid, _ ) -> ojid /= optJobId) model.optJobs
+            }
+                ! [ retreiveOptimisation optJobId ]
+
         ProcessModel (Ok { pdbFile, score, residuesPerTurn }) ->
             let
                 historyLength =
@@ -220,12 +227,11 @@ update msg model =
                 { model
                     | parameters = parametersDict
                     , currentInput = parametersDictToInputDict parametersDict
-                    , optimising = False
                 }
                     ! [ toCommand (ProcessModel (Ok modellingResults)) ]
 
         ProcessOptimisation (Err error) ->
-            { model | optimising = False } ! [ toCommand (ProcessModel (Err error)) ]
+            model ! [ toCommand (ProcessModel (Err error)) ]
 
         SetOligomericState n ->
             let
@@ -454,6 +460,14 @@ jobStatusDecoder =
         (field "status" Json.Decode.string)
 
 
+retreiveOptimisation : String -> Cmd Msg
+retreiveOptimisation optJobId =
+    Http.send ProcessOptimisation <|
+        Http.get
+            ("/builder/api/v0.1/optimise/retrieve-opt-job?opt-job-id=" ++ optJobId)
+            optimisationResultsDecoder
+
+
 optimisationResultsDecoder : Json.Decode.Decoder OptimisationResults
 optimisationResultsDecoder =
     Json.Decode.map2
@@ -614,4 +628,3 @@ updateRepresentation repOption oldRep =
                 , spheres = False
                 , points = not oldRep.points
             }
-

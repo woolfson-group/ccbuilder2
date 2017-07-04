@@ -75,8 +75,14 @@ def get_optimisation_result():
     """Get the status of an optimisation job."""
     opt_job_id = request.args.get('opt-job-id')
     opt_job = database.opt_jobs.find_one({'_id': ObjectId(opt_job_id)})
+    model = database.models.find_one({'_id': opt_job['model_id']})
     model_and_parameters = {
-        'pdb': opt_job['status'],
-        'heat': opt_job['heat']
+        'model_and_info': {
+            'model_id': str(model['_id']),
+            'pdb': model['pdb'],
+            'score': model['score'],
+            'mean_rpt_value': model['mean_rpt_value']
+        },
+        'parameters': opt_job['final_parameters']
     }
     return jsonify(model_and_parameters)

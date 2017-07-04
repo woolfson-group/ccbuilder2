@@ -19248,6 +19248,9 @@ var _user$project$Types$SetOligomericState = function (a) {
 var _user$project$Types$ProcessOptimisation = function (a) {
 	return {ctor: 'ProcessOptimisation', _0: a};
 };
+var _user$project$Types$RetrieveOptimisation = function (a) {
+	return {ctor: 'RetrieveOptimisation', _0: a};
+};
 var _user$project$Types$OptJobStatus = function (a) {
 	return {ctor: 'OptJobStatus', _0: a};
 };
@@ -22388,6 +22391,15 @@ var _user$project$Update$optimisationResultsDecoder = A3(
 	_user$project$Types$OptimisationResults,
 	A2(_elm_lang$core$Json_Decode$field, 'parameters', _user$project$Update$basicParameterJsonDecoder),
 	A2(_elm_lang$core$Json_Decode$field, 'model_and_info', _user$project$Update$modellingResultsDecoder));
+var _user$project$Update$retreiveOptimisation = function (optJobId) {
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$Types$ProcessOptimisation,
+		A2(
+			_elm_lang$http$Http$get,
+			A2(_elm_lang$core$Basics_ops['++'], '/builder/api/v0.1/optimise/retrieve-opt-job?opt-job-id=', optJobId),
+			_user$project$Update$optimisationResultsDecoder));
+};
 var _user$project$Update$sendBuildCmd = function (parameters) {
 	return A2(
 		_elm_lang$http$Http$send,
@@ -22603,10 +22615,30 @@ var _user$project$Update$update = F2(
 						model,
 						{ctor: '[]'});
 				}
+			case 'RetrieveOptimisation':
+				var _p14 = _p5._0;
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							optJobs: A2(
+								_elm_lang$core$List$filter,
+								function (_p12) {
+									var _p13 = _p12;
+									return !_elm_lang$core$Native_Utils.eq(_p13._0, _p14);
+								},
+								model.optJobs)
+						}),
+					{
+						ctor: '::',
+						_0: _user$project$Update$retreiveOptimisation(_p14),
+						_1: {ctor: '[]'}
+					});
 			case 'ProcessModel':
 				if (_p5._0.ctor === 'Ok') {
-					var _p13 = _p5._0._0.score;
-					var _p12 = _p5._0._0.pdbFile;
+					var _p16 = _p5._0._0.score;
+					var _p15 = _p5._0._0.pdbFile;
 					var historyLength = 10;
 					var oldHistory = _elm_lang$core$Native_Utils.eq(
 						_elm_lang$core$List$length(
@@ -22624,21 +22656,21 @@ var _user$project$Update$update = F2(
 							model,
 							{
 								currentInput: _user$project$Update$parametersDictToInputDict(model.parameters),
-								pdbFile: _elm_lang$core$Maybe$Just(_p12),
-								score: _elm_lang$core$Maybe$Just(_p13),
+								pdbFile: _elm_lang$core$Maybe$Just(_p15),
+								score: _elm_lang$core$Maybe$Just(_p16),
 								residuesPerTurn: _elm_lang$core$Maybe$Just(_p5._0._0.residuesPerTurn),
 								building: false,
 								modelHistory: A3(
 									_elm_lang$core$Dict$insert,
 									model.nextHistoryID,
-									{ctor: '_Tuple3', _0: model.parameters, _1: false, _2: _p13},
+									{ctor: '_Tuple3', _0: model.parameters, _1: false, _2: _p16},
 									oldHistory),
 								nextHistoryID: model.nextHistoryID + 1
 							}),
 						{
 							ctor: '::',
 							_0: _user$project$Ports$showStructure(
-								{ctor: '_Tuple2', _0: _p12, _1: model.currentRepresentation}),
+								{ctor: '_Tuple2', _0: _p15, _1: model.currentRepresentation}),
 							_1: {
 								ctor: '::',
 								_0: _user$project$Update$toCommand(_user$project$Types$StoreModel),
@@ -22682,8 +22714,7 @@ var _user$project$Update$update = F2(
 							model,
 							{
 								parameters: parametersDict,
-								currentInput: _user$project$Update$parametersDictToInputDict(parametersDict),
-								optimising: false
+								currentInput: _user$project$Update$parametersDictToInputDict(parametersDict)
 							}),
 						{
 							ctor: '::',
@@ -22695,9 +22726,7 @@ var _user$project$Update$update = F2(
 				} else {
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{optimising: false}),
+						model,
 						{
 							ctor: '::',
 							_0: _user$project$Update$toCommand(
@@ -22799,8 +22828,8 @@ var _user$project$Update$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'SetParametersAndBuild':
-				var _p14 = _p5._0;
-				return _user$project$ParameterValidation$invalidParameterDict(_p14) ? A2(
+				var _p17 = _p5._0;
+				return _user$project$ParameterValidation$invalidParameterDict(_p17) ? A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
 					{ctor: '[]'}) : A2(
@@ -22808,10 +22837,10 @@ var _user$project$Update$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parameters: _p14,
-							currentInput: _user$project$Update$parametersDictToInputDict(_p14),
+							parameters: _p17,
+							currentInput: _user$project$Update$parametersDictToInputDict(_p17),
 							oligomericState: _elm_lang$core$List$length(
-								_elm_lang$core$Dict$toList(_p14))
+								_elm_lang$core$Dict$toList(_p17))
 						}),
 					{
 						ctor: '::',
@@ -22819,8 +22848,8 @@ var _user$project$Update$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'KeyMsg':
-				var _p15 = _p5._0;
-				if (_p15 === 13) {
+				var _p18 = _p5._0;
+				if (_p18 === 13) {
 					return _user$project$ParameterValidation$invalidParameterDict(model.parameters) ? A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						model,
@@ -22862,10 +22891,10 @@ var _user$project$Update$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'ExpandHistory':
-				var _p17 = _p5._0;
-				var oldEntry = A2(_elm_lang$core$Dict$get, _p17, model.modelHistory);
-				var _p16 = oldEntry;
-				if (_p16.ctor === 'Just') {
+				var _p20 = _p5._0;
+				var oldEntry = A2(_elm_lang$core$Dict$get, _p20, model.modelHistory);
+				var _p19 = oldEntry;
+				if (_p19.ctor === 'Just') {
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
@@ -22873,8 +22902,8 @@ var _user$project$Update$update = F2(
 							{
 								modelHistory: A3(
 									_elm_lang$core$Dict$insert,
-									_p17,
-									{ctor: '_Tuple3', _0: _p16._0._0, _1: !_p16._0._1, _2: _p16._0._2},
+									_p20,
+									{ctor: '_Tuple3', _0: _p19._0._0, _1: !_p19._0._1, _2: _p19._0._2},
 									model.modelHistory)
 							}),
 						{ctor: '[]'});
@@ -24417,29 +24446,39 @@ var _user$project$Views$statusPanel = F2(
 var _user$project$Views$optJobStatus = F2(
 	function (_p9, position) {
 		var _p10 = _p9;
+		var _p12 = _p10._1;
+		var _p11 = _p10._0;
 		return A2(
 			_elm_lang$html$Html$div,
-			{
-				ctor: '::',
-				_0: _user$project$Views$class(
-					{
-						ctor: '::',
-						_0: _user$project$BuilderCss$OverlayPanelCss,
-						_1: {ctor: '[]'}
-					}),
-				_1: {
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				{
 					ctor: '::',
-					_0: _user$project$Views$styles(
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							_user$project$Views$optJobStatusStyling(position),
-							_user$project$BuilderCss$panelStyling)),
+					_0: _user$project$Views$class(
+						{
+							ctor: '::',
+							_0: _user$project$BuilderCss$OverlayPanelCss,
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: _user$project$Views$styles(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_user$project$Views$optJobStatusStyling(position),
+								_user$project$BuilderCss$panelStyling)),
+						_1: {ctor: '[]'}
+					}
+				},
+				_elm_lang$core$Native_Utils.eq(_p12, _user$project$Types$Complete) ? {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(
+						_user$project$Types$RetrieveOptimisation(_p11)),
 					_1: {ctor: '[]'}
-				}
-			},
+				} : {ctor: '[]'}),
 			{
 				ctor: '::',
-				_0: _elm_lang$html$Html$text(_p10._0),
+				_0: _elm_lang$html$Html$text(_p11),
 				_1: {
 					ctor: '::',
 					_0: A2(
@@ -24449,7 +24488,7 @@ var _user$project$Views$optJobStatus = F2(
 					_1: {
 						ctor: '::',
 						_0: _elm_lang$html$Html$text(
-							_user$project$Types$optStatusToString(_p10._1)),
+							_user$project$Types$optStatusToString(_p12)),
 						_1: {ctor: '[]'}
 					}
 				}
@@ -25283,7 +25322,7 @@ var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"SetHeat":["String"],"OptJobStatus":["Result.Result Http.Error ( String, String )"],"ChangeBuildMode":["String"],"Build":[],"OptimisationSubmitted":["Result.Result Http.Error String"],"CheckOptJobs":["Time.Time"],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"SetParametersAndBuild":["Types.ParametersDict"],"StoreModel":[],"Optimise":[],"ProcessOptimisation":["Result.Result Http.Error Types.OptimisationResults"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ModelInfoPanel":[],"ExamplesPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ model_id : String , pdbFile : String , score : Float , residuesPerTurn : Float }"},"Types.OptimisationResults":{"args":[],"type":"{ parameters : Types.ParameterRecord , modellingResults : Types.ModellingResults }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"SetHeat":["String"],"OptJobStatus":["Result.Result Http.Error ( String, String )"],"ChangeBuildMode":["String"],"RetrieveOptimisation":["String"],"Build":[],"OptimisationSubmitted":["Result.Result Http.Error String"],"CheckOptJobs":["Time.Time"],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"SetParametersAndBuild":["Types.ParametersDict"],"StoreModel":[],"Optimise":[],"ProcessOptimisation":["Result.Result Http.Error Types.OptimisationResults"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ModelInfoPanel":[],"ExamplesPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ model_id : String , pdbFile : String , score : Float , residuesPerTurn : Float }"},"Types.OptimisationResults":{"args":[],"type":"{ parameters : Types.ParameterRecord , modellingResults : Types.ModellingResults }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])
