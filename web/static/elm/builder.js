@@ -22024,6 +22024,906 @@ var _user$project$Model$ExportableModel = function (a) {
 	};
 };
 
+var _user$project$Ports$setStorage = _elm_lang$core$Native_Platform.outgoingPort(
+	'setStorage',
+	function (v) {
+		return {
+			parameters: _elm_lang$core$Native_List.toArray(v.parameters).map(
+				function (v) {
+					return [
+						v._0,
+						{
+						radius: (v._1.radius.ctor === 'Nothing') ? null : v._1.radius._0,
+						pitch: (v._1.pitch.ctor === 'Nothing') ? null : v._1.pitch._0,
+						phiCA: (v._1.phiCA.ctor === 'Nothing') ? null : v._1.phiCA._0,
+						sequence: (v._1.sequence.ctor === 'Nothing') ? null : v._1.sequence._0,
+						register: v._1.register,
+						superHelRot: (v._1.superHelRot.ctor === 'Nothing') ? null : v._1.superHelRot._0,
+						antiParallel: v._1.antiParallel,
+						zShift: (v._1.zShift.ctor === 'Nothing') ? null : v._1.zShift._0,
+						linkedSuperHelRot: v._1.linkedSuperHelRot
+					}
+					];
+				}),
+			currentInput: _elm_lang$core$Native_List.toArray(v.currentInput).map(
+				function (v) {
+					return [
+						v._0,
+						{radius: v._1.radius, pitch: v._1.pitch, phiCA: v._1.phiCA, sequence: v._1.sequence, register: v._1.register, superHelRot: v._1.superHelRot, antiParallel: v._1.antiParallel, zShift: v._1.zShift, linkedSuperHelRot: v._1.linkedSuperHelRot}
+					];
+				}),
+			parameterClipBoard: (v.parameterClipBoard.ctor === 'Nothing') ? null : {
+				radius: (v.parameterClipBoard._0.radius.ctor === 'Nothing') ? null : v.parameterClipBoard._0.radius._0,
+				pitch: (v.parameterClipBoard._0.pitch.ctor === 'Nothing') ? null : v.parameterClipBoard._0.pitch._0,
+				phiCA: (v.parameterClipBoard._0.phiCA.ctor === 'Nothing') ? null : v.parameterClipBoard._0.phiCA._0,
+				sequence: (v.parameterClipBoard._0.sequence.ctor === 'Nothing') ? null : v.parameterClipBoard._0.sequence._0,
+				register: v.parameterClipBoard._0.register,
+				superHelRot: (v.parameterClipBoard._0.superHelRot.ctor === 'Nothing') ? null : v.parameterClipBoard._0.superHelRot._0,
+				antiParallel: v.parameterClipBoard._0.antiParallel,
+				zShift: (v.parameterClipBoard._0.zShift.ctor === 'Nothing') ? null : v.parameterClipBoard._0.zShift._0,
+				linkedSuperHelRot: v.parameterClipBoard._0.linkedSuperHelRot
+			},
+			oligomericState: v.oligomericState,
+			pdbFile: (v.pdbFile.ctor === 'Nothing') ? null : v.pdbFile._0,
+			score: (v.score.ctor === 'Nothing') ? null : v.score._0,
+			residuesPerTurn: (v.residuesPerTurn.ctor === 'Nothing') ? null : v.residuesPerTurn._0,
+			building: v.building,
+			optimising: v.optimising,
+			optJobs: _elm_lang$core$Native_List.toArray(v.optJobs).map(
+				function (v) {
+					return [v._0, v._1];
+				}),
+			heat: v.heat,
+			modelHistory: _elm_lang$core$Native_List.toArray(v.modelHistory).map(
+				function (v) {
+					return [
+						v._0,
+						[
+						_elm_lang$core$Native_List.toArray(v._1._0).map(
+						function (v) {
+							return [
+								v._0,
+								{
+								radius: (v._1.radius.ctor === 'Nothing') ? null : v._1.radius._0,
+								pitch: (v._1.pitch.ctor === 'Nothing') ? null : v._1.pitch._0,
+								phiCA: (v._1.phiCA.ctor === 'Nothing') ? null : v._1.phiCA._0,
+								sequence: (v._1.sequence.ctor === 'Nothing') ? null : v._1.sequence._0,
+								register: v._1.register,
+								superHelRot: (v._1.superHelRot.ctor === 'Nothing') ? null : v._1.superHelRot._0,
+								antiParallel: v._1.antiParallel,
+								zShift: (v._1.zShift.ctor === 'Nothing') ? null : v._1.zShift._0,
+								linkedSuperHelRot: v._1.linkedSuperHelRot
+							}
+							];
+						}),
+						v._1._1,
+						v._1._2
+					]
+					];
+				}),
+			nextHistoryID: v.nextHistoryID,
+			panelVisibility: {buildPanel: v.panelVisibility.buildPanel, examplesPanel: v.panelVisibility.examplesPanel, optimisePanel: v.panelVisibility.optimisePanel, buildHistoryPanel: v.panelVisibility.buildHistoryPanel, viewerPanel: v.panelVisibility.viewerPanel},
+			currentRepresentation: {cartoon: v.currentRepresentation.cartoon, trace: v.currentRepresentation.trace, ballsAndSticks: v.currentRepresentation.ballsAndSticks, spheres: v.currentRepresentation.spheres, points: v.currentRepresentation.points}
+		};
+	});
+var _user$project$Ports$initialiseViewer = _elm_lang$core$Native_Platform.outgoingPort(
+	'initialiseViewer',
+	function (v) {
+		return null;
+	});
+var _user$project$Ports$showStructure = _elm_lang$core$Native_Platform.outgoingPort(
+	'showStructure',
+	function (v) {
+		return [
+			v._0,
+			{cartoon: v._1.cartoon, trace: v._1.trace, ballsAndSticks: v._1.ballsAndSticks, spheres: v._1.spheres, points: v._1.points}
+		];
+	});
+var _user$project$Ports$showAxes = _elm_lang$core$Native_Platform.outgoingPort(
+	'showAxes',
+	function (v) {
+		return null;
+	});
+var _user$project$Ports$newRepresentation = _elm_lang$core$Native_Platform.outgoingPort(
+	'newRepresentation',
+	function (v) {
+		return {cartoon: v.cartoon, trace: v.trace, ballsAndSticks: v.ballsAndSticks, spheres: v.spheres, points: v.points};
+	});
+var _user$project$Ports$downloadPdb = _elm_lang$core$Native_Platform.outgoingPort(
+	'downloadPdb',
+	function (v) {
+		return [v._0, v._1];
+	});
+
+var _user$project$Update$updateRepresentation = F2(
+	function (repOption, oldRep) {
+		var _p0 = repOption;
+		switch (_p0.ctor) {
+			case 'Cartoon':
+				return _elm_lang$core$Native_Utils.update(
+					oldRep,
+					{cartoon: !oldRep.cartoon, trace: false});
+			case 'Trace':
+				return _elm_lang$core$Native_Utils.update(
+					oldRep,
+					{cartoon: false, trace: !oldRep.trace});
+			case 'BallsAndSticks':
+				return _elm_lang$core$Native_Utils.update(
+					oldRep,
+					{ballsAndSticks: !oldRep.ballsAndSticks, spheres: false, points: false});
+			case 'Spheres':
+				return _elm_lang$core$Native_Utils.update(
+					oldRep,
+					{ballsAndSticks: false, spheres: !oldRep.spheres, points: false});
+			default:
+				return _elm_lang$core$Native_Utils.update(
+					oldRep,
+					{ballsAndSticks: false, spheres: false, points: !oldRep.points});
+		}
+	});
+var _user$project$Update$togglePanelVisibility = F2(
+	function (panel, currentVisibility) {
+		var _p1 = panel;
+		switch (_p1.ctor) {
+			case 'BuildPanel':
+				return _elm_lang$core$Native_Utils.update(
+					currentVisibility,
+					{buildPanel: !currentVisibility.buildPanel, optimisePanel: false, examplesPanel: false});
+			case 'ExamplesPanel':
+				return _elm_lang$core$Native_Utils.update(
+					currentVisibility,
+					{buildPanel: false, optimisePanel: false, examplesPanel: !currentVisibility.examplesPanel});
+			case 'OptimisePanel':
+				return _elm_lang$core$Native_Utils.update(
+					currentVisibility,
+					{buildPanel: false, optimisePanel: !currentVisibility.optimisePanel, examplesPanel: false});
+			case 'BuildHistoryPanel':
+				return _elm_lang$core$Native_Utils.update(
+					currentVisibility,
+					{buildHistoryPanel: !currentVisibility.buildHistoryPanel, viewerPanel: false});
+			case 'ViewerPanel':
+				return _elm_lang$core$Native_Utils.update(
+					currentVisibility,
+					{buildHistoryPanel: false, viewerPanel: !currentVisibility.viewerPanel});
+			default:
+				return currentVisibility;
+		}
+	});
+var _user$project$Update$maybeNumberToString = function (mNum) {
+	var _p2 = mNum;
+	if (_p2.ctor === 'Just') {
+		return _elm_lang$core$Basics$toString(_p2._0);
+	} else {
+		return '';
+	}
+};
+var _user$project$Update$parametersToInput = function (parameterRecord) {
+	var lsh = _elm_lang$core$Basics$toString(parameterRecord.linkedSuperHelRot);
+	var zsh = _user$project$Update$maybeNumberToString(parameterRecord.zShift);
+	var ant = _elm_lang$core$Basics$toString(parameterRecord.antiParallel);
+	var rot = _user$project$Update$maybeNumberToString(parameterRecord.superHelRot);
+	var reg = parameterRecord.register;
+	var seq = A2(_elm_lang$core$Maybe$withDefault, '', parameterRecord.sequence);
+	var phi = _user$project$Update$maybeNumberToString(parameterRecord.phiCA);
+	var pit = _user$project$Update$maybeNumberToString(parameterRecord.pitch);
+	var rad = _user$project$Update$maybeNumberToString(parameterRecord.radius);
+	return A9(_user$project$Types$InputValues, rad, pit, phi, seq, reg, rot, ant, zsh, lsh);
+};
+var _user$project$Update$parametersDictToInputDict = function (parameters) {
+	return _elm_lang$core$Dict$fromList(
+		A2(
+			_elm_lang$core$List$map,
+			function (_p3) {
+				var _p4 = _p3;
+				return {
+					ctor: '_Tuple2',
+					_0: _p4._0,
+					_1: _user$project$Update$parametersToInput(_p4._1)
+				};
+			},
+			_elm_lang$core$Dict$toList(parameters)));
+};
+var _user$project$Update$basicParametersToRecord = F5(
+	function (radius, pitch, phiCA, sequence, register) {
+		return {
+			radius: _elm_lang$core$Maybe$Just(radius),
+			pitch: _elm_lang$core$Maybe$Just(pitch),
+			phiCA: _elm_lang$core$Maybe$Just(phiCA),
+			sequence: _elm_lang$core$Maybe$Just(sequence),
+			register: register,
+			superHelRot: _elm_lang$core$Maybe$Nothing,
+			antiParallel: false,
+			zShift: _elm_lang$core$Maybe$Nothing,
+			linkedSuperHelRot: true
+		};
+	});
+var _user$project$Update$basicParameterJsonDecoder = A6(
+	_elm_lang$core$Json_Decode$map5,
+	_user$project$Update$basicParametersToRecord,
+	A2(_elm_lang$core$Json_Decode$field, 'radius', _elm_lang$core$Json_Decode$float),
+	A2(_elm_lang$core$Json_Decode$field, 'pitch', _elm_lang$core$Json_Decode$float),
+	A2(_elm_lang$core$Json_Decode$field, 'radius', _elm_lang$core$Json_Decode$float),
+	A2(_elm_lang$core$Json_Decode$field, 'sequence', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'register', _elm_lang$core$Json_Decode$string));
+var _user$project$Update$jobStatusDecoder = A3(
+	_elm_lang$core$Json_Decode$map2,
+	F2(
+		function (v0, v1) {
+			return {ctor: '_Tuple2', _0: v0, _1: v1};
+		}),
+	A2(_elm_lang$core$Json_Decode$field, '_id', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'status', _elm_lang$core$Json_Decode$string));
+var _user$project$Update$checkJobStatus = function (optJobId) {
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$Types$OptJobStatus,
+		A2(
+			_elm_lang$http$Http$get,
+			A2(_elm_lang$core$Basics_ops['++'], 'builder/api/v0.1/optimise/check-job-status?opt-job-id=', optJobId),
+			_user$project$Update$jobStatusDecoder));
+};
+var _user$project$Update$parameterRecordJson = function (parameters) {
+	return _elm_lang$core$Json_Encode$object(
+		{
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: 'Radius',
+				_1: _elm_lang$core$Json_Encode$float(
+					A2(_elm_lang$core$Maybe$withDefault, 0, parameters.radius))
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'Pitch',
+					_1: _elm_lang$core$Json_Encode$float(
+						A2(_elm_lang$core$Maybe$withDefault, 0, parameters.pitch))
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'Interface Angle',
+						_1: _elm_lang$core$Json_Encode$float(
+							A2(_elm_lang$core$Maybe$withDefault, 0, parameters.phiCA))
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'Sequence',
+							_1: _elm_lang$core$Json_Encode$string(
+								A2(_elm_lang$core$Maybe$withDefault, '', parameters.sequence))
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'Register',
+								_1: _elm_lang$core$Json_Encode$string(parameters.register)
+							},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'Super-Helical Rotation',
+									_1: _elm_lang$core$Json_Encode$float(
+										A2(_elm_lang$core$Maybe$withDefault, 0, parameters.superHelRot))
+								},
+								_1: {
+									ctor: '::',
+									_0: {
+										ctor: '_Tuple2',
+										_0: 'Orientation',
+										_1: _elm_lang$core$Json_Encode$bool(parameters.antiParallel)
+									},
+									_1: {
+										ctor: '::',
+										_0: {
+											ctor: '_Tuple2',
+											_0: 'Z-Shift',
+											_1: _elm_lang$core$Json_Encode$float(
+												A2(_elm_lang$core$Maybe$withDefault, 0, parameters.zShift))
+										},
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		});
+};
+var _user$project$Update$parametersDictToListJson = function (parameters) {
+	return _elm_lang$core$Json_Encode$list(
+		A2(
+			_elm_lang$core$List$map,
+			_user$project$Update$parameterRecordJson,
+			_elm_lang$core$Dict$values(parameters)));
+};
+var _user$project$Update$optimisationJson = F2(
+	function (parameters, heat) {
+		return _elm_lang$core$Json_Encode$object(
+			{
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'Parameters',
+					_1: _user$project$Update$parametersDictToListJson(parameters)
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'Heat',
+						_1: _elm_lang$core$Json_Encode$int(heat)
+					},
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _user$project$Update$sendOptimiseCmd = F2(
+	function (parameters, heat) {
+		return A2(
+			_elm_lang$http$Http$send,
+			_user$project$Types$OptimisationSubmitted,
+			A3(
+				_elm_lang$http$Http$post,
+				'builder/api/v0.1/optimise/coiled-coil',
+				_elm_lang$http$Http$jsonBody(
+					A2(_user$project$Update$optimisationJson, parameters, heat)),
+				_elm_lang$core$Json_Decode$string));
+	});
+var _user$project$Update$modellingResultsDecoder = A5(
+	_elm_lang$core$Json_Decode$map4,
+	_user$project$Types$ModellingResults,
+	A2(_elm_lang$core$Json_Decode$field, 'model_id', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'pdb', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'score', _elm_lang$core$Json_Decode$float),
+	A2(_elm_lang$core$Json_Decode$field, 'mean_rpt_value', _elm_lang$core$Json_Decode$float));
+var _user$project$Update$optimisationResultsDecoder = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_user$project$Types$OptimisationResults,
+	A2(_elm_lang$core$Json_Decode$field, 'parameters', _user$project$Update$basicParameterJsonDecoder),
+	A2(_elm_lang$core$Json_Decode$field, 'model_and_info', _user$project$Update$modellingResultsDecoder));
+var _user$project$Update$sendBuildCmd = function (parameters) {
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$Types$ProcessModel,
+		A3(
+			_elm_lang$http$Http$post,
+			'builder/api/v0.1/build/coiled-coil',
+			_elm_lang$http$Http$jsonBody(
+				_elm_lang$core$Json_Encode$object(
+					{
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'Parameters',
+							_1: _user$project$Update$parametersDictToListJson(parameters)
+						},
+						_1: {ctor: '[]'}
+					})),
+			_user$project$Update$modellingResultsDecoder));
+};
+var _user$project$Update$toCommand = function (msg) {
+	return A2(
+		_elm_lang$core$Task$perform,
+		_elm_lang$core$Basics$identity,
+		_elm_lang$core$Task$succeed(msg));
+};
+var _user$project$Update$update = F2(
+	function (msg, model) {
+		var _p5 = msg;
+		switch (_p5.ctor) {
+			case 'EditSingleParameter':
+				var _p7 = _p5._1;
+				var input = A2(_user$project$Types$inputRecordWithDefault, _p7, model.currentInput);
+				var params = A2(_user$project$Types$parameterRecordWithDefault, _p7, model.parameters);
+				var _p6 = A4(_user$project$ParameterValidation$editParameterValue, params, input, _p5._0, _p5._2);
+				var p = _p6._0;
+				var i = _p6._1;
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							parameters: A3(_elm_lang$core$Dict$insert, _p7, p, model.parameters),
+							currentInput: A3(_elm_lang$core$Dict$insert, _p7, i, model.currentInput)
+						}),
+					{ctor: '[]'});
+			case 'EditAllParameters':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					A2(
+						_elm_lang$core$List$map,
+						_user$project$Update$toCommand,
+						A3(
+							_elm_lang$core$List$map2,
+							F2(
+								function (v, m) {
+									return m(v);
+								}),
+							A2(_elm_lang$core$List$repeat, model.oligomericState, _p5._1),
+							A2(
+								_elm_lang$core$List$map,
+								_user$project$Types$EditSingleParameter(_p5._0),
+								A2(_elm_lang$core$List$range, 1, model.oligomericState)))));
+			case 'CopyParameters':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							parameterClipBoard: A2(_elm_lang$core$Dict$get, _p5._0, model.parameters)
+						}),
+					{ctor: '[]'});
+			case 'PasteParameters':
+				var _p8 = _p5._0;
+				var pastedParameters = A2(_elm_lang$core$Maybe$withDefault, _user$project$Types$emptyParameterRecord, model.parameterClipBoard);
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							parameters: A3(_elm_lang$core$Dict$insert, _p8, pastedParameters, model.parameters),
+							currentInput: A3(
+								_elm_lang$core$Dict$insert,
+								_p8,
+								_user$project$Update$parametersToInput(pastedParameters),
+								model.currentInput)
+						}),
+					{ctor: '[]'});
+			case 'ChangeBuildMode':
+				var newBuildMode = function () {
+					var _p9 = _p5._0;
+					switch (_p9) {
+						case 'Basic':
+							return _user$project$Types$Basic;
+						case 'Advanced':
+							return _user$project$Types$Advanced;
+						default:
+							return model.buildMode;
+					}
+				}();
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{buildMode: newBuildMode}),
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$core$Task$perform,
+							_user$project$Types$NoOp,
+							_elm_lang$core$Process$sleep(10 * _elm_lang$core$Time$millisecond)),
+						_1: {ctor: '[]'}
+					});
+			case 'Build':
+				var panelVisibility = model.panelVisibility;
+				return ((!model.building) || _user$project$ParameterValidation$invalidParameterDict(model.parameters)) ? A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							building: true,
+							panelVisibility: A5(_user$project$Types$PanelVisibility, false, false, false, false, false)
+						}),
+					{
+						ctor: '::',
+						_0: _user$project$Update$sendBuildCmd(model.parameters),
+						_1: {ctor: '[]'}
+					}) : A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{ctor: '[]'});
+			case 'Optimise':
+				var panelVisibility = model.panelVisibility;
+				return (!model.building) ? A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							panelVisibility: _elm_lang$core$Native_Utils.update(
+								panelVisibility,
+								{buildPanel: false, examplesPanel: false})
+						}),
+					{
+						ctor: '::',
+						_0: A2(_user$project$Update$sendOptimiseCmd, model.parameters, model.heat),
+						_1: {ctor: '[]'}
+					}) : A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{ctor: '[]'});
+			case 'OptimisationSubmitted':
+				if (_p5._0.ctor === 'Ok') {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								optJobs: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: _p5._0._0, _1: _user$project$Types$Submitted},
+									_1: model.optJobs
+								}
+							}),
+						{
+							ctor: '::',
+							_0: _user$project$Update$toCommand(_user$project$Types$StoreModel),
+							_1: {ctor: '[]'}
+						});
+				} else {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						model,
+						{ctor: '[]'});
+				}
+			case 'CheckOptJobs':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					A2(
+						_elm_lang$core$List$map,
+						_user$project$Update$checkJobStatus,
+						A2(
+							_elm_lang$core$List$map,
+							_elm_lang$core$Tuple$first,
+							A2(
+								_elm_lang$core$List$filter,
+								function (_p10) {
+									var _p11 = _p10;
+									return _elm_lang$core$Native_Utils.eq(_p11._1, _user$project$Types$Complete) ? false : true;
+								},
+								model.optJobs))));
+			case 'OptJobStatus':
+				if (_p5._0.ctor === 'Ok') {
+					var newOptJobs = _elm_lang$core$Dict$toList(
+						A3(
+							_elm_lang$core$Dict$insert,
+							_p5._0._0._0,
+							A2(
+								_elm_lang$core$Result$withDefault,
+								_user$project$Types$Failed,
+								_user$project$Types$stringToOptStatus(_p5._0._0._1)),
+							_elm_lang$core$Dict$fromList(model.optJobs)));
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{optJobs: newOptJobs}),
+						{ctor: '[]'});
+				} else {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						model,
+						{ctor: '[]'});
+				}
+			case 'ProcessModel':
+				if (_p5._0.ctor === 'Ok') {
+					var _p13 = _p5._0._0.score;
+					var _p12 = _p5._0._0.pdbFile;
+					var historyLength = 10;
+					var oldHistory = _elm_lang$core$Native_Utils.eq(
+						_elm_lang$core$List$length(
+							_elm_lang$core$Dict$toList(model.modelHistory)),
+						historyLength) ? _elm_lang$core$Dict$fromList(
+						_elm_lang$core$List$reverse(
+							A2(
+								_elm_lang$core$List$take,
+								historyLength - 1,
+								_elm_lang$core$List$reverse(
+									_elm_lang$core$Dict$toList(model.modelHistory))))) : model.modelHistory;
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								currentInput: _user$project$Update$parametersDictToInputDict(model.parameters),
+								pdbFile: _elm_lang$core$Maybe$Just(_p12),
+								score: _elm_lang$core$Maybe$Just(_p13),
+								residuesPerTurn: _elm_lang$core$Maybe$Just(_p5._0._0.residuesPerTurn),
+								building: false,
+								modelHistory: A3(
+									_elm_lang$core$Dict$insert,
+									model.nextHistoryID,
+									{ctor: '_Tuple3', _0: model.parameters, _1: false, _2: _p13},
+									oldHistory),
+								nextHistoryID: model.nextHistoryID + 1
+							}),
+						{
+							ctor: '::',
+							_0: _user$project$Ports$showStructure(
+								{ctor: '_Tuple2', _0: _p12, _1: model.currentRepresentation}),
+							_1: {
+								ctor: '::',
+								_0: _user$project$Update$toCommand(_user$project$Types$StoreModel),
+								_1: {ctor: '[]'}
+							}
+						});
+				} else {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{building: false}),
+						{ctor: '[]'});
+				}
+			case 'SetHeat':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							heat: A2(
+								_elm_lang$core$Result$withDefault,
+								298,
+								_elm_lang$core$String$toInt(_p5._0))
+						}),
+					{ctor: '[]'});
+			case 'ProcessOptimisation':
+				if (_p5._0.ctor === 'Ok') {
+					var parametersDict = _elm_lang$core$Dict$fromList(
+						A3(
+							_elm_lang$core$List$map2,
+							F2(
+								function (v0, v1) {
+									return {ctor: '_Tuple2', _0: v0, _1: v1};
+								}),
+							A2(_elm_lang$core$List$range, 1, model.oligomericState),
+							A2(_elm_lang$core$List$repeat, model.oligomericState, _p5._0._0.parameters)));
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								parameters: parametersDict,
+								currentInput: _user$project$Update$parametersDictToInputDict(parametersDict),
+								optimising: false
+							}),
+						{
+							ctor: '::',
+							_0: _user$project$Update$toCommand(
+								_user$project$Types$ProcessModel(
+									_elm_lang$core$Result$Ok(_p5._0._0.modellingResults))),
+							_1: {ctor: '[]'}
+						});
+				} else {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{optimising: false}),
+						{
+							ctor: '::',
+							_0: _user$project$Update$toCommand(
+								_user$project$Types$ProcessModel(
+									_elm_lang$core$Result$Err(_p5._0._0))),
+							_1: {ctor: '[]'}
+						});
+				}
+			case 'SetOligomericState':
+				var oligomericState = A2(
+					_elm_lang$core$Maybe$withDefault,
+					2,
+					_elm_lang$core$Result$toMaybe(
+						_elm_lang$core$String$toInt(_p5._0)));
+				return (_elm_lang$core$Native_Utils.cmp(oligomericState, model.oligomericState) > 0) ? A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							parameters: _elm_lang$core$Dict$fromList(
+								A2(
+									_elm_lang$core$List$append,
+									_elm_lang$core$Dict$toList(model.parameters),
+									A2(
+										_elm_lang$core$List$map,
+										function (k) {
+											return {
+												ctor: '_Tuple2',
+												_0: k,
+												_1: A2(_user$project$Types$parameterRecordWithDefault, 1, model.parameters)
+											};
+										},
+										A2(_elm_lang$core$List$range, model.oligomericState + 1, oligomericState)))),
+							currentInput: _elm_lang$core$Dict$fromList(
+								A2(
+									_elm_lang$core$List$append,
+									_elm_lang$core$Dict$toList(model.currentInput),
+									A2(
+										_elm_lang$core$List$map,
+										function (k) {
+											return {
+												ctor: '_Tuple2',
+												_0: k,
+												_1: A2(_user$project$Types$inputRecordWithDefault, 1, model.currentInput)
+											};
+										},
+										A2(_elm_lang$core$List$range, model.oligomericState + 1, oligomericState)))),
+							oligomericState: oligomericState
+						}),
+					{ctor: '[]'}) : A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							parameters: _elm_lang$core$Dict$fromList(
+								A2(
+									_elm_lang$core$List$take,
+									oligomericState,
+									_elm_lang$core$Dict$toList(model.parameters))),
+							currentInput: _elm_lang$core$Dict$fromList(
+								A2(
+									_elm_lang$core$List$take,
+									oligomericState,
+									_elm_lang$core$Dict$toList(model.currentInput))),
+							oligomericState: oligomericState
+						}),
+					{ctor: '[]'});
+			case 'Clear':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							parameters: _elm_lang$core$Dict$fromList(
+								A2(
+									_elm_lang$core$List$map,
+									function (k) {
+										return {ctor: '_Tuple2', _0: k, _1: _user$project$Types$emptyParameterRecord};
+									},
+									_elm_lang$core$Dict$keys(model.parameters))),
+							currentInput: _elm_lang$core$Dict$fromList(
+								A2(
+									_elm_lang$core$List$map,
+									function (k) {
+										return {ctor: '_Tuple2', _0: k, _1: _user$project$Types$emptyInput};
+									},
+									_elm_lang$core$Dict$keys(model.currentInput)))
+						}),
+					{ctor: '[]'});
+			case 'DownloadPdb':
+				var pdbFile = A2(_elm_lang$core$Maybe$withDefault, '', model.pdbFile);
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{
+						ctor: '::',
+						_0: _user$project$Ports$downloadPdb(
+							{ctor: '_Tuple2', _0: 'ccbuilder_model.pdb', _1: pdbFile}),
+						_1: {ctor: '[]'}
+					});
+			case 'SetParametersAndBuild':
+				var _p14 = _p5._0;
+				return _user$project$ParameterValidation$invalidParameterDict(_p14) ? A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{ctor: '[]'}) : A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							parameters: _p14,
+							currentInput: _user$project$Update$parametersDictToInputDict(_p14),
+							oligomericState: _elm_lang$core$List$length(
+								_elm_lang$core$Dict$toList(_p14))
+						}),
+					{
+						ctor: '::',
+						_0: _user$project$Update$toCommand(_user$project$Types$Build),
+						_1: {ctor: '[]'}
+					});
+			case 'KeyMsg':
+				var _p15 = _p5._0;
+				if (_p15 === 13) {
+					return _user$project$ParameterValidation$invalidParameterDict(model.parameters) ? A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						model,
+						{ctor: '[]'}) : A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						model,
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$core$Task$perform,
+								_elm_lang$core$Basics$identity,
+								A2(
+									_elm_lang$core$Task$andThen,
+									_elm_lang$core$Basics$always(
+										_elm_lang$core$Task$succeed(_user$project$Types$Build)),
+									_elm_lang$core$Process$sleep(1 * _elm_lang$core$Time$millisecond))),
+							_1: {ctor: '[]'}
+						});
+				} else {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						model,
+						{ctor: '[]'});
+				}
+			case 'TogglePanel':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							panelVisibility: A2(_user$project$Update$togglePanelVisibility, _p5._0, model.panelVisibility)
+						}),
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$core$Task$perform,
+							_user$project$Types$NoOp,
+							_elm_lang$core$Process$sleep(10 * _elm_lang$core$Time$millisecond)),
+						_1: {ctor: '[]'}
+					});
+			case 'ExpandHistory':
+				var _p17 = _p5._0;
+				var oldEntry = A2(_elm_lang$core$Dict$get, _p17, model.modelHistory);
+				var _p16 = oldEntry;
+				if (_p16.ctor === 'Just') {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								modelHistory: A3(
+									_elm_lang$core$Dict$insert,
+									_p17,
+									{ctor: '_Tuple3', _0: _p16._0._0, _1: !_p16._0._1, _2: _p16._0._2},
+									model.modelHistory)
+							}),
+						{ctor: '[]'});
+				} else {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						model,
+						{ctor: '[]'});
+				}
+			case 'ShowAxes':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{
+						ctor: '::',
+						_0: _user$project$Ports$showAxes(
+							{ctor: '_Tuple0'}),
+						_1: {ctor: '[]'}
+					});
+			case 'EditRepresentation':
+				var newRep = A2(_user$project$Update$updateRepresentation, _p5._0, model.currentRepresentation);
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{currentRepresentation: newRep}),
+					{
+						ctor: '::',
+						_0: _user$project$Ports$newRepresentation(newRep),
+						_1: {ctor: '[]'}
+					});
+			case 'StoreModel':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{
+						ctor: '::',
+						_0: _user$project$Ports$setStorage(
+							_user$project$Model$modelToExportable(model)),
+						_1: {ctor: '[]'}
+					});
+			default:
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{ctor: '[]'});
+		}
+	});
+
 var _user$project$Builder$optJobStatusStyling = function (position) {
 	return {
 		ctor: '::',
@@ -22058,32 +22958,6 @@ var _user$project$Builder$buildingStatusStyling = {
 		}
 	}
 };
-var _user$project$Builder$updateRepresentation = F2(
-	function (repOption, oldRep) {
-		var _p0 = repOption;
-		switch (_p0.ctor) {
-			case 'Cartoon':
-				return _elm_lang$core$Native_Utils.update(
-					oldRep,
-					{cartoon: !oldRep.cartoon, trace: false});
-			case 'Trace':
-				return _elm_lang$core$Native_Utils.update(
-					oldRep,
-					{cartoon: false, trace: !oldRep.trace});
-			case 'BallsAndSticks':
-				return _elm_lang$core$Native_Utils.update(
-					oldRep,
-					{ballsAndSticks: !oldRep.ballsAndSticks, spheres: false, points: false});
-			case 'Spheres':
-				return _elm_lang$core$Native_Utils.update(
-					oldRep,
-					{ballsAndSticks: false, spheres: !oldRep.spheres, points: false});
-			default:
-				return _elm_lang$core$Native_Utils.update(
-					oldRep,
-					{ballsAndSticks: false, spheres: false, points: !oldRep.points});
-		}
-	});
 var _user$project$Builder$viewerPanelStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$top(
@@ -22328,262 +23202,42 @@ var _user$project$Builder$subscriptions = function (model) {
 			}
 		});
 };
-var _user$project$Builder$togglePanelVisibility = F2(
-	function (panel, currentVisibility) {
-		var _p1 = panel;
-		switch (_p1.ctor) {
-			case 'BuildPanel':
-				return _elm_lang$core$Native_Utils.update(
-					currentVisibility,
-					{buildPanel: !currentVisibility.buildPanel, optimisePanel: false, examplesPanel: false});
-			case 'ExamplesPanel':
-				return _elm_lang$core$Native_Utils.update(
-					currentVisibility,
-					{buildPanel: false, optimisePanel: false, examplesPanel: !currentVisibility.examplesPanel});
-			case 'OptimisePanel':
-				return _elm_lang$core$Native_Utils.update(
-					currentVisibility,
-					{buildPanel: false, optimisePanel: !currentVisibility.optimisePanel, examplesPanel: false});
-			case 'BuildHistoryPanel':
-				return _elm_lang$core$Native_Utils.update(
-					currentVisibility,
-					{buildHistoryPanel: !currentVisibility.buildHistoryPanel, viewerPanel: false});
-			case 'ViewerPanel':
-				return _elm_lang$core$Native_Utils.update(
-					currentVisibility,
-					{buildHistoryPanel: false, viewerPanel: !currentVisibility.viewerPanel});
-			default:
-				return currentVisibility;
-		}
-	});
-var _user$project$Builder$maybeNumberToString = function (mNum) {
-	var _p2 = mNum;
-	if (_p2.ctor === 'Just') {
-		return _elm_lang$core$Basics$toString(_p2._0);
-	} else {
-		return '';
-	}
-};
-var _user$project$Builder$parametersToInput = function (parameterRecord) {
-	var lsh = _elm_lang$core$Basics$toString(parameterRecord.linkedSuperHelRot);
-	var zsh = _user$project$Builder$maybeNumberToString(parameterRecord.zShift);
-	var ant = _elm_lang$core$Basics$toString(parameterRecord.antiParallel);
-	var rot = _user$project$Builder$maybeNumberToString(parameterRecord.superHelRot);
-	var reg = parameterRecord.register;
-	var seq = A2(_elm_lang$core$Maybe$withDefault, '', parameterRecord.sequence);
-	var phi = _user$project$Builder$maybeNumberToString(parameterRecord.phiCA);
-	var pit = _user$project$Builder$maybeNumberToString(parameterRecord.pitch);
-	var rad = _user$project$Builder$maybeNumberToString(parameterRecord.radius);
-	return A9(_user$project$Types$InputValues, rad, pit, phi, seq, reg, rot, ant, zsh, lsh);
-};
-var _user$project$Builder$parametersDictToInputDict = function (parameters) {
-	return _elm_lang$core$Dict$fromList(
-		A2(
-			_elm_lang$core$List$map,
-			function (_p3) {
-				var _p4 = _p3;
-				return {
-					ctor: '_Tuple2',
-					_0: _p4._0,
-					_1: _user$project$Builder$parametersToInput(_p4._1)
-				};
-			},
-			_elm_lang$core$Dict$toList(parameters)));
-};
-var _user$project$Builder$basicParametersToRecord = F5(
-	function (radius, pitch, phiCA, sequence, register) {
-		return {
-			radius: _elm_lang$core$Maybe$Just(radius),
-			pitch: _elm_lang$core$Maybe$Just(pitch),
-			phiCA: _elm_lang$core$Maybe$Just(phiCA),
-			sequence: _elm_lang$core$Maybe$Just(sequence),
-			register: register,
-			superHelRot: _elm_lang$core$Maybe$Nothing,
-			antiParallel: false,
-			zShift: _elm_lang$core$Maybe$Nothing,
-			linkedSuperHelRot: true
-		};
-	});
-var _user$project$Builder$basicParameterJsonDecoder = A6(
-	_elm_lang$core$Json_Decode$map5,
-	_user$project$Builder$basicParametersToRecord,
-	A2(_elm_lang$core$Json_Decode$field, 'radius', _elm_lang$core$Json_Decode$float),
-	A2(_elm_lang$core$Json_Decode$field, 'pitch', _elm_lang$core$Json_Decode$float),
-	A2(_elm_lang$core$Json_Decode$field, 'radius', _elm_lang$core$Json_Decode$float),
-	A2(_elm_lang$core$Json_Decode$field, 'sequence', _elm_lang$core$Json_Decode$string),
-	A2(_elm_lang$core$Json_Decode$field, 'register', _elm_lang$core$Json_Decode$string));
-var _user$project$Builder$jobStatusDecoder = A3(
-	_elm_lang$core$Json_Decode$map2,
-	F2(
-		function (v0, v1) {
-			return {ctor: '_Tuple2', _0: v0, _1: v1};
-		}),
-	A2(_elm_lang$core$Json_Decode$field, '_id', _elm_lang$core$Json_Decode$string),
-	A2(_elm_lang$core$Json_Decode$field, 'status', _elm_lang$core$Json_Decode$string));
-var _user$project$Builder$checkJobStatus = function (optJobId) {
+var _user$project$Builder$init = function (storedModel) {
+	var model = A2(
+		_elm_lang$core$Maybe$withDefault,
+		_user$project$Model$emptyModel,
+		A2(_elm_lang$core$Maybe$map, _user$project$Model$exportableToModel, storedModel));
+	var showDefaultModel = _elm_lang$core$Native_Utils.eq(storedModel, _elm_lang$core$Maybe$Nothing) ? true : false;
 	return A2(
-		_elm_lang$http$Http$send,
-		_user$project$Types$OptJobStatus,
+		_elm_lang$core$Platform_Cmd_ops['!'],
+		model,
 		A2(
-			_elm_lang$http$Http$get,
-			A2(_elm_lang$core$Basics_ops['++'], 'builder/api/v0.1/optimise/check-job-status?opt-job-id=', optJobId),
-			_user$project$Builder$jobStatusDecoder));
-};
-var _user$project$Builder$parameterRecordJson = function (parameters) {
-	return _elm_lang$core$Json_Encode$object(
-		{
-			ctor: '::',
-			_0: {
-				ctor: '_Tuple2',
-				_0: 'Radius',
-				_1: _elm_lang$core$Json_Encode$float(
-					A2(_elm_lang$core$Maybe$withDefault, 0, parameters.radius))
-			},
-			_1: {
-				ctor: '::',
-				_0: {
-					ctor: '_Tuple2',
-					_0: 'Pitch',
-					_1: _elm_lang$core$Json_Encode$float(
-						A2(_elm_lang$core$Maybe$withDefault, 0, parameters.pitch))
-				},
-				_1: {
-					ctor: '::',
-					_0: {
-						ctor: '_Tuple2',
-						_0: 'Interface Angle',
-						_1: _elm_lang$core$Json_Encode$float(
-							A2(_elm_lang$core$Maybe$withDefault, 0, parameters.phiCA))
-					},
-					_1: {
-						ctor: '::',
-						_0: {
-							ctor: '_Tuple2',
-							_0: 'Sequence',
-							_1: _elm_lang$core$Json_Encode$string(
-								A2(_elm_lang$core$Maybe$withDefault, '', parameters.sequence))
-						},
-						_1: {
-							ctor: '::',
-							_0: {
-								ctor: '_Tuple2',
-								_0: 'Register',
-								_1: _elm_lang$core$Json_Encode$string(parameters.register)
-							},
-							_1: {
-								ctor: '::',
-								_0: {
-									ctor: '_Tuple2',
-									_0: 'Super-Helical Rotation',
-									_1: _elm_lang$core$Json_Encode$float(
-										A2(_elm_lang$core$Maybe$withDefault, 0, parameters.superHelRot))
-								},
-								_1: {
-									ctor: '::',
-									_0: {
-										ctor: '_Tuple2',
-										_0: 'Orientation',
-										_1: _elm_lang$core$Json_Encode$bool(parameters.antiParallel)
-									},
-									_1: {
-										ctor: '::',
-										_0: {
-											ctor: '_Tuple2',
-											_0: 'Z-Shift',
-											_1: _elm_lang$core$Json_Encode$float(
-												A2(_elm_lang$core$Maybe$withDefault, 0, parameters.zShift))
-										},
-										_1: {ctor: '[]'}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		});
-};
-var _user$project$Builder$parametersDictToListJson = function (parameters) {
-	return _elm_lang$core$Json_Encode$list(
-		A2(
-			_elm_lang$core$List$map,
-			_user$project$Builder$parameterRecordJson,
-			_elm_lang$core$Dict$values(parameters)));
-};
-var _user$project$Builder$optimisationJson = F2(
-	function (parameters, heat) {
-		return _elm_lang$core$Json_Encode$object(
+			_elm_lang$core$Basics_ops['++'],
 			{
 				ctor: '::',
-				_0: {
-					ctor: '_Tuple2',
-					_0: 'Parameters',
-					_1: _user$project$Builder$parametersDictToListJson(parameters)
-				},
-				_1: {
-					ctor: '::',
-					_0: {
-						ctor: '_Tuple2',
-						_0: 'Heat',
-						_1: _elm_lang$core$Json_Encode$int(heat)
-					},
-					_1: {ctor: '[]'}
-				}
-			});
-	});
-var _user$project$Builder$sendOptimiseCmd = F2(
-	function (parameters, heat) {
-		return A2(
-			_elm_lang$http$Http$send,
-			_user$project$Types$OptimisationSubmitted,
-			A3(
-				_elm_lang$http$Http$post,
-				'builder/api/v0.1/optimise/coiled-coil',
-				_elm_lang$http$Http$jsonBody(
-					A2(_user$project$Builder$optimisationJson, parameters, heat)),
-				_elm_lang$core$Json_Decode$string));
-	});
-var _user$project$Builder$modellingResultsDecoder = A5(
-	_elm_lang$core$Json_Decode$map4,
-	_user$project$Types$ModellingResults,
-	A2(_elm_lang$core$Json_Decode$field, 'model_id', _elm_lang$core$Json_Decode$string),
-	A2(_elm_lang$core$Json_Decode$field, 'pdb', _elm_lang$core$Json_Decode$string),
-	A2(_elm_lang$core$Json_Decode$field, 'score', _elm_lang$core$Json_Decode$float),
-	A2(_elm_lang$core$Json_Decode$field, 'mean_rpt_value', _elm_lang$core$Json_Decode$float));
-var _user$project$Builder$optimisationResultsDecoder = A3(
-	_elm_lang$core$Json_Decode$map2,
-	_user$project$Types$OptimisationResults,
-	A2(_elm_lang$core$Json_Decode$field, 'parameters', _user$project$Builder$basicParameterJsonDecoder),
-	A2(_elm_lang$core$Json_Decode$field, 'model_and_info', _user$project$Builder$modellingResultsDecoder));
-var _user$project$Builder$sendBuildCmd = function (parameters) {
-	return A2(
-		_elm_lang$http$Http$send,
-		_user$project$Types$ProcessModel,
-		A3(
-			_elm_lang$http$Http$post,
-			'builder/api/v0.1/build/coiled-coil',
-			_elm_lang$http$Http$jsonBody(
-				_elm_lang$core$Json_Encode$object(
+				_0: _user$project$Ports$initialiseViewer(
+					{ctor: '_Tuple0'}),
+				_1: {ctor: '[]'}
+			},
+			showDefaultModel ? {
+				ctor: '::',
+				_0: _user$project$Update$toCommand(
+					_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetDimer)),
+				_1: {ctor: '[]'}
+			} : {
+				ctor: '::',
+				_0: _user$project$Ports$showStructure(
 					{
-						ctor: '::',
-						_0: {
-							ctor: '_Tuple2',
-							_0: 'Parameters',
-							_1: _user$project$Builder$parametersDictToListJson(parameters)
-						},
-						_1: {ctor: '[]'}
-					})),
-			_user$project$Builder$modellingResultsDecoder));
+						ctor: '_Tuple2',
+						_0: A2(_elm_lang$core$Maybe$withDefault, '', model.pdbFile),
+						_1: model.currentRepresentation
+					}),
+				_1: {ctor: '[]'}
+			}));
 };
-var _user$project$Builder$toCommand = function (msg) {
-	return A2(
-		_elm_lang$core$Task$perform,
-		_elm_lang$core$Basics$identity,
-		_elm_lang$core$Task$succeed(msg));
-};
-var _user$project$Builder$styles = function (_p5) {
+var _user$project$Builder$styles = function (_p0) {
 	return _elm_lang$html$Html_Attributes$style(
-		_rtfeldman$elm_css$Css$asPairs(_p5));
+		_rtfeldman$elm_css$Css$asPairs(_p0));
 };
 var _user$project$Builder$modelDetailTableHeader = A2(
 	_elm_lang$html$Html$thead,
@@ -22758,10 +23412,10 @@ var _user$project$Builder$modelDetailTableHeader = A2(
 			}),
 		_1: {ctor: '[]'}
 	});
-var _user$project$Builder$_p6 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace(_user$project$BuilderCss$cssNamespace);
-var _user$project$Builder$class = _user$project$Builder$_p6.$class;
-var _user$project$Builder$classList = _user$project$Builder$_p6.classList;
-var _user$project$Builder$id = _user$project$Builder$_p6.id;
+var _user$project$Builder$_p1 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace(_user$project$BuilderCss$cssNamespace);
+var _user$project$Builder$class = _user$project$Builder$_p1.$class;
+var _user$project$Builder$classList = _user$project$Builder$_p1.classList;
+var _user$project$Builder$id = _user$project$Builder$_p1.id;
 var _user$project$Builder$siteHeader = A2(
 	_elm_lang$html$Html$div,
 	{
@@ -22925,8 +23579,8 @@ var _user$project$Builder$optimisePanel = F4(
 			_elm_lang$core$List$length(optJobs),
 			0) > 0) ? true : false;
 		var advancedBuild = function () {
-			var _p7 = buildMode;
-			if (_p7.ctor === 'Basic') {
+			var _p2 = buildMode;
+			if (_p2.ctor === 'Basic') {
 				return false;
 			} else {
 				return true;
@@ -23307,27 +23961,27 @@ var _user$project$Builder$modelHistoryTopRow = F5(
 					})));
 	});
 var _user$project$Builder$modelParametersAsRow = F2(
-	function (_p8, building) {
-		var _p9 = _p8;
-		var _p13 = _p9._1._1;
-		var _p12 = _p9._1._2;
-		var _p11 = _p9._1._0;
-		var _p10 = _p9._0;
+	function (_p3, building) {
+		var _p4 = _p3;
+		var _p8 = _p4._1._1;
+		var _p7 = _p4._1._2;
+		var _p6 = _p4._1._0;
+		var _p5 = _p4._0;
 		var foldedRows = A2(
 			_elm_lang$core$List$map,
-			_user$project$Builder$modelFoldedRow(_p12),
+			_user$project$Builder$modelFoldedRow(_p7),
 			A2(
 				_elm_lang$core$Maybe$withDefault,
 				{ctor: '[]'},
 				_elm_lang$core$List$tail(
-					_elm_lang$core$Dict$values(_p11))));
-		return (!_p13) ? {
+					_elm_lang$core$Dict$values(_p6))));
+		return (!_p8) ? {
 			ctor: '::',
-			_0: A5(_user$project$Builder$modelHistoryTopRow, _p10, _p11, building, _p13, _p12),
+			_0: A5(_user$project$Builder$modelHistoryTopRow, _p5, _p6, building, _p8, _p7),
 			_1: {ctor: '[]'}
 		} : {
 			ctor: '::',
-			_0: A5(_user$project$Builder$modelHistoryTopRow, _p10, _p11, building, _p13, _p12),
+			_0: A5(_user$project$Builder$modelHistoryTopRow, _p5, _p6, building, _p8, _p7),
 			_1: foldedRows
 		};
 	});
@@ -23806,8 +24460,8 @@ var _user$project$Builder$statusPanel = F2(
 			});
 	});
 var _user$project$Builder$optJobStatus = F2(
-	function (_p14, position) {
-		var _p15 = _p14;
+	function (_p9, position) {
+		var _p10 = _p9;
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -23830,7 +24484,7 @@ var _user$project$Builder$optJobStatus = F2(
 			},
 			{
 				ctor: '::',
-				_0: _elm_lang$html$Html$text(_p15._0),
+				_0: _elm_lang$html$Html$text(_p10._0),
 				_1: {
 					ctor: '::',
 					_0: A2(
@@ -23840,7 +24494,7 @@ var _user$project$Builder$optJobStatus = F2(
 					_1: {
 						ctor: '::',
 						_0: _elm_lang$html$Html$text(
-							_user$project$Types$optStatusToString(_p15._1)),
+							_user$project$Types$optStatusToString(_p10._1)),
 						_1: {ctor: '[]'}
 					}
 				}
@@ -23921,660 +24575,8 @@ var _user$project$Builder$view = function (model) {
 			_1: {ctor: '[]'}
 		});
 };
-var _user$project$Builder$setStorage = _elm_lang$core$Native_Platform.outgoingPort(
-	'setStorage',
-	function (v) {
-		return {
-			parameters: _elm_lang$core$Native_List.toArray(v.parameters).map(
-				function (v) {
-					return [
-						v._0,
-						{
-						radius: (v._1.radius.ctor === 'Nothing') ? null : v._1.radius._0,
-						pitch: (v._1.pitch.ctor === 'Nothing') ? null : v._1.pitch._0,
-						phiCA: (v._1.phiCA.ctor === 'Nothing') ? null : v._1.phiCA._0,
-						sequence: (v._1.sequence.ctor === 'Nothing') ? null : v._1.sequence._0,
-						register: v._1.register,
-						superHelRot: (v._1.superHelRot.ctor === 'Nothing') ? null : v._1.superHelRot._0,
-						antiParallel: v._1.antiParallel,
-						zShift: (v._1.zShift.ctor === 'Nothing') ? null : v._1.zShift._0,
-						linkedSuperHelRot: v._1.linkedSuperHelRot
-					}
-					];
-				}),
-			currentInput: _elm_lang$core$Native_List.toArray(v.currentInput).map(
-				function (v) {
-					return [
-						v._0,
-						{radius: v._1.radius, pitch: v._1.pitch, phiCA: v._1.phiCA, sequence: v._1.sequence, register: v._1.register, superHelRot: v._1.superHelRot, antiParallel: v._1.antiParallel, zShift: v._1.zShift, linkedSuperHelRot: v._1.linkedSuperHelRot}
-					];
-				}),
-			parameterClipBoard: (v.parameterClipBoard.ctor === 'Nothing') ? null : {
-				radius: (v.parameterClipBoard._0.radius.ctor === 'Nothing') ? null : v.parameterClipBoard._0.radius._0,
-				pitch: (v.parameterClipBoard._0.pitch.ctor === 'Nothing') ? null : v.parameterClipBoard._0.pitch._0,
-				phiCA: (v.parameterClipBoard._0.phiCA.ctor === 'Nothing') ? null : v.parameterClipBoard._0.phiCA._0,
-				sequence: (v.parameterClipBoard._0.sequence.ctor === 'Nothing') ? null : v.parameterClipBoard._0.sequence._0,
-				register: v.parameterClipBoard._0.register,
-				superHelRot: (v.parameterClipBoard._0.superHelRot.ctor === 'Nothing') ? null : v.parameterClipBoard._0.superHelRot._0,
-				antiParallel: v.parameterClipBoard._0.antiParallel,
-				zShift: (v.parameterClipBoard._0.zShift.ctor === 'Nothing') ? null : v.parameterClipBoard._0.zShift._0,
-				linkedSuperHelRot: v.parameterClipBoard._0.linkedSuperHelRot
-			},
-			oligomericState: v.oligomericState,
-			pdbFile: (v.pdbFile.ctor === 'Nothing') ? null : v.pdbFile._0,
-			score: (v.score.ctor === 'Nothing') ? null : v.score._0,
-			residuesPerTurn: (v.residuesPerTurn.ctor === 'Nothing') ? null : v.residuesPerTurn._0,
-			building: v.building,
-			optimising: v.optimising,
-			optJobs: _elm_lang$core$Native_List.toArray(v.optJobs).map(
-				function (v) {
-					return [v._0, v._1];
-				}),
-			heat: v.heat,
-			modelHistory: _elm_lang$core$Native_List.toArray(v.modelHistory).map(
-				function (v) {
-					return [
-						v._0,
-						[
-						_elm_lang$core$Native_List.toArray(v._1._0).map(
-						function (v) {
-							return [
-								v._0,
-								{
-								radius: (v._1.radius.ctor === 'Nothing') ? null : v._1.radius._0,
-								pitch: (v._1.pitch.ctor === 'Nothing') ? null : v._1.pitch._0,
-								phiCA: (v._1.phiCA.ctor === 'Nothing') ? null : v._1.phiCA._0,
-								sequence: (v._1.sequence.ctor === 'Nothing') ? null : v._1.sequence._0,
-								register: v._1.register,
-								superHelRot: (v._1.superHelRot.ctor === 'Nothing') ? null : v._1.superHelRot._0,
-								antiParallel: v._1.antiParallel,
-								zShift: (v._1.zShift.ctor === 'Nothing') ? null : v._1.zShift._0,
-								linkedSuperHelRot: v._1.linkedSuperHelRot
-							}
-							];
-						}),
-						v._1._1,
-						v._1._2
-					]
-					];
-				}),
-			nextHistoryID: v.nextHistoryID,
-			panelVisibility: {buildPanel: v.panelVisibility.buildPanel, examplesPanel: v.panelVisibility.examplesPanel, optimisePanel: v.panelVisibility.optimisePanel, buildHistoryPanel: v.panelVisibility.buildHistoryPanel, viewerPanel: v.panelVisibility.viewerPanel},
-			currentRepresentation: {cartoon: v.currentRepresentation.cartoon, trace: v.currentRepresentation.trace, ballsAndSticks: v.currentRepresentation.ballsAndSticks, spheres: v.currentRepresentation.spheres, points: v.currentRepresentation.points}
-		};
-	});
-var _user$project$Builder$initialiseViewer = _elm_lang$core$Native_Platform.outgoingPort(
-	'initialiseViewer',
-	function (v) {
-		return null;
-	});
-var _user$project$Builder$showStructure = _elm_lang$core$Native_Platform.outgoingPort(
-	'showStructure',
-	function (v) {
-		return [
-			v._0,
-			{cartoon: v._1.cartoon, trace: v._1.trace, ballsAndSticks: v._1.ballsAndSticks, spheres: v._1.spheres, points: v._1.points}
-		];
-	});
-var _user$project$Builder$init = function (storedModel) {
-	var model = A2(
-		_elm_lang$core$Maybe$withDefault,
-		_user$project$Model$emptyModel,
-		A2(_elm_lang$core$Maybe$map, _user$project$Model$exportableToModel, storedModel));
-	var showDefaultModel = _elm_lang$core$Native_Utils.eq(storedModel, _elm_lang$core$Maybe$Nothing) ? true : false;
-	return A2(
-		_elm_lang$core$Platform_Cmd_ops['!'],
-		model,
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			{
-				ctor: '::',
-				_0: _user$project$Builder$initialiseViewer(
-					{ctor: '_Tuple0'}),
-				_1: {ctor: '[]'}
-			},
-			showDefaultModel ? {
-				ctor: '::',
-				_0: _user$project$Builder$toCommand(
-					_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetDimer)),
-				_1: {ctor: '[]'}
-			} : {
-				ctor: '::',
-				_0: _user$project$Builder$showStructure(
-					{
-						ctor: '_Tuple2',
-						_0: A2(_elm_lang$core$Maybe$withDefault, '', model.pdbFile),
-						_1: model.currentRepresentation
-					}),
-				_1: {ctor: '[]'}
-			}));
-};
-var _user$project$Builder$showAxes = _elm_lang$core$Native_Platform.outgoingPort(
-	'showAxes',
-	function (v) {
-		return null;
-	});
-var _user$project$Builder$newRepresentation = _elm_lang$core$Native_Platform.outgoingPort(
-	'newRepresentation',
-	function (v) {
-		return {cartoon: v.cartoon, trace: v.trace, ballsAndSticks: v.ballsAndSticks, spheres: v.spheres, points: v.points};
-	});
-var _user$project$Builder$downloadPdb = _elm_lang$core$Native_Platform.outgoingPort(
-	'downloadPdb',
-	function (v) {
-		return [v._0, v._1];
-	});
-var _user$project$Builder$update = F2(
-	function (msg, model) {
-		var _p16 = msg;
-		switch (_p16.ctor) {
-			case 'EditSingleParameter':
-				var _p18 = _p16._1;
-				var input = A2(_user$project$Types$inputRecordWithDefault, _p18, model.currentInput);
-				var params = A2(_user$project$Types$parameterRecordWithDefault, _p18, model.parameters);
-				var _p17 = A4(_user$project$ParameterValidation$editParameterValue, params, input, _p16._0, _p16._2);
-				var p = _p17._0;
-				var i = _p17._1;
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							parameters: A3(_elm_lang$core$Dict$insert, _p18, p, model.parameters),
-							currentInput: A3(_elm_lang$core$Dict$insert, _p18, i, model.currentInput)
-						}),
-					{ctor: '[]'});
-			case 'EditAllParameters':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					A2(
-						_elm_lang$core$List$map,
-						_user$project$Builder$toCommand,
-						A3(
-							_elm_lang$core$List$map2,
-							F2(
-								function (v, m) {
-									return m(v);
-								}),
-							A2(_elm_lang$core$List$repeat, model.oligomericState, _p16._1),
-							A2(
-								_elm_lang$core$List$map,
-								_user$project$Types$EditSingleParameter(_p16._0),
-								A2(_elm_lang$core$List$range, 1, model.oligomericState)))));
-			case 'CopyParameters':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							parameterClipBoard: A2(_elm_lang$core$Dict$get, _p16._0, model.parameters)
-						}),
-					{ctor: '[]'});
-			case 'PasteParameters':
-				var _p19 = _p16._0;
-				var pastedParameters = A2(_elm_lang$core$Maybe$withDefault, _user$project$Types$emptyParameterRecord, model.parameterClipBoard);
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							parameters: A3(_elm_lang$core$Dict$insert, _p19, pastedParameters, model.parameters),
-							currentInput: A3(
-								_elm_lang$core$Dict$insert,
-								_p19,
-								_user$project$Builder$parametersToInput(pastedParameters),
-								model.currentInput)
-						}),
-					{ctor: '[]'});
-			case 'ChangeBuildMode':
-				var newBuildMode = function () {
-					var _p20 = _p16._0;
-					switch (_p20) {
-						case 'Basic':
-							return _user$project$Types$Basic;
-						case 'Advanced':
-							return _user$project$Types$Advanced;
-						default:
-							return model.buildMode;
-					}
-				}();
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{buildMode: newBuildMode}),
-					{
-						ctor: '::',
-						_0: A2(
-							_elm_lang$core$Task$perform,
-							_user$project$Types$NoOp,
-							_elm_lang$core$Process$sleep(10 * _elm_lang$core$Time$millisecond)),
-						_1: {ctor: '[]'}
-					});
-			case 'Build':
-				var panelVisibility = model.panelVisibility;
-				return ((!model.building) || _user$project$ParameterValidation$invalidParameterDict(model.parameters)) ? A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							building: true,
-							panelVisibility: A5(_user$project$Types$PanelVisibility, false, false, false, false, false)
-						}),
-					{
-						ctor: '::',
-						_0: _user$project$Builder$sendBuildCmd(model.parameters),
-						_1: {ctor: '[]'}
-					}) : A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					{ctor: '[]'});
-			case 'Optimise':
-				var panelVisibility = model.panelVisibility;
-				return (!model.building) ? A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							panelVisibility: _elm_lang$core$Native_Utils.update(
-								panelVisibility,
-								{buildPanel: false, examplesPanel: false})
-						}),
-					{
-						ctor: '::',
-						_0: A2(_user$project$Builder$sendOptimiseCmd, model.parameters, model.heat),
-						_1: {ctor: '[]'}
-					}) : A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					{ctor: '[]'});
-			case 'OptimisationSubmitted':
-				if (_p16._0.ctor === 'Ok') {
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{
-								optJobs: {
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: _p16._0._0, _1: _user$project$Types$Submitted},
-									_1: model.optJobs
-								}
-							}),
-						{
-							ctor: '::',
-							_0: _user$project$Builder$toCommand(_user$project$Types$StoreModel),
-							_1: {ctor: '[]'}
-						});
-				} else {
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						model,
-						{ctor: '[]'});
-				}
-			case 'CheckOptJobs':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					A2(
-						_elm_lang$core$List$map,
-						_user$project$Builder$checkJobStatus,
-						A2(
-							_elm_lang$core$List$map,
-							_elm_lang$core$Tuple$first,
-							A2(
-								_elm_lang$core$List$filter,
-								function (_p21) {
-									var _p22 = _p21;
-									return _elm_lang$core$Native_Utils.eq(_p22._1, _user$project$Types$Complete) ? false : true;
-								},
-								model.optJobs))));
-			case 'OptJobStatus':
-				if (_p16._0.ctor === 'Ok') {
-					var newOptJobs = _elm_lang$core$Dict$toList(
-						A3(
-							_elm_lang$core$Dict$insert,
-							_p16._0._0._0,
-							A2(
-								_elm_lang$core$Result$withDefault,
-								_user$project$Types$Failed,
-								_user$project$Types$stringToOptStatus(_p16._0._0._1)),
-							_elm_lang$core$Dict$fromList(model.optJobs)));
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{optJobs: newOptJobs}),
-						{ctor: '[]'});
-				} else {
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						model,
-						{ctor: '[]'});
-				}
-			case 'ProcessModel':
-				if (_p16._0.ctor === 'Ok') {
-					var _p24 = _p16._0._0.score;
-					var _p23 = _p16._0._0.pdbFile;
-					var historyLength = 10;
-					var oldHistory = _elm_lang$core$Native_Utils.eq(
-						_elm_lang$core$List$length(
-							_elm_lang$core$Dict$toList(model.modelHistory)),
-						historyLength) ? _elm_lang$core$Dict$fromList(
-						_elm_lang$core$List$reverse(
-							A2(
-								_elm_lang$core$List$take,
-								historyLength - 1,
-								_elm_lang$core$List$reverse(
-									_elm_lang$core$Dict$toList(model.modelHistory))))) : model.modelHistory;
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{
-								currentInput: _user$project$Builder$parametersDictToInputDict(model.parameters),
-								pdbFile: _elm_lang$core$Maybe$Just(_p23),
-								score: _elm_lang$core$Maybe$Just(_p24),
-								residuesPerTurn: _elm_lang$core$Maybe$Just(_p16._0._0.residuesPerTurn),
-								building: false,
-								modelHistory: A3(
-									_elm_lang$core$Dict$insert,
-									model.nextHistoryID,
-									{ctor: '_Tuple3', _0: model.parameters, _1: false, _2: _p24},
-									oldHistory),
-								nextHistoryID: model.nextHistoryID + 1
-							}),
-						{
-							ctor: '::',
-							_0: _user$project$Builder$showStructure(
-								{ctor: '_Tuple2', _0: _p23, _1: model.currentRepresentation}),
-							_1: {
-								ctor: '::',
-								_0: _user$project$Builder$toCommand(_user$project$Types$StoreModel),
-								_1: {ctor: '[]'}
-							}
-						});
-				} else {
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{building: false}),
-						{ctor: '[]'});
-				}
-			case 'SetHeat':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							heat: A2(
-								_elm_lang$core$Result$withDefault,
-								298,
-								_elm_lang$core$String$toInt(_p16._0))
-						}),
-					{ctor: '[]'});
-			case 'ProcessOptimisation':
-				if (_p16._0.ctor === 'Ok') {
-					var parametersDict = _elm_lang$core$Dict$fromList(
-						A3(
-							_elm_lang$core$List$map2,
-							F2(
-								function (v0, v1) {
-									return {ctor: '_Tuple2', _0: v0, _1: v1};
-								}),
-							A2(_elm_lang$core$List$range, 1, model.oligomericState),
-							A2(_elm_lang$core$List$repeat, model.oligomericState, _p16._0._0.parameters)));
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{
-								parameters: parametersDict,
-								currentInput: _user$project$Builder$parametersDictToInputDict(parametersDict),
-								optimising: false
-							}),
-						{
-							ctor: '::',
-							_0: _user$project$Builder$toCommand(
-								_user$project$Types$ProcessModel(
-									_elm_lang$core$Result$Ok(_p16._0._0.modellingResults))),
-							_1: {ctor: '[]'}
-						});
-				} else {
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{optimising: false}),
-						{
-							ctor: '::',
-							_0: _user$project$Builder$toCommand(
-								_user$project$Types$ProcessModel(
-									_elm_lang$core$Result$Err(_p16._0._0))),
-							_1: {ctor: '[]'}
-						});
-				}
-			case 'SetOligomericState':
-				var oligomericState = A2(
-					_elm_lang$core$Maybe$withDefault,
-					2,
-					_elm_lang$core$Result$toMaybe(
-						_elm_lang$core$String$toInt(_p16._0)));
-				return (_elm_lang$core$Native_Utils.cmp(oligomericState, model.oligomericState) > 0) ? A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							parameters: _elm_lang$core$Dict$fromList(
-								A2(
-									_elm_lang$core$List$append,
-									_elm_lang$core$Dict$toList(model.parameters),
-									A2(
-										_elm_lang$core$List$map,
-										function (k) {
-											return {
-												ctor: '_Tuple2',
-												_0: k,
-												_1: A2(_user$project$Types$parameterRecordWithDefault, 1, model.parameters)
-											};
-										},
-										A2(_elm_lang$core$List$range, model.oligomericState + 1, oligomericState)))),
-							currentInput: _elm_lang$core$Dict$fromList(
-								A2(
-									_elm_lang$core$List$append,
-									_elm_lang$core$Dict$toList(model.currentInput),
-									A2(
-										_elm_lang$core$List$map,
-										function (k) {
-											return {
-												ctor: '_Tuple2',
-												_0: k,
-												_1: A2(_user$project$Types$inputRecordWithDefault, 1, model.currentInput)
-											};
-										},
-										A2(_elm_lang$core$List$range, model.oligomericState + 1, oligomericState)))),
-							oligomericState: oligomericState
-						}),
-					{ctor: '[]'}) : A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							parameters: _elm_lang$core$Dict$fromList(
-								A2(
-									_elm_lang$core$List$take,
-									oligomericState,
-									_elm_lang$core$Dict$toList(model.parameters))),
-							currentInput: _elm_lang$core$Dict$fromList(
-								A2(
-									_elm_lang$core$List$take,
-									oligomericState,
-									_elm_lang$core$Dict$toList(model.currentInput))),
-							oligomericState: oligomericState
-						}),
-					{ctor: '[]'});
-			case 'Clear':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							parameters: _elm_lang$core$Dict$fromList(
-								A2(
-									_elm_lang$core$List$map,
-									function (k) {
-										return {ctor: '_Tuple2', _0: k, _1: _user$project$Types$emptyParameterRecord};
-									},
-									_elm_lang$core$Dict$keys(model.parameters))),
-							currentInput: _elm_lang$core$Dict$fromList(
-								A2(
-									_elm_lang$core$List$map,
-									function (k) {
-										return {ctor: '_Tuple2', _0: k, _1: _user$project$Types$emptyInput};
-									},
-									_elm_lang$core$Dict$keys(model.currentInput)))
-						}),
-					{ctor: '[]'});
-			case 'DownloadPdb':
-				var pdbFile = A2(_elm_lang$core$Maybe$withDefault, '', model.pdbFile);
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					{
-						ctor: '::',
-						_0: _user$project$Builder$downloadPdb(
-							{ctor: '_Tuple2', _0: 'ccbuilder_model.pdb', _1: pdbFile}),
-						_1: {ctor: '[]'}
-					});
-			case 'SetParametersAndBuild':
-				var _p25 = _p16._0;
-				return _user$project$ParameterValidation$invalidParameterDict(_p25) ? A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					{ctor: '[]'}) : A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							parameters: _p25,
-							currentInput: _user$project$Builder$parametersDictToInputDict(_p25),
-							oligomericState: _elm_lang$core$List$length(
-								_elm_lang$core$Dict$toList(_p25))
-						}),
-					{
-						ctor: '::',
-						_0: _user$project$Builder$toCommand(_user$project$Types$Build),
-						_1: {ctor: '[]'}
-					});
-			case 'KeyMsg':
-				var _p26 = _p16._0;
-				if (_p26 === 13) {
-					return _user$project$ParameterValidation$invalidParameterDict(model.parameters) ? A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						model,
-						{ctor: '[]'}) : A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						model,
-						{
-							ctor: '::',
-							_0: A2(
-								_elm_lang$core$Task$perform,
-								_elm_lang$core$Basics$identity,
-								A2(
-									_elm_lang$core$Task$andThen,
-									_elm_lang$core$Basics$always(
-										_elm_lang$core$Task$succeed(_user$project$Types$Build)),
-									_elm_lang$core$Process$sleep(1 * _elm_lang$core$Time$millisecond))),
-							_1: {ctor: '[]'}
-						});
-				} else {
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						model,
-						{ctor: '[]'});
-				}
-			case 'TogglePanel':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							panelVisibility: A2(_user$project$Builder$togglePanelVisibility, _p16._0, model.panelVisibility)
-						}),
-					{
-						ctor: '::',
-						_0: A2(
-							_elm_lang$core$Task$perform,
-							_user$project$Types$NoOp,
-							_elm_lang$core$Process$sleep(10 * _elm_lang$core$Time$millisecond)),
-						_1: {ctor: '[]'}
-					});
-			case 'ExpandHistory':
-				var _p28 = _p16._0;
-				var oldEntry = A2(_elm_lang$core$Dict$get, _p28, model.modelHistory);
-				var _p27 = oldEntry;
-				if (_p27.ctor === 'Just') {
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{
-								modelHistory: A3(
-									_elm_lang$core$Dict$insert,
-									_p28,
-									{ctor: '_Tuple3', _0: _p27._0._0, _1: !_p27._0._1, _2: _p27._0._2},
-									model.modelHistory)
-							}),
-						{ctor: '[]'});
-				} else {
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						model,
-						{ctor: '[]'});
-				}
-			case 'ShowAxes':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					{
-						ctor: '::',
-						_0: _user$project$Builder$showAxes(
-							{ctor: '_Tuple0'}),
-						_1: {ctor: '[]'}
-					});
-			case 'EditRepresentation':
-				var newRep = A2(_user$project$Builder$updateRepresentation, _p16._0, model.currentRepresentation);
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{currentRepresentation: newRep}),
-					{
-						ctor: '::',
-						_0: _user$project$Builder$newRepresentation(newRep),
-						_1: {ctor: '[]'}
-					});
-			case 'StoreModel':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					{
-						ctor: '::',
-						_0: _user$project$Builder$setStorage(
-							_user$project$Model$modelToExportable(model)),
-						_1: {ctor: '[]'}
-					});
-			default:
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					{ctor: '[]'});
-		}
-	});
 var _user$project$Builder$main = _elm_lang$html$Html$programWithFlags(
-	{init: _user$project$Builder$init, view: _user$project$Builder$view, update: _user$project$Builder$update, subscriptions: _user$project$Builder$subscriptions})(
+	{init: _user$project$Builder$init, view: _user$project$Builder$view, update: _user$project$Update$update, subscriptions: _user$project$Builder$subscriptions})(
 	_elm_lang$core$Json_Decode$oneOf(
 		{
 			ctor: '::',
