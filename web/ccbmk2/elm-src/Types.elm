@@ -18,7 +18,7 @@ type Msg
     | SetHeat String
     | OptimisationSubmitted (Result Http.Error String)
     | CheckOptJobs Time.Time
-    | OptJobStatus (Result Http.Error (String, String))
+    | OptJobStatus (Result Http.Error ( String, String ))
     | ProcessOptimisation (Result Http.Error OptimisationResults)
     | SetOligomericState String
     | Clear
@@ -33,13 +33,16 @@ type Msg
     | NoOp ()
 
 
-type alias SectionID = Int
+type alias SectionID =
+    Int
 
 
-type alias HistoryID = Int
+type alias HistoryID =
+    Int
 
 
-type alias ParametersDict = Dict.Dict SectionID ParameterRecord
+type alias ParametersDict =
+    Dict.Dict SectionID ParameterRecord
 
 
 type alias ParameterRecord =
@@ -55,7 +58,8 @@ type alias ParameterRecord =
     }
 
 
-type alias InputValuesDict = Dict.Dict SectionID InputValues
+type alias InputValuesDict =
+    Dict.Dict SectionID InputValues
 
 
 type alias InputValues =
@@ -113,12 +117,21 @@ type Panel
     | ViewerPanel
 
 
+type alias PanelVisibility =
+    { buildPanel : Bool
+    , examplesPanel : Bool
+    , optimisePanel : Bool
+    , buildHistoryPanel : Bool
+    , viewerPanel : Bool
+    }
+
+
 type OptStatus
     = Submitted
     | Queued
     | Running
     | Complete
-    | Failed 
+    | Failed
 
 
 type alias Representation =
@@ -143,12 +156,16 @@ optStatusToString status =
     case status of
         Submitted ->
             "SUBMITTED"
+
         Queued ->
             "QUEUED"
+
         Running ->
             "RUNNING"
+
         Complete ->
             "COMPLETE"
+
         Failed ->
             "FAILED"
 
@@ -158,14 +175,19 @@ stringToOptStatus statusString =
     case statusString of
         "SUBMITTED" ->
             Ok Submitted
+
         "QUEUED" ->
             Ok Queued
+
         "RUNNING" ->
             Ok Running
+
         "COMPLETE" ->
             Ok Complete
+
         "FAILED" ->
             Ok Failed
+
         _ ->
             Err "String could not be converted to OptStatus."
 
@@ -178,3 +200,15 @@ emptyParameterRecord =
 emptyInput : InputValues
 emptyInput =
     InputValues "" "" "" "" "a" "" "False" "" "True"
+
+
+parameterRecordWithDefault : SectionID -> ParametersDict -> ParameterRecord
+parameterRecordWithDefault pRID parameters =
+    Dict.get pRID parameters
+        |> Maybe.withDefault emptyParameterRecord
+
+
+inputRecordWithDefault : SectionID -> InputValuesDict -> InputValues
+inputRecordWithDefault iVID inputValues =
+    Dict.get iVID inputValues
+        |> Maybe.withDefault emptyInput

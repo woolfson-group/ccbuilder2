@@ -13,6 +13,7 @@ import Http
 import Json.Decode exposing (field, string, float, decodeString)
 import Json.Encode
 import Keyboard
+import Model exposing (..)
 import ParameterValidation
     exposing
         ( containsInvalidParameter
@@ -30,20 +31,23 @@ import Types
         , SectionID
         , HistoryID
         , ParametersDict
-        , emptyParameterRecord
         , InputValues
         , InputValuesDict
-        , emptyInput
         , ModellingResults
         , OptimisationResults
         , Parameter(..)
         , BuildMode(..)
         , OptStatus(..)
-        , optStatusToString
         , stringToOptStatus
         , Panel(..)
+        , PanelVisibility
         , Representation
         , RepOption(..)
+        , optStatusToString
+        , emptyInput
+        , emptyParameterRecord
+        , parameterRecordWithDefault
+        , inputRecordWithDefault
         )
 
 
@@ -64,52 +68,6 @@ main =
         , update = update
         , subscriptions = subscriptions
         }
-
-
-
--- Ports
-
-
-port setStorage : ExportableModel -> Cmd msg
-
-
-port initialiseViewer : () -> Cmd msg
-
-
-port showStructure : ( String, Representation ) -> Cmd msg
-
-
-port showAxes : () -> Cmd msg
-
-
-port newRepresentation : Representation -> Cmd msg
-
-
-port downloadPdb : ( String, String ) -> Cmd msg
-
-
-
--- Model
-
-
-type alias Model =
-    { parameters : ParametersDict
-    , currentInput : InputValuesDict
-    , parameterClipBoard : Maybe ParameterRecord
-    , oligomericState : Int
-    , buildMode : BuildMode
-    , pdbFile : Maybe String
-    , score : Maybe Float
-    , residuesPerTurn : Maybe Float
-    , building : Bool
-    , optimising : Bool
-    , optJobs : List ( String, OptStatus )
-    , heat : Int
-    , modelHistory : Dict.Dict HistoryID ( ParametersDict, Bool, Float )
-    , nextHistoryID : HistoryID
-    , panelVisibility : PanelVisibility
-    , currentRepresentation : Representation
-    }
 
 
 init : Maybe ExportableModel -> ( Model, Cmd Msg )
@@ -139,148 +97,30 @@ init storedModel =
               )
 
 
-type alias PanelVisibility =
-    { buildPanel : Bool
-    , examplesPanel : Bool
-    , optimisePanel : Bool
-    , buildHistoryPanel : Bool
-    , viewerPanel : Bool
-    }
+
+-- Ports
 
 
-parameterRecordWithDefault : SectionID -> ParametersDict -> ParameterRecord
-parameterRecordWithDefault pRID parameters =
-    Dict.get pRID parameters
-        |> Maybe.withDefault emptyParameterRecord
+port setStorage : ExportableModel -> Cmd msg
 
 
-inputRecordWithDefault : SectionID -> InputValuesDict -> InputValues
-inputRecordWithDefault iVID inputValues =
-    Dict.get iVID inputValues
-        |> Maybe.withDefault emptyInput
+port initialiseViewer : () -> Cmd msg
 
 
-emptyModel : Model
-emptyModel =
-    { parameters = Dict.fromList [ ( 1, emptyParameterRecord ), ( 2, emptyParameterRecord ) ]
-    , currentInput = Dict.fromList [ ( 1, emptyInput ), ( 2, emptyInput ) ]
-    , parameterClipBoard = Nothing
-    , oligomericState = 2
-    , buildMode = Basic
-    , pdbFile = Nothing
-    , score = Nothing
-    , residuesPerTurn = Nothing
-    , building = False
-    , optimising = False
-    , optJobs = []
-    , heat = 298
-    , modelHistory = Dict.empty
-    , nextHistoryID = 1
-    , panelVisibility = defaultVisibility
-    , currentRepresentation = Representation False True True False False
-    }
+port showStructure : ( String, Representation ) -> Cmd msg
 
 
-defaultVisibility : PanelVisibility
-defaultVisibility =
-    PanelVisibility True False False False False
+port showAxes : () -> Cmd msg
 
 
-type alias ExportableModel =
-    { parameters : List ( SectionID, ParameterRecord )
-    , currentInput : List ( SectionID, InputValues )
-    , parameterClipBoard : Maybe ParameterRecord
-    , oligomericState : Int
-    , pdbFile : Maybe String
-    , score : Maybe Float
-    , residuesPerTurn : Maybe Float
-    , building : Bool
-    , optimising : Bool
-    , optJobs : List ( String, String )
-    , heat : Int
-    , modelHistory : List ( HistoryID, ( List ( SectionID, ParameterRecord ), Bool, Float ) )
-    , nextHistoryID : HistoryID
-    , panelVisibility : PanelVisibility
-    , currentRepresentation : Representation
-    }
+port newRepresentation : Representation -> Cmd msg
 
 
-modelToExportable : Model -> ExportableModel
-modelToExportable model =
-    { parameters = Dict.toList model.parameters
-    , currentInput = Dict.toList model.currentInput
-    , parameterClipBoard = model.parameterClipBoard
-    , oligomericState = model.oligomericState
-    , pdbFile = model.pdbFile
-    , score = model.score
-    , residuesPerTurn = model.residuesPerTurn
-    , building = False
-    , optimising = False
-    , optJobs = exportableOptJobs model.optJobs
-    , heat = model.heat
-    , modelHistory =
-        model.modelHistory
-            |> Dict.toList
-            |> List.map
-                (\( hid, ( params, vis, score ) ) ->
-                    ( hid
-                    , ( Dict.toList params, vis, score )
-                    )
-                )
-    , nextHistoryID = model.nextHistoryID
-    , panelVisibility = model.panelVisibility
-    , currentRepresentation = model.currentRepresentation
-    }
-
-
-exportableToModel : ExportableModel -> Model
-exportableToModel exportableModel =
-    { parameters = Dict.fromList exportableModel.parameters
-    , currentInput = Dict.fromList exportableModel.currentInput
-    , parameterClipBoard = exportableModel.parameterClipBoard
-    , oligomericState = exportableModel.oligomericState
-    , buildMode = Basic
-    , pdbFile = exportableModel.pdbFile
-    , score = exportableModel.score
-    , residuesPerTurn = exportableModel.residuesPerTurn
-    , building = False
-    , optimising = False
-    , optJobs = modelOptJobs exportableModel.optJobs
-    , heat = exportableModel.heat
-    , modelHistory =
-        exportableModel.modelHistory
-            |> List.map
-                (\( hid, ( params, vis, score ) ) ->
-                    ( hid
-                    , ( Dict.fromList params, vis, score )
-                    )
-                )
-            |> Dict.fromList
-    , nextHistoryID = exportableModel.nextHistoryID
-    , panelVisibility = exportableModel.panelVisibility
-    , currentRepresentation = exportableModel.currentRepresentation
-    }
-
-
-exportableOptJobs : List ( String, OptStatus ) -> List ( String, String )
-exportableOptJobs optJobs =
-    List.map (\( ojid, status ) -> ( ojid, optStatusToString status )) optJobs
-
-
-modelOptJobs : List ( String, String ) -> List ( String, OptStatus )
-modelOptJobs optJobs =
-    List.map
-        (\( ojid, statusString ) ->
-            ( ojid
-            , Result.withDefault Failed (stringToOptStatus statusString)
-            )
-        )
-        optJobs
+port downloadPdb : ( String, String ) -> Cmd msg
 
 
 
 -- Update
--- The Msg union type can be found in Types.elm
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
