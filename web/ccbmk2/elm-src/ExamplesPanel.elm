@@ -89,7 +89,7 @@ exampleButton os exampleParameters building =
         , styles buttonStyling
         , disabled building
         ]
-        [ ccIcon os 60 ]
+        [ ccIcon os 40 ]
 
 
 tau : Float
@@ -159,7 +159,7 @@ ccIcon n widthAndHeight =
             , SvgAtt.height <| toString widthAndHeight
             , SvgAtt.display "block"
             ]
-            ((List.map (drawHelixCircle 6) frameCoordinates)
+            ((List.map (drawHelixCircle 4) frameCoordinates)
                 |> List.append (List.map drawLine coordinatePairs)
             )
 

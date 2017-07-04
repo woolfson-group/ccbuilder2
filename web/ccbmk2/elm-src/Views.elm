@@ -94,7 +94,7 @@ siteHeader =
         , id [ AppHeaderPanel ]
         , styles <| headerStyling ++ panelStyling
         ]
-        [ header [ styles [ Css.width (Css.pct 50) ] ] [ h1 [] [ text "CCBuilder Mk.2" ] ]
+        [ header [ styles [ Css.width (Css.pct 50) ] ] [ h1 [] [ text "CCBuilder 2.0" ] ]
         , div
             [ styles
                 [ Css.width (Css.pct 50)
