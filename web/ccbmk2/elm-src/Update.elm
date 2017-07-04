@@ -475,7 +475,7 @@ retreiveOptimisation : String -> Cmd Msg
 retreiveOptimisation optJobId =
     Http.send ProcessOptimisation <|
         Http.get
-            ("/builder/api/v0.1/optimise/retrieve-opt-job?opt-job-id=" ++ optJobId)
+            ("builder/api/v0.1/optimise/retrieve-opt-job?opt-job-id=" ++ optJobId)
             optimisationResultsDecoder
 
 

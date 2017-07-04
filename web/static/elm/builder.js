@@ -18439,7 +18439,7 @@ var _user$project$Update$retreiveOptimisation = function (optJobId) {
 		_user$project$Types$ProcessOptimisation,
 		A2(
 			_elm_lang$http$Http$get,
-			A2(_elm_lang$core$Basics_ops['++'], '/builder/api/v0.1/optimise/retrieve-opt-job?opt-job-id=', optJobId),
+			A2(_elm_lang$core$Basics_ops['++'], 'builder/api/v0.1/optimise/retrieve-opt-job?opt-job-id=', optJobId),
 			_user$project$Update$optimisationResultsDecoder));
 };
 var _user$project$Update$sendBuildCmd = function (parameters) {
