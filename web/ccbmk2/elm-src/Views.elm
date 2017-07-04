@@ -1,4 +1,4 @@
-module Builder exposing (..)
+module Views exposing (..)
 
 import BuilderCss exposing (CssClasses(..), cssNamespace, panelStyling)
 import BuildPanel
@@ -9,10 +9,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Html.CssHelpers
-import Keyboard
 import Model exposing (..)
-import Ports exposing (..)
-import Time
 import Types
     exposing
         ( Msg(..)
@@ -28,7 +25,7 @@ import Types
         , optStatusToString
         , emptyParameterRecord
         )
-import Update exposing (update, toCommand)
+
 
 
 { class, classList, id } =
@@ -38,59 +35,6 @@ import Update exposing (update, toCommand)
 styles : List Css.Mixin -> Attribute msg
 styles =
     Css.asPairs >> Html.Attributes.style
-
-
-main : Program (Maybe ExportableModel) Model Msg
-main =
-    programWithFlags
-        { init = init
-        , view = view
-        , update = update
-        , subscriptions = subscriptions
-        }
-
-
-init : Maybe ExportableModel -> ( Model, Cmd Msg )
-init storedModel =
-    let
-        showDefaultModel =
-            if storedModel == Nothing then
-                True
-            else
-                False
-
-        model =
-            storedModel
-                |> Maybe.map exportableToModel
-                |> Maybe.withDefault emptyModel
-    in
-        model
-            ! ([ initialiseViewer () ]
-                ++ if showDefaultModel then
-                    [ toCommand (SetParametersAndBuild ExamplesPanel.basisSetDimer) ]
-                   else
-                    [ showStructure
-                        ( Maybe.withDefault "" model.pdbFile
-                        , model.currentRepresentation
-                        )
-                    ]
-              )
-
-
-
--- Subscriptions
-
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.batch
-        [ Time.every (5 * Time.second) CheckOptJobs
-        , Keyboard.presses KeyMsg
-        ]
-
-
-
--- View
 
 
 view : Model -> Html Msg

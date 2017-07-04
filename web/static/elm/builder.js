@@ -22924,7 +22924,7 @@ var _user$project$Update$update = F2(
 		}
 	});
 
-var _user$project$Builder$optJobStatusStyling = function (position) {
+var _user$project$Views$optJobStatusStyling = function (position) {
 	return {
 		ctor: '::',
 		_0: _rtfeldman$elm_css$Css$bottom(
@@ -22937,7 +22937,7 @@ var _user$project$Builder$optJobStatusStyling = function (position) {
 		}
 	};
 };
-var _user$project$Builder$buildingStatusStyling = {
+var _user$project$Views$buildingStatusStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$top(
 		_rtfeldman$elm_css$Css$pct(50)),
@@ -22958,7 +22958,7 @@ var _user$project$Builder$buildingStatusStyling = {
 		}
 	}
 };
-var _user$project$Builder$viewerPanelStyling = {
+var _user$project$Views$viewerPanelStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$top(
 		_rtfeldman$elm_css$Css$px(60)),
@@ -22969,7 +22969,7 @@ var _user$project$Builder$viewerPanelStyling = {
 		_1: {ctor: '[]'}
 	}
 };
-var _user$project$Builder$buildHistoryPanelStyling = {
+var _user$project$Views$buildHistoryPanelStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$top(
 		_rtfeldman$elm_css$Css$px(60)),
@@ -22980,14 +22980,14 @@ var _user$project$Builder$buildHistoryPanelStyling = {
 		_1: {ctor: '[]'}
 	}
 };
-var _user$project$Builder$makeParameterTh = function (pString) {
+var _user$project$Views$makeParameterTh = function (pString) {
 	return A2(
 		_elm_lang$html$Html$th,
 		{ctor: '[]'},
 		_elm_lang$core$List$singleton(
 			_elm_lang$html$Html$text(pString)));
 };
-var _user$project$Builder$roundToXDecPlaces = F2(
+var _user$project$Views$roundToXDecPlaces = F2(
 	function (precision, num) {
 		var scaling = _elm_lang$core$Basics$toFloat(
 			Math.pow(10, precision));
@@ -23001,13 +23001,13 @@ var _user$project$Builder$roundToXDecPlaces = F2(
 			_elm_lang$core$Basics$toFloat(
 				_elm_lang$core$Basics$round(num * scaling)));
 	});
-var _user$project$Builder$parametersToRow = F2(
+var _user$project$Views$parametersToRow = F2(
 	function (parameters, score) {
 		return {
 			ctor: '::',
 			_0: _elm_lang$core$Basics$toString(
 				A2(
-					_user$project$Builder$roundToXDecPlaces,
+					_user$project$Views$roundToXDecPlaces,
 					1,
 					A2(_elm_lang$core$Maybe$withDefault, 0, parameters.radius))),
 			_1: {
@@ -23019,21 +23019,21 @@ var _user$project$Builder$parametersToRow = F2(
 					ctor: '::',
 					_0: _elm_lang$core$Basics$toString(
 						A2(
-							_user$project$Builder$roundToXDecPlaces,
+							_user$project$Views$roundToXDecPlaces,
 							1,
 							A2(_elm_lang$core$Maybe$withDefault, 0, parameters.phiCA))),
 					_1: {
 						ctor: '::',
 						_0: _elm_lang$core$Basics$toString(
 							A2(
-								_user$project$Builder$roundToXDecPlaces,
+								_user$project$Views$roundToXDecPlaces,
 								1,
 								A2(_elm_lang$core$Maybe$withDefault, 0, parameters.superHelRot))),
 						_1: {
 							ctor: '::',
 							_0: _elm_lang$core$Basics$toString(
 								A2(
-									_user$project$Builder$roundToXDecPlaces,
+									_user$project$Views$roundToXDecPlaces,
 									1,
 									A2(_elm_lang$core$Maybe$withDefault, 0, parameters.zShift))),
 							_1: {
@@ -23045,7 +23045,7 @@ var _user$project$Builder$parametersToRow = F2(
 									_1: {
 										ctor: '::',
 										_0: _elm_lang$core$Basics$toString(
-											A2(_user$project$Builder$roundToXDecPlaces, 2, score)),
+											A2(_user$project$Views$roundToXDecPlaces, 2, score)),
 										_1: {ctor: '[]'}
 									}
 								}
@@ -23056,7 +23056,7 @@ var _user$project$Builder$parametersToRow = F2(
 			}
 		};
 	});
-var _user$project$Builder$modelFoldedRow = F2(
+var _user$project$Views$modelFoldedRow = F2(
 	function (score, parameters) {
 		return A2(
 			_elm_lang$html$Html$tr,
@@ -23070,10 +23070,10 @@ var _user$project$Builder$modelFoldedRow = F2(
 				},
 				A2(
 					_elm_lang$core$List$map,
-					_user$project$Builder$makeParameterTh,
-					A2(_user$project$Builder$parametersToRow, parameters, score))));
+					_user$project$Views$makeParameterTh,
+					A2(_user$project$Views$parametersToRow, parameters, score))));
 	});
-var _user$project$Builder$modelInfoPanelStyling = {
+var _user$project$Views$modelInfoPanelStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$bottom(
 		_rtfeldman$elm_css$Css$px(20)),
@@ -23084,7 +23084,7 @@ var _user$project$Builder$modelInfoPanelStyling = {
 		_1: {ctor: '[]'}
 	}
 };
-var _user$project$Builder$optimisePanelStyling = {
+var _user$project$Views$optimisePanelStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$top(
 		_rtfeldman$elm_css$Css$px(60)),
@@ -23095,7 +23095,7 @@ var _user$project$Builder$optimisePanelStyling = {
 		_1: {ctor: '[]'}
 	}
 };
-var _user$project$Builder$topRightTogglesStyling = {
+var _user$project$Views$topRightTogglesStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$top(
 		_rtfeldman$elm_css$Css$px(60)),
@@ -23120,7 +23120,7 @@ var _user$project$Builder$topRightTogglesStyling = {
 		}
 	}
 };
-var _user$project$Builder$topLeftTogglesStyling = {
+var _user$project$Views$topLeftTogglesStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$top(
 		_rtfeldman$elm_css$Css$px(60)),
@@ -23140,7 +23140,7 @@ var _user$project$Builder$topLeftTogglesStyling = {
 		}
 	}
 };
-var _user$project$Builder$headerStyling = {
+var _user$project$Views$headerStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$position(_rtfeldman$elm_css$Css$absolute),
 	_1: {
@@ -23165,7 +23165,7 @@ var _user$project$Builder$headerStyling = {
 		}
 	}
 };
-var _user$project$Builder$viewerStyling = {
+var _user$project$Views$viewerStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$position(_rtfeldman$elm_css$Css$fixed),
 	_1: {
@@ -23190,56 +23190,11 @@ var _user$project$Builder$viewerStyling = {
 		}
 	}
 };
-var _user$project$Builder$subscriptions = function (model) {
-	return _elm_lang$core$Platform_Sub$batch(
-		{
-			ctor: '::',
-			_0: A2(_elm_lang$core$Time$every, 5 * _elm_lang$core$Time$second, _user$project$Types$CheckOptJobs),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$keyboard$Keyboard$presses(_user$project$Types$KeyMsg),
-				_1: {ctor: '[]'}
-			}
-		});
-};
-var _user$project$Builder$init = function (storedModel) {
-	var model = A2(
-		_elm_lang$core$Maybe$withDefault,
-		_user$project$Model$emptyModel,
-		A2(_elm_lang$core$Maybe$map, _user$project$Model$exportableToModel, storedModel));
-	var showDefaultModel = _elm_lang$core$Native_Utils.eq(storedModel, _elm_lang$core$Maybe$Nothing) ? true : false;
-	return A2(
-		_elm_lang$core$Platform_Cmd_ops['!'],
-		model,
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			{
-				ctor: '::',
-				_0: _user$project$Ports$initialiseViewer(
-					{ctor: '_Tuple0'}),
-				_1: {ctor: '[]'}
-			},
-			showDefaultModel ? {
-				ctor: '::',
-				_0: _user$project$Update$toCommand(
-					_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetDimer)),
-				_1: {ctor: '[]'}
-			} : {
-				ctor: '::',
-				_0: _user$project$Ports$showStructure(
-					{
-						ctor: '_Tuple2',
-						_0: A2(_elm_lang$core$Maybe$withDefault, '', model.pdbFile),
-						_1: model.currentRepresentation
-					}),
-				_1: {ctor: '[]'}
-			}));
-};
-var _user$project$Builder$styles = function (_p0) {
+var _user$project$Views$styles = function (_p0) {
 	return _elm_lang$html$Html_Attributes$style(
 		_rtfeldman$elm_css$Css$asPairs(_p0));
 };
-var _user$project$Builder$modelDetailTableHeader = A2(
+var _user$project$Views$modelDetailTableHeader = A2(
 	_elm_lang$html$Html$thead,
 	{ctor: '[]'},
 	{
@@ -23259,7 +23214,7 @@ var _user$project$Builder$modelDetailTableHeader = A2(
 						_elm_lang$html$Html$th,
 						{
 							ctor: '::',
-							_0: _user$project$Builder$styles(
+							_0: _user$project$Views$styles(
 								{
 									ctor: '::',
 									_0: _rtfeldman$elm_css$Css$width(
@@ -23279,7 +23234,7 @@ var _user$project$Builder$modelDetailTableHeader = A2(
 							_elm_lang$html$Html$th,
 							{
 								ctor: '::',
-								_0: _user$project$Builder$styles(
+								_0: _user$project$Views$styles(
 									{
 										ctor: '::',
 										_0: _rtfeldman$elm_css$Css$width(
@@ -23299,7 +23254,7 @@ var _user$project$Builder$modelDetailTableHeader = A2(
 								_elm_lang$html$Html$th,
 								{
 									ctor: '::',
-									_0: _user$project$Builder$styles(
+									_0: _user$project$Views$styles(
 										{
 											ctor: '::',
 											_0: _rtfeldman$elm_css$Css$width(
@@ -23319,7 +23274,7 @@ var _user$project$Builder$modelDetailTableHeader = A2(
 									_elm_lang$html$Html$th,
 									{
 										ctor: '::',
-										_0: _user$project$Builder$styles(
+										_0: _user$project$Views$styles(
 											{
 												ctor: '::',
 												_0: _rtfeldman$elm_css$Css$width(
@@ -23339,7 +23294,7 @@ var _user$project$Builder$modelDetailTableHeader = A2(
 										_elm_lang$html$Html$th,
 										{
 											ctor: '::',
-											_0: _user$project$Builder$styles(
+											_0: _user$project$Views$styles(
 												{
 													ctor: '::',
 													_0: _rtfeldman$elm_css$Css$width(
@@ -23369,7 +23324,7 @@ var _user$project$Builder$modelDetailTableHeader = A2(
 												_elm_lang$html$Html$th,
 												{
 													ctor: '::',
-													_0: _user$project$Builder$styles(
+													_0: _user$project$Views$styles(
 														{
 															ctor: '::',
 															_0: _rtfeldman$elm_css$Css$width(
@@ -23412,15 +23367,15 @@ var _user$project$Builder$modelDetailTableHeader = A2(
 			}),
 		_1: {ctor: '[]'}
 	});
-var _user$project$Builder$_p1 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace(_user$project$BuilderCss$cssNamespace);
-var _user$project$Builder$class = _user$project$Builder$_p1.$class;
-var _user$project$Builder$classList = _user$project$Builder$_p1.classList;
-var _user$project$Builder$id = _user$project$Builder$_p1.id;
-var _user$project$Builder$siteHeader = A2(
+var _user$project$Views$_p1 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace(_user$project$BuilderCss$cssNamespace);
+var _user$project$Views$class = _user$project$Views$_p1.$class;
+var _user$project$Views$classList = _user$project$Views$_p1.classList;
+var _user$project$Views$id = _user$project$Views$_p1.id;
+var _user$project$Views$siteHeader = A2(
 	_elm_lang$html$Html$div,
 	{
 		ctor: '::',
-		_0: _user$project$Builder$class(
+		_0: _user$project$Views$class(
 			{
 				ctor: '::',
 				_0: _user$project$BuilderCss$FlexContainerCss,
@@ -23428,7 +23383,7 @@ var _user$project$Builder$siteHeader = A2(
 			}),
 		_1: {
 			ctor: '::',
-			_0: _user$project$Builder$id(
+			_0: _user$project$Views$id(
 				{
 					ctor: '::',
 					_0: _user$project$Types$AppHeaderPanel,
@@ -23436,8 +23391,8 @@ var _user$project$Builder$siteHeader = A2(
 				}),
 			_1: {
 				ctor: '::',
-				_0: _user$project$Builder$styles(
-					A2(_elm_lang$core$Basics_ops['++'], _user$project$Builder$headerStyling, _user$project$BuilderCss$panelStyling)),
+				_0: _user$project$Views$styles(
+					A2(_elm_lang$core$Basics_ops['++'], _user$project$Views$headerStyling, _user$project$BuilderCss$panelStyling)),
 				_1: {ctor: '[]'}
 			}
 		}
@@ -23448,7 +23403,7 @@ var _user$project$Builder$siteHeader = A2(
 			_elm_lang$html$Html$header,
 			{
 				ctor: '::',
-				_0: _user$project$Builder$styles(
+				_0: _user$project$Views$styles(
 					{
 						ctor: '::',
 						_0: _rtfeldman$elm_css$Css$width(
@@ -23475,7 +23430,7 @@ var _user$project$Builder$siteHeader = A2(
 				_elm_lang$html$Html$div,
 				{
 					ctor: '::',
-					_0: _user$project$Builder$styles(
+					_0: _user$project$Views$styles(
 						{
 							ctor: '::',
 							_0: _rtfeldman$elm_css$Css$width(
@@ -23499,7 +23454,7 @@ var _user$project$Builder$siteHeader = A2(
 						_elm_lang$html$Html$h3,
 						{
 							ctor: '::',
-							_0: _user$project$Builder$styles(
+							_0: _user$project$Views$styles(
 								{
 									ctor: '::',
 									_0: _rtfeldman$elm_css$Css$position(_rtfeldman$elm_css$Css$absolute),
@@ -23532,7 +23487,7 @@ var _user$project$Builder$siteHeader = A2(
 									_elm_lang$html$Html$img,
 									{
 										ctor: '::',
-										_0: _user$project$Builder$styles(
+										_0: _user$project$Views$styles(
 											{
 												ctor: '::',
 												_0: _rtfeldman$elm_css$Css$height(
@@ -23573,7 +23528,7 @@ var _user$project$Builder$siteHeader = A2(
 			_1: {ctor: '[]'}
 		}
 	});
-var _user$project$Builder$optimisePanel = F4(
+var _user$project$Views$optimisePanel = F4(
 	function (buildMode, optJobs, visible, heat) {
 		var optimising = (_elm_lang$core$Native_Utils.cmp(
 			_elm_lang$core$List$length(optJobs),
@@ -23591,7 +23546,7 @@ var _user$project$Builder$optimisePanel = F4(
 			_elm_lang$html$Html$div,
 			{
 				ctor: '::',
-				_0: _user$project$Builder$class(
+				_0: _user$project$Views$class(
 					{
 						ctor: '::',
 						_0: _user$project$BuilderCss$OverlayPanelCss,
@@ -23599,8 +23554,8 @@ var _user$project$Builder$optimisePanel = F4(
 					}),
 				_1: {
 					ctor: '::',
-					_0: _user$project$Builder$styles(
-						A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$Builder$optimisePanelStyling)),
+					_0: _user$project$Views$styles(
+						A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$Views$optimisePanelStyling)),
 					_1: {
 						ctor: '::',
 						_0: _elm_lang$html$Html_Attributes$hidden(!visible),
@@ -23686,11 +23641,11 @@ var _user$project$Builder$optimisePanel = F4(
 				}
 			});
 	});
-var _user$project$Builder$toggleOptimisePanel = A2(
+var _user$project$Views$toggleOptimisePanel = A2(
 	_elm_lang$html$Html$div,
 	{
 		ctor: '::',
-		_0: _user$project$Builder$class(
+		_0: _user$project$Views$class(
 			{
 				ctor: '::',
 				_0: _user$project$BuilderCss$OverlayPanelCss,
@@ -23712,11 +23667,11 @@ var _user$project$Builder$toggleOptimisePanel = A2(
 		_0: _elm_lang$html$Html$text('Optimise'),
 		_1: {ctor: '[]'}
 	});
-var _user$project$Builder$topLeftToggles = A2(
+var _user$project$Views$topLeftToggles = A2(
 	_elm_lang$html$Html$div,
 	{
 		ctor: '::',
-		_0: _user$project$Builder$styles(_user$project$Builder$topLeftTogglesStyling),
+		_0: _user$project$Views$styles(_user$project$Views$topLeftTogglesStyling),
 		_1: {ctor: '[]'}
 	},
 	{
@@ -23727,18 +23682,18 @@ var _user$project$Builder$topLeftToggles = A2(
 			_0: _user$project$ExamplesPanel$toggleExamplesPanel,
 			_1: {
 				ctor: '::',
-				_0: _user$project$Builder$toggleOptimisePanel,
+				_0: _user$project$Views$toggleOptimisePanel,
 				_1: {ctor: '[]'}
 			}
 		}
 	});
-var _user$project$Builder$downloadStructureButton = function (pdbFile) {
+var _user$project$Views$downloadStructureButton = function (pdbFile) {
 	var deactivated = _elm_lang$core$Native_Utils.eq(pdbFile, _elm_lang$core$Maybe$Nothing) ? true : false;
 	return A2(
 		_elm_lang$html$Html$button,
 		{
 			ctor: '::',
-			_0: _user$project$Builder$class(
+			_0: _user$project$Views$class(
 				{
 					ctor: '::',
 					_0: _user$project$BuilderCss$CCBButtonCss,
@@ -23760,12 +23715,12 @@ var _user$project$Builder$downloadStructureButton = function (pdbFile) {
 			_1: {ctor: '[]'}
 		});
 };
-var _user$project$Builder$modelInfoPanel = function (model) {
+var _user$project$Views$modelInfoPanel = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _user$project$Builder$class(
+			_0: _user$project$Views$class(
 				{
 					ctor: '::',
 					_0: _user$project$BuilderCss$OverlayPanelCss,
@@ -23773,7 +23728,7 @@ var _user$project$Builder$modelInfoPanel = function (model) {
 				}),
 			_1: {
 				ctor: '::',
-				_0: _user$project$Builder$id(
+				_0: _user$project$Views$id(
 					{
 						ctor: '::',
 						_0: _user$project$Types$ModelInfoPanel,
@@ -23781,8 +23736,8 @@ var _user$project$Builder$modelInfoPanel = function (model) {
 					}),
 				_1: {
 					ctor: '::',
-					_0: _user$project$Builder$styles(
-						A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$Builder$modelInfoPanelStyling)),
+					_0: _user$project$Views$styles(
+						A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$Views$modelInfoPanelStyling)),
 					_1: {ctor: '[]'}
 				}
 			}
@@ -23830,7 +23785,7 @@ var _user$project$Builder$modelInfoPanel = function (model) {
 									_elm_lang$core$Basics$toString,
 									A2(
 										_elm_lang$core$Maybe$map,
-										_user$project$Builder$roundToXDecPlaces(1),
+										_user$project$Views$roundToXDecPlaces(1),
 										model.score)))),
 						_1: {
 							ctor: '::',
@@ -23871,7 +23826,7 @@ var _user$project$Builder$modelInfoPanel = function (model) {
 													_elm_lang$core$Basics$toString,
 													A2(
 														_elm_lang$core$Maybe$map,
-														_user$project$Builder$roundToXDecPlaces(2),
+														_user$project$Views$roundToXDecPlaces(2),
 														model.residuesPerTurn)))),
 										_1: {
 											ctor: '::',
@@ -23881,7 +23836,7 @@ var _user$project$Builder$modelInfoPanel = function (model) {
 												{ctor: '[]'}),
 											_1: {
 												ctor: '::',
-												_0: _user$project$Builder$downloadStructureButton(model.pdbFile),
+												_0: _user$project$Views$downloadStructureButton(model.pdbFile),
 												_1: {ctor: '[]'}
 											}
 										}
@@ -23894,7 +23849,7 @@ var _user$project$Builder$modelInfoPanel = function (model) {
 			}
 		});
 };
-var _user$project$Builder$modelHistoryTopRow = F5(
+var _user$project$Views$modelHistoryTopRow = F5(
 	function (hID, parameters, building, visible, score) {
 		var topRowParameters = A2(
 			_elm_lang$core$Maybe$withDefault,
@@ -23927,15 +23882,15 @@ var _user$project$Builder$modelHistoryTopRow = F5(
 					_elm_lang$core$Basics_ops['++'],
 					A2(
 						_elm_lang$core$List$map,
-						_user$project$Builder$makeParameterTh,
-						A2(_user$project$Builder$parametersToRow, topRowParameters, score)),
+						_user$project$Views$makeParameterTh,
+						A2(_user$project$Views$parametersToRow, topRowParameters, score)),
 					{
 						ctor: '::',
 						_0: A2(
 							_elm_lang$html$Html$button,
 							{
 								ctor: '::',
-								_0: _user$project$Builder$class(
+								_0: _user$project$Views$class(
 									{
 										ctor: '::',
 										_0: _user$project$BuilderCss$CCBButtonCss,
@@ -23960,7 +23915,7 @@ var _user$project$Builder$modelHistoryTopRow = F5(
 						_1: {ctor: '[]'}
 					})));
 	});
-var _user$project$Builder$modelParametersAsRow = F2(
+var _user$project$Views$modelParametersAsRow = F2(
 	function (_p3, building) {
 		var _p4 = _p3;
 		var _p8 = _p4._1._1;
@@ -23969,7 +23924,7 @@ var _user$project$Builder$modelParametersAsRow = F2(
 		var _p5 = _p4._0;
 		var foldedRows = A2(
 			_elm_lang$core$List$map,
-			_user$project$Builder$modelFoldedRow(_p7),
+			_user$project$Views$modelFoldedRow(_p7),
 			A2(
 				_elm_lang$core$Maybe$withDefault,
 				{ctor: '[]'},
@@ -23977,21 +23932,21 @@ var _user$project$Builder$modelParametersAsRow = F2(
 					_elm_lang$core$Dict$values(_p6))));
 		return (!_p8) ? {
 			ctor: '::',
-			_0: A5(_user$project$Builder$modelHistoryTopRow, _p5, _p6, building, _p8, _p7),
+			_0: A5(_user$project$Views$modelHistoryTopRow, _p5, _p6, building, _p8, _p7),
 			_1: {ctor: '[]'}
 		} : {
 			ctor: '::',
-			_0: A5(_user$project$Builder$modelHistoryTopRow, _p5, _p6, building, _p8, _p7),
+			_0: A5(_user$project$Views$modelHistoryTopRow, _p5, _p6, building, _p8, _p7),
 			_1: foldedRows
 		};
 	});
-var _user$project$Builder$buildHistoryPanel = F3(
+var _user$project$Views$buildHistoryPanel = F3(
 	function (modelHistory, building, visible) {
 		return A2(
 			_elm_lang$html$Html$div,
 			{
 				ctor: '::',
-				_0: _user$project$Builder$class(
+				_0: _user$project$Views$class(
 					{
 						ctor: '::',
 						_0: _user$project$BuilderCss$OverlayPanelCss,
@@ -23999,7 +23954,7 @@ var _user$project$Builder$buildHistoryPanel = F3(
 					}),
 				_1: {
 					ctor: '::',
-					_0: _user$project$Builder$id(
+					_0: _user$project$Views$id(
 						{
 							ctor: '::',
 							_0: _user$project$Types$BuildHistoryPanel,
@@ -24007,8 +23962,8 @@ var _user$project$Builder$buildHistoryPanel = F3(
 						}),
 					_1: {
 						ctor: '::',
-						_0: _user$project$Builder$styles(
-							A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$Builder$buildHistoryPanelStyling)),
+						_0: _user$project$Views$styles(
+							A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$Views$buildHistoryPanelStyling)),
 						_1: {
 							ctor: '::',
 							_0: _elm_lang$html$Html_Attributes$hidden(!visible),
@@ -24034,7 +23989,7 @@ var _user$project$Builder$buildHistoryPanel = F3(
 						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _user$project$Builder$modelDetailTableHeader,
+							_0: _user$project$Views$modelDetailTableHeader,
 							_1: {
 								ctor: '::',
 								_0: A2(
@@ -24043,7 +23998,7 @@ var _user$project$Builder$buildHistoryPanel = F3(
 									_elm_lang$core$List$concat(
 										A3(
 											_elm_lang$core$List$map2,
-											_user$project$Builder$modelParametersAsRow,
+											_user$project$Views$modelParametersAsRow,
 											_elm_lang$core$List$reverse(
 												_elm_lang$core$Dict$toList(modelHistory)),
 											A2(
@@ -24058,11 +24013,11 @@ var _user$project$Builder$buildHistoryPanel = F3(
 				}
 			});
 	});
-var _user$project$Builder$toggleBuildHistoryPanel = A2(
+var _user$project$Views$toggleBuildHistoryPanel = A2(
 	_elm_lang$html$Html$div,
 	{
 		ctor: '::',
-		_0: _user$project$Builder$class(
+		_0: _user$project$Views$class(
 			{
 				ctor: '::',
 				_0: _user$project$BuilderCss$OverlayPanelCss,
@@ -24084,12 +24039,12 @@ var _user$project$Builder$toggleBuildHistoryPanel = A2(
 		_0: _elm_lang$html$Html$text('Build History'),
 		_1: {ctor: '[]'}
 	});
-var _user$project$Builder$viewerPanel = function (visible) {
+var _user$project$Views$viewerPanel = function (visible) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _user$project$Builder$class(
+			_0: _user$project$Views$class(
 				{
 					ctor: '::',
 					_0: _user$project$BuilderCss$OverlayPanelCss,
@@ -24097,7 +24052,7 @@ var _user$project$Builder$viewerPanel = function (visible) {
 				}),
 			_1: {
 				ctor: '::',
-				_0: _user$project$Builder$id(
+				_0: _user$project$Views$id(
 					{
 						ctor: '::',
 						_0: _user$project$Types$ViewerPanel,
@@ -24105,8 +24060,8 @@ var _user$project$Builder$viewerPanel = function (visible) {
 					}),
 				_1: {
 					ctor: '::',
-					_0: _user$project$Builder$styles(
-						A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$Builder$viewerPanelStyling)),
+					_0: _user$project$Views$styles(
+						A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$Views$viewerPanelStyling)),
 					_1: {
 						ctor: '::',
 						_0: _elm_lang$html$Html_Attributes$hidden(!visible),
@@ -24162,7 +24117,7 @@ var _user$project$Builder$viewerPanel = function (visible) {
 										_elm_lang$html$Html$button,
 										{
 											ctor: '::',
-											_0: _user$project$Builder$class(
+											_0: _user$project$Views$class(
 												{
 													ctor: '::',
 													_0: _user$project$BuilderCss$CCBButtonCss,
@@ -24186,7 +24141,7 @@ var _user$project$Builder$viewerPanel = function (visible) {
 											_elm_lang$html$Html$button,
 											{
 												ctor: '::',
-												_0: _user$project$Builder$class(
+												_0: _user$project$Views$class(
 													{
 														ctor: '::',
 														_0: _user$project$BuilderCss$CCBButtonCss,
@@ -24225,7 +24180,7 @@ var _user$project$Builder$viewerPanel = function (visible) {
 															_elm_lang$html$Html$button,
 															{
 																ctor: '::',
-																_0: _user$project$Builder$class(
+																_0: _user$project$Views$class(
 																	{
 																		ctor: '::',
 																		_0: _user$project$BuilderCss$CCBButtonCss,
@@ -24249,7 +24204,7 @@ var _user$project$Builder$viewerPanel = function (visible) {
 																_elm_lang$html$Html$button,
 																{
 																	ctor: '::',
-																	_0: _user$project$Builder$class(
+																	_0: _user$project$Views$class(
 																		{
 																			ctor: '::',
 																			_0: _user$project$BuilderCss$CCBButtonCss,
@@ -24273,7 +24228,7 @@ var _user$project$Builder$viewerPanel = function (visible) {
 																	_elm_lang$html$Html$button,
 																	{
 																		ctor: '::',
-																		_0: _user$project$Builder$class(
+																		_0: _user$project$Views$class(
 																			{
 																				ctor: '::',
 																				_0: _user$project$BuilderCss$CCBButtonCss,
@@ -24319,7 +24274,7 @@ var _user$project$Builder$viewerPanel = function (visible) {
 																					_elm_lang$html$Html$button,
 																					{
 																						ctor: '::',
-																						_0: _user$project$Builder$class(
+																						_0: _user$project$Views$class(
 																							{
 																								ctor: '::',
 																								_0: _user$project$BuilderCss$CCBButtonCss,
@@ -24360,11 +24315,11 @@ var _user$project$Builder$viewerPanel = function (visible) {
 			}
 		});
 };
-var _user$project$Builder$toggleViewerPanel = A2(
+var _user$project$Views$toggleViewerPanel = A2(
 	_elm_lang$html$Html$div,
 	{
 		ctor: '::',
-		_0: _user$project$Builder$class(
+		_0: _user$project$Views$class(
 			{
 				ctor: '::',
 				_0: _user$project$BuilderCss$OverlayPanelCss,
@@ -24386,29 +24341,29 @@ var _user$project$Builder$toggleViewerPanel = A2(
 		_0: _elm_lang$html$Html$text('Viewer'),
 		_1: {ctor: '[]'}
 	});
-var _user$project$Builder$topRightToggles = A2(
+var _user$project$Views$topRightToggles = A2(
 	_elm_lang$html$Html$div,
 	{
 		ctor: '::',
-		_0: _user$project$Builder$styles(_user$project$Builder$topRightTogglesStyling),
+		_0: _user$project$Views$styles(_user$project$Views$topRightTogglesStyling),
 		_1: {ctor: '[]'}
 	},
 	{
 		ctor: '::',
-		_0: _user$project$Builder$toggleBuildHistoryPanel,
+		_0: _user$project$Views$toggleBuildHistoryPanel,
 		_1: {
 			ctor: '::',
-			_0: _user$project$Builder$toggleViewerPanel,
+			_0: _user$project$Views$toggleViewerPanel,
 			_1: {ctor: '[]'}
 		}
 	});
-var _user$project$Builder$statusPanel = F2(
+var _user$project$Views$statusPanel = F2(
 	function (building, optimising) {
 		return A2(
 			_elm_lang$html$Html$div,
 			{
 				ctor: '::',
-				_0: _user$project$Builder$class(
+				_0: _user$project$Views$class(
 					{
 						ctor: '::',
 						_0: _user$project$BuilderCss$OverlayPanelCss,
@@ -24416,7 +24371,7 @@ var _user$project$Builder$statusPanel = F2(
 					}),
 				_1: {
 					ctor: '::',
-					_0: _user$project$Builder$id(
+					_0: _user$project$Views$id(
 						{
 							ctor: '::',
 							_0: _user$project$Types$BuildingStatusPanel,
@@ -24424,8 +24379,8 @@ var _user$project$Builder$statusPanel = F2(
 						}),
 					_1: {
 						ctor: '::',
-						_0: _user$project$Builder$styles(
-							A2(_elm_lang$core$Basics_ops['++'], _user$project$Builder$buildingStatusStyling, _user$project$BuilderCss$panelStyling)),
+						_0: _user$project$Views$styles(
+							A2(_elm_lang$core$Basics_ops['++'], _user$project$Views$buildingStatusStyling, _user$project$BuilderCss$panelStyling)),
 						_1: {
 							ctor: '::',
 							_0: _elm_lang$html$Html_Attributes$hidden((!building) && (!optimising)),
@@ -24459,14 +24414,14 @@ var _user$project$Builder$statusPanel = F2(
 				}
 			});
 	});
-var _user$project$Builder$optJobStatus = F2(
+var _user$project$Views$optJobStatus = F2(
 	function (_p9, position) {
 		var _p10 = _p9;
 		return A2(
 			_elm_lang$html$Html$div,
 			{
 				ctor: '::',
-				_0: _user$project$Builder$class(
+				_0: _user$project$Views$class(
 					{
 						ctor: '::',
 						_0: _user$project$BuilderCss$OverlayPanelCss,
@@ -24474,10 +24429,10 @@ var _user$project$Builder$optJobStatus = F2(
 					}),
 				_1: {
 					ctor: '::',
-					_0: _user$project$Builder$styles(
+					_0: _user$project$Views$styles(
 						A2(
 							_elm_lang$core$Basics_ops['++'],
-							_user$project$Builder$optJobStatusStyling(position),
+							_user$project$Views$optJobStatusStyling(position),
 							_user$project$BuilderCss$panelStyling)),
 					_1: {ctor: '[]'}
 				}
@@ -24500,39 +24455,39 @@ var _user$project$Builder$optJobStatus = F2(
 				}
 			});
 	});
-var _user$project$Builder$overlayPanels = function (model) {
+var _user$project$Views$overlayPanels = function (model) {
 	var panelDivs = A2(
 		_elm_lang$core$Basics_ops['++'],
 		{
 			ctor: '::',
-			_0: _user$project$Builder$siteHeader,
+			_0: _user$project$Views$siteHeader,
 			_1: {
 				ctor: '::',
-				_0: _user$project$Builder$topLeftToggles,
+				_0: _user$project$Views$topLeftToggles,
 				_1: {
 					ctor: '::',
-					_0: _user$project$Builder$topRightToggles,
+					_0: _user$project$Views$topRightToggles,
 					_1: {
 						ctor: '::',
 						_0: A5(_user$project$BuildPanel$buildPanel, model.buildMode, model.parameters, model.currentInput, model.building, model.panelVisibility.buildPanel),
 						_1: {
 							ctor: '::',
-							_0: A4(_user$project$Builder$optimisePanel, model.buildMode, model.optJobs, model.panelVisibility.optimisePanel, model.heat),
+							_0: A4(_user$project$Views$optimisePanel, model.buildMode, model.optJobs, model.panelVisibility.optimisePanel, model.heat),
 							_1: {
 								ctor: '::',
 								_0: A2(_user$project$ExamplesPanel$examplesPanel, model.building, model.panelVisibility.examplesPanel),
 								_1: {
 									ctor: '::',
-									_0: A2(_user$project$Builder$statusPanel, model.building, model.optimising),
+									_0: A2(_user$project$Views$statusPanel, model.building, model.optimising),
 									_1: {
 										ctor: '::',
-										_0: A3(_user$project$Builder$buildHistoryPanel, model.modelHistory, model.building, model.panelVisibility.buildHistoryPanel),
+										_0: A3(_user$project$Views$buildHistoryPanel, model.modelHistory, model.building, model.panelVisibility.buildHistoryPanel),
 										_1: {
 											ctor: '::',
-											_0: _user$project$Builder$viewerPanel(model.panelVisibility.viewerPanel),
+											_0: _user$project$Views$viewerPanel(model.panelVisibility.viewerPanel),
 											_1: {
 												ctor: '::',
-												_0: _user$project$Builder$modelInfoPanel(model),
+												_0: _user$project$Views$modelInfoPanel(model),
 												_1: {ctor: '[]'}
 											}
 										}
@@ -24546,7 +24501,7 @@ var _user$project$Builder$overlayPanels = function (model) {
 		},
 		A3(
 			_elm_lang$core$List$map2,
-			_user$project$Builder$optJobStatus,
+			_user$project$Views$optJobStatus,
 			model.optJobs,
 			A2(
 				_elm_lang$core$List$range,
@@ -24557,26 +24512,72 @@ var _user$project$Builder$overlayPanels = function (model) {
 		{ctor: '[]'},
 		panelDivs);
 };
-var _user$project$Builder$view = function (model) {
+var _user$project$Views$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _user$project$Builder$id('viewer'),
+			_0: _user$project$Views$id('viewer'),
 			_1: {
 				ctor: '::',
-				_0: _user$project$Builder$styles(_user$project$Builder$viewerStyling),
+				_0: _user$project$Views$styles(_user$project$Views$viewerStyling),
 				_1: {ctor: '[]'}
 			}
 		},
 		{
 			ctor: '::',
-			_0: _user$project$Builder$overlayPanels(model),
+			_0: _user$project$Views$overlayPanels(model),
 			_1: {ctor: '[]'}
 		});
 };
-var _user$project$Builder$main = _elm_lang$html$Html$programWithFlags(
-	{init: _user$project$Builder$init, view: _user$project$Builder$view, update: _user$project$Update$update, subscriptions: _user$project$Builder$subscriptions})(
+
+var _user$project$Main$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: A2(_elm_lang$core$Time$every, 5 * _elm_lang$core$Time$second, _user$project$Types$CheckOptJobs),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$keyboard$Keyboard$presses(_user$project$Types$KeyMsg),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _user$project$Main$init = function (storedModel) {
+	var model = A2(
+		_elm_lang$core$Maybe$withDefault,
+		_user$project$Model$emptyModel,
+		A2(_elm_lang$core$Maybe$map, _user$project$Model$exportableToModel, storedModel));
+	var showDefaultModel = _elm_lang$core$Native_Utils.eq(storedModel, _elm_lang$core$Maybe$Nothing) ? true : false;
+	return A2(
+		_elm_lang$core$Platform_Cmd_ops['!'],
+		model,
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			{
+				ctor: '::',
+				_0: _user$project$Ports$initialiseViewer(
+					{ctor: '_Tuple0'}),
+				_1: {ctor: '[]'}
+			},
+			showDefaultModel ? {
+				ctor: '::',
+				_0: _user$project$Update$toCommand(
+					_user$project$Types$SetParametersAndBuild(_user$project$ExamplesPanel$basisSetDimer)),
+				_1: {ctor: '[]'}
+			} : {
+				ctor: '::',
+				_0: _user$project$Ports$showStructure(
+					{
+						ctor: '_Tuple2',
+						_0: A2(_elm_lang$core$Maybe$withDefault, '', model.pdbFile),
+						_1: model.currentRepresentation
+					}),
+				_1: {ctor: '[]'}
+			}));
+};
+var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
+	{init: _user$project$Main$init, view: _user$project$Views$view, update: _user$project$Update$update, subscriptions: _user$project$Main$subscriptions})(
 	_elm_lang$core$Json_Decode$oneOf(
 		{
 			ctor: '::',
@@ -25280,9 +25281,9 @@ var _user$project$Builder$main = _elm_lang$html$Html$programWithFlags(
 		}));
 
 var Elm = {};
-Elm['Builder'] = Elm['Builder'] || {};
-if (typeof _user$project$Builder$main !== 'undefined') {
-    _user$project$Builder$main(Elm['Builder'], 'Builder', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"SetHeat":["String"],"OptJobStatus":["Result.Result Http.Error ( String, String )"],"ChangeBuildMode":["String"],"Build":[],"OptimisationSubmitted":["Result.Result Http.Error String"],"CheckOptJobs":["Time.Time"],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"SetParametersAndBuild":["Types.ParametersDict"],"StoreModel":[],"Optimise":[],"ProcessOptimisation":["Result.Result Http.Error Types.OptimisationResults"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ModelInfoPanel":[],"ExamplesPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ model_id : String , pdbFile : String , score : Float , residuesPerTurn : Float }"},"Types.OptimisationResults":{"args":[],"type":"{ parameters : Types.ParameterRecord , modellingResults : Types.ModellingResults }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+Elm['Main'] = Elm['Main'] || {};
+if (typeof _user$project$Main$main !== 'undefined') {
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"SetHeat":["String"],"OptJobStatus":["Result.Result Http.Error ( String, String )"],"ChangeBuildMode":["String"],"Build":[],"OptimisationSubmitted":["Result.Result Http.Error String"],"CheckOptJobs":["Time.Time"],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"SetParametersAndBuild":["Types.ParametersDict"],"StoreModel":[],"Optimise":[],"ProcessOptimisation":["Result.Result Http.Error Types.OptimisationResults"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ModelInfoPanel":[],"ExamplesPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ model_id : String , pdbFile : String , score : Float , residuesPerTurn : Float }"},"Types.OptimisationResults":{"args":[],"type":"{ parameters : Types.ParameterRecord , modellingResults : Types.ModellingResults }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

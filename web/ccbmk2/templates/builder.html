@@ -21,10 +21,10 @@
     var startingState = storedState ? JSON.parse(storedState) : null;
     // This try block will catch a problem with the local storage.
     try {
-        var app = Elm.Builder.embed(node, startingState);
+        var app = Elm.Main.embed(node, startingState);
     }
     catch (e) {
-        var app = Elm.Builder.embed(node, null);
+        var app = Elm.Main.embed(node, null);
     }
 
     var viewer;
