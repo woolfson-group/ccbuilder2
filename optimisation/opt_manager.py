@@ -24,8 +24,6 @@ def main():
         listener.start()
 
     while True:
-        for job in database.opt_jobs.find():
-            print('{_id}, {status}'.format(**job))
         jobs = database.opt_jobs.find(
             {'status': database.JobStatus.SUBMITTED.name})
         for job in sorted(jobs, key=lambda x: x['time_submitted']):
@@ -60,9 +58,6 @@ def get_and_process_opt_jobs(opt_job_queue):
         update_job_status(job_id, database.JobStatus.RUNNING)
         print("Running opt job {}!".format(job_id), file=sys.stderr)
         model_id = run_optimisation(job_id, parameters)
-        '''except:
-            print("Failed opt job {}!".format(job_id), file=sys.stderr)
-            update_job_status(job_id, database.JobStatus.FAILED)'''
         print("Finished opt job {}!".format(job_id), file=sys.stderr)
     return
 
@@ -86,7 +81,7 @@ def run_optimisation(opt_job_id, parameters):
         {'_id': opt_job_id},
         {'$set': {
             'final_parameters': optimised_parameters,
-            'status': database.JobStatus.SUCCESS.name,
+            'status': database.JobStatus.COMPLETE.name,
             'time_finished': datetime.datetime.now(),
             'model_id': model_id
         },

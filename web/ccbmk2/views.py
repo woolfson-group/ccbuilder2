@@ -4,6 +4,7 @@ import datetime
 import sys
 
 from flask import jsonify, redirect, render_template, request
+from bson.objectid import ObjectId
 
 from ccbmk2 import app
 from ccbmk2 import database
@@ -59,3 +60,30 @@ def optimise_coiled_coil_model():
     build_start_time = datetime.datetime.now()
     opt_id = database.create_opt_job_entry(request.json)
     return jsonify(str(opt_id))
+
+
+@app.route('/builder/api/v0.1/optimise/check-job-status', methods=['GET'])
+def get_optimisation_status():
+    """Get the status of an optimisation job."""
+    opt_job_id = request.args.get('opt-job-id')
+    opt_job = database.opt_jobs.find_one({'_id': ObjectId(opt_job_id)})
+    return jsonify({'_id': opt_job_id, 'status': opt_job['status']})
+
+
+@app.route('/builder/api/v0.1/optimise/retrieve-opt-job', methods=['GET'])
+def get_optimisation_result():
+    """Get the status of an optimisation job."""
+    opt_job_id = request.args.get('opt-job-id')
+    opt_job = database.opt_jobs.find_one({'_id': ObjectId(opt_job_id)})
+    model = database.models.find_one({'_id': opt_job['model_id']})
+    model_and_parameters = {
+        'model_and_info': {
+            'model_id': str(model['_id']),
+            'pdb': model['pdb'],
+            'score': model['score'],
+            'mean_rpt_value': model['mean_rpt_value']
+        },
+        'parameters': opt_job['final_parameters'],
+        'oligomeric_state': opt_job['oligomeric_state']
+    }
+    return jsonify(model_and_parameters)
