@@ -377,15 +377,26 @@ update msg model =
                     model ! []
 
         OptimisationSubmitted (Ok optJobID) ->
-            { model | optJobs = ( optJobID, Submitted ) :: model.optJobs } ! []
+            { model | optJobs = ( optJobID, Submitted ) :: model.optJobs }
+                ! [ toCommand StoreModel ]
 
         OptimisationSubmitted (Err optJobID) ->
             model ! []
 
         CheckOptJobs _ ->
+            -- Does not check the status of completed jobs.
             model
-                ! (List.map Tuple.first model.optJobs
-                |> List.map checkJobStatus)
+                ! (model.optJobs
+                    |> List.filter
+                        (\( _, status ) ->
+                            if status == Complete then
+                                False
+                            else
+                                True
+                        )
+                    |> List.map Tuple.first
+                    |> List.map checkJobStatus
+                  )
 
         OptJobStatus (Ok ( ojid, status )) ->
             let
@@ -811,7 +822,7 @@ togglePanelVisibility panel currentVisibility =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ Time.every Time.second CheckOptJobs
+        [ Time.every (5 * Time.second) CheckOptJobs
         , Keyboard.presses KeyMsg
         ]
 
@@ -971,7 +982,7 @@ optimisePanel buildMode optJobs visible heat =
                     True
 
         optimising =
-            if List.length optJobs > 1 then
+            if List.length optJobs > 0 then
                 True
             else
                 False
@@ -1394,5 +1405,5 @@ optJobStatus ( optID, status ) position =
 optJobStatusStyling : Int -> List Css.Mixin
 optJobStatusStyling position =
     [ Css.bottom (Css.px 20)
-    , Css.left (Css.px <| toFloat (200 * position))
+    , Css.right (Css.px 35)
     ]

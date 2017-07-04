@@ -81,7 +81,7 @@ def run_optimisation(opt_job_id, parameters):
         {'_id': opt_job_id},
         {'$set': {
             'final_parameters': optimised_parameters,
-            'status': database.JobStatus.SUCCESS.name,
+            'status': database.JobStatus.COMPLETE.name,
             'time_finished': datetime.datetime.now(),
             'model_id': model_id
         },

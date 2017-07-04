@@ -131,5 +131,5 @@ class JobStatus(enum.Enum):
     SUBMITTED = 1
     QUEUED = 2
     RUNNING = 3
-    SUCCESS = 4
+    COMPLETE = 4
     FAILED = 5

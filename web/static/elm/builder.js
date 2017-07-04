@@ -19174,8 +19174,8 @@ var _user$project$Types$optStatusToString = function (status) {
 			return 'QUEUED';
 		case 'Running':
 			return 'RUNNING';
-		case 'Succeeded':
-			return 'SUCCEEDED';
+		case 'Complete':
+			return 'COMPLETE';
 		default:
 			return 'FAILED';
 	}
@@ -19284,7 +19284,7 @@ var _user$project$Types$ExamplesPanel = {ctor: 'ExamplesPanel'};
 var _user$project$Types$BuildPanel = {ctor: 'BuildPanel'};
 var _user$project$Types$AppHeaderPanel = {ctor: 'AppHeaderPanel'};
 var _user$project$Types$Failed = {ctor: 'Failed'};
-var _user$project$Types$Succeeded = {ctor: 'Succeeded'};
+var _user$project$Types$Complete = {ctor: 'Complete'};
 var _user$project$Types$Running = {ctor: 'Running'};
 var _user$project$Types$Queued = {ctor: 'Queued'};
 var _user$project$Types$Submitted = {ctor: 'Submitted'};
@@ -19297,8 +19297,8 @@ var _user$project$Types$stringToOptStatus = function (statusString) {
 			return _elm_lang$core$Result$Ok(_user$project$Types$Queued);
 		case 'RUNNING':
 			return _elm_lang$core$Result$Ok(_user$project$Types$Running);
-		case 'SUCCEEDED':
-			return _elm_lang$core$Result$Ok(_user$project$Types$Succeeded);
+		case 'COMPLETE':
+			return _elm_lang$core$Result$Ok(_user$project$Types$Complete);
 		case 'FAILED':
 			return _elm_lang$core$Result$Ok(_user$project$Types$Failed);
 		default:
@@ -21812,9 +21812,8 @@ var _user$project$Builder$optJobStatusStyling = function (position) {
 			_rtfeldman$elm_css$Css$px(20)),
 		_1: {
 			ctor: '::',
-			_0: _rtfeldman$elm_css$Css$left(
-				_rtfeldman$elm_css$Css$px(
-					_elm_lang$core$Basics$toFloat(200 * position))),
+			_0: _rtfeldman$elm_css$Css$right(
+				_rtfeldman$elm_css$Css$px(35)),
 			_1: {ctor: '[]'}
 		}
 	};
@@ -22102,7 +22101,7 @@ var _user$project$Builder$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$batch(
 		{
 			ctor: '::',
-			_0: A2(_elm_lang$core$Time$every, _elm_lang$core$Time$second, _user$project$Types$CheckOptJobs),
+			_0: A2(_elm_lang$core$Time$every, 5 * _elm_lang$core$Time$second, _user$project$Types$CheckOptJobs),
 			_1: {
 				ctor: '::',
 				_0: _elm_lang$keyboard$Keyboard$presses(_user$project$Types$KeyMsg),
@@ -22818,7 +22817,7 @@ var _user$project$Builder$optimisePanel = F4(
 	function (buildMode, optJobs, visible, heat) {
 		var optimising = (_elm_lang$core$Native_Utils.cmp(
 			_elm_lang$core$List$length(optJobs),
-			1) > 0) ? true : false;
+			0) > 0) ? true : false;
 		var advancedBuild = function () {
 			var _p15 = buildMode;
 			if (_p15.ctor === 'Basic') {
@@ -24171,7 +24170,11 @@ var _user$project$Builder$update = F2(
 									_1: model.optJobs
 								}
 							}),
-						{ctor: '[]'});
+						{
+							ctor: '::',
+							_0: _user$project$Builder$toCommand(_user$project$Types$StoreModel),
+							_1: {ctor: '[]'}
+						});
 				} else {
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
@@ -24185,7 +24188,16 @@ var _user$project$Builder$update = F2(
 					A2(
 						_elm_lang$core$List$map,
 						_user$project$Builder$checkJobStatus,
-						A2(_elm_lang$core$List$map, _elm_lang$core$Tuple$first, model.optJobs)));
+						A2(
+							_elm_lang$core$List$map,
+							_elm_lang$core$Tuple$first,
+							A2(
+								_elm_lang$core$List$filter,
+								function (_p29) {
+									var _p30 = _p29;
+									return _elm_lang$core$Native_Utils.eq(_p30._1, _user$project$Types$Complete) ? false : true;
+								},
+								model.optJobs))));
 			case 'OptJobStatus':
 				if (_p24._0.ctor === 'Ok') {
 					var newOptJobs = _elm_lang$core$Dict$toList(
@@ -24211,8 +24223,8 @@ var _user$project$Builder$update = F2(
 				}
 			case 'ProcessModel':
 				if (_p24._0.ctor === 'Ok') {
-					var _p30 = _p24._0._0.score;
-					var _p29 = _p24._0._0.pdbFile;
+					var _p32 = _p24._0._0.score;
+					var _p31 = _p24._0._0.pdbFile;
 					var historyLength = 10;
 					var oldHistory = _elm_lang$core$Native_Utils.eq(
 						_elm_lang$core$List$length(
@@ -24230,21 +24242,21 @@ var _user$project$Builder$update = F2(
 							model,
 							{
 								currentInput: _user$project$Builder$parametersDictToInputDict(model.parameters),
-								pdbFile: _elm_lang$core$Maybe$Just(_p29),
-								score: _elm_lang$core$Maybe$Just(_p30),
+								pdbFile: _elm_lang$core$Maybe$Just(_p31),
+								score: _elm_lang$core$Maybe$Just(_p32),
 								residuesPerTurn: _elm_lang$core$Maybe$Just(_p24._0._0.residuesPerTurn),
 								building: false,
 								modelHistory: A3(
 									_elm_lang$core$Dict$insert,
 									model.nextHistoryID,
-									{ctor: '_Tuple3', _0: model.parameters, _1: false, _2: _p30},
+									{ctor: '_Tuple3', _0: model.parameters, _1: false, _2: _p32},
 									oldHistory),
 								nextHistoryID: model.nextHistoryID + 1
 							}),
 						{
 							ctor: '::',
 							_0: _user$project$Builder$showStructure(
-								{ctor: '_Tuple2', _0: _p29, _1: model.currentRepresentation}),
+								{ctor: '_Tuple2', _0: _p31, _1: model.currentRepresentation}),
 							_1: {
 								ctor: '::',
 								_0: _user$project$Builder$toCommand(_user$project$Types$StoreModel),
@@ -24405,8 +24417,8 @@ var _user$project$Builder$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'SetParametersAndBuild':
-				var _p31 = _p24._0;
-				return _user$project$ParameterValidation$invalidParameterDict(_p31) ? A2(
+				var _p33 = _p24._0;
+				return _user$project$ParameterValidation$invalidParameterDict(_p33) ? A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
 					{ctor: '[]'}) : A2(
@@ -24414,10 +24426,10 @@ var _user$project$Builder$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parameters: _p31,
-							currentInput: _user$project$Builder$parametersDictToInputDict(_p31),
+							parameters: _p33,
+							currentInput: _user$project$Builder$parametersDictToInputDict(_p33),
 							oligomericState: _elm_lang$core$List$length(
-								_elm_lang$core$Dict$toList(_p31))
+								_elm_lang$core$Dict$toList(_p33))
 						}),
 					{
 						ctor: '::',
@@ -24425,8 +24437,8 @@ var _user$project$Builder$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'KeyMsg':
-				var _p32 = _p24._0;
-				if (_p32 === 13) {
+				var _p34 = _p24._0;
+				if (_p34 === 13) {
 					return _user$project$ParameterValidation$invalidParameterDict(model.parameters) ? A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						model,
@@ -24468,10 +24480,10 @@ var _user$project$Builder$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'ExpandHistory':
-				var _p34 = _p24._0;
-				var oldEntry = A2(_elm_lang$core$Dict$get, _p34, model.modelHistory);
-				var _p33 = oldEntry;
-				if (_p33.ctor === 'Just') {
+				var _p36 = _p24._0;
+				var oldEntry = A2(_elm_lang$core$Dict$get, _p36, model.modelHistory);
+				var _p35 = oldEntry;
+				if (_p35.ctor === 'Just') {
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
@@ -24479,8 +24491,8 @@ var _user$project$Builder$update = F2(
 							{
 								modelHistory: A3(
 									_elm_lang$core$Dict$insert,
-									_p34,
-									{ctor: '_Tuple3', _0: _p33._0._0, _1: !_p33._0._1, _2: _p33._0._2},
+									_p36,
+									{ctor: '_Tuple3', _0: _p35._0._0, _1: !_p35._0._1, _2: _p35._0._2},
 									model.modelHistory)
 							}),
 						{ctor: '[]'});

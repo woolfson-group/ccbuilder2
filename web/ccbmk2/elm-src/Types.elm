@@ -117,7 +117,7 @@ type OptStatus
     = Submitted
     | Queued
     | Running
-    | Succeeded
+    | Complete
     | Failed 
 
 
@@ -147,8 +147,8 @@ optStatusToString status =
             "QUEUED"
         Running ->
             "RUNNING"
-        Succeeded ->
-            "SUCCEEDED"
+        Complete ->
+            "COMPLETE"
         Failed ->
             "FAILED"
 
@@ -162,8 +162,8 @@ stringToOptStatus statusString =
             Ok Queued
         "RUNNING" ->
             Ok Running
-        "SUCCEEDED" ->
-            Ok Succeeded
+        "COMPLETE" ->
+            Ok Complete
         "FAILED" ->
             Ok Failed
         _ ->
