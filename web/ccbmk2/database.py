@@ -116,6 +116,7 @@ def create_opt_job_entry(request):
     opt_job = {
         'initial_parameter_ids':
             [get_chain_parameters_id(p) for p in request['Parameters']],
+        'oligomeric_state': len(request['Parameters']),
         'final_parameters': None,
         'heat': request['Heat'],
         'status': JobStatus.SUBMITTED.name,

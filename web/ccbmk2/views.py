@@ -83,6 +83,7 @@ def get_optimisation_result():
             'score': model['score'],
             'mean_rpt_value': model['mean_rpt_value']
         },
-        'parameters': opt_job['final_parameters']
+        'parameters': opt_job['final_parameters'],
+        'oligomeric_state': opt_job['oligomeric_state']
     }
     return jsonify(model_and_parameters)

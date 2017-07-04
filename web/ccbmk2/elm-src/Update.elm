@@ -216,12 +216,23 @@ update msg model =
         SetHeat heat ->
             { model | heat = String.toInt heat |> Result.withDefault 298 } ! []
 
-        ProcessOptimisation (Ok { parameters, modellingResults }) ->
+        ProcessOptimisation (Ok { parameters, modellingResults, oligomericState }) ->
             let
+                fullParameters =
+                    { radius = parameters.radius
+                    , pitch = parameters.pitch
+                    , phiCA = parameters.phiCA
+                    , sequence = parameters.sequence
+                    , register = parameters.register
+                    , antiParallel = False
+                    , linkedSuperHelRot = True
+                    , superHelRot = Just 0
+                    , zShift = Just 0
+                    }
                 parametersDict =
                     List.map2 (,)
-                        (List.range 1 model.oligomericState)
-                        (List.repeat model.oligomericState parameters)
+                        (List.range 1 oligomericState)
+                        (List.repeat oligomericState fullParameters)
                         |> Dict.fromList
             in
                 { model
@@ -470,10 +481,11 @@ retreiveOptimisation optJobId =
 
 optimisationResultsDecoder : Json.Decode.Decoder OptimisationResults
 optimisationResultsDecoder =
-    Json.Decode.map2
+    Json.Decode.map3
         OptimisationResults
         (field "parameters" basicParameterJsonDecoder)
         (field "model_and_info" modellingResultsDecoder)
+        (field "oligomeric_state" Json.Decode.int)
 
 
 basicParameterJsonDecoder : Json.Decode.Decoder ParameterRecord

@@ -87,6 +87,7 @@ type alias ModellingResults =
 type alias OptimisationResults =
     { parameters : ParameterRecord
     , modellingResults : ModellingResults
+    , oligomericState : Int
     }
 
 

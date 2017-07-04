@@ -68,8 +68,10 @@ overlayPanels model =
                 model.optJobs
                 model.panelVisibility.optimisePanel
                 model.heat
-            , ExamplesPanel.examplesPanel model.building model.panelVisibility.examplesPanel
-            , statusPanel model.building model.optimising
+            , ExamplesPanel.examplesPanel
+                model.building
+                model.panelVisibility.examplesPanel
+            , buildingStatusPanel model.building
             , buildHistoryPanel
                 model.modelHistory
                 model.building
@@ -527,18 +529,15 @@ toggleViewerPanel =
 -- Building Status
 
 
-statusPanel : Bool -> Bool -> Html msg
-statusPanel building optimising =
+buildingStatusPanel : Bool -> Html msg
+buildingStatusPanel building =
     div
         [ class [ OverlayPanelCss ]
         , id [ BuildingStatusPanel ]
         , styles <| buildingStatusStyling ++ panelStyling
-        , hidden ((not building) && (not optimising))
+        , hidden (not building)
         ]
-        [ if optimising then
-            text "Optimising"
-          else
-            text "Building"
+        [ text "Building"
         , img [ src "static/css/infinity.gif", width 80, height 80 ] []
         ]
 
@@ -559,22 +558,33 @@ buildingStatusStyling =
 optJobStatus : ( String, OptStatus ) -> Int -> Html Msg
 optJobStatus ( optID, status ) position =
     div
-        ([ class [ OverlayPanelCss ]
-         , styles <| optJobStatusStyling position ++ panelStyling
-         ]
-            ++ if status == Complete then
-                [ onClick (RetrieveOptimisation optID) ]
-               else
-                []
-        )
-        [ text optID
-        , br [] []
-        , text (optStatusToString status)
+        [ class [ OverlayPanelCss ]
+        , styles <| optJobStatusStyling position ++ panelStyling
         ]
+        ([ text "Optimising"
+         , br [] []
+         , text ("(" ++ (toString status) ++ ")")
+         ]
+            ++ (case status of
+                    Complete ->
+                        [ button
+                            [ onClick (RetrieveOptimisation optID) ]
+                            [ text "Retrieve" ]
+                        ]
+
+                    _ ->
+                        [ img
+                            [ src "static/css/infinity.gif", width 80, height 80 ]
+                            []
+                        ]
+               )
+        )
 
 
 optJobStatusStyling : Int -> List Css.Mixin
 optJobStatusStyling position =
-    [ Css.bottom (Css.px 20)
+    [ Css.textAlign Css.center
+    , Css.bottom (Css.px 20)
     , Css.right (Css.px 35)
+    , Css.width (Css.px 90)
     ]
