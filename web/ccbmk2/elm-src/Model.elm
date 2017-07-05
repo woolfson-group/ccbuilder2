@@ -24,7 +24,12 @@ import Types
         , PanelVisibility
         , Representation
         , RepOption(..)
+        , stringToHelixType
         )
+
+
+-- Each entry in the model history contains:
+-- ParametersDict, whether it is expanded, score, HelixType
 
 
 type alias Model =
@@ -40,7 +45,7 @@ type alias Model =
     , building : Bool
     , optJobs : List ( String, OptStatus )
     , heat : Int
-    , modelHistory : Dict.Dict HistoryID ( ParametersDict, Bool, Float )
+    , modelHistory : Dict.Dict HistoryID ( ParametersDict, Bool, Float, HelixType )
     , nextHistoryID : HistoryID
     , panelVisibility : PanelVisibility
     , currentRepresentation : Representation
@@ -58,7 +63,8 @@ type alias ExportableModel =
     , building : Bool
     , optJobs : List ( String, String )
     , heat : Int
-    , modelHistory : List ( HistoryID, ( List ( SectionID, ParameterRecord ), Bool, Float ) )
+    , modelHistory :
+        List ( HistoryID, ( List ( SectionID, ParameterRecord ), Bool, Float, String ) )
     , nextHistoryID : HistoryID
     , panelVisibility : PanelVisibility
     , currentRepresentation : Representation
@@ -107,9 +113,9 @@ modelToExportable model =
         model.modelHistory
             |> Dict.toList
             |> List.map
-                (\( hid, ( params, vis, score ) ) ->
+                (\( hid, ( params, vis, score, hType ) ) ->
                     ( hid
-                    , ( Dict.toList params, vis, score )
+                    , ( Dict.toList params, vis, score, toString hType )
                     )
                 )
     , nextHistoryID = model.nextHistoryID
@@ -135,9 +141,13 @@ exportableToModel exportableModel =
     , modelHistory =
         exportableModel.modelHistory
             |> List.map
-                (\( hid, ( params, vis, score ) ) ->
+                (\( hid, ( params, vis, score, hType ) ) ->
                     ( hid
-                    , ( Dict.fromList params, vis, score )
+                    , ( Dict.fromList params
+                      , vis
+                      , score
+                      , Result.withDefault Alpha (stringToHelixType hType)
+                      )
                     )
                 )
             |> Dict.fromList

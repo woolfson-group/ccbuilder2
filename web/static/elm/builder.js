@@ -19240,7 +19240,7 @@ var _user$project$Types$parametersDictToInputDict = function (parameters) {
 };
 var _user$project$Types$ModellingResults = F5(
 	function (a, b, c, d, e) {
-		return {model_id: a, helixType: b, pdbFile: c, score: d, residuesPerTurn: e};
+		return {model_id: a, helixTypeString: b, pdbFile: c, score: d, residuesPerTurn: e};
 	});
 var _user$project$Types$OptimisationResults = F3(
 	function (a, b, c) {
@@ -21958,10 +21958,14 @@ var _user$project$Model$exportableToModel = function (exportableModel) {
 						ctor: '_Tuple2',
 						_0: _p5._0,
 						_1: {
-							ctor: '_Tuple3',
+							ctor: '_Tuple4',
 							_0: _elm_lang$core$Dict$fromList(_p5._1._0),
 							_1: _p5._1._1,
-							_2: _p5._1._2
+							_2: _p5._1._2,
+							_3: A2(
+								_elm_lang$core$Result$withDefault,
+								_user$project$Types$Alpha,
+								_user$project$Types$stringToHelixType(_p5._1._3))
 						}
 					};
 				},
@@ -21991,10 +21995,11 @@ var _user$project$Model$modelToExportable = function (model) {
 					ctor: '_Tuple2',
 					_0: _p7._0,
 					_1: {
-						ctor: '_Tuple3',
+						ctor: '_Tuple4',
 						_0: _elm_lang$core$Dict$toList(_p7._1._0),
 						_1: _p7._1._1,
-						_2: _p7._1._2
+						_2: _p7._1._2,
+						_3: _elm_lang$core$Basics$toString(_p7._1._3)
 					}
 				};
 			},
@@ -22176,7 +22181,8 @@ var _user$project$Ports$setStorage = _elm_lang$core$Native_Platform.outgoingPort
 							];
 						}),
 						v._1._1,
-						v._1._2
+						v._1._2,
+						v._1._3
 					]
 					];
 				}),
@@ -22796,6 +22802,10 @@ var _user$project$Update$update = F2(
 				if (_p2._0.ctor === 'Ok') {
 					var _p17 = _p2._0._0.score;
 					var _p16 = _p2._0._0.pdbFile;
+					var helixType = A2(
+						_elm_lang$core$Result$withDefault,
+						_user$project$Types$Alpha,
+						_user$project$Types$stringToHelixType(_p2._0._0.helixTypeString));
 					var historyLength = 10;
 					var oldHistory = _elm_lang$core$Native_Utils.eq(
 						_elm_lang$core$List$length(
@@ -22812,10 +22822,7 @@ var _user$project$Update$update = F2(
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								helixType: A2(
-									_elm_lang$core$Result$withDefault,
-									_user$project$Types$Alpha,
-									_user$project$Types$stringToHelixType(_p2._0._0.helixType)),
+								helixType: helixType,
 								currentInput: _user$project$Types$parametersDictToInputDict(model.parameters),
 								pdbFile: _elm_lang$core$Maybe$Just(_p16),
 								score: _elm_lang$core$Maybe$Just(_p17),
@@ -22824,7 +22831,7 @@ var _user$project$Update$update = F2(
 								modelHistory: A3(
 									_elm_lang$core$Dict$insert,
 									model.nextHistoryID,
-									{ctor: '_Tuple3', _0: model.parameters, _1: false, _2: _p17},
+									{ctor: '_Tuple4', _0: model.parameters, _1: false, _2: _p17, _3: helixType},
 									oldHistory),
 								nextHistoryID: model.nextHistoryID + 1
 							}),
@@ -23078,7 +23085,7 @@ var _user$project$Update$update = F2(
 								modelHistory: A3(
 									_elm_lang$core$Dict$insert,
 									_p23,
-									{ctor: '_Tuple3', _0: _p22._0._0, _1: !_p22._0._1, _2: _p22._0._2},
+									{ctor: '_Tuple4', _0: _p22._0._0, _1: !_p22._0._1, _2: _p22._0._2, _3: _p22._0._3},
 									model.modelHistory)
 							}),
 						{ctor: '[]'});
@@ -24062,8 +24069,8 @@ var _user$project$Views$modelInfoPanel = function (model) {
 			}
 		});
 };
-var _user$project$Views$modelHistoryTopRow = F5(
-	function (hID, parameters, building, visible, score) {
+var _user$project$Views$modelHistoryTopRow = F6(
+	function (hID, parameters, building, visible, score, helixType) {
 		var topRowParameters = A2(
 			_elm_lang$core$Maybe$withDefault,
 			_user$project$Types$emptyParameterRecord,
@@ -24112,7 +24119,7 @@ var _user$project$Views$modelHistoryTopRow = F5(
 								_1: {
 									ctor: '::',
 									_0: _elm_lang$html$Html_Events$onClick(
-										A2(_user$project$Types$SetParametersAndBuild, parameters, _user$project$Types$Alpha)),
+										A2(_user$project$Types$SetParametersAndBuild, parameters, helixType)),
 									_1: {
 										ctor: '::',
 										_0: _elm_lang$html$Html_Attributes$disabled(building),
@@ -24131,25 +24138,26 @@ var _user$project$Views$modelHistoryTopRow = F5(
 var _user$project$Views$modelParametersAsRow = F2(
 	function (_p3, building) {
 		var _p4 = _p3;
-		var _p8 = _p4._1._1;
-		var _p7 = _p4._1._2;
-		var _p6 = _p4._1._0;
+		var _p9 = _p4._1._1;
+		var _p8 = _p4._1._2;
+		var _p7 = _p4._1._0;
+		var _p6 = _p4._1._3;
 		var _p5 = _p4._0;
 		var foldedRows = A2(
 			_elm_lang$core$List$map,
-			_user$project$Views$modelFoldedRow(_p7),
+			_user$project$Views$modelFoldedRow(_p8),
 			A2(
 				_elm_lang$core$Maybe$withDefault,
 				{ctor: '[]'},
 				_elm_lang$core$List$tail(
-					_elm_lang$core$Dict$values(_p6))));
-		return (!_p8) ? {
+					_elm_lang$core$Dict$values(_p7))));
+		return (!_p9) ? {
 			ctor: '::',
-			_0: A5(_user$project$Views$modelHistoryTopRow, _p5, _p6, building, _p8, _p7),
+			_0: A6(_user$project$Views$modelHistoryTopRow, _p5, _p7, building, _p9, _p8, _p6),
 			_1: {ctor: '[]'}
 		} : {
 			ctor: '::',
-			_0: A5(_user$project$Views$modelHistoryTopRow, _p5, _p6, building, _p8, _p7),
+			_0: A6(_user$project$Views$modelHistoryTopRow, _p5, _p7, building, _p9, _p8, _p6),
 			_1: foldedRows
 		};
 	});
@@ -24627,9 +24635,9 @@ var _user$project$Views$buildingStatusPanel = function (building) {
 		});
 };
 var _user$project$Views$optJobStatus = F2(
-	function (_p9, position) {
-		var _p10 = _p9;
-		var _p12 = _p10._1;
+	function (_p10, position) {
+		var _p11 = _p10;
+		var _p13 = _p11._1;
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -24669,15 +24677,15 @@ var _user$project$Views$optJobStatus = F2(
 									'(',
 									A2(
 										_elm_lang$core$Basics_ops['++'],
-										_elm_lang$core$Basics$toString(_p12),
+										_elm_lang$core$Basics$toString(_p13),
 										')'))),
 							_1: {ctor: '[]'}
 						}
 					}
 				},
 				function () {
-					var _p11 = _p12;
-					if (_p11.ctor === 'Complete') {
+					var _p12 = _p13;
+					if (_p12.ctor === 'Complete') {
 						return {
 							ctor: '::',
 							_0: A2(
@@ -24685,7 +24693,7 @@ var _user$project$Views$optJobStatus = F2(
 								{
 									ctor: '::',
 									_0: _elm_lang$html$Html_Events$onClick(
-										_user$project$Types$RetrieveOptimisation(_p10._0)),
+										_user$project$Types$RetrieveOptimisation(_p11._0)),
 									_1: {ctor: '[]'}
 								},
 								{
@@ -25288,8 +25296,13 @@ var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
 																								return A2(
 																									_elm_lang$core$Json_Decode$andThen,
 																									function (x2) {
-																										return _elm_lang$core$Json_Decode$succeed(
-																											{ctor: '_Tuple3', _0: x0, _1: x1, _2: x2});
+																										return A2(
+																											_elm_lang$core$Json_Decode$andThen,
+																											function (x3) {
+																												return _elm_lang$core$Json_Decode$succeed(
+																													{ctor: '_Tuple4', _0: x0, _1: x1, _2: x2, _3: x3});
+																											},
+																											A2(_elm_lang$core$Json_Decode$index, 3, _elm_lang$core$Json_Decode$string));
 																									},
 																									A2(_elm_lang$core$Json_Decode$index, 2, _elm_lang$core$Json_Decode$float));
 																							},
@@ -25542,7 +25555,7 @@ var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Types.HelixType":{"args":[],"tags":{"Alpha":[],"Collagen":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"SetHeat":["String"],"OptJobStatus":["Result.Result Http.Error ( String, String )"],"ChangeBuildMode":["String"],"RetrieveOptimisation":["String"],"Build":[],"OptimisationSubmitted":["Result.Result Http.Error String"],"CheckOptJobs":["Time.Time"],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"SetParametersAndBuild":["Types.ParametersDict","Types.HelixType"],"StoreModel":[],"Optimise":[],"ProcessOptimisation":["Result.Result Http.Error Types.OptimisationResults"],"ChangeHelixType":["String"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ModelInfoPanel":[],"ExamplesPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ model_id : String , helixType : String , pdbFile : String , score : Float , residuesPerTurn : Float }"},"Types.OptimisationResults":{"args":[],"type":"{ parameters : Types.ParameterRecord , modellingResults : Types.ModellingResults , oligomericState : Int }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Types.HelixType":{"args":[],"tags":{"Alpha":[],"Collagen":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"SetHeat":["String"],"OptJobStatus":["Result.Result Http.Error ( String, String )"],"ChangeBuildMode":["String"],"RetrieveOptimisation":["String"],"Build":[],"OptimisationSubmitted":["Result.Result Http.Error String"],"CheckOptJobs":["Time.Time"],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"SetParametersAndBuild":["Types.ParametersDict","Types.HelixType"],"StoreModel":[],"Optimise":[],"ProcessOptimisation":["Result.Result Http.Error Types.OptimisationResults"],"ChangeHelixType":["String"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ModelInfoPanel":[],"ExamplesPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ model_id : String , helixTypeString : String , pdbFile : String , score : Float , residuesPerTurn : Float }"},"Types.OptimisationResults":{"args":[],"type":"{ parameters : Types.ParameterRecord , modellingResults : Types.ModellingResults , oligomericState : Int }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

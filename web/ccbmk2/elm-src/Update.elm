@@ -265,7 +265,7 @@ update msg model =
             }
                 ! [ retreiveOptimisation optJobId ]
 
-        ProcessModel (Ok { helixType, pdbFile, score, residuesPerTurn }) ->
+        ProcessModel (Ok { helixTypeString, pdbFile, score, residuesPerTurn }) ->
             let
                 historyLength =
                     10
@@ -279,16 +279,20 @@ update msg model =
                             |> Dict.fromList
                     else
                         model.modelHistory
+                helixType = Result.withDefault Alpha (stringToHelixType helixTypeString)
             in
                 { model
-                    | helixType = Result.withDefault Alpha (stringToHelixType helixType)
+                    | helixType = helixType
                     , currentInput = parametersDictToInputDict model.parameters
                     , pdbFile = Just pdbFile
                     , score = Just score
                     , residuesPerTurn = Just residuesPerTurn
                     , building = False
                     , modelHistory =
-                        Dict.insert model.nextHistoryID ( model.parameters, False, score ) oldHistory
+                        Dict.insert
+                            model.nextHistoryID
+                            ( model.parameters, False, score, helixType )
+                            oldHistory
                     , nextHistoryID = model.nextHistoryID + 1
                 }
                     ! [ showStructure ( pdbFile, model.currentRepresentation )
@@ -435,10 +439,10 @@ update msg model =
                     Dict.get hID model.modelHistory
             in
                 case oldEntry of
-                    Just ( parametersDict, visible, score ) ->
+                    Just ( parametersDict, visible, score, helixType ) ->
                         { model
                             | modelHistory =
-                                Dict.insert hID ( parametersDict, not visible, score ) model.modelHistory
+                                Dict.insert hID ( parametersDict, not visible, score, helixType ) model.modelHistory
                         }
                             ! []
 

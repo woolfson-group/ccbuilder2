@@ -79,7 +79,7 @@ type alias InputValues =
 
 type alias ModellingResults =
     { model_id : String
-    , helixType : String
+    , helixTypeString : String
     , pdbFile : String
     , score : Float
     , residuesPerTurn : Float
