@@ -104,6 +104,37 @@ def optimise_coiled_coil(parameters, debug=False):
     return optimised_parameters, model_and_info
 
 
+def build_collagen(parameters, debug=False):
+    """Builds a model of a collagen triple-helix using the input parameters.
+
+    Parameters
+    ----------
+    parameter : [ dict[str, int/float/str] ]
+        List of parameter dictionaries required for building a coiled coil
+        i.e. radius, pitch, phiCA, sequence.
+
+    Returns
+    -------
+    model_data : dict
+        A dictionary containing information about the model that has
+        been produced.
+    """
+    if debug:
+        print(parameters, file=sys.stderr)
+    collagen = isambard.specifications.CoiledCoil.tropocollagen(
+        auto_build=False)
+    collagen.aas = [len(p['Sequence']) for p in parameters]
+    collagen.major_radii = [p['Radius'] for p in parameters]
+    collagen.major_pitches = [p['Pitch'] for p in parameters]
+    collagen.phi_c_alphas = [p['Interface Angle'] for p in parameters]
+    sequences = [p['Sequence'] for p in parameters]
+    collagen.build()
+    collagen.pack_new_sequences(sequences)
+    mean_rpt_value = calculate_average_rpt(collagen)
+    score = collagen.buff_interaction_energy.total_energy
+    return collagen.pdb, score, mean_rpt_value
+
+
 def calculate_average_rpt(ampal):
     """Returns the mean residues per turn value for an AMPAL object."""
     rpt_lists = [isambard.analyse_protein.residues_per_turn(ch)[
