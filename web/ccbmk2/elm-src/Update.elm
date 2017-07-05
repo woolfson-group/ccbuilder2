@@ -190,7 +190,12 @@ update msg model =
                         , panelVisibility =
                             PanelVisibility False False False False False
                     }
-                        ! [ sendBuildCmd model.parameters ]
+                        ! [ case model.helixType of
+                                Alpha ->
+                                    sendBuildCmd model.parameters
+                                Collagen ->
+                                    sendCollagenBuildCmd model.parameters
+                          ]
                 else
                     model ! []
 
@@ -463,6 +468,19 @@ sendBuildCmd parameters =
     Http.send ProcessModel <|
         Http.post
             "builder/api/v0.1/build/coiled-coil"
+            (Json.Encode.object
+                [ ( "Parameters", parametersDictToListJson parameters )
+                ]
+                |> Http.jsonBody
+            )
+            modellingResultsDecoder
+
+
+sendCollagenBuildCmd : ParametersDict -> Cmd Msg
+sendCollagenBuildCmd parameters =
+    Http.send ProcessModel <|
+        Http.post
+            "builder/api/v0.1/build/collagen"
             (Json.Encode.object
                 [ ( "Parameters", parametersDictToListJson parameters )
                 ]

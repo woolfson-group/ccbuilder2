@@ -22431,6 +22431,26 @@ var _user$project$Update$retreiveOptimisation = function (optJobId) {
 			A2(_elm_lang$core$Basics_ops['++'], 'builder/api/v0.1/optimise/retrieve-opt-job?opt-job-id=', optJobId),
 			_user$project$Update$optimisationResultsDecoder));
 };
+var _user$project$Update$sendCollagenBuildCmd = function (parameters) {
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$Types$ProcessModel,
+		A3(
+			_elm_lang$http$Http$post,
+			'builder/api/v0.1/build/collagen',
+			_elm_lang$http$Http$jsonBody(
+				_elm_lang$core$Json_Encode$object(
+					{
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'Parameters',
+							_1: _user$project$Update$parametersDictToListJson(parameters)
+						},
+						_1: {ctor: '[]'}
+					})),
+			_user$project$Update$modellingResultsDecoder));
+};
 var _user$project$Update$sendBuildCmd = function (parameters) {
 	return A2(
 		_elm_lang$http$Http$send,
@@ -22643,7 +22663,14 @@ var _user$project$Update$update = F2(
 						}),
 					{
 						ctor: '::',
-						_0: _user$project$Update$sendBuildCmd(model.parameters),
+						_0: function () {
+							var _p10 = model.helixType;
+							if (_p10.ctor === 'Alpha') {
+								return _user$project$Update$sendBuildCmd(model.parameters);
+							} else {
+								return _user$project$Update$sendCollagenBuildCmd(model.parameters);
+							}
+						}(),
 						_1: {ctor: '[]'}
 					}) : A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
@@ -22704,9 +22731,9 @@ var _user$project$Update$update = F2(
 							_elm_lang$core$Tuple$first,
 							A2(
 								_elm_lang$core$List$filter,
-								function (_p10) {
-									var _p11 = _p10;
-									return _elm_lang$core$Native_Utils.eq(_p11._1, _user$project$Types$Complete) ? false : true;
+								function (_p11) {
+									var _p12 = _p11;
+									return _elm_lang$core$Native_Utils.eq(_p12._1, _user$project$Types$Complete) ? false : true;
 								},
 								model.optJobs))));
 			case 'OptJobStatus':
@@ -22733,7 +22760,7 @@ var _user$project$Update$update = F2(
 						{ctor: '[]'});
 				}
 			case 'RetrieveOptimisation':
-				var _p14 = _p2._0;
+				var _p15 = _p2._0;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -22741,21 +22768,21 @@ var _user$project$Update$update = F2(
 						{
 							optJobs: A2(
 								_elm_lang$core$List$filter,
-								function (_p12) {
-									var _p13 = _p12;
-									return !_elm_lang$core$Native_Utils.eq(_p13._0, _p14);
+								function (_p13) {
+									var _p14 = _p13;
+									return !_elm_lang$core$Native_Utils.eq(_p14._0, _p15);
 								},
 								model.optJobs)
 						}),
 					{
 						ctor: '::',
-						_0: _user$project$Update$retreiveOptimisation(_p14),
+						_0: _user$project$Update$retreiveOptimisation(_p15),
 						_1: {ctor: '[]'}
 					});
 			case 'ProcessModel':
 				if (_p2._0.ctor === 'Ok') {
-					var _p16 = _p2._0._0.score;
-					var _p15 = _p2._0._0.pdbFile;
+					var _p17 = _p2._0._0.score;
+					var _p16 = _p2._0._0.pdbFile;
 					var historyLength = 10;
 					var oldHistory = _elm_lang$core$Native_Utils.eq(
 						_elm_lang$core$List$length(
@@ -22773,21 +22800,21 @@ var _user$project$Update$update = F2(
 							model,
 							{
 								currentInput: _user$project$Types$parametersDictToInputDict(model.parameters),
-								pdbFile: _elm_lang$core$Maybe$Just(_p15),
-								score: _elm_lang$core$Maybe$Just(_p16),
+								pdbFile: _elm_lang$core$Maybe$Just(_p16),
+								score: _elm_lang$core$Maybe$Just(_p17),
 								residuesPerTurn: _elm_lang$core$Maybe$Just(_p2._0._0.residuesPerTurn),
 								building: false,
 								modelHistory: A3(
 									_elm_lang$core$Dict$insert,
 									model.nextHistoryID,
-									{ctor: '_Tuple3', _0: model.parameters, _1: false, _2: _p16},
+									{ctor: '_Tuple3', _0: model.parameters, _1: false, _2: _p17},
 									oldHistory),
 								nextHistoryID: model.nextHistoryID + 1
 							}),
 						{
 							ctor: '::',
 							_0: _user$project$Ports$showStructure(
-								{ctor: '_Tuple2', _0: _p15, _1: model.currentRepresentation}),
+								{ctor: '_Tuple2', _0: _p16, _1: model.currentRepresentation}),
 							_1: {
 								ctor: '::',
 								_0: _user$project$Update$toCommand(_user$project$Types$StoreModel),
@@ -22816,14 +22843,14 @@ var _user$project$Update$update = F2(
 					{ctor: '[]'});
 			case 'ProcessOptimisation':
 				if (_p2._0.ctor === 'Ok') {
-					var _p18 = _p2._0._0.parameters;
-					var _p17 = _p2._0._0.oligomericState;
+					var _p19 = _p2._0._0.parameters;
+					var _p18 = _p2._0._0.oligomericState;
 					var fullParameters = {
-						radius: _p18.radius,
-						pitch: _p18.pitch,
-						phiCA: _p18.phiCA,
-						sequence: _p18.sequence,
-						register: _p18.register,
+						radius: _p19.radius,
+						pitch: _p19.pitch,
+						phiCA: _p19.phiCA,
+						sequence: _p19.sequence,
+						register: _p19.register,
 						antiParallel: false,
 						linkedSuperHelRot: true,
 						superHelRot: _elm_lang$core$Maybe$Just(0),
@@ -22836,8 +22863,8 @@ var _user$project$Update$update = F2(
 								function (v0, v1) {
 									return {ctor: '_Tuple2', _0: v0, _1: v1};
 								}),
-							A2(_elm_lang$core$List$range, 1, _p17),
-							A2(_elm_lang$core$List$repeat, _p17, fullParameters)));
+							A2(_elm_lang$core$List$range, 1, _p18),
+							A2(_elm_lang$core$List$repeat, _p18, fullParameters)));
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
@@ -22958,8 +22985,8 @@ var _user$project$Update$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'SetParametersAndBuild':
-				var _p19 = _p2._0;
-				return _user$project$ParameterValidation$invalidParameterDict(_p19) ? A2(
+				var _p20 = _p2._0;
+				return _user$project$ParameterValidation$invalidParameterDict(_p20) ? A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
 					{ctor: '[]'}) : A2(
@@ -22967,10 +22994,10 @@ var _user$project$Update$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parameters: _p19,
-							currentInput: _user$project$Types$parametersDictToInputDict(_p19),
+							parameters: _p20,
+							currentInput: _user$project$Types$parametersDictToInputDict(_p20),
 							oligomericState: _elm_lang$core$List$length(
-								_elm_lang$core$Dict$toList(_p19))
+								_elm_lang$core$Dict$toList(_p20))
 						}),
 					{
 						ctor: '::',
@@ -22978,8 +23005,8 @@ var _user$project$Update$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'KeyMsg':
-				var _p20 = _p2._0;
-				if (_p20 === 13) {
+				var _p21 = _p2._0;
+				if (_p21 === 13) {
 					return _user$project$ParameterValidation$invalidParameterDict(model.parameters) ? A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						model,
@@ -23021,10 +23048,10 @@ var _user$project$Update$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'ExpandHistory':
-				var _p22 = _p2._0;
-				var oldEntry = A2(_elm_lang$core$Dict$get, _p22, model.modelHistory);
-				var _p21 = oldEntry;
-				if (_p21.ctor === 'Just') {
+				var _p23 = _p2._0;
+				var oldEntry = A2(_elm_lang$core$Dict$get, _p23, model.modelHistory);
+				var _p22 = oldEntry;
+				if (_p22.ctor === 'Just') {
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
@@ -23032,8 +23059,8 @@ var _user$project$Update$update = F2(
 							{
 								modelHistory: A3(
 									_elm_lang$core$Dict$insert,
-									_p22,
-									{ctor: '_Tuple3', _0: _p21._0._0, _1: !_p21._0._1, _2: _p21._0._2},
+									_p23,
+									{ctor: '_Tuple3', _0: _p22._0._0, _1: !_p22._0._1, _2: _p22._0._2},
 									model.modelHistory)
 							}),
 						{ctor: '[]'});

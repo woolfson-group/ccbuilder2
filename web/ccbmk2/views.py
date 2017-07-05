@@ -65,12 +65,14 @@ def optimise_coiled_coil_model():
 @app.route('/builder/api/v0.1/build/collagen', methods=['POST'])
 def build_collagen_model():
     """Passes command to build a collagen model."""
+    parameters_list = request.json['Parameters']
     build_start_time = datetime.datetime.now()
     pdb, score, rpt = model_building.build_collagen(
         parameters_list, debug=app.debug)
     build_start_end = datetime.datetime.now()
     build_time = build_start_end - build_start_time
     model_and_info = {
+        'model_id': "3421421412",
         'pdb': pdb,
         'score': score,
         'mean_rpt_value': rpt,
