@@ -301,13 +301,14 @@ singleParameterInput sectionID ( parameterLabel, parameter, currentParameter ) =
 singleZShiftInput : SectionID -> ( String, Parameter, String ) -> Bool -> Html Msg
 singleZShiftInput sectionID ( parameterLabel, parameter, currentParameter ) isChecked =
     div [ class [ ParameterInputCss ] ]
-        [ text parameterLabel
+        [ text (parameterLabel ++ " (Link SHR")
         , input
             [ type_ "checkbox"
             , onClick (EditSingleParameter LinkedSuperHelRot sectionID "")
             , checked isChecked
             ]
             []
+        , text ")"
         , br [] []
         , input
             [ type_ "text"

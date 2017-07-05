@@ -45,12 +45,16 @@ def build_coiled_coil(parameters, debug=False):
     coiled_coil.phi_c_alphas = [ia + REGISTER_ADJUST[r]
                                 for ia, r in zip(raw_phi, registers)]
     sequences = [p['Sequence'] for p in parameters]
-    coiled_coil.rotational_offsets = [
-        d + p['Super-Helical Rotation'] for d, p in zip(
-            coiled_coil.rotational_offsets, parameters)]
+    coiled_coil.z_shifts = [p['Z-Shift'] for p in parameters]
+    lshr_adjust = [(p['Z-Shift'] / p['Pitch']) * 360 if p['Linked SHR'] else 0
+                   for p in parameters]
+    coiled_coil.rotational_offsets = [d + p['Super-Helical Rotation'] - a
+                                      for d, p, a in zip(
+                                          coiled_coil.rotational_offsets,
+                                          parameters,
+                                          lshr_adjust)]
     coiled_coil.orientations = [-1 if p['Orientation']
                                 else 1 for p in parameters]
-    coiled_coil.z_shifts = [p['Z-Shift'] for p in parameters]
     coiled_coil.build()
     coiled_coil.pack_new_sequences(sequences)
     mean_rpt_value = calculate_average_rpt(coiled_coil)
@@ -129,6 +133,16 @@ def build_collagen(parameters, debug=False):
     collagen.major_pitches = [p['Pitch'] for p in parameters]
     collagen.phi_c_alphas = [p['Interface Angle'] for p in parameters]
     sequences = [p['Sequence'] for p in parameters]
+    collagen.z_shifts = [
+        d + p['Z-Shift'] for d, p in zip(
+            collagen.z_shifts, parameters)]
+    lshr_adjust = [(z / p['Pitch']) * 360 if p['Linked SHR'] else 0
+                   for z, p in zip(collagen.z_shifts, parameters)]
+    collagen.rotational_offsets = [d + p['Super-Helical Rotation'] + a
+                                   for d, p, a in zip(
+                                       collagen.rotational_offsets,
+                                       parameters,
+                                       lshr_adjust)]
     collagen.build()
     collagen.pack_new_sequences(sequences)
     mean_rpt_value = calculate_average_rpt(collagen)

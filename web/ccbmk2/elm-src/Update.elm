@@ -527,6 +527,7 @@ parameterRecordJson parameters =
           )
         , ( "Orientation", parameters.antiParallel |> Json.Encode.bool )
         , ( "Z-Shift", parameters.zShift |> Maybe.withDefault 0 |> Json.Encode.float )
+        , ( "Linked SHR", parameters.linkedSuperHelRot |> Json.Encode.bool )
         ]
 
 

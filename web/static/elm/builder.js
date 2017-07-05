@@ -20195,7 +20195,7 @@ var _user$project$ParameterValidation$editParameterValue = F4(
 			default:
 				var newParameters = _elm_lang$core$Native_Utils.update(
 					parameters,
-					{linkedSuperHelRot: !parameters.antiParallel});
+					{linkedSuperHelRot: !parameters.linkedSuperHelRot});
 				var newInput = _elm_lang$core$Native_Utils.update(
 					currentInput,
 					{
@@ -20731,7 +20731,8 @@ var _user$project$BuildPanel$singleZShiftInput = F3(
 			},
 			{
 				ctor: '::',
-				_0: _elm_lang$html$Html$text(_p14),
+				_0: _elm_lang$html$Html$text(
+					A2(_elm_lang$core$Basics_ops['++'], _p14, ' (Link SHR')),
 				_1: {
 					ctor: '::',
 					_0: A2(
@@ -20753,42 +20754,46 @@ var _user$project$BuildPanel$singleZShiftInput = F3(
 						{ctor: '[]'}),
 					_1: {
 						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$br,
-							{ctor: '[]'},
-							{ctor: '[]'}),
+						_0: _elm_lang$html$Html$text(')'),
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$input,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$type_('text'),
-									_1: {
+								_elm_lang$html$Html$br,
+								{ctor: '[]'},
+								{ctor: '[]'}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$input,
+									{
 										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$name(_p14),
+										_0: _elm_lang$html$Html_Attributes$type_('text'),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$placeholder(_p14),
+											_0: _elm_lang$html$Html_Attributes$name(_p14),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html_Events$onInput(
-													A2(_user$project$Types$EditSingleParameter, _p13._1, sectionID)),
+												_0: _elm_lang$html$Html_Attributes$placeholder(_p14),
 												_1: {
 													ctor: '::',
-													_0: _user$project$BuildPanel$styles(_user$project$BuildPanel$inputStyling),
+													_0: _elm_lang$html$Html_Events$onInput(
+														A2(_user$project$Types$EditSingleParameter, _p13._1, sectionID)),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$value(_p13._2),
-														_1: {ctor: '[]'}
+														_0: _user$project$BuildPanel$styles(_user$project$BuildPanel$inputStyling),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$value(_p13._2),
+															_1: {ctor: '[]'}
+														}
 													}
 												}
 											}
 										}
-									}
-								},
-								{ctor: '[]'}),
-							_1: {ctor: '[]'}
+									},
+									{ctor: '[]'}),
+								_1: {ctor: '[]'}
+							}
 						}
 					}
 				}
@@ -22377,7 +22382,15 @@ var _user$project$Update$parameterRecordJson = function (parameters) {
 											_1: _elm_lang$core$Json_Encode$float(
 												A2(_elm_lang$core$Maybe$withDefault, 0, parameters.zShift))
 										},
-										_1: {ctor: '[]'}
+										_1: {
+											ctor: '::',
+											_0: {
+												ctor: '_Tuple2',
+												_0: 'Linked SHR',
+												_1: _elm_lang$core$Json_Encode$bool(parameters.linkedSuperHelRot)
+											},
+											_1: {ctor: '[]'}
+										}
 									}
 								}
 							}

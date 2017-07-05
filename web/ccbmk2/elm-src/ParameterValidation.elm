@@ -47,7 +47,12 @@ containsInvalidParameter { radius, pitch, phiCA, sequence, superHelRot, zShift }
         List.member False [ vRadius, vPitch, vPhiCA, vSeq, vSuperHelRot, vZShift ]
 
 
-editParameterValue : ParameterRecord -> InputValues -> Parameter -> String -> ( ParameterRecord, InputValues )
+editParameterValue :
+    ParameterRecord
+    -> InputValues
+    -> Parameter
+    -> String
+    -> ( ParameterRecord, InputValues )
 editParameterValue parameters currentInput parameter newValue =
     case parameter of
         Radius ->
@@ -162,7 +167,7 @@ editParameterValue parameters currentInput parameter newValue =
             let
                 newParameters =
                     { parameters
-                        | linkedSuperHelRot = not parameters.antiParallel
+                        | linkedSuperHelRot = not parameters.linkedSuperHelRot
                     }
 
                 newInput =
