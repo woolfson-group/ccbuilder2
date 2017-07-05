@@ -40,6 +40,7 @@ def build_coiled_coil_model():
         model_id = database.store_model(build_request_id, pdb, score, rpt)
         model_and_info = {
             'model_id': str(model_id),
+            'helix_type': model_building.HelixType.ALPHA.name,
             'pdb': pdb,
             'score': score,
             'mean_rpt_value': rpt,
@@ -47,6 +48,7 @@ def build_coiled_coil_model():
     else:
         model_and_info = {
             'model_id': str(model_record['_id']),
+            'helix_type': model_building.HelixType.ALPHA.name,
             'pdb': model_record['pdb'],
             'score': model_record['score'],
             'mean_rpt_value': model_record['mean_rpt_value'],
@@ -73,6 +75,7 @@ def build_collagen_model():
     build_time = build_start_end - build_start_time
     model_and_info = {
         'model_id': "3421421412",
+        'helix_type': model_building.HelixType.COLLAGEN.name,
         'pdb': pdb,
         'score': score,
         'mean_rpt_value': rpt,

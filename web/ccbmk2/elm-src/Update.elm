@@ -36,6 +36,7 @@ import Types
         , Representation
         , RepOption(..)
         , optStatusToString
+        , stringToHelixType
         , emptyInput
         , emptyParameterRecord
         , parameterRecordWithDefault
@@ -95,7 +96,9 @@ update msg model =
 
         ChangeHelixType helixType ->
             let
-                oligomericState = 3
+                oligomericState =
+                    3
+
                 newHelixType =
                     case helixType of
                         "Alpha" ->
@@ -106,28 +109,30 @@ update msg model =
 
                         _ ->
                             model.helixType
+
                 newParameters =
-                        if newHelixType /= model.helixType then
-                            case newHelixType of
-                                Collagen ->
-                                    if model.oligomericState > 3 then
-                                        Dict.toList model.parameters
-                                            |> List.take oligomericState
-                                            |> Dict.fromList
-                                    else if model.oligomericState < 3 then
-                                        Dict.values model.parameters
-                                            |> List.head
-                                            |> Maybe.withDefault emptyParameterRecord
-                                            |> List.repeat oligomericState
-                                            |> List.map2 (,)
-                                                (List.range 1 model.oligomericState)
-                                            |> Dict.fromList
-                                    else
-                                        model.parameters
-                                Alpha ->
+                    if newHelixType /= model.helixType then
+                        case newHelixType of
+                            Collagen ->
+                                if model.oligomericState > 3 then
+                                    Dict.toList model.parameters
+                                        |> List.take oligomericState
+                                        |> Dict.fromList
+                                else if model.oligomericState < 3 then
+                                    Dict.values model.parameters
+                                        |> List.head
+                                        |> Maybe.withDefault emptyParameterRecord
+                                        |> List.repeat oligomericState
+                                        |> List.map2 (,)
+                                            (List.range 1 oligomericState)
+                                        |> Dict.fromList
+                                else
                                     model.parameters
-                        else
-                            model.parameters
+
+                            Alpha ->
+                                model.parameters
+                    else
+                        model.parameters
 
                 newInput =
                     parametersDictToInputDict newParameters
@@ -193,6 +198,7 @@ update msg model =
                         ! [ case model.helixType of
                                 Alpha ->
                                     sendBuildCmd model.parameters
+
                                 Collagen ->
                                     sendCollagenBuildCmd model.parameters
                           ]
@@ -259,7 +265,7 @@ update msg model =
             }
                 ! [ retreiveOptimisation optJobId ]
 
-        ProcessModel (Ok { pdbFile, score, residuesPerTurn }) ->
+        ProcessModel (Ok { helixType, pdbFile, score, residuesPerTurn }) ->
             let
                 historyLength =
                     10
@@ -275,7 +281,8 @@ update msg model =
                         model.modelHistory
             in
                 { model
-                    | currentInput = parametersDictToInputDict model.parameters
+                    | helixType = Result.withDefault Alpha (stringToHelixType helixType)
+                    , currentInput = parametersDictToInputDict model.parameters
                     , pdbFile = Just pdbFile
                     , score = Just score
                     , residuesPerTurn = Just residuesPerTurn
@@ -387,12 +394,13 @@ update msg model =
             in
                 model ! [ downloadPdb ( "ccbuilder_model.pdb", pdbFile ) ]
 
-        SetParametersAndBuild parameters ->
+        SetParametersAndBuild parameters helixType ->
             if invalidParameterDict parameters then
                 model ! []
             else
                 { model
-                    | parameters = parameters
+                    | helixType = helixType
+                    , parameters = parameters
                     , currentInput = parametersDictToInputDict parameters
                     , oligomericState = Dict.toList parameters |> List.length
                 }
@@ -491,9 +499,10 @@ sendCollagenBuildCmd parameters =
 
 modellingResultsDecoder : Json.Decode.Decoder ModellingResults
 modellingResultsDecoder =
-    Json.Decode.map4
+    Json.Decode.map5
         ModellingResults
         (field "model_id" string)
+        (field "helix_type" string)
         (field "pdb" string)
         (field "score" float)
         (field "mean_rpt_value" float)

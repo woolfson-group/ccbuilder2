@@ -1,5 +1,6 @@
 """Module for building models using ISAMBARD."""
 
+import enum
 import itertools
 import sys
 
@@ -142,3 +143,8 @@ def calculate_average_rpt(ampal):
     rpt_values = list(itertools.chain(*rpt_lists))
     average_rpt = sum(rpt_values) / len(rpt_values)
     return average_rpt
+
+
+class HelixType(enum.Enum):
+    ALPHA = 1
+    COLLAGEN = 2

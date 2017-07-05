@@ -16,6 +16,7 @@ import Types
         , ParametersDict
         , InputValues
         , Parameter(..)
+        , HelixType(..)
         , Panel(..)
         )
 
@@ -42,15 +43,15 @@ examplesPanel building visible =
             [ hr [] []
             , h3 [] [ text "Basis Set" ]
             , hr [] []
-            , exampleButton 2 basisSetDimer building
+            , exampleCCButton 2 basisSetDimer building
             , br [] []
             , text "CC Di"
             , br [] []
-            , exampleButton 3 basisSetTrimer building
+            , exampleCCButton 3 basisSetTrimer building
             , br [] []
             , text "CC Tri"
             , br [] []
-            , exampleButton 4 basisSetTetramer building
+            , exampleCCButton 4 basisSetTetramer building
             , br [] []
             , text "CC Tet"
             ]
@@ -58,34 +59,34 @@ examplesPanel building visible =
             [ hr [] []
             , h3 [] [ text "α-Helical Barrels" ]
             , hr [] []
-            , exampleButton 5 largermerCCPent building
+            , exampleCCButton 5 largermerCCPent building
             , br [] []
             , text "CC Pent"
             , br [] []
-            , exampleButton 6 largermerCCHex building
+            , exampleCCButton 6 largermerCCHex building
             , br [] []
             , text "CC Hex"
             , br [] []
-            , exampleButton 6 largermerCCHex2 building
+            , exampleCCButton 6 largermerCCHex2 building
             , br [] []
             , text "CC Hex2"
             , br [] []
-            , exampleButton 6 largermerCCHex3 building
+            , exampleCCButton 6 largermerCCHex3 building
             , br [] []
             , text "CC Hex3"
             , br [] []
-            , exampleButton 7 largermerCCHept building
+            , exampleCCButton 7 largermerCCHept building
             , br [] []
             , text "CC Hept"
             ]
         ]
 
 
-exampleButton : Int -> ParametersDict -> Bool -> Html Msg
-exampleButton os exampleParameters building =
+exampleCCButton : Int -> ParametersDict -> Bool -> Html Msg
+exampleCCButton os exampleParameters building =
     button
         [ class [ CCBButtonCss ]
-        , onClick <| SetParametersAndBuild exampleParameters
+        , onClick <| SetParametersAndBuild exampleParameters Alpha
         , styles buttonStyling
         , disabled building
         ]

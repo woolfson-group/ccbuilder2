@@ -25,7 +25,7 @@ type Msg
     | SetOligomericState String
     | Clear
     | DownloadPdb
-    | SetParametersAndBuild ParametersDict
+    | SetParametersAndBuild ParametersDict HelixType
     | KeyMsg Keyboard.KeyCode
     | TogglePanel Panel
     | ExpandHistory HistoryID
@@ -79,6 +79,7 @@ type alias InputValues =
 
 type alias ModellingResults =
     { model_id : String
+    , helixType : String
     , pdbFile : String
     , score : Float
     , residuesPerTurn : Float
@@ -198,6 +199,19 @@ stringToOptStatus statusString =
 
         _ ->
             Err "String could not be converted to OptStatus."
+
+
+stringToHelixType : String -> Result String HelixType
+stringToHelixType helixString =
+    case helixString of
+        "ALPHA" ->
+            Ok Alpha
+
+        "COLLAGEN" ->
+            Ok Collagen
+
+        _ ->
+            Err "String could not be converted to HelixType."
 
 
 emptyParameterRecord : ParameterRecord

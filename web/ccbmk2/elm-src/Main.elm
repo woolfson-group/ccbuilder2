@@ -6,7 +6,7 @@ import Html exposing (..)
 import Model exposing (..)
 import Ports exposing (..)
 import Time
-import Types exposing (Msg(..))
+import Types exposing (Msg(..), HelixType(..))
 import Update exposing (update, toCommand)
 import Views exposing (view)
 
@@ -38,7 +38,7 @@ init storedModel =
         model
             ! ([ initialiseViewer () ]
                 ++ if showDefaultModel then
-                    [ toCommand (SetParametersAndBuild ExamplesPanel.basisSetDimer) ]
+                    [ toCommand (SetParametersAndBuild ExamplesPanel.basisSetDimer Alpha) ]
                    else
                     [ showStructure
                         ( Maybe.withDefault "" model.pdbFile

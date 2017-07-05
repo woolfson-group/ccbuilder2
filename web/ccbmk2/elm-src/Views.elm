@@ -17,6 +17,7 @@ import Types
         , HistoryID
         , ParametersDict
         , Parameter(..)
+        , HelixType(..)
         , BuildMode(..)
         , OptStatus(..)
         , Panel(..)
@@ -382,7 +383,7 @@ modelHistoryTopRow hID parameters building visible score =
                     (parametersToRow topRowParameters score)
                 ++ [ button
                         [ class [ CCBButtonCss ]
-                        , onClick (SetParametersAndBuild parameters)
+                        , onClick (SetParametersAndBuild parameters Alpha)
                         , disabled building
                         ]
                         [ text "Rebuild" ]
