@@ -1,7 +1,6 @@
 """Views for CCBuilder Mk.II"""
 
 import datetime
-import sys
 
 from flask import jsonify, redirect, render_template, request
 from bson.objectid import ObjectId
@@ -25,7 +24,7 @@ def builder():
 
 @app.route('/builder/api/v0.1/build/coiled-coil', methods=['POST'])
 def build_coiled_coil_model():
-    """Passes to the build commands to the model_building module."""
+    """Generates and returns a coiled-coil model."""
     model_and_info = build_and_record_model(
         request, model_building.HelixType.ALPHA)
     return jsonify(model_and_info)
@@ -33,13 +32,14 @@ def build_coiled_coil_model():
 
 @app.route('/builder/api/v0.1/build/collagen', methods=['POST'])
 def build_collagen_model():
-    """Passes command to build a collagen model."""
+    """Generates and returns a collagen model."""
     model_and_info = build_and_record_model(
         request, model_building.HelixType.COLLAGEN)
     return jsonify(model_and_info)
 
 
 def build_and_record_model(request, helix_type):
+    """Records request and either builds a model of retrieves from DB."""
     parameters_list = request.json['Parameters']
     # Number of times before save not currently in use
     (build_request_id, save_model) = database.store_build_request(

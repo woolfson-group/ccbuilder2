@@ -27,6 +27,10 @@ def store_build_request(parameters_list, helix_type, number_for_save=5):
         Json body of the Http request that contains a list of build
         parameter dicts.
 
+    helix_type : model_building.HelixType
+        HelixType enumerable contains options that are available
+        for helix types.
+
     number_for_save : int
         The number of times the model must be requested before
         it is cached in the models database.
@@ -50,7 +54,7 @@ def store_build_request(parameters_list, helix_type, number_for_save=5):
         build_request = {
             'parameter_ids': chain_ids,
             'helix_type': helix_type.name
-            }
+        }
         build_request['requested'] = 1
         build_request_id = build_requests.insert_one(
             build_request
@@ -69,6 +73,10 @@ def store_build_request(parameters_list, helix_type, number_for_save=5):
 
 
 def get_chain_parameters_id(chain_parameters):
+    """Finds the '_id' of parameters in the parameter_stores.
+
+    Adds parameters if they are not found.
+    """
     parameter_record = parameters_store.find_one(
         chain_parameters)
     if parameter_record:
@@ -132,6 +140,7 @@ def create_opt_job_entry(request):
 
 
 class JobStatus(enum.Enum):
+    """Options availble for the status of optimisation jobs."""
     SUBMITTED = 1
     QUEUED = 2
     RUNNING = 3
