@@ -59,6 +59,7 @@ overlayPanels model =
             , topLeftToggles
             , topRightToggles
             , BuildPanel.buildPanel
+                model.helixType
                 model.buildMode
                 model.parameters
                 model.currentInput

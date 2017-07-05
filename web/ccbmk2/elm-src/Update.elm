@@ -27,6 +27,7 @@ import Types
         , ModellingResults
         , OptimisationResults
         , Parameter(..)
+        , HelixType(..)
         , BuildMode(..)
         , OptStatus(..)
         , stringToOptStatus
@@ -39,6 +40,8 @@ import Types
         , emptyParameterRecord
         , parameterRecordWithDefault
         , inputRecordWithDefault
+        , parametersToInput
+        , parametersDictToInputDict
         )
 
 
@@ -90,6 +93,53 @@ update msg model =
                 }
                     ! []
 
+        ChangeHelixType helixType ->
+            let
+                oligomericState = 3
+                newHelixType =
+                    case helixType of
+                        "Alpha" ->
+                            Alpha
+
+                        "Collagen" ->
+                            Collagen
+
+                        _ ->
+                            model.helixType
+                newParameters =
+                        if newHelixType /= model.helixType then
+                            case newHelixType of
+                                Collagen ->
+                                    if model.oligomericState > 3 then
+                                        Dict.toList model.parameters
+                                            |> List.take oligomericState
+                                            |> Dict.fromList
+                                    else if model.oligomericState < 3 then
+                                        Dict.values model.parameters
+                                            |> List.head
+                                            |> Maybe.withDefault emptyParameterRecord
+                                            |> List.repeat oligomericState
+                                            |> List.map2 (,)
+                                                (List.range 1 model.oligomericState)
+                                            |> Dict.fromList
+                                    else
+                                        model.parameters
+                                Alpha ->
+                                    model.parameters
+                        else
+                            model.parameters
+
+                newInput =
+                    parametersDictToInputDict newParameters
+            in
+                { model
+                    | helixType = newHelixType
+                    , oligomericState = oligomericState
+                    , parameters = newParameters
+                    , currentInput = newInput
+                }
+                    ! [ Task.perform NoOp (Process.sleep (10 * Time.millisecond)) ]
+
         ChangeBuildMode buildMode ->
             let
                 newBuildMode =
@@ -102,8 +152,31 @@ update msg model =
 
                         _ ->
                             model.buildMode
+
+                newParameters =
+                    if newBuildMode /= model.buildMode then
+                        case newBuildMode of
+                            Basic ->
+                                Dict.values model.parameters
+                                    |> List.head
+                                    |> Maybe.withDefault emptyParameterRecord
+                                    |> List.repeat model.oligomericState
+                                    |> List.map2 (,) (List.range 1 model.oligomericState)
+                                    |> Dict.fromList
+
+                            Advanced ->
+                                model.parameters
+                    else
+                        model.parameters
+
+                newInput =
+                    parametersDictToInputDict newParameters
             in
-                { model | buildMode = newBuildMode }
+                { model
+                    | buildMode = newBuildMode
+                    , parameters = newParameters
+                    , currentInput = newInput
+                }
                     ! [ Task.perform NoOp (Process.sleep (10 * Time.millisecond)) ]
 
         Build ->
@@ -229,6 +302,7 @@ update msg model =
                     , superHelRot = Just 0
                     , zShift = Just 0
                     }
+
                 parametersDict =
                     List.map2 (,)
                         (List.range 1 oligomericState)
@@ -511,56 +585,6 @@ basicParametersToRecord radius pitch phiCA sequence register =
     , zShift = Nothing
     , linkedSuperHelRot = True
     }
-
-
-parametersDictToInputDict : ParametersDict -> InputValuesDict
-parametersDictToInputDict parameters =
-    Dict.toList parameters
-        |> List.map (\( k, v ) -> ( k, parametersToInput v ))
-        |> Dict.fromList
-
-
-parametersToInput : ParameterRecord -> InputValues
-parametersToInput parameterRecord =
-    let
-        rad =
-            maybeNumberToString parameterRecord.radius
-
-        pit =
-            maybeNumberToString parameterRecord.pitch
-
-        phi =
-            maybeNumberToString parameterRecord.phiCA
-
-        seq =
-            Maybe.withDefault "" parameterRecord.sequence
-
-        reg =
-            parameterRecord.register
-
-        rot =
-            maybeNumberToString parameterRecord.superHelRot
-
-        ant =
-            toString parameterRecord.antiParallel
-
-        zsh =
-            maybeNumberToString parameterRecord.zShift
-
-        lsh =
-            toString parameterRecord.linkedSuperHelRot
-    in
-        InputValues rad pit phi seq reg rot ant zsh lsh
-
-
-maybeNumberToString : Maybe number -> String
-maybeNumberToString mNum =
-    case mNum of
-        Just num ->
-            toString num
-
-        Nothing ->
-            ""
 
 
 togglePanelVisibility : Panel -> PanelVisibility -> PanelVisibility

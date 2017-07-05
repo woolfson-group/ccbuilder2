@@ -15,6 +15,7 @@ import Types
         , ModellingResults
         , OptimisationResults
         , Parameter(..)
+        , HelixType(..)
         , BuildMode(..)
         , OptStatus(..)
         , optStatusToString
@@ -31,6 +32,7 @@ type alias Model =
     , currentInput : InputValuesDict
     , parameterClipBoard : Maybe ParameterRecord
     , oligomericState : Int
+    , helixType : HelixType
     , buildMode : BuildMode
     , pdbFile : Maybe String
     , score : Maybe Float
@@ -69,6 +71,7 @@ emptyModel =
     , currentInput = Dict.fromList [ ( 1, emptyInput ), ( 2, emptyInput ) ]
     , parameterClipBoard = Nothing
     , oligomericState = 2
+    , helixType = Alpha
     , buildMode = Basic
     , pdbFile = Nothing
     , score = Nothing
@@ -121,6 +124,7 @@ exportableToModel exportableModel =
     , currentInput = Dict.fromList exportableModel.currentInput
     , parameterClipBoard = exportableModel.parameterClipBoard
     , oligomericState = exportableModel.oligomericState
+    , helixType = Alpha
     , buildMode = Basic
     , pdbFile = exportableModel.pdbFile
     , score = exportableModel.score

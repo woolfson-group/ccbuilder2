@@ -11,6 +11,7 @@ type Msg
     | EditAllParameters Parameter String
     | CopyParameters SectionID
     | PasteParameters SectionID
+    | ChangeHelixType String
     | ChangeBuildMode String
     | Build
     | Optimise
@@ -101,6 +102,11 @@ type Parameter
     | Orientation
     | ZShift
     | LinkedSuperHelRot
+
+
+type HelixType
+    = Alpha
+    | Collagen
 
 
 type BuildMode
@@ -214,3 +220,53 @@ inputRecordWithDefault : SectionID -> InputValuesDict -> InputValues
 inputRecordWithDefault iVID inputValues =
     Dict.get iVID inputValues
         |> Maybe.withDefault emptyInput
+
+
+parametersToInput : ParameterRecord -> InputValues
+parametersToInput parameterRecord =
+    let
+        rad =
+            maybeNumberToString parameterRecord.radius
+
+        pit =
+            maybeNumberToString parameterRecord.pitch
+
+        phi =
+            maybeNumberToString parameterRecord.phiCA
+
+        seq =
+            Maybe.withDefault "" parameterRecord.sequence
+
+        reg =
+            parameterRecord.register
+
+        rot =
+            maybeNumberToString parameterRecord.superHelRot
+
+        ant =
+            toString parameterRecord.antiParallel
+
+        zsh =
+            maybeNumberToString parameterRecord.zShift
+
+        lsh =
+            toString parameterRecord.linkedSuperHelRot
+    in
+        InputValues rad pit phi seq reg rot ant zsh lsh
+
+
+maybeNumberToString : Maybe number -> String
+maybeNumberToString mNum =
+    case mNum of
+        Just num ->
+            toString num
+
+        Nothing ->
+            ""
+
+
+parametersDictToInputDict : ParametersDict -> InputValuesDict
+parametersDictToInputDict parameters =
+    Dict.toList parameters
+        |> List.map (\( k, v ) -> ( k, parametersToInput v ))
+        |> Dict.fromList

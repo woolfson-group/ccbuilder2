@@ -23,6 +23,7 @@ import Types
         , InputValuesDict
         , InputValues
         , Parameter(..)
+        , HelixType(..)
         , BuildMode(..)
         , Panel(..)
         , emptyInput
@@ -38,8 +39,15 @@ styles =
     Css.asPairs >> Html.Attributes.style
 
 
-buildPanel : BuildMode -> ParametersDict -> InputValuesDict -> Bool -> Bool -> Html Msg
-buildPanel buildMode parametersDict currentInputDict building visible =
+buildPanel :
+    HelixType
+    -> BuildMode
+    -> ParametersDict
+    -> InputValuesDict
+    -> Bool
+    -> Bool
+    -> Html Msg
+buildPanel helixType buildMode parametersDict currentInputDict building visible =
     let
         panelView =
             case buildMode of
@@ -55,37 +63,47 @@ buildPanel buildMode parametersDict currentInputDict building visible =
             , styles <| panelStyling ++ buildPanelStyling
             , hidden <| not visible
             ]
-            [ h2 [] [ text "Build" ]
-            , selectBuildMode buildMode
-            , br [] []
-            , h3 [] [ text "Oligomeric State" ]
-            , selectOligomericState (Dict.toList parametersDict |> List.length)
-            , panelView parametersDict currentInputDict
-            , parameterSubmit building parametersDict
-            , button
-                [ class [ CCBButtonCss ]
-                , onClick Clear
-                ]
-                [ text "Clear" ]
-            ]
+            ([ h2 [] [ text "Build" ]
+             , selectHelixType helixType
+             , selectBuildMode buildMode
+             , br [] []
+             ]
+                -- Collagen does not require access to the oligomeric state
+                ++ (if helixType == Alpha then
+                        [ h3 [] [ text "Oligomeric State" ]
+                        , selectOligomericState
+                            (Dict.toList parametersDict |> List.length)
+                        ]
+                    else
+                        []
+                   )
+                ++ [ panelView parametersDict currentInputDict
+                   , parameterSubmit building parametersDict
+                   , button
+                        [ class [ CCBButtonCss ]
+                        , onClick Clear
+                        ]
+                        [ text "Clear" ]
+                   ]
+            )
 
 
 selectBuildMode : BuildMode -> Html Msg
 selectBuildMode currentBuildMode =
-    let
-        buildModeValue =
-            case currentBuildMode of
-                Basic ->
-                    "Basic"
+    select
+        [ value (toString currentBuildMode)
+        , onInput ChangeBuildMode
+        ]
+        (List.map simpleOption [ "Basic", "Advanced" ])
 
-                Advanced ->
-                    "Advanced"
-    in
-        select
-            [ value buildModeValue
-            , onInput ChangeBuildMode
-            ]
-            (List.map simpleOption [ "Basic", "Advanced" ])
+
+selectHelixType : HelixType -> Html Msg
+selectHelixType currentHelixType =
+    select
+        [ value (toString currentHelixType)
+        , onInput ChangeHelixType
+        ]
+        (List.map simpleOption [ "Alpha", "Collagen" ])
 
 
 selectOligomericState : Int -> Html Msg
