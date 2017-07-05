@@ -36,7 +36,6 @@ type alias Model =
     , score : Maybe Float
     , residuesPerTurn : Maybe Float
     , building : Bool
-    , optimising : Bool
     , optJobs : List ( String, OptStatus )
     , heat : Int
     , modelHistory : Dict.Dict HistoryID ( ParametersDict, Bool, Float )
@@ -55,7 +54,6 @@ type alias ExportableModel =
     , score : Maybe Float
     , residuesPerTurn : Maybe Float
     , building : Bool
-    , optimising : Bool
     , optJobs : List ( String, String )
     , heat : Int
     , modelHistory : List ( HistoryID, ( List ( SectionID, ParameterRecord ), Bool, Float ) )
@@ -76,7 +74,6 @@ emptyModel =
     , score = Nothing
     , residuesPerTurn = Nothing
     , building = False
-    , optimising = False
     , optJobs = []
     , heat = 298
     , modelHistory = Dict.empty
@@ -101,7 +98,6 @@ modelToExportable model =
     , score = model.score
     , residuesPerTurn = model.residuesPerTurn
     , building = False
-    , optimising = False
     , optJobs = exportableOptJobs model.optJobs
     , heat = model.heat
     , modelHistory =
@@ -130,7 +126,6 @@ exportableToModel exportableModel =
     , score = exportableModel.score
     , residuesPerTurn = exportableModel.residuesPerTurn
     , building = False
-    , optimising = False
     , optJobs = modelOptJobs exportableModel.optJobs
     , heat = exportableModel.heat
     , modelHistory =
