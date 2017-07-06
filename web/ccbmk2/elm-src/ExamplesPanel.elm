@@ -18,6 +18,7 @@ import Types
         , InputValues
         , Parameter(..)
         , HelixType(..)
+        , BuildMode(..)
         , Panel(..)
         )
 
@@ -98,8 +99,8 @@ barrels building =
 collagens : Bool -> ( String, List ( String, Html Msg ) )
 collagens building =
     ( "Collagen"
-    , [ ( "Homo", exampleCollagenButton homoCollagen building )
-      , ( "Hetero", exampleCollagenButton heteroCollagen building )
+    , [ ( "Homo", exampleCollagenButton homoCollagen Basic building )
+      , ( "Hetero", exampleCollagenButton heteroCollagen Advanced building )
       ]
     )
 
@@ -108,18 +109,18 @@ exampleCCButton : Int -> ParametersDict -> Bool -> Html Msg
 exampleCCButton os exampleParameters building =
     button
         [ class [ CCBButtonCss ]
-        , onClick <| SetParametersAndBuild exampleParameters Alpha
+        , onClick <| SetParametersAndBuild exampleParameters Alpha Basic
         , styles buttonStyling
         , disabled building
         ]
         [ ccIcon os 40 ]
 
 
-exampleCollagenButton : ParametersDict -> Bool -> Html Msg
-exampleCollagenButton exampleParameters building =
+exampleCollagenButton : ParametersDict -> BuildMode -> Bool -> Html Msg
+exampleCollagenButton exampleParameters buildMode building =
     button
         [ class [ CCBButtonCss ]
-        , onClick <| SetParametersAndBuild exampleParameters Collagen
+        , onClick <| SetParametersAndBuild exampleParameters Collagen buildMode
         , styles buttonStyling
         , disabled building
         ]
@@ -379,10 +380,10 @@ largermerCCHept =
 homoCollagen : ParametersDict
 homoCollagen =
     makeHomoOligomerExample 3
-        { radius = Just 5.0
-        , pitch = Just 80
-        , phiCA = Just 0
-        , sequence = Just "GPPGPPGPPGPPGPPGPPGPP"
+        { radius = Just 3.34
+        , pitch = Just 59.4
+        , phiCA = Just 20.2
+        , sequence = Just "GPPGPPGPPGPPGPPGPPGPPGPPGPP"
         , register = "a"
         , superHelRot = Just 0.0
         , antiParallel = False
@@ -395,10 +396,10 @@ heteroCollagen : ParametersDict
 heteroCollagen =
     Dict.fromList
         [ ( 1
-          , { radius = Just 5.0
-            , pitch = Just 80
-            , phiCA = Just 0
-            , sequence = Just "GPPGPPGPPGPAGPPGPPGPP"
+          , { radius = Just 3.34
+            , pitch = Just 59.4
+            , phiCA = Just 20.2
+            , sequence = Just "GPPGPPGPPGPPGARGQAGVMGFPGPP"
             , register = "a"
             , superHelRot = Just 0.0
             , antiParallel = False
@@ -407,10 +408,10 @@ heteroCollagen =
             }
           )
         , ( 2
-          , { radius = Just 5.0
-            , pitch = Just 80
-            , phiCA = Just 0
-            , sequence = Just "GPPGPPGPPGPVGPPGPPGPP"
+          , { radius = Just 3.34
+            , pitch = Just 59.4
+            , phiCA = Just 20.2
+            , sequence = Just "GPPGPPGPPGPPGARGEPGNIGFPGPP"
             , register = "a"
             , superHelRot = Just 0.0
             , antiParallel = False
@@ -419,10 +420,10 @@ heteroCollagen =
             }
           )
         , ( 3
-          , { radius = Just 5.0
-            , pitch = Just 80
-            , phiCA = Just 0
-            , sequence = Just "GPPGPPGPPGPMGPPGPPGPP"
+          , { radius = Just 3.34
+            , pitch = Just 59.4
+            , phiCA = Just 20.2
+            , sequence = Just "GPPGPPGPPGPPGARGQAGVMGFPGPP"
             , register = "a"
             , superHelRot = Just 0.0
             , antiParallel = False

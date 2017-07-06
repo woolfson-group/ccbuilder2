@@ -19279,9 +19279,9 @@ var _user$project$Types$TogglePanel = function (a) {
 var _user$project$Types$KeyMsg = function (a) {
 	return {ctor: 'KeyMsg', _0: a};
 };
-var _user$project$Types$SetParametersAndBuild = F2(
-	function (a, b) {
-		return {ctor: 'SetParametersAndBuild', _0: a, _1: b};
+var _user$project$Types$SetParametersAndBuild = F3(
+	function (a, b, c) {
+		return {ctor: 'SetParametersAndBuild', _0: a, _1: b, _2: c};
 	});
 var _user$project$Types$DownloadPdb = {ctor: 'DownloadPdb'};
 var _user$project$Types$Clear = {ctor: 'Clear'};
@@ -19355,6 +19355,17 @@ var _user$project$Types$stringToHelixType = function (helixString) {
 };
 var _user$project$Types$Advanced = {ctor: 'Advanced'};
 var _user$project$Types$Basic = {ctor: 'Basic'};
+var _user$project$Types$stringToBuildMode = function (statusString) {
+	var _p6 = statusString;
+	switch (_p6) {
+		case 'Basic':
+			return _elm_lang$core$Result$Ok(_user$project$Types$Basic);
+		case 'Advanced':
+			return _elm_lang$core$Result$Ok(_user$project$Types$Advanced);
+		default:
+			return _elm_lang$core$Result$Err('String could not be converted to BuildMode.');
+	}
+};
 var _user$project$Types$ViewerPanel = {ctor: 'ViewerPanel'};
 var _user$project$Types$BuildHistoryPanel = {ctor: 'BuildHistoryPanel'};
 var _user$project$Types$BuildingStatusPanel = {ctor: 'BuildingStatusPanel'};
@@ -19369,8 +19380,8 @@ var _user$project$Types$Running = {ctor: 'Running'};
 var _user$project$Types$Queued = {ctor: 'Queued'};
 var _user$project$Types$Submitted = {ctor: 'Submitted'};
 var _user$project$Types$stringToOptStatus = function (statusString) {
-	var _p6 = statusString;
-	switch (_p6) {
+	var _p7 = statusString;
+	switch (_p7) {
 		case 'SUBMITTED':
 			return _elm_lang$core$Result$Ok(_user$project$Types$Submitted);
 		case 'QUEUED':
@@ -21312,10 +21323,10 @@ var _user$project$ExamplesPanel$heteroCollagen = _elm_lang$core$Dict$fromList(
 			ctor: '_Tuple2',
 			_0: 1,
 			_1: {
-				radius: _elm_lang$core$Maybe$Just(5.0),
-				pitch: _elm_lang$core$Maybe$Just(80),
-				phiCA: _elm_lang$core$Maybe$Just(0),
-				sequence: _elm_lang$core$Maybe$Just('GPPGPPGPPGPAGPPGPPGPP'),
+				radius: _elm_lang$core$Maybe$Just(3.34),
+				pitch: _elm_lang$core$Maybe$Just(59.4),
+				phiCA: _elm_lang$core$Maybe$Just(20.2),
+				sequence: _elm_lang$core$Maybe$Just('GPPGPPGPPGPPGARGQAGVMGFPGPP'),
 				register: 'a',
 				superHelRot: _elm_lang$core$Maybe$Just(0.0),
 				antiParallel: false,
@@ -21329,10 +21340,10 @@ var _user$project$ExamplesPanel$heteroCollagen = _elm_lang$core$Dict$fromList(
 				ctor: '_Tuple2',
 				_0: 2,
 				_1: {
-					radius: _elm_lang$core$Maybe$Just(5.0),
-					pitch: _elm_lang$core$Maybe$Just(80),
-					phiCA: _elm_lang$core$Maybe$Just(0),
-					sequence: _elm_lang$core$Maybe$Just('GPPGPPGPPGPVGPPGPPGPP'),
+					radius: _elm_lang$core$Maybe$Just(3.34),
+					pitch: _elm_lang$core$Maybe$Just(59.4),
+					phiCA: _elm_lang$core$Maybe$Just(20.2),
+					sequence: _elm_lang$core$Maybe$Just('GPPGPPGPPGPPGARGEPGNIGFPGPP'),
 					register: 'a',
 					superHelRot: _elm_lang$core$Maybe$Just(0.0),
 					antiParallel: false,
@@ -21346,10 +21357,10 @@ var _user$project$ExamplesPanel$heteroCollagen = _elm_lang$core$Dict$fromList(
 					ctor: '_Tuple2',
 					_0: 3,
 					_1: {
-						radius: _elm_lang$core$Maybe$Just(5.0),
-						pitch: _elm_lang$core$Maybe$Just(80),
-						phiCA: _elm_lang$core$Maybe$Just(0),
-						sequence: _elm_lang$core$Maybe$Just('GPPGPPGPPGPMGPPGPPGPP'),
+						radius: _elm_lang$core$Maybe$Just(3.34),
+						pitch: _elm_lang$core$Maybe$Just(59.4),
+						phiCA: _elm_lang$core$Maybe$Just(20.2),
+						sequence: _elm_lang$core$Maybe$Just('GPPGPPGPPGPPGARGQAGVMGFPGPP'),
 						register: 'a',
 						superHelRot: _elm_lang$core$Maybe$Just(0.0),
 						antiParallel: false,
@@ -21365,10 +21376,10 @@ var _user$project$ExamplesPanel$homoCollagen = A2(
 	_user$project$ExamplesPanel$makeHomoOligomerExample,
 	3,
 	{
-		radius: _elm_lang$core$Maybe$Just(5.0),
-		pitch: _elm_lang$core$Maybe$Just(80),
-		phiCA: _elm_lang$core$Maybe$Just(0),
-		sequence: _elm_lang$core$Maybe$Just('GPPGPPGPPGPPGPPGPPGPP'),
+		radius: _elm_lang$core$Maybe$Just(3.34),
+		pitch: _elm_lang$core$Maybe$Just(59.4),
+		phiCA: _elm_lang$core$Maybe$Just(20.2),
+		sequence: _elm_lang$core$Maybe$Just('GPPGPPGPPGPPGPPGPPGPPGPPGPP'),
 		register: 'a',
 		superHelRot: _elm_lang$core$Maybe$Just(0.0),
 		antiParallel: false,
@@ -21785,7 +21796,7 @@ var _user$project$ExamplesPanel$exampleCCButton = F3(
 				_1: {
 					ctor: '::',
 					_0: _elm_lang$html$Html_Events$onClick(
-						A2(_user$project$Types$SetParametersAndBuild, exampleParameters, _user$project$Types$Alpha)),
+						A3(_user$project$Types$SetParametersAndBuild, exampleParameters, _user$project$Types$Alpha, _user$project$Types$Basic)),
 					_1: {
 						ctor: '::',
 						_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
@@ -21881,8 +21892,8 @@ var _user$project$ExamplesPanel$barrels = function (building) {
 		}
 	};
 };
-var _user$project$ExamplesPanel$exampleCollagenButton = F2(
-	function (exampleParameters, building) {
+var _user$project$ExamplesPanel$exampleCollagenButton = F3(
+	function (exampleParameters, buildMode, building) {
 		return A2(
 			_elm_lang$html$Html$button,
 			{
@@ -21896,7 +21907,7 @@ var _user$project$ExamplesPanel$exampleCollagenButton = F2(
 				_1: {
 					ctor: '::',
 					_0: _elm_lang$html$Html_Events$onClick(
-						A2(_user$project$Types$SetParametersAndBuild, exampleParameters, _user$project$Types$Collagen)),
+						A3(_user$project$Types$SetParametersAndBuild, exampleParameters, _user$project$Types$Collagen, buildMode)),
 					_1: {
 						ctor: '::',
 						_0: _user$project$ExamplesPanel$styles(_user$project$ExamplesPanel$buttonStyling),
@@ -21923,14 +21934,14 @@ var _user$project$ExamplesPanel$collagens = function (building) {
 			_0: {
 				ctor: '_Tuple2',
 				_0: 'Homo',
-				_1: A2(_user$project$ExamplesPanel$exampleCollagenButton, _user$project$ExamplesPanel$homoCollagen, building)
+				_1: A3(_user$project$ExamplesPanel$exampleCollagenButton, _user$project$ExamplesPanel$homoCollagen, _user$project$Types$Basic, building)
 			},
 			_1: {
 				ctor: '::',
 				_0: {
 					ctor: '_Tuple2',
 					_0: 'Hetero',
-					_1: A2(_user$project$ExamplesPanel$exampleCollagenButton, _user$project$ExamplesPanel$heteroCollagen, building)
+					_1: A3(_user$project$ExamplesPanel$exampleCollagenButton, _user$project$ExamplesPanel$heteroCollagen, _user$project$Types$Advanced, building)
 				},
 				_1: {ctor: '[]'}
 			}
@@ -22076,14 +22087,18 @@ var _user$project$Model$exportableToModel = function (exportableModel) {
 						ctor: '_Tuple2',
 						_0: _p5._0,
 						_1: {
-							ctor: '_Tuple4',
+							ctor: '_Tuple5',
 							_0: _elm_lang$core$Dict$fromList(_p5._1._0),
 							_1: _p5._1._1,
 							_2: _p5._1._2,
 							_3: A2(
 								_elm_lang$core$Result$withDefault,
 								_user$project$Types$Alpha,
-								_user$project$Types$stringToHelixType(_p5._1._3))
+								_user$project$Types$stringToHelixType(_p5._1._3)),
+							_4: A2(
+								_elm_lang$core$Result$withDefault,
+								_user$project$Types$Basic,
+								_user$project$Types$stringToBuildMode(_p5._1._4))
 						}
 					};
 				},
@@ -22113,11 +22128,12 @@ var _user$project$Model$modelToExportable = function (model) {
 					ctor: '_Tuple2',
 					_0: _p7._0,
 					_1: {
-						ctor: '_Tuple4',
+						ctor: '_Tuple5',
 						_0: _elm_lang$core$Dict$toList(_p7._1._0),
 						_1: _p7._1._1,
 						_2: _p7._1._2,
-						_3: _elm_lang$core$Basics$toString(_p7._1._3)
+						_3: _elm_lang$core$Basics$toString(_p7._1._3),
+						_4: _elm_lang$core$Basics$toString(_p7._1._4)
 					}
 				};
 			},
@@ -22300,7 +22316,8 @@ var _user$project$Ports$setStorage = _elm_lang$core$Native_Platform.outgoingPort
 						}),
 						v._1._1,
 						v._1._2,
-						v._1._3
+						v._1._3,
+						v._1._4
 					]
 					];
 				}),
@@ -22966,7 +22983,7 @@ var _user$project$Update$update = F2(
 								modelHistory: A3(
 									_elm_lang$core$Dict$insert,
 									model.nextHistoryID,
-									{ctor: '_Tuple4', _0: model.parameters, _1: false, _2: _p17, _3: helixType},
+									{ctor: '_Tuple5', _0: model.parameters, _1: false, _2: _p17, _3: helixType, _4: _user$project$Types$Basic},
 									oldHistory),
 								nextHistoryID: model.nextHistoryID + 1
 							}),
@@ -23154,6 +23171,7 @@ var _user$project$Update$update = F2(
 						model,
 						{
 							helixType: _p2._1,
+							buildMode: _p2._2,
 							parameters: _p20,
 							currentInput: _user$project$Types$parametersDictToInputDict(_p20),
 							oligomericState: _elm_lang$core$List$length(
@@ -23220,7 +23238,7 @@ var _user$project$Update$update = F2(
 								modelHistory: A3(
 									_elm_lang$core$Dict$insert,
 									_p23,
-									{ctor: '_Tuple4', _0: _p22._0._0, _1: !_p22._0._1, _2: _p22._0._2, _3: _p22._0._3},
+									{ctor: '_Tuple5', _0: _p22._0._0, _1: !_p22._0._1, _2: _p22._0._2, _3: _p22._0._3, _4: _p22._0._4},
 									model.modelHistory)
 							}),
 						{ctor: '[]'});
@@ -24204,8 +24222,8 @@ var _user$project$Views$modelInfoPanel = function (model) {
 			}
 		});
 };
-var _user$project$Views$modelHistoryTopRow = F6(
-	function (hID, parameters, building, visible, score, helixType) {
+var _user$project$Views$modelHistoryTopRow = F7(
+	function (hID, parameters, building, visible, score, helixType, buildMode) {
 		var topRowParameters = A2(
 			_elm_lang$core$Maybe$withDefault,
 			_user$project$Types$emptyParameterRecord,
@@ -24254,7 +24272,7 @@ var _user$project$Views$modelHistoryTopRow = F6(
 								_1: {
 									ctor: '::',
 									_0: _elm_lang$html$Html_Events$onClick(
-										A2(_user$project$Types$SetParametersAndBuild, parameters, helixType)),
+										A3(_user$project$Types$SetParametersAndBuild, parameters, helixType, buildMode)),
 									_1: {
 										ctor: '::',
 										_0: _elm_lang$html$Html_Attributes$disabled(building),
@@ -24273,26 +24291,27 @@ var _user$project$Views$modelHistoryTopRow = F6(
 var _user$project$Views$modelParametersAsRow = F2(
 	function (_p3, building) {
 		var _p4 = _p3;
-		var _p9 = _p4._1._1;
-		var _p8 = _p4._1._2;
-		var _p7 = _p4._1._0;
-		var _p6 = _p4._1._3;
-		var _p5 = _p4._0;
+		var _p10 = _p4._1._1;
+		var _p9 = _p4._1._2;
+		var _p8 = _p4._1._0;
+		var _p7 = _p4._1._3;
+		var _p6 = _p4._0;
+		var _p5 = _p4._1._4;
 		var foldedRows = A2(
 			_elm_lang$core$List$map,
-			_user$project$Views$modelFoldedRow(_p8),
+			_user$project$Views$modelFoldedRow(_p9),
 			A2(
 				_elm_lang$core$Maybe$withDefault,
 				{ctor: '[]'},
 				_elm_lang$core$List$tail(
-					_elm_lang$core$Dict$values(_p7))));
-		return (!_p9) ? {
+					_elm_lang$core$Dict$values(_p8))));
+		return (!_p10) ? {
 			ctor: '::',
-			_0: A6(_user$project$Views$modelHistoryTopRow, _p5, _p7, building, _p9, _p8, _p6),
+			_0: A7(_user$project$Views$modelHistoryTopRow, _p6, _p8, building, _p10, _p9, _p7, _p5),
 			_1: {ctor: '[]'}
 		} : {
 			ctor: '::',
-			_0: A6(_user$project$Views$modelHistoryTopRow, _p5, _p7, building, _p9, _p8, _p6),
+			_0: A7(_user$project$Views$modelHistoryTopRow, _p6, _p8, building, _p10, _p9, _p7, _p5),
 			_1: foldedRows
 		};
 	});
@@ -24770,9 +24789,9 @@ var _user$project$Views$buildingStatusPanel = function (building) {
 		});
 };
 var _user$project$Views$optJobStatus = F2(
-	function (_p10, position) {
-		var _p11 = _p10;
-		var _p13 = _p11._1;
+	function (_p11, position) {
+		var _p12 = _p11;
+		var _p14 = _p12._1;
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -24812,15 +24831,15 @@ var _user$project$Views$optJobStatus = F2(
 									'(',
 									A2(
 										_elm_lang$core$Basics_ops['++'],
-										_elm_lang$core$Basics$toString(_p13),
+										_elm_lang$core$Basics$toString(_p14),
 										')'))),
 							_1: {ctor: '[]'}
 						}
 					}
 				},
 				function () {
-					var _p12 = _p13;
-					if (_p12.ctor === 'Complete') {
+					var _p13 = _p14;
+					if (_p13.ctor === 'Complete') {
 						return {
 							ctor: '::',
 							_0: A2(
@@ -24828,7 +24847,7 @@ var _user$project$Views$optJobStatus = F2(
 								{
 									ctor: '::',
 									_0: _elm_lang$html$Html_Events$onClick(
-										_user$project$Types$RetrieveOptimisation(_p11._0)),
+										_user$project$Types$RetrieveOptimisation(_p12._0)),
 									_1: {ctor: '[]'}
 								},
 								{
@@ -24970,7 +24989,7 @@ var _user$project$Main$init = function (storedModel) {
 			showDefaultModel ? {
 				ctor: '::',
 				_0: _user$project$Update$toCommand(
-					A2(_user$project$Types$SetParametersAndBuild, _user$project$ExamplesPanel$basisSetDimer, _user$project$Types$Alpha)),
+					A3(_user$project$Types$SetParametersAndBuild, _user$project$ExamplesPanel$basisSetDimer, _user$project$Types$Alpha, _user$project$Types$Basic)),
 				_1: {ctor: '[]'}
 			} : {
 				ctor: '::',
@@ -25434,8 +25453,13 @@ var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
 																										return A2(
 																											_elm_lang$core$Json_Decode$andThen,
 																											function (x3) {
-																												return _elm_lang$core$Json_Decode$succeed(
-																													{ctor: '_Tuple4', _0: x0, _1: x1, _2: x2, _3: x3});
+																												return A2(
+																													_elm_lang$core$Json_Decode$andThen,
+																													function (x4) {
+																														return _elm_lang$core$Json_Decode$succeed(
+																															{ctor: '_Tuple5', _0: x0, _1: x1, _2: x2, _3: x3, _4: x4});
+																													},
+																													A2(_elm_lang$core$Json_Decode$index, 4, _elm_lang$core$Json_Decode$string));
 																											},
 																											A2(_elm_lang$core$Json_Decode$index, 3, _elm_lang$core$Json_Decode$string));
 																									},
@@ -25690,7 +25714,7 @@ var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Types.HelixType":{"args":[],"tags":{"Alpha":[],"Collagen":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"SetHeat":["String"],"OptJobStatus":["Result.Result Http.Error ( String, String )"],"ChangeBuildMode":["String"],"RetrieveOptimisation":["String"],"Build":[],"OptimisationSubmitted":["Result.Result Http.Error String"],"CheckOptJobs":["Time.Time"],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"SetParametersAndBuild":["Types.ParametersDict","Types.HelixType"],"StoreModel":[],"Optimise":[],"ProcessOptimisation":["Result.Result Http.Error Types.OptimisationResults"],"ChangeHelixType":["String"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ModelInfoPanel":[],"ExamplesPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ model_id : String , helixTypeString : String , pdbFile : String , score : Float , residuesPerTurn : Float }"},"Types.OptimisationResults":{"args":[],"type":"{ parameters : Types.ParameterRecord , modellingResults : Types.ModellingResults , oligomericState : Int }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Types.HelixType":{"args":[],"tags":{"Alpha":[],"Collagen":[]}},"Types.BuildMode":{"args":[],"tags":{"Basic":[],"Advanced":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"SetHeat":["String"],"OptJobStatus":["Result.Result Http.Error ( String, String )"],"ChangeBuildMode":["String"],"RetrieveOptimisation":["String"],"Build":[],"OptimisationSubmitted":["Result.Result Http.Error String"],"CheckOptJobs":["Time.Time"],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"SetParametersAndBuild":["Types.ParametersDict","Types.HelixType","Types.BuildMode"],"StoreModel":[],"Optimise":[],"ProcessOptimisation":["Result.Result Http.Error Types.OptimisationResults"],"ChangeHelixType":["String"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ModelInfoPanel":[],"ExamplesPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ model_id : String , helixTypeString : String , pdbFile : String , score : Float , residuesPerTurn : Float }"},"Types.OptimisationResults":{"args":[],"type":"{ parameters : Types.ParameterRecord , modellingResults : Types.ModellingResults , oligomericState : Int }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

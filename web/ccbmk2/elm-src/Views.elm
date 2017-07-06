@@ -308,7 +308,7 @@ downloadStructureButton pdbFile =
 
 
 buildHistoryPanel :
-    Dict.Dict Int ( ParametersDict, Bool, Float, HelixType )
+    Dict.Dict Int ( ParametersDict, Bool, Float, HelixType, BuildMode )
     -> Bool
     -> Bool
     -> Html Msg
@@ -350,10 +350,10 @@ modelDetailTableHeader =
 
 
 modelParametersAsRow :
-    ( HistoryID, ( ParametersDict, Bool, Float, HelixType ) )
+    ( HistoryID, ( ParametersDict, Bool, Float, HelixType, BuildMode ) )
     -> Bool
     -> List (Html Msg)
-modelParametersAsRow ( hID, ( parameters, visible, score, helixType ) ) building =
+modelParametersAsRow ( hID, ( parameters, visible, score, helixType, buildMode ) ) building =
     let
         foldedRows =
             Dict.values parameters
@@ -362,9 +362,9 @@ modelParametersAsRow ( hID, ( parameters, visible, score, helixType ) ) building
                 |> List.map (modelFoldedRow score)
     in
         if not visible then
-            [ modelHistoryTopRow hID parameters building visible score helixType ]
+            [ modelHistoryTopRow hID parameters building visible score helixType buildMode ]
         else
-            (modelHistoryTopRow hID parameters building visible score helixType)
+            (modelHistoryTopRow hID parameters building visible score helixType buildMode)
                 :: foldedRows
 
 
@@ -375,8 +375,9 @@ modelHistoryTopRow :
     -> Bool
     -> Float
     -> HelixType
+    -> BuildMode
     -> Html Msg
-modelHistoryTopRow hID parameters building visible score helixType =
+modelHistoryTopRow hID parameters building visible score helixType buildMode =
     let
         topRowParameters =
             Dict.values parameters
@@ -397,7 +398,7 @@ modelHistoryTopRow hID parameters building visible score helixType =
                     (parametersToRow topRowParameters score)
                 ++ [ button
                         [ class [ CCBButtonCss ]
-                        , onClick (SetParametersAndBuild parameters helixType)
+                        , onClick (SetParametersAndBuild parameters helixType buildMode)
                         , disabled building
                         ]
                         [ text "Rebuild" ]
