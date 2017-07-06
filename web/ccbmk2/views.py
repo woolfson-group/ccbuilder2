@@ -13,7 +13,7 @@ from ccbmk2 import model_building
 @app.route('/')
 def welcome():
     """Welcome to CCBuilder splash screen."""
-    return redirect('/builder')
+    return redirect('ccbuilder2/builder')
 
 
 @app.route('/builder')
