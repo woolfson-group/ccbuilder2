@@ -52,10 +52,10 @@ buildPanel helixType buildMode parametersDict currentInputDict building visible 
         panelView =
             case buildMode of
                 Basic ->
-                    basicParameterInputForm
+                    basicParameterInputForm helixType
 
                 Advanced ->
-                    advancedParameterInputForm
+                    advancedParameterInputForm helixType
     in
         div
             [ class [ OverlayPanelCss ]
@@ -69,14 +69,15 @@ buildPanel helixType buildMode parametersDict currentInputDict building visible 
              , br [] []
              ]
                 -- Collagen does not require access to the oligomeric state
-                ++ (if helixType == Alpha then
+                ++
+                    (if helixType == Alpha then
                         [ h3 [] [ text "Oligomeric State" ]
                         , selectOligomericState
                             (Dict.toList parametersDict |> List.length)
                         ]
-                    else
+                     else
                         []
-                   )
+                    )
                 ++ [ panelView parametersDict currentInputDict
                    , parameterSubmit building parametersDict
                    , button
@@ -144,22 +145,23 @@ advancedParameters currentInput =
     ]
 
 
-basicParameterInputForm : ParametersDict -> InputValuesDict -> Html Msg
-basicParameterInputForm parametersDict currentInputDict =
+basicParameterInputForm : HelixType -> ParametersDict -> InputValuesDict -> Html Msg
+basicParameterInputForm helixType parametersDict currentInputDict =
     Html.div []
         [ h3 [] [ text "Parameters" ]
         , Dict.get 1 currentInputDict
             |> Maybe.withDefault emptyInput
-            |> allChainInputSection
+            |> allChainInputSection helixType
         ]
 
 
-allChainInputSection : InputValues -> Html Msg
-allChainInputSection currentInput =
+allChainInputSection : HelixType -> InputValues -> Html Msg
+allChainInputSection helixType currentInput =
     List.map
         allParameterInput
         (basicParameters currentInput)
         ++ [ allSequenceInput
+                helixType
                 ( "Sequence", Sequence, currentInput.sequence, currentInput.register )
            ]
         |> div [ class [ FlexItemCss ] ]
@@ -182,29 +184,38 @@ allParameterInput ( parameterLabel, parameter, currentParameter ) =
         ]
 
 
-allSequenceInput : ( String, Parameter, String, String ) -> Html Msg
-allSequenceInput ( parameterLabel, parameter, currentSequence, currentRegister ) =
+allSequenceInput : HelixType -> ( String, Parameter, String, String ) -> Html Msg
+allSequenceInput helixType ( parameterLabel, parameter, currentSequence, currentRegister ) =
     div [ class [ ParameterInputCss ] ]
-        [ text parameterLabel
-        , text " (Register: "
-        , registerSelection 1 currentRegister
-        , text ")"
-        , br [] []
-        , textarea
-            [ name parameterLabel
-            , rows 3
-            , cols 30
-            , styles inputStyling
-            , placeholder parameterLabel
-            , onInput (EditAllParameters parameter)
-            , value currentSequence
-            ]
-            []
-        ]
+        ([ text parameterLabel
+         ]
+            ++ (case helixType of
+                    Alpha ->
+                        [ text " (Register: "
+                        , registerSelection 1 currentRegister
+                        , text ")"
+                        ]
+
+                    Collagen ->
+                        []
+               )
+            ++ [ br [] []
+               , textarea
+                    [ name parameterLabel
+                    , rows 3
+                    , cols 30
+                    , styles inputStyling
+                    , placeholder parameterLabel
+                    , onInput (EditAllParameters parameter)
+                    , value currentSequence
+                    ]
+                    []
+               ]
+        )
 
 
-advancedParameterInputForm : ParametersDict -> InputValuesDict -> Html Msg
-advancedParameterInputForm parametersDict currentInputDict =
+advancedParameterInputForm : HelixType -> ParametersDict -> InputValuesDict -> Html Msg
+advancedParameterInputForm helixType parametersDict currentInputDict =
     let
         inputChunks =
             Dict.toList currentInputDict
@@ -214,7 +225,7 @@ advancedParameterInputForm parametersDict currentInputDict =
             [ h3 [] [ text "Parameters" ]
             , Html.div
                 []
-                (List.map createParametersSections inputChunks)
+                (List.map (createParametersSections helixType) inputChunks)
             ]
 
 
@@ -230,14 +241,14 @@ chunks k xs =
             [ xs ]
 
 
-createParametersSections : List ( SectionID, InputValues ) -> Html Msg
-createParametersSections currentInputChunk =
-    List.map singleChainInputSection currentInputChunk
+createParametersSections : HelixType -> List ( SectionID, InputValues ) -> Html Msg
+createParametersSections helixType currentInputChunk =
+    List.map (singleChainInputSection helixType) currentInputChunk
         |> Html.div [ class [ FlexContainerCss ] ]
 
 
-singleChainInputSection : ( SectionID, InputValues ) -> Html Msg
-singleChainInputSection ( sectionID, currentInput ) =
+singleChainInputSection : HelixType -> ( SectionID, InputValues ) -> Html Msg
+singleChainInputSection helixType ( sectionID, currentInput ) =
     [ h4 [] [ text ("Chain " ++ toString sectionID) ] ]
         ++ List.map
             (singleParameterInput sectionID)
@@ -264,7 +275,8 @@ singleChainInputSection ( sectionID, currentInput ) =
                 []
            , text "Anti Parallel"
            ]
-        ++ [ singleSequenceInput sectionID
+        ++ [ singleSequenceInput helixType
+                sectionID
                 ( "Sequence", Sequence, currentInput.sequence, currentInput.register )
            ]
         ++ [ button
@@ -322,25 +334,38 @@ singleZShiftInput sectionID ( parameterLabel, parameter, currentParameter ) isCh
         ]
 
 
-singleSequenceInput : SectionID -> ( String, Parameter, String, String ) -> Html Msg
-singleSequenceInput sectionID ( parameterLabel, parameter, currentSequence, currentRegister ) =
+singleSequenceInput :
+    HelixType
+    -> SectionID
+    -> ( String, Parameter, String, String )
+    -> Html Msg
+singleSequenceInput helixType sectionID ( parameterLabel, parameter, currentSequence, currentRegister ) =
     div [ class [ ParameterInputCss ] ]
-        [ text parameterLabel
-        , text " (Register: "
-        , registerSelection sectionID currentRegister
-        , text ")"
-        , br [] []
-        , textarea
-            [ name parameterLabel
-            , rows 3
-            , cols 30
-            , styles inputStyling
-            , placeholder parameterLabel
-            , onInput (EditSingleParameter parameter sectionID)
-            , value currentSequence
-            ]
-            []
-        ]
+        ([ text parameterLabel
+         ]
+            ++ (case helixType of
+                    Alpha ->
+                        [ text " (Register: "
+                        , registerSelection sectionID currentRegister
+                        , text ")"
+                        ]
+
+                    Collagen ->
+                        []
+               )
+            ++ [ br [] []
+               , textarea
+                    [ name parameterLabel
+                    , rows 3
+                    , cols 30
+                    , styles inputStyling
+                    , placeholder parameterLabel
+                    , onInput (EditSingleParameter parameter sectionID)
+                    , value currentSequence
+                    ]
+                    []
+               ]
+        )
 
 
 inputStyling : List Css.Mixin

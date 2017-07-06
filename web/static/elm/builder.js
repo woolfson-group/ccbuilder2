@@ -20532,110 +20532,127 @@ var _user$project$BuildPanel$allParameterInput = function (_p3) {
 			}
 		});
 };
-var _user$project$BuildPanel$allSequenceInput = function (_p6) {
-	var _p7 = _p6;
-	var _p8 = _p7._0;
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _user$project$BuildPanel$class(
+var _user$project$BuildPanel$allSequenceInput = F2(
+	function (helixType, _p6) {
+		var _p7 = _p6;
+		var _p9 = _p7._0;
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _user$project$BuildPanel$class(
+					{
+						ctor: '::',
+						_0: _user$project$BuilderCss$ParameterInputCss,
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			},
+			A2(
+				_elm_lang$core$Basics_ops['++'],
 				{
 					ctor: '::',
-					_0: _user$project$BuilderCss$ParameterInputCss,
+					_0: _elm_lang$html$Html$text(_p9),
 					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(_p8),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(' (Register: '),
-				_1: {
-					ctor: '::',
-					_0: A2(_user$project$BuildPanel$registerSelection, 1, _p7._3),
-					_1: {
+				},
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					function () {
+						var _p8 = helixType;
+						if (_p8.ctor === 'Alpha') {
+							return {
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(' (Register: '),
+								_1: {
+									ctor: '::',
+									_0: A2(_user$project$BuildPanel$registerSelection, 1, _p7._3),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(')'),
+										_1: {ctor: '[]'}
+									}
+								}
+							};
+						} else {
+							return {ctor: '[]'};
+						}
+					}(),
+					{
 						ctor: '::',
-						_0: _elm_lang$html$Html$text(')'),
+						_0: A2(
+							_elm_lang$html$Html$br,
+							{ctor: '[]'},
+							{ctor: '[]'}),
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$br,
-								{ctor: '[]'},
-								{ctor: '[]'}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$textarea,
-									{
+								_elm_lang$html$Html$textarea,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$name(_p9),
+									_1: {
 										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$name(_p8),
+										_0: _elm_lang$html$Html_Attributes$rows(3),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$rows(3),
+											_0: _elm_lang$html$Html_Attributes$cols(30),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$cols(30),
+												_0: _user$project$BuildPanel$styles(_user$project$BuildPanel$inputStyling),
 												_1: {
 													ctor: '::',
-													_0: _user$project$BuildPanel$styles(_user$project$BuildPanel$inputStyling),
+													_0: _elm_lang$html$Html_Attributes$placeholder(_p9),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$placeholder(_p8),
+														_0: _elm_lang$html$Html_Events$onInput(
+															_user$project$Types$EditAllParameters(_p7._1)),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html_Events$onInput(
-																_user$project$Types$EditAllParameters(_p7._1)),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$value(_p7._2),
-																_1: {ctor: '[]'}
-															}
+															_0: _elm_lang$html$Html_Attributes$value(_p7._2),
+															_1: {ctor: '[]'}
 														}
 													}
 												}
 											}
 										}
-									},
-									{ctor: '[]'}),
-								_1: {ctor: '[]'}
-							}
+									}
+								},
+								{ctor: '[]'}),
+							_1: {ctor: '[]'}
 						}
-					}
-				}
-			}
-		});
-};
-var _user$project$BuildPanel$allChainInputSection = function (currentInput) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _user$project$BuildPanel$class(
-				{
-					ctor: '::',
-					_0: _user$project$BuilderCss$FlexItemCss,
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		},
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			A2(
-				_elm_lang$core$List$map,
-				_user$project$BuildPanel$allParameterInput,
-				_user$project$BuildPanel$basicParameters(currentInput)),
+					})));
+	});
+var _user$project$BuildPanel$allChainInputSection = F2(
+	function (helixType, currentInput) {
+		return A2(
+			_elm_lang$html$Html$div,
 			{
 				ctor: '::',
-				_0: _user$project$BuildPanel$allSequenceInput(
-					{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: currentInput.sequence, _3: currentInput.register}),
+				_0: _user$project$BuildPanel$class(
+					{
+						ctor: '::',
+						_0: _user$project$BuilderCss$FlexItemCss,
+						_1: {ctor: '[]'}
+					}),
 				_1: {ctor: '[]'}
-			}));
-};
-var _user$project$BuildPanel$basicParameterInputForm = F2(
-	function (parametersDict, currentInputDict) {
+			},
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				A2(
+					_elm_lang$core$List$map,
+					_user$project$BuildPanel$allParameterInput,
+					_user$project$BuildPanel$basicParameters(currentInput)),
+				{
+					ctor: '::',
+					_0: A2(
+						_user$project$BuildPanel$allSequenceInput,
+						helixType,
+						{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: currentInput.sequence, _3: currentInput.register}),
+					_1: {ctor: '[]'}
+				}));
+	});
+var _user$project$BuildPanel$basicParameterInputForm = F3(
+	function (helixType, parametersDict, currentInputDict) {
 		return A2(
 			_elm_lang$html$Html$div,
 			{ctor: '[]'},
@@ -20651,7 +20668,9 @@ var _user$project$BuildPanel$basicParameterInputForm = F2(
 					}),
 				_1: {
 					ctor: '::',
-					_0: _user$project$BuildPanel$allChainInputSection(
+					_0: A2(
+						_user$project$BuildPanel$allChainInputSection,
+						helixType,
 						A2(
 							_elm_lang$core$Maybe$withDefault,
 							_user$project$Types$emptyInput,
@@ -20661,9 +20680,9 @@ var _user$project$BuildPanel$basicParameterInputForm = F2(
 			});
 	});
 var _user$project$BuildPanel$singleParameterInput = F2(
-	function (sectionID, _p9) {
-		var _p10 = _p9;
-		var _p11 = _p10._0;
+	function (sectionID, _p10) {
+		var _p11 = _p10;
+		var _p12 = _p11._0;
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -20678,7 +20697,7 @@ var _user$project$BuildPanel$singleParameterInput = F2(
 			},
 			{
 				ctor: '::',
-				_0: _elm_lang$html$Html$text(_p11),
+				_0: _elm_lang$html$Html$text(_p12),
 				_1: {
 					ctor: '::',
 					_0: A2(
@@ -20694,20 +20713,20 @@ var _user$project$BuildPanel$singleParameterInput = F2(
 								_0: _elm_lang$html$Html_Attributes$type_('text'),
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$name(_p11),
+									_0: _elm_lang$html$Html_Attributes$name(_p12),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$placeholder(_p11),
+										_0: _elm_lang$html$Html_Attributes$placeholder(_p12),
 										_1: {
 											ctor: '::',
 											_0: _elm_lang$html$Html_Events$onInput(
-												A2(_user$project$Types$EditSingleParameter, _p10._1, sectionID)),
+												A2(_user$project$Types$EditSingleParameter, _p11._1, sectionID)),
 											_1: {
 												ctor: '::',
 												_0: _user$project$BuildPanel$styles(_user$project$BuildPanel$inputStyling),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$value(_p10._2),
+													_0: _elm_lang$html$Html_Attributes$value(_p11._2),
 													_1: {ctor: '[]'}
 												}
 											}
@@ -20722,9 +20741,9 @@ var _user$project$BuildPanel$singleParameterInput = F2(
 			});
 	});
 var _user$project$BuildPanel$singleZShiftInput = F3(
-	function (sectionID, _p12, isChecked) {
-		var _p13 = _p12;
-		var _p14 = _p13._0;
+	function (sectionID, _p13, isChecked) {
+		var _p14 = _p13;
+		var _p15 = _p14._0;
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -20740,7 +20759,7 @@ var _user$project$BuildPanel$singleZShiftInput = F3(
 			{
 				ctor: '::',
 				_0: _elm_lang$html$Html$text(
-					A2(_elm_lang$core$Basics_ops['++'], _p14, ' (Link SHR')),
+					A2(_elm_lang$core$Basics_ops['++'], _p15, ' (Link SHR')),
 				_1: {
 					ctor: '::',
 					_0: A2(
@@ -20778,20 +20797,20 @@ var _user$project$BuildPanel$singleZShiftInput = F3(
 										_0: _elm_lang$html$Html_Attributes$type_('text'),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$name(_p14),
+											_0: _elm_lang$html$Html_Attributes$name(_p15),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$placeholder(_p14),
+												_0: _elm_lang$html$Html_Attributes$placeholder(_p15),
 												_1: {
 													ctor: '::',
 													_0: _elm_lang$html$Html_Events$onInput(
-														A2(_user$project$Types$EditSingleParameter, _p13._1, sectionID)),
+														A2(_user$project$Types$EditSingleParameter, _p14._1, sectionID)),
 													_1: {
 														ctor: '::',
 														_0: _user$project$BuildPanel$styles(_user$project$BuildPanel$inputStyling),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$value(_p13._2),
+															_0: _elm_lang$html$Html_Attributes$value(_p14._2),
 															_1: {ctor: '[]'}
 														}
 													}
@@ -20807,10 +20826,10 @@ var _user$project$BuildPanel$singleZShiftInput = F3(
 				}
 			});
 	});
-var _user$project$BuildPanel$singleSequenceInput = F2(
-	function (sectionID, _p15) {
-		var _p16 = _p15;
-		var _p17 = _p16._0;
+var _user$project$BuildPanel$singleSequenceInput = F3(
+	function (helixType, sectionID, _p16) {
+		var _p17 = _p16;
+		var _p19 = _p17._0;
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -20823,184 +20842,175 @@ var _user$project$BuildPanel$singleSequenceInput = F2(
 					}),
 				_1: {ctor: '[]'}
 			},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(_p17),
-				_1: {
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				{
 					ctor: '::',
-					_0: _elm_lang$html$Html$text(' (Register: '),
-					_1: {
-						ctor: '::',
-						_0: A2(_user$project$BuildPanel$registerSelection, sectionID, _p16._3),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html$text(')'),
-							_1: {
+					_0: _elm_lang$html$Html$text(_p19),
+					_1: {ctor: '[]'}
+				},
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					function () {
+						var _p18 = helixType;
+						if (_p18.ctor === 'Alpha') {
+							return {
 								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$br,
-									{ctor: '[]'},
-									{ctor: '[]'}),
+								_0: _elm_lang$html$Html$text(' (Register: '),
 								_1: {
 									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$textarea,
-										{
+									_0: A2(_user$project$BuildPanel$registerSelection, sectionID, _p17._3),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(')'),
+										_1: {ctor: '[]'}
+									}
+								}
+							};
+						} else {
+							return {ctor: '[]'};
+						}
+					}(),
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$br,
+							{ctor: '[]'},
+							{ctor: '[]'}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$textarea,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$name(_p19),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$rows(3),
+										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$name(_p17),
+											_0: _elm_lang$html$Html_Attributes$cols(30),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$rows(3),
+												_0: _user$project$BuildPanel$styles(_user$project$BuildPanel$inputStyling),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$cols(30),
+													_0: _elm_lang$html$Html_Attributes$placeholder(_p19),
 													_1: {
 														ctor: '::',
-														_0: _user$project$BuildPanel$styles(_user$project$BuildPanel$inputStyling),
+														_0: _elm_lang$html$Html_Events$onInput(
+															A2(_user$project$Types$EditSingleParameter, _p17._1, sectionID)),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$placeholder(_p17),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$html$Html_Events$onInput(
-																	A2(_user$project$Types$EditSingleParameter, _p16._1, sectionID)),
-																_1: {
-																	ctor: '::',
-																	_0: _elm_lang$html$Html_Attributes$value(_p16._2),
-																	_1: {ctor: '[]'}
-																}
-															}
+															_0: _elm_lang$html$Html_Attributes$value(_p17._2),
+															_1: {ctor: '[]'}
 														}
 													}
 												}
 											}
-										},
-										{ctor: '[]'}),
-									_1: {ctor: '[]'}
-								}
-							}
+										}
+									}
+								},
+								{ctor: '[]'}),
+							_1: {ctor: '[]'}
 						}
-					}
-				}
-			});
+					})));
 	});
-var _user$project$BuildPanel$singleChainInputSection = function (_p18) {
-	var _p19 = _p18;
-	var _p21 = _p19._0;
-	var _p20 = _p19._1;
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _user$project$BuildPanel$class(
-				{
-					ctor: '::',
-					_0: _user$project$BuilderCss$FlexItemCss,
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		},
-		A2(
-			_elm_lang$core$Basics_ops['++'],
+var _user$project$BuildPanel$singleChainInputSection = F2(
+	function (helixType, _p20) {
+		var _p21 = _p20;
+		var _p23 = _p21._0;
+		var _p22 = _p21._1;
+		return A2(
+			_elm_lang$html$Html$div,
 			{
 				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$h4,
-					{ctor: '[]'},
+				_0: _user$project$BuildPanel$class(
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html$text(
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								'Chain ',
-								_elm_lang$core$Basics$toString(_p21))),
+						_0: _user$project$BuilderCss$FlexItemCss,
 						_1: {ctor: '[]'}
 					}),
 				_1: {ctor: '[]'}
 			},
 			A2(
 				_elm_lang$core$Basics_ops['++'],
-				A2(
-					_elm_lang$core$List$map,
-					_user$project$BuildPanel$singleParameterInput(_p21),
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_user$project$BuildPanel$basicParameters(_p20),
-						_user$project$BuildPanel$advancedParameters(_p20))),
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$h4,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									'Chain ',
+									_elm_lang$core$Basics$toString(_p23))),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				},
 				A2(
 					_elm_lang$core$Basics_ops['++'],
-					{
-						ctor: '::',
-						_0: A3(
-							_user$project$BuildPanel$singleZShiftInput,
-							_p21,
-							{ctor: '_Tuple3', _0: 'Z-Shift', _1: _user$project$Types$ZShift, _2: _p20.zShift},
-							_elm_lang$core$Native_Utils.eq(_p20.linkedSuperHelRot, 'True') ? true : false),
-						_1: {ctor: '[]'}
-					},
+					A2(
+						_elm_lang$core$List$map,
+						_user$project$BuildPanel$singleParameterInput(_p23),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_user$project$BuildPanel$basicParameters(_p22),
+							_user$project$BuildPanel$advancedParameters(_p22))),
 					A2(
 						_elm_lang$core$Basics_ops['++'],
 						{
 							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$input,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onClick(
-											A3(_user$project$Types$EditSingleParameter, _user$project$Types$Orientation, _p21, '')),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$checked(
-												_elm_lang$core$Native_Utils.eq(_p20.antiParallel, 'True') ? true : false),
-											_1: {ctor: '[]'}
-										}
-									}
-								},
-								{ctor: '[]'}),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('Anti Parallel'),
-								_1: {ctor: '[]'}
-							}
+							_0: A3(
+								_user$project$BuildPanel$singleZShiftInput,
+								_p23,
+								{ctor: '_Tuple3', _0: 'Z-Shift', _1: _user$project$Types$ZShift, _2: _p22.zShift},
+								_elm_lang$core$Native_Utils.eq(_p22.linkedSuperHelRot, 'True') ? true : false),
+							_1: {ctor: '[]'}
 						},
 						A2(
 							_elm_lang$core$Basics_ops['++'],
 							{
 								ctor: '::',
 								_0: A2(
-									_user$project$BuildPanel$singleSequenceInput,
-									_p21,
-									{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: _p20.sequence, _3: _p20.register}),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$button,
+									_elm_lang$html$Html$input,
 									{
 										ctor: '::',
-										_0: _user$project$BuildPanel$class(
-											{
-												ctor: '::',
-												_0: _user$project$BuilderCss$CCBButtonCss,
-												_1: {ctor: '[]'}
-											}),
+										_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
 										_1: {
 											ctor: '::',
 											_0: _elm_lang$html$Html_Events$onClick(
-												_user$project$Types$CopyParameters(_p21)),
-											_1: {ctor: '[]'}
+												A3(_user$project$Types$EditSingleParameter, _user$project$Types$Orientation, _p23, '')),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$checked(
+													_elm_lang$core$Native_Utils.eq(_p22.antiParallel, 'True') ? true : false),
+												_1: {ctor: '[]'}
+											}
 										}
 									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('Copy'),
-										_1: {ctor: '[]'}
-									}),
+									{ctor: '[]'}),
 								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Anti Parallel'),
+									_1: {ctor: '[]'}
+								}
+							},
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								{
+									ctor: '::',
+									_0: A3(
+										_user$project$BuildPanel$singleSequenceInput,
+										helixType,
+										_p23,
+										{ctor: '_Tuple4', _0: 'Sequence', _1: _user$project$Types$Sequence, _2: _p22.sequence, _3: _p22.register}),
+									_1: {ctor: '[]'}
+								},
+								{
 									ctor: '::',
 									_0: A2(
 										_elm_lang$html$Html$button,
@@ -21015,36 +21025,64 @@ var _user$project$BuildPanel$singleChainInputSection = function (_p18) {
 											_1: {
 												ctor: '::',
 												_0: _elm_lang$html$Html_Events$onClick(
-													_user$project$Types$PasteParameters(_p21)),
+													_user$project$Types$CopyParameters(_p23)),
 												_1: {ctor: '[]'}
 											}
 										},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('Paste'),
+											_0: _elm_lang$html$Html$text('Copy'),
 											_1: {ctor: '[]'}
 										}),
-									_1: {ctor: '[]'}
-								}
-							}))))));
-};
-var _user$project$BuildPanel$createParametersSections = function (currentInputChunk) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _user$project$BuildPanel$class(
-				{
-					ctor: '::',
-					_0: _user$project$BuilderCss$FlexContainerCss,
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		},
-		A2(_elm_lang$core$List$map, _user$project$BuildPanel$singleChainInputSection, currentInputChunk));
-};
-var _user$project$BuildPanel$advancedParameterInputForm = F2(
-	function (parametersDict, currentInputDict) {
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$button,
+											{
+												ctor: '::',
+												_0: _user$project$BuildPanel$class(
+													{
+														ctor: '::',
+														_0: _user$project$BuilderCss$CCBButtonCss,
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onClick(
+														_user$project$Types$PasteParameters(_p23)),
+													_1: {ctor: '[]'}
+												}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Paste'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}))))));
+	});
+var _user$project$BuildPanel$createParametersSections = F2(
+	function (helixType, currentInputChunk) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _user$project$BuildPanel$class(
+					{
+						ctor: '::',
+						_0: _user$project$BuilderCss$FlexContainerCss,
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			},
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$BuildPanel$singleChainInputSection(helixType),
+				currentInputChunk));
+	});
+var _user$project$BuildPanel$advancedParameterInputForm = F3(
+	function (helixType, parametersDict, currentInputDict) {
 		var inputChunks = A2(
 			_user$project$BuildPanel$chunks,
 			4,
@@ -21067,7 +21105,10 @@ var _user$project$BuildPanel$advancedParameterInputForm = F2(
 					_0: A2(
 						_elm_lang$html$Html$div,
 						{ctor: '[]'},
-						A2(_elm_lang$core$List$map, _user$project$BuildPanel$createParametersSections, inputChunks)),
+						A2(
+							_elm_lang$core$List$map,
+							_user$project$BuildPanel$createParametersSections(helixType),
+							inputChunks)),
 					_1: {ctor: '[]'}
 				}
 			});
@@ -21104,11 +21145,11 @@ var _user$project$BuildPanel$parameterSubmit = F2(
 var _user$project$BuildPanel$buildPanel = F6(
 	function (helixType, buildMode, parametersDict, currentInputDict, building, visible) {
 		var panelView = function () {
-			var _p22 = buildMode;
-			if (_p22.ctor === 'Basic') {
-				return _user$project$BuildPanel$basicParameterInputForm;
+			var _p24 = buildMode;
+			if (_p24.ctor === 'Basic') {
+				return _user$project$BuildPanel$basicParameterInputForm(helixType);
 			} else {
-				return _user$project$BuildPanel$advancedParameterInputForm;
+				return _user$project$BuildPanel$advancedParameterInputForm(helixType);
 			}
 		}();
 		return A2(

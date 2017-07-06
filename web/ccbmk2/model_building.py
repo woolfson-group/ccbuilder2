@@ -96,6 +96,8 @@ def build_collagen(parameters, debug=False):
                                        collagen.rotational_offsets,
                                        parameters,
                                        lshr_adjust)]
+    collagen.orientations = [-1 if p['Orientation']
+                             else 1 for p in parameters]
     collagen.build()
     collagen.pack_new_sequences(sequences)
     mean_rpt_value = calculate_average_rpt(collagen)
@@ -195,7 +197,8 @@ def optimise_collagen(parameters, debug=False):
 
 def calculate_average_rpt(ampal):
     """Returns the mean residues per turn value for an AMPAL object."""
-    rpt_lists = [isambard.analyse_protein.residues_per_turn(ch)[:-1] for ch in ampal]
+    rpt_lists = [isambard.analyse_protein.residues_per_turn(ch)[
+        :-1] for ch in ampal]
     rpt_values = list(itertools.chain(*rpt_lists))
     average_rpt = sum(rpt_values) / len(rpt_values)
     return average_rpt
@@ -214,8 +217,9 @@ class OptCollagen(isambard.specifications.CoiledCoil):
         self.minor_repeats = [None] * n
         rpr_ppii = 3.1
         self.z_shifts = [-rpr_ppii * 2, 0.0, -rpr_ppii]
-        rot_adj = [(z/p)*360 for z, p in zip(self.z_shifts, self.major_pitches)]
-        self.rotational_offsets = [r+ra for r, ra in zip(
+        rot_adj = [(z / p) * 360 for z,
+                   p in zip(self.z_shifts, self.major_pitches)]
+        self.rotational_offsets = [r + ra for r, ra in zip(
             self.rotational_offsets, rot_adj)]
         self.build()
 
