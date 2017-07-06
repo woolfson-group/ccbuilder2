@@ -13,6 +13,7 @@ import ParameterValidation
         , editParameterValue
         , invalidParameterDict
         )
+import Tools exposing (chunks)
 import Types
     exposing
         ( Msg(..)
@@ -227,18 +228,6 @@ advancedParameterInputForm helixType parametersDict currentInputDict =
                 []
                 (List.map (createParametersSections helixType) inputChunks)
             ]
-
-
-chunks : Int -> List a -> List (List a)
-chunks k xs =
-    let
-        len =
-            List.length xs
-    in
-        if len > k then
-            List.take k xs :: chunks k (List.drop k xs)
-        else
-            [ xs ]
 
 
 createParametersSections : HelixType -> List ( SectionID, InputValues ) -> Html Msg
