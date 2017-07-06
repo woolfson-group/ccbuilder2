@@ -1,7 +1,7 @@
 port module Ports exposing (..)
 
 import Model exposing ( ExportableModel )
-import Types exposing ( Representation )
+import Types exposing ( KnobIDs, Representation )
 
 -- Ports
 
@@ -19,6 +19,9 @@ port showAxes : () -> Cmd msg
 
 
 port newRepresentation : Representation -> Cmd msg
+
+
+port highlightKnobs : KnobIDs -> Cmd msg
 
 
 port downloadPdb : ( String, String ) -> Cmd msg
