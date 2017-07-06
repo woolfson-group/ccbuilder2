@@ -19173,9 +19173,17 @@ var _user$project$Types$maybeNumberToString = function (mNum) {
 		return '';
 	}
 };
+var _user$project$Types$helixTypeToString = function (helixType) {
+	var _p1 = helixType;
+	if (_p1.ctor === 'Alpha') {
+		return 'ALPHA';
+	} else {
+		return 'COLLAGEN';
+	}
+};
 var _user$project$Types$optStatusToString = function (status) {
-	var _p1 = status;
-	switch (_p1.ctor) {
+	var _p2 = status;
+	switch (_p2.ctor) {
 		case 'Submitted':
 			return 'SUBMITTED';
 		case 'Queued':
@@ -19228,12 +19236,12 @@ var _user$project$Types$parametersDictToInputDict = function (parameters) {
 	return _elm_lang$core$Dict$fromList(
 		A2(
 			_elm_lang$core$List$map,
-			function (_p2) {
-				var _p3 = _p2;
+			function (_p3) {
+				var _p4 = _p3;
 				return {
 					ctor: '_Tuple2',
-					_0: _p3._0,
-					_1: _user$project$Types$parametersToInput(_p3._1)
+					_0: _p4._0,
+					_1: _user$project$Types$parametersToInput(_p4._1)
 				};
 			},
 			_elm_lang$core$Dict$toList(parameters)));
@@ -19335,8 +19343,8 @@ var _user$project$Types$Radius = {ctor: 'Radius'};
 var _user$project$Types$Collagen = {ctor: 'Collagen'};
 var _user$project$Types$Alpha = {ctor: 'Alpha'};
 var _user$project$Types$stringToHelixType = function (helixString) {
-	var _p4 = helixString;
-	switch (_p4) {
+	var _p5 = helixString;
+	switch (_p5) {
 		case 'ALPHA':
 			return _elm_lang$core$Result$Ok(_user$project$Types$Alpha);
 		case 'COLLAGEN':
@@ -19361,8 +19369,8 @@ var _user$project$Types$Running = {ctor: 'Running'};
 var _user$project$Types$Queued = {ctor: 'Queued'};
 var _user$project$Types$Submitted = {ctor: 'Submitted'};
 var _user$project$Types$stringToOptStatus = function (statusString) {
-	var _p5 = statusString;
-	switch (_p5) {
+	var _p6 = statusString;
+	switch (_p6) {
 		case 'SUBMITTED':
 			return _elm_lang$core$Result$Ok(_user$project$Types$Submitted);
 		case 'QUEUED':
@@ -22407,8 +22415,8 @@ var _user$project$Update$parametersDictToListJson = function (parameters) {
 			_user$project$Update$parameterRecordJson,
 			_elm_lang$core$Dict$values(parameters)));
 };
-var _user$project$Update$optimisationJson = F2(
-	function (parameters, heat) {
+var _user$project$Update$optimisationJson = F3(
+	function (parameters, helixType, heat) {
 		return _elm_lang$core$Json_Encode$object(
 			{
 				ctor: '::',
@@ -22421,15 +22429,24 @@ var _user$project$Update$optimisationJson = F2(
 					ctor: '::',
 					_0: {
 						ctor: '_Tuple2',
-						_0: 'Heat',
-						_1: _elm_lang$core$Json_Encode$int(heat)
+						_0: 'Helix Type',
+						_1: _elm_lang$core$Json_Encode$string(
+							_user$project$Types$helixTypeToString(helixType))
 					},
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'Heat',
+							_1: _elm_lang$core$Json_Encode$int(heat)
+						},
+						_1: {ctor: '[]'}
+					}
 				}
 			});
 	});
-var _user$project$Update$sendOptimiseCmd = F2(
-	function (parameters, heat) {
+var _user$project$Update$sendOptimiseCmd = F3(
+	function (parameters, helixType, heat) {
 		return A2(
 			_elm_lang$http$Http$send,
 			_user$project$Types$OptimisationSubmitted,
@@ -22437,7 +22454,7 @@ var _user$project$Update$sendOptimiseCmd = F2(
 				_elm_lang$http$Http$post,
 				'builder/api/v0.1/optimise/coiled-coil',
 				_elm_lang$http$Http$jsonBody(
-					A2(_user$project$Update$optimisationJson, parameters, heat)),
+					A3(_user$project$Update$optimisationJson, parameters, helixType, heat)),
 				_elm_lang$core$Json_Decode$string));
 	});
 var _user$project$Update$modellingResultsDecoder = A6(
@@ -22717,11 +22734,11 @@ var _user$project$Update$update = F2(
 						{
 							panelVisibility: _elm_lang$core$Native_Utils.update(
 								panelVisibility,
-								{buildPanel: false, examplesPanel: false})
+								{buildPanel: false, examplesPanel: false, optimisePanel: false})
 						}),
 					{
 						ctor: '::',
-						_0: A2(_user$project$Update$sendOptimiseCmd, model.parameters, model.heat),
+						_0: A3(_user$project$Update$sendOptimiseCmd, model.parameters, model.helixType, model.heat),
 						_1: {ctor: '[]'}
 					}) : A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],

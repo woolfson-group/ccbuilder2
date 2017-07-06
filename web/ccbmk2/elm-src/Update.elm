@@ -36,6 +36,7 @@ import Types
         , Representation
         , RepOption(..)
         , optStatusToString
+        , helixTypeToString
         , stringToHelixType
         , emptyInput
         , emptyParameterRecord
@@ -216,9 +217,10 @@ update msg model =
                             { panelVisibility
                                 | buildPanel = False
                                 , examplesPanel = False
+                                , optimisePanel = False
                             }
                     }
-                        ! [ sendOptimiseCmd model.parameters model.heat ]
+                        ! [ sendOptimiseCmd model.parameters model.helixType model.heat ]
                 else
                     model ! []
 
@@ -542,20 +544,21 @@ parametersDictToListJson parameters =
 -- Optimisation Cmd
 
 
-optimisationJson : ParametersDict -> Int -> Json.Encode.Value
-optimisationJson parameters heat =
+optimisationJson : ParametersDict -> HelixType -> Int -> Json.Encode.Value
+optimisationJson parameters helixType heat =
     Json.Encode.object
         [ ( "Parameters", parametersDictToListJson parameters )
+        , ( "Helix Type", Json.Encode.string (helixTypeToString helixType) )
         , ( "Heat", Json.Encode.int heat )
         ]
 
 
-sendOptimiseCmd : ParametersDict -> Int -> Cmd Msg
-sendOptimiseCmd parameters heat =
+sendOptimiseCmd : ParametersDict -> HelixType -> Int -> Cmd Msg
+sendOptimiseCmd parameters helixType heat =
     Http.send OptimisationSubmitted <|
         Http.post
             "builder/api/v0.1/optimise/coiled-coil"
-            (optimisationJson parameters heat
+            (optimisationJson parameters helixType heat
                 |> Http.jsonBody
             )
             Json.Decode.string

@@ -98,6 +98,7 @@ def get_optimisation_result():
     model_and_parameters = {
         'model_and_info': {
             'model_id': str(model['_id']),
+            'helix_type': opt_job['helix_type'],
             'pdb': model['pdb'],
             'score': model['score'],
             'mean_rpt_value': model['mean_rpt_value']

@@ -201,6 +201,16 @@ stringToOptStatus statusString =
             Err "String could not be converted to OptStatus."
 
 
+helixTypeToString : HelixType -> String
+helixTypeToString helixType =
+    case helixType of
+        Alpha ->
+            "ALPHA"
+
+        Collagen ->
+            "COLLAGEN"
+
+
 stringToHelixType : String -> Result String HelixType
 stringToHelixType helixString =
     case helixString of

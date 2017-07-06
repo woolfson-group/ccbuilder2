@@ -125,6 +125,7 @@ def create_opt_job_entry(request):
         ID for the submitted optimsation job.
     """
     opt_job = {
+        'helix_type': request['Helix Type'],
         'initial_parameter_ids':
             [get_chain_parameters_id(p) for p in request['Parameters']],
         'oligomeric_state': len(request['Parameters']),
