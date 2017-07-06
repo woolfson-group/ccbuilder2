@@ -24,8 +24,9 @@ type Msg
     | ProcessOptimisation (Result Http.Error OptimisationResults)
     | SetOligomericState String
     | Clear
+    | HighlightKnobs
     | DownloadPdb
-    | SetParametersAndBuild ParametersDict HelixType
+    | SetParametersAndBuild ParametersDict HelixType BuildMode
     | KeyMsg Keyboard.KeyCode
     | TogglePanel Panel
     | ExpandHistory HistoryID
@@ -41,6 +42,14 @@ type alias SectionID =
 
 type alias HistoryID =
     Int
+
+
+type alias HistoryEntry =
+    ( ParametersDict, Bool, Float, HelixType, BuildMode, KnobIDs )
+
+
+type alias ExpHistoryEntry =
+    ( List ( SectionID, ParameterRecord ), Bool, Float, String, String, KnobIDs )
 
 
 type alias ParametersDict =
@@ -83,7 +92,12 @@ type alias ModellingResults =
     , pdbFile : String
     , score : Float
     , residuesPerTurn : Float
+    , knobIDs : List (List String)
     }
+
+
+type alias KnobIDs =
+    List (List String)
 
 
 type alias OptimisationResults =
@@ -158,6 +172,19 @@ type RepOption
     | BallsAndSticks
     | Spheres
     | Points
+
+
+stringToBuildMode : String -> Result String BuildMode
+stringToBuildMode statusString =
+    case statusString of
+        "Basic" ->
+            Ok Basic
+
+        "Advanced" ->
+            Ok Advanced
+
+        _ ->
+            Err "String could not be converted to BuildMode."
 
 
 optStatusToString : OptStatus -> String

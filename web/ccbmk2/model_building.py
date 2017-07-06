@@ -5,6 +5,7 @@ import itertools
 import sys
 
 import isambard
+import isambard.add_ons.knobs_into_holes as kihs
 
 
 REGISTER_ADJUST = {
@@ -59,7 +60,9 @@ def build_coiled_coil(parameters, debug=False):
     coiled_coil.pack_new_sequences(sequences)
     mean_rpt_value = calculate_average_rpt(coiled_coil)
     score = coiled_coil.buff_interaction_energy.total_energy
-    return coiled_coil.pdb, score, mean_rpt_value
+    knobs = [k.knob_residue for k in kihs.find_kihs(coiled_coil)]
+    knob_ids = [[k.ampal_parent.id, k.id] for k in knobs]
+    return coiled_coil.pdb, score, mean_rpt_value, knob_ids
 
 
 def build_collagen(parameters, debug=False):
@@ -102,7 +105,8 @@ def build_collagen(parameters, debug=False):
     collagen.pack_new_sequences(sequences)
     mean_rpt_value = calculate_average_rpt(collagen)
     score = collagen.buff_interaction_energy.total_energy
-    return collagen.pdb, score, mean_rpt_value
+    knob_ids = [] # Collagen can't have KIHs
+    return collagen.pdb, score, mean_rpt_value, knob_ids
 
 
 def optimise_coiled_coil(parameters, debug=False):
@@ -137,6 +141,8 @@ def optimise_coiled_coil(parameters, debug=False):
     )
     opt.run_opt(20, 5, 2)
     top_model = opt.best_model
+    knobs = [k.knob_residue for k in kihs.find_kihs(top_model)]
+    knob_ids = [[k.ampal_parent.id, k.id] for k in knobs]
     optimised_parameters = {
         'radius': top_model.major_radii[0],
         'pitch': top_model.major_pitches[0],
@@ -147,7 +153,8 @@ def optimise_coiled_coil(parameters, debug=False):
     model_and_info = {
         'pdb': top_model.pdb,
         'mean_rpt_value': calculate_average_rpt(top_model),
-        'score': top_model.buff_interaction_energy.total_energy
+        'score': top_model.buff_interaction_energy.total_energy,
+        'knob_ids': knob_ids
     }
     return optimised_parameters, model_and_info
 
@@ -180,6 +187,7 @@ def optimise_collagen(parameters, debug=False):
     )
     opt.run_opt(20, 5, 2)
     top_model = opt.best_model
+    knob_ids = []
     optimised_parameters = {
         'radius': top_model.major_radii[0],
         'pitch': top_model.major_pitches[0],
@@ -190,7 +198,8 @@ def optimise_collagen(parameters, debug=False):
     model_and_info = {
         'pdb': top_model.pdb,
         'mean_rpt_value': calculate_average_rpt(top_model),
-        'score': top_model.buff_interaction_energy.total_energy
+        'score': top_model.buff_interaction_energy.total_energy,
+        'knob_ids': knob_ids
     }
     return optimised_parameters, model_and_info
 

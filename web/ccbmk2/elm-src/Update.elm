@@ -267,7 +267,7 @@ update msg model =
             }
                 ! [ retreiveOptimisation optJobId ]
 
-        ProcessModel (Ok { helixTypeString, pdbFile, score, residuesPerTurn }) ->
+        ProcessModel (Ok { helixTypeString, pdbFile, score, residuesPerTurn, knobIDs }) ->
             let
                 historyLength =
                     10
@@ -281,7 +281,9 @@ update msg model =
                             |> Dict.fromList
                     else
                         model.modelHistory
-                helixType = Result.withDefault Alpha (stringToHelixType helixTypeString)
+
+                helixType =
+                    Result.withDefault Alpha (stringToHelixType helixTypeString)
             in
                 { model
                     | helixType = helixType
@@ -289,11 +291,12 @@ update msg model =
                     , pdbFile = Just pdbFile
                     , score = Just score
                     , residuesPerTurn = Just residuesPerTurn
+                    , knobIDs = Just knobIDs
                     , building = False
                     , modelHistory =
                         Dict.insert
                             model.nextHistoryID
-                            ( model.parameters, False, score, helixType )
+                            ( model.parameters, False, score, helixType, Basic, knobIDs )
                             oldHistory
                     , nextHistoryID = model.nextHistoryID + 1
                 }
@@ -392,6 +395,9 @@ update msg model =
                         |> Dict.fromList
             }
                 ! []
+        
+        HighlightKnobs ->
+            model ! [ highlightKnobs (Maybe.withDefault [] model.knobIDs) ]
 
         DownloadPdb ->
             let
@@ -400,12 +406,13 @@ update msg model =
             in
                 model ! [ downloadPdb ( "ccbuilder_model.pdb", pdbFile ) ]
 
-        SetParametersAndBuild parameters helixType ->
+        SetParametersAndBuild parameters helixType buildMode ->
             if invalidParameterDict parameters then
                 model ! []
             else
                 { model
                     | helixType = helixType
+                    , buildMode = buildMode
                     , parameters = parameters
                     , currentInput = parametersDictToInputDict parameters
                     , oligomericState = Dict.toList parameters |> List.length
@@ -441,10 +448,19 @@ update msg model =
                     Dict.get hID model.modelHistory
             in
                 case oldEntry of
-                    Just ( parametersDict, visible, score, helixType ) ->
+                    Just ( parametersDict, visible, score, helixType, buildMode, knobIDs ) ->
                         { model
                             | modelHistory =
-                                Dict.insert hID ( parametersDict, not visible, score, helixType ) model.modelHistory
+                                Dict.insert
+                                    hID
+                                    ( parametersDict
+                                    , not visible
+                                    , score
+                                    , helixType
+                                    , buildMode
+                                    , knobIDs
+                                    )
+                                    model.modelHistory
                         }
                             ! []
 
@@ -505,13 +521,14 @@ sendCollagenBuildCmd parameters =
 
 modellingResultsDecoder : Json.Decode.Decoder ModellingResults
 modellingResultsDecoder =
-    Json.Decode.map5
+    Json.Decode.map6
         ModellingResults
         (field "model_id" string)
         (field "helix_type" string)
         (field "pdb" string)
         (field "score" float)
         (field "mean_rpt_value" float)
+        (field "knob_ids" (Json.Decode.list (Json.Decode.list string)))
 
 
 parameterRecordJson : ParameterRecord -> Json.Encode.Value

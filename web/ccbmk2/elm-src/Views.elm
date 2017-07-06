@@ -15,6 +15,7 @@ import Types
         ( Msg(..)
         , ParameterRecord
         , HistoryID
+        , HistoryEntry
         , ParametersDict
         , Parameter(..)
         , HelixType(..)
@@ -264,6 +265,12 @@ modelInfoPanel model =
             |> Maybe.withDefault ""
             |> \val -> input [ value val, readonly True ] []
         , br [] []
+        , button
+            [ class [ CCBButtonCss ]
+            , onClick HighlightKnobs
+            ]
+            [ text "Highlight Knobs" ]
+        , br [] []
         , downloadStructureButton model.pdbFile
         ]
 
@@ -307,11 +314,7 @@ downloadStructureButton pdbFile =
 -- Build History
 
 
-buildHistoryPanel :
-    Dict.Dict Int ( ParametersDict, Bool, Float, HelixType )
-    -> Bool
-    -> Bool
-    -> Html Msg
+buildHistoryPanel : Dict.Dict Int HistoryEntry -> Bool -> Bool -> Html Msg
 buildHistoryPanel modelHistory building visible =
     div
         [ class [ OverlayPanelCss ]
@@ -349,11 +352,8 @@ modelDetailTableHeader =
         ]
 
 
-modelParametersAsRow :
-    ( HistoryID, ( ParametersDict, Bool, Float, HelixType ) )
-    -> Bool
-    -> List (Html Msg)
-modelParametersAsRow ( hID, ( parameters, visible, score, helixType ) ) building =
+modelParametersAsRow : ( HistoryID, HistoryEntry ) -> Bool -> List (Html Msg)
+modelParametersAsRow ( hID, ( parameters, visible, score, helixType, buildMode, _ ) ) building =
     let
         foldedRows =
             Dict.values parameters
@@ -362,9 +362,9 @@ modelParametersAsRow ( hID, ( parameters, visible, score, helixType ) ) building
                 |> List.map (modelFoldedRow score)
     in
         if not visible then
-            [ modelHistoryTopRow hID parameters building visible score helixType ]
+            [ modelHistoryTopRow hID parameters building visible score helixType buildMode ]
         else
-            (modelHistoryTopRow hID parameters building visible score helixType)
+            (modelHistoryTopRow hID parameters building visible score helixType buildMode)
                 :: foldedRows
 
 
@@ -375,8 +375,9 @@ modelHistoryTopRow :
     -> Bool
     -> Float
     -> HelixType
+    -> BuildMode
     -> Html Msg
-modelHistoryTopRow hID parameters building visible score helixType =
+modelHistoryTopRow hID parameters building visible score helixType buildMode =
     let
         topRowParameters =
             Dict.values parameters
@@ -397,7 +398,7 @@ modelHistoryTopRow hID parameters building visible score helixType =
                     (parametersToRow topRowParameters score)
                 ++ [ button
                         [ class [ CCBButtonCss ]
-                        , onClick (SetParametersAndBuild parameters helixType)
+                        , onClick (SetParametersAndBuild parameters helixType buildMode)
                         , disabled building
                         ]
                         [ text "Rebuild" ]

@@ -1,3 +1,4 @@
 pypandoc
+scipy
 isambard
 pymongo

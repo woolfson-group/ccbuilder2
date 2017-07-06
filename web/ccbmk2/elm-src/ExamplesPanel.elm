@@ -9,6 +9,7 @@ import Html.Events exposing (..)
 import Html.CssHelpers
 import Svg
 import Svg.Attributes as SvgAtt
+import Tools exposing (chunks)
 import Types
     exposing
         ( Msg(..)
@@ -17,6 +18,7 @@ import Types
         , InputValues
         , Parameter(..)
         , HelixType(..)
+        , BuildMode(..)
         , Panel(..)
         )
 
@@ -39,58 +41,90 @@ examplesPanel building visible =
         , hidden <| not visible
         ]
         [ h2 [] [ text "Examples" ]
-        , div []
-            [ hr [] []
-            , h3 [] [ text "Basis Set" ]
-            , hr [] []
-            , exampleCCButton 2 basisSetDimer building
-            , br [] []
-            , text "CC Di"
-            , br [] []
-            , exampleCCButton 3 basisSetTrimer building
-            , br [] []
-            , text "CC Tri"
-            , br [] []
-            , exampleCCButton 4 basisSetTetramer building
-            , br [] []
-            , text "CC Tet"
-            ]
-        , div []
-            [ hr [] []
-            , h3 [] [ text "α-Helical Barrels" ]
-            , hr [] []
-            , exampleCCButton 5 largermerCCPent building
-            , br [] []
-            , text "CC Pent"
-            , br [] []
-            , exampleCCButton 6 largermerCCHex building
-            , br [] []
-            , text "CC Hex"
-            , br [] []
-            , exampleCCButton 6 largermerCCHex2 building
-            , br [] []
-            , text "CC Hex2"
-            , br [] []
-            , exampleCCButton 6 largermerCCHex3 building
-            , br [] []
-            , text "CC Hex3"
-            , br [] []
-            , exampleCCButton 7 largermerCCHept building
-            , br [] []
-            , text "CC Hept"
-            ]
+        , basisSet building |> examplesBlock
+        , barrels building |> examplesBlock
+        , collagens building |> examplesBlock
         ]
+
+
+examplesBlock : ( String, List ( String, Html Msg ) ) -> Html Msg
+examplesBlock ( sectionName, examples ) =
+    div
+        []
+        ([ h3 [] [ text sectionName ]
+         ]
+            ++ (chunks 3 examples
+                    |> List.map exampleRowDiv
+               )
+        )
+
+
+exampleRowDiv : List ( String, Html Msg ) -> Html Msg
+exampleRowDiv examples =
+    div [ class [ FlexContainerCss ] ] (List.map exampleButtonDiv examples)
+
+
+exampleButtonDiv : ( String, Html Msg ) -> Html Msg
+exampleButtonDiv ( exampleName, example ) =
+    div
+        [ class [ FlexItemCss ] ]
+        [ example
+        , br [] []
+        , text exampleName
+        ]
+
+
+basisSet : Bool -> ( String, List ( String, Html Msg ) )
+basisSet building =
+    ( "Basis Set"
+    , [ ( "CC Di", exampleCCButton 2 basisSetDimer building )
+      , ( "CC Tri", exampleCCButton 3 basisSetTrimer building )
+      , ( "CC Tet", exampleCCButton 4 basisSetTetramer building )
+      ]
+    )
+
+
+barrels : Bool -> ( String, List ( String, Html Msg ) )
+barrels building =
+    ( "α-Helical Barrels"
+    , [ ( "CC Pent", exampleCCButton 5 largermerCCPent building )
+      , ( "CC Hex", exampleCCButton 6 largermerCCHex building )
+      , ( "CC Hex2", exampleCCButton 6 largermerCCHex2 building )
+      , ( "CC Hex3", exampleCCButton 6 largermerCCHex3 building )
+      , ( "CC Hept", exampleCCButton 7 largermerCCHept building )
+      ]
+    )
+
+
+collagens : Bool -> ( String, List ( String, Html Msg ) )
+collagens building =
+    ( "Collagen"
+    , [ ( "Homo", exampleCollagenButton homoCollagen Basic building )
+      , ( "Hetero", exampleCollagenButton heteroCollagen Advanced building )
+      ]
+    )
 
 
 exampleCCButton : Int -> ParametersDict -> Bool -> Html Msg
 exampleCCButton os exampleParameters building =
     button
         [ class [ CCBButtonCss ]
-        , onClick <| SetParametersAndBuild exampleParameters Alpha
+        , onClick <| SetParametersAndBuild exampleParameters Alpha Basic
         , styles buttonStyling
         , disabled building
         ]
         [ ccIcon os 40 ]
+
+
+exampleCollagenButton : ParametersDict -> BuildMode -> Bool -> Html Msg
+exampleCollagenButton exampleParameters buildMode building =
+    button
+        [ class [ CCBButtonCss ]
+        , onClick <| SetParametersAndBuild exampleParameters Collagen buildMode
+        , styles buttonStyling
+        , disabled building
+        ]
+        [ ccIcon 3 40 ]
 
 
 tau : Float
@@ -341,6 +375,63 @@ largermerCCHept =
         , zShift = Just 0.0
         , linkedSuperHelRot = True
         }
+
+
+homoCollagen : ParametersDict
+homoCollagen =
+    makeHomoOligomerExample 3
+        { radius = Just 3.34
+        , pitch = Just 59.4
+        , phiCA = Just 20.2
+        , sequence = Just "GPPGPPGPPGPPGPPGPPGPPGPPGPP"
+        , register = "a"
+        , superHelRot = Just 0.0
+        , antiParallel = False
+        , zShift = Just 0.0
+        , linkedSuperHelRot = True
+        }
+
+
+heteroCollagen : ParametersDict
+heteroCollagen =
+    Dict.fromList
+        [ ( 1
+          , { radius = Just 3.34
+            , pitch = Just 59.4
+            , phiCA = Just 20.2
+            , sequence = Just "GPPGPPGPPGPPGARGQAGVMGFPGPP"
+            , register = "a"
+            , superHelRot = Just 0.0
+            , antiParallel = False
+            , zShift = Just 0.0
+            , linkedSuperHelRot = True
+            }
+          )
+        , ( 2
+          , { radius = Just 3.34
+            , pitch = Just 59.4
+            , phiCA = Just 20.2
+            , sequence = Just "GPPGPPGPPGPPGARGEPGNIGFPGPP"
+            , register = "a"
+            , superHelRot = Just 0.0
+            , antiParallel = False
+            , zShift = Just 0.0
+            , linkedSuperHelRot = True
+            }
+          )
+        , ( 3
+          , { radius = Just 3.34
+            , pitch = Just 59.4
+            , phiCA = Just 20.2
+            , sequence = Just "GPPGPPGPPGPPGARGQAGVMGFPGPP"
+            , register = "a"
+            , superHelRot = Just 0.0
+            , antiParallel = False
+            , zShift = Just 0.0
+            , linkedSuperHelRot = True
+            }
+          )
+        ]
 
 
 makeHomoOligomerExample : Int -> ParameterRecord -> ParametersDict
