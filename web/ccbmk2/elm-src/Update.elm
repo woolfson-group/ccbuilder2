@@ -557,7 +557,7 @@ sendOptimiseCmd : ParametersDict -> HelixType -> Int -> Cmd Msg
 sendOptimiseCmd parameters helixType heat =
     Http.send OptimisationSubmitted <|
         Http.post
-            "builder/api/v0.1/optimise/coiled-coil"
+            "builder/api/v0.1/optimise/model"
             (optimisationJson parameters helixType heat
                 |> Http.jsonBody
             )

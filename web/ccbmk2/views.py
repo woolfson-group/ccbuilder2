@@ -73,8 +73,8 @@ def build_and_record_model(request, helix_type):
     return model_record
 
 
-@app.route('/builder/api/v0.1/optimise/coiled-coil', methods=['POST'])
-def optimise_coiled_coil_model():
+@app.route('/builder/api/v0.1/optimise/model', methods=['POST'])
+def optimise_model():
     """Runs a parameter optimisation for a supplied model."""
     build_start_time = datetime.datetime.now()
     opt_id = database.create_opt_job_entry(request.json)

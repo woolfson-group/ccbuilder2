@@ -22452,7 +22452,7 @@ var _user$project$Update$sendOptimiseCmd = F3(
 			_user$project$Types$OptimisationSubmitted,
 			A3(
 				_elm_lang$http$Http$post,
-				'builder/api/v0.1/optimise/coiled-coil',
+				'builder/api/v0.1/optimise/model',
 				_elm_lang$http$Http$jsonBody(
 					A3(_user$project$Update$optimisationJson, parameters, helixType, heat)),
 				_elm_lang$core$Json_Decode$string));
