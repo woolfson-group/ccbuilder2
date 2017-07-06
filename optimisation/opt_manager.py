@@ -81,8 +81,8 @@ def run_optimisation(opt_job_id, helix_type, parameters):
     else:
         raise ValueError('Unknown helix type.')
     model_id = database.store_model(
-        opt_job_id, model_and_info['pdb'],
-        model_and_info['score'], model_and_info['mean_rpt_value'])
+        opt_job_id, model_and_info['pdb'], model_and_info['score'],
+        model_and_info['mean_rpt_value'], model_and_info['knob_ids'])
     database.opt_jobs.update_one(
         {'_id': opt_job_id},
         {'$set': {

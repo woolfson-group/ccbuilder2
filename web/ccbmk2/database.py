@@ -99,13 +99,14 @@ def log_build_info(request, build_time, build_request_id):
     return build_info_id
 
 
-def store_model(request_log_id, pdb, score, rpt):
+def store_model(request_log_id, pdb, score, rpt, knob_ids):
     """Stores a model in the database."""
     model = {
         '_id': request_log_id,
         'pdb': pdb,
         'score': score,
-        'mean_rpt_value': rpt
+        'mean_rpt_value': rpt,
+        'knob_ids': knob_ids
     }
     model_id = models.insert_one(model).inserted_id
     return model_id

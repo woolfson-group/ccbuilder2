@@ -48,23 +48,25 @@ def build_and_record_model(request, helix_type):
     if model_record is None:
         build_start_time = datetime.datetime.now()
         if helix_type is model_building.HelixType.ALPHA:
-            pdb, score, rpt = model_building.build_coiled_coil(
+            pdb, score, rpt, knob_ids = model_building.build_coiled_coil(
                 parameters_list, debug=app.debug)
         elif helix_type is model_building.HelixType.COLLAGEN:
-            pdb, score, rpt = model_building.build_collagen(
+            pdb, score, rpt, knob_ids = model_building.build_collagen(
                 parameters_list, debug=app.debug)
         else:
             raise ValueError('Unknown helix type.')
         build_start_end = datetime.datetime.now()
         build_time = build_start_end - build_start_time
         database.log_build_info(request, build_time, build_request_id)
-        model_id = database.store_model(build_request_id, pdb, score, rpt)
+        model_id = database.store_model(
+            build_request_id, pdb, score, rpt, knob_ids)
         model_record = {
             'model_id': str(model_id),
             'helix_type': helix_type.name,
             'pdb': pdb,
             'score': score,
             'mean_rpt_value': rpt,
+            'knob_ids': knob_ids
         }
     else:
         # Change to string from ObjectID for response
@@ -101,7 +103,8 @@ def get_optimisation_result():
             'helix_type': opt_job['helix_type'],
             'pdb': model['pdb'],
             'score': model['score'],
-            'mean_rpt_value': model['mean_rpt_value']
+            'mean_rpt_value': model['mean_rpt_value'],
+            'knob_ids': model['knob_ids']
         },
         'parameters': opt_job['final_parameters'],
         'oligomeric_state': opt_job['oligomeric_state']

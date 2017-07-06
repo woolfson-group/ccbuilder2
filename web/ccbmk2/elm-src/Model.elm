@@ -7,12 +7,15 @@ import Types
         , ParameterRecord
         , SectionID
         , HistoryID
+        , HistoryEntry
+        , ExpHistoryEntry
         , ParametersDict
         , emptyParameterRecord
         , InputValues
         , InputValuesDict
         , emptyInput
         , ModellingResults
+        , KnobIDs
         , OptimisationResults
         , Parameter(..)
         , HelixType(..)
@@ -43,10 +46,12 @@ type alias Model =
     , pdbFile : Maybe String
     , score : Maybe Float
     , residuesPerTurn : Maybe Float
+    , knobIDs : Maybe KnobIDs
     , building : Bool
     , optJobs : List ( String, OptStatus )
     , heat : Int
-    , modelHistory : Dict.Dict HistoryID ( ParametersDict, Bool, Float, HelixType, BuildMode )
+    , modelHistory :
+        Dict.Dict HistoryID HistoryEntry
     , nextHistoryID : HistoryID
     , panelVisibility : PanelVisibility
     , currentRepresentation : Representation
@@ -61,11 +66,12 @@ type alias ExportableModel =
     , pdbFile : Maybe String
     , score : Maybe Float
     , residuesPerTurn : Maybe Float
+    , knobIDs : Maybe KnobIDs
     , building : Bool
     , optJobs : List ( String, String )
     , heat : Int
     , modelHistory :
-        List ( HistoryID, ( List ( SectionID, ParameterRecord ), Bool, Float, String, String ) )
+        List ( HistoryID, ExpHistoryEntry )
     , nextHistoryID : HistoryID
     , panelVisibility : PanelVisibility
     , currentRepresentation : Representation
@@ -83,6 +89,7 @@ emptyModel =
     , pdbFile = Nothing
     , score = Nothing
     , residuesPerTurn = Nothing
+    , knobIDs = Nothing
     , building = False
     , optJobs = []
     , heat = 298
@@ -107,6 +114,7 @@ modelToExportable model =
     , pdbFile = model.pdbFile
     , score = model.score
     , residuesPerTurn = model.residuesPerTurn
+    , knobIDs = model.knobIDs
     , building = False
     , optJobs = exportableOptJobs model.optJobs
     , heat = model.heat
@@ -114,9 +122,9 @@ modelToExportable model =
         model.modelHistory
             |> Dict.toList
             |> List.map
-                (\( hid, ( params, vis, score, hType, bMode ) ) ->
+                (\( hid, ( params, vis, score, hType, bMode, knobIDs ) ) ->
                     ( hid
-                    , ( Dict.toList params, vis, score, toString hType, toString bMode )
+                    , ( Dict.toList params, vis, score, toString hType, toString bMode, knobIDs )
                     )
                 )
     , nextHistoryID = model.nextHistoryID
@@ -136,19 +144,21 @@ exportableToModel exportableModel =
     , pdbFile = exportableModel.pdbFile
     , score = exportableModel.score
     , residuesPerTurn = exportableModel.residuesPerTurn
+    , knobIDs = exportableModel.knobIDs
     , building = False
     , optJobs = modelOptJobs exportableModel.optJobs
     , heat = exportableModel.heat
     , modelHistory =
         exportableModel.modelHistory
             |> List.map
-                (\( hid, ( params, vis, score, hType, bMode ) ) ->
+                (\( hid, ( params, vis, score, hType, bMode, knobIDs ) ) ->
                     ( hid
                     , ( Dict.fromList params
                       , vis
                       , score
                       , Result.withDefault Alpha (stringToHelixType hType)
                       , Result.withDefault Basic (stringToBuildMode bMode)
+                      , knobIDs
                       )
                     )
                 )

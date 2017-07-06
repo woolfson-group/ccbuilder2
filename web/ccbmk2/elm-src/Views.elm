@@ -15,6 +15,7 @@ import Types
         ( Msg(..)
         , ParameterRecord
         , HistoryID
+        , HistoryEntry
         , ParametersDict
         , Parameter(..)
         , HelixType(..)
@@ -264,6 +265,12 @@ modelInfoPanel model =
             |> Maybe.withDefault ""
             |> \val -> input [ value val, readonly True ] []
         , br [] []
+        , button
+            [ class [ CCBButtonCss ]
+            , onClick HighlightKnobs
+            ]
+            [ text "Highlight Knobs" ]
+        , br [] []
         , downloadStructureButton model.pdbFile
         ]
 
@@ -307,11 +314,7 @@ downloadStructureButton pdbFile =
 -- Build History
 
 
-buildHistoryPanel :
-    Dict.Dict Int ( ParametersDict, Bool, Float, HelixType, BuildMode )
-    -> Bool
-    -> Bool
-    -> Html Msg
+buildHistoryPanel : Dict.Dict Int HistoryEntry -> Bool -> Bool -> Html Msg
 buildHistoryPanel modelHistory building visible =
     div
         [ class [ OverlayPanelCss ]
@@ -349,11 +352,8 @@ modelDetailTableHeader =
         ]
 
 
-modelParametersAsRow :
-    ( HistoryID, ( ParametersDict, Bool, Float, HelixType, BuildMode ) )
-    -> Bool
-    -> List (Html Msg)
-modelParametersAsRow ( hID, ( parameters, visible, score, helixType, buildMode ) ) building =
+modelParametersAsRow : ( HistoryID, HistoryEntry ) -> Bool -> List (Html Msg)
+modelParametersAsRow ( hID, ( parameters, visible, score, helixType, buildMode, _ ) ) building =
     let
         foldedRows =
             Dict.values parameters
