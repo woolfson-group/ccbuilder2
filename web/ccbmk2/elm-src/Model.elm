@@ -15,6 +15,7 @@ import Types
         , ModellingResults
         , OptimisationResults
         , Parameter(..)
+        , HelixType(..)
         , BuildMode(..)
         , OptStatus(..)
         , optStatusToString
@@ -23,7 +24,12 @@ import Types
         , PanelVisibility
         , Representation
         , RepOption(..)
+        , stringToHelixType
         )
+
+
+-- Each entry in the model history contains:
+-- ParametersDict, whether it is expanded, score, HelixType
 
 
 type alias Model =
@@ -31,15 +37,15 @@ type alias Model =
     , currentInput : InputValuesDict
     , parameterClipBoard : Maybe ParameterRecord
     , oligomericState : Int
+    , helixType : HelixType
     , buildMode : BuildMode
     , pdbFile : Maybe String
     , score : Maybe Float
     , residuesPerTurn : Maybe Float
     , building : Bool
-    , optimising : Bool
     , optJobs : List ( String, OptStatus )
     , heat : Int
-    , modelHistory : Dict.Dict HistoryID ( ParametersDict, Bool, Float )
+    , modelHistory : Dict.Dict HistoryID ( ParametersDict, Bool, Float, HelixType )
     , nextHistoryID : HistoryID
     , panelVisibility : PanelVisibility
     , currentRepresentation : Representation
@@ -55,10 +61,10 @@ type alias ExportableModel =
     , score : Maybe Float
     , residuesPerTurn : Maybe Float
     , building : Bool
-    , optimising : Bool
     , optJobs : List ( String, String )
     , heat : Int
-    , modelHistory : List ( HistoryID, ( List ( SectionID, ParameterRecord ), Bool, Float ) )
+    , modelHistory :
+        List ( HistoryID, ( List ( SectionID, ParameterRecord ), Bool, Float, String ) )
     , nextHistoryID : HistoryID
     , panelVisibility : PanelVisibility
     , currentRepresentation : Representation
@@ -71,12 +77,12 @@ emptyModel =
     , currentInput = Dict.fromList [ ( 1, emptyInput ), ( 2, emptyInput ) ]
     , parameterClipBoard = Nothing
     , oligomericState = 2
+    , helixType = Alpha
     , buildMode = Basic
     , pdbFile = Nothing
     , score = Nothing
     , residuesPerTurn = Nothing
     , building = False
-    , optimising = False
     , optJobs = []
     , heat = 298
     , modelHistory = Dict.empty
@@ -101,16 +107,15 @@ modelToExportable model =
     , score = model.score
     , residuesPerTurn = model.residuesPerTurn
     , building = False
-    , optimising = False
     , optJobs = exportableOptJobs model.optJobs
     , heat = model.heat
     , modelHistory =
         model.modelHistory
             |> Dict.toList
             |> List.map
-                (\( hid, ( params, vis, score ) ) ->
+                (\( hid, ( params, vis, score, hType ) ) ->
                     ( hid
-                    , ( Dict.toList params, vis, score )
+                    , ( Dict.toList params, vis, score, toString hType )
                     )
                 )
     , nextHistoryID = model.nextHistoryID
@@ -125,20 +130,24 @@ exportableToModel exportableModel =
     , currentInput = Dict.fromList exportableModel.currentInput
     , parameterClipBoard = exportableModel.parameterClipBoard
     , oligomericState = exportableModel.oligomericState
+    , helixType = Alpha
     , buildMode = Basic
     , pdbFile = exportableModel.pdbFile
     , score = exportableModel.score
     , residuesPerTurn = exportableModel.residuesPerTurn
     , building = False
-    , optimising = False
     , optJobs = modelOptJobs exportableModel.optJobs
     , heat = exportableModel.heat
     , modelHistory =
         exportableModel.modelHistory
             |> List.map
-                (\( hid, ( params, vis, score ) ) ->
+                (\( hid, ( params, vis, score, hType ) ) ->
                     ( hid
-                    , ( Dict.fromList params, vis, score )
+                    , ( Dict.fromList params
+                      , vis
+                      , score
+                      , Result.withDefault Alpha (stringToHelixType hType)
+                      )
                     )
                 )
             |> Dict.fromList

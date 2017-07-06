@@ -13,7 +13,7 @@ models = client.ccbuilder.models
 opt_jobs = client.ccbuilder.opt_jobs
 
 
-def store_build_request(parameters_list, number_for_save=5):
+def store_build_request(parameters_list, helix_type, number_for_save=5):
     """Saves the requested parameters in the database.
 
     An additional 'requested' field is added to the request before
@@ -26,6 +26,10 @@ def store_build_request(parameters_list, number_for_save=5):
     parameters_list : [dict]
         Json body of the Http request that contains a list of build
         parameter dicts.
+
+    helix_type : model_building.HelixType
+        HelixType enumerable contains options that are available
+        for helix types.
 
     number_for_save : int
         The number of times the model must be requested before
@@ -45,9 +49,12 @@ def store_build_request(parameters_list, number_for_save=5):
     """
     chain_ids = list(map(get_chain_parameters_id, parameters_list))
     build_request = build_requests.find_one(
-        {'parameter_ids': chain_ids})
+        {'parameter_ids': chain_ids, 'helix_type': helix_type.name})
     if build_request is None:
-        build_request = {'parameter_ids': chain_ids}
+        build_request = {
+            'parameter_ids': chain_ids,
+            'helix_type': helix_type.name
+        }
         build_request['requested'] = 1
         build_request_id = build_requests.insert_one(
             build_request
@@ -66,6 +73,10 @@ def store_build_request(parameters_list, number_for_save=5):
 
 
 def get_chain_parameters_id(chain_parameters):
+    """Finds the '_id' of parameters in the parameter_stores.
+
+    Adds parameters if they are not found.
+    """
     parameter_record = parameters_store.find_one(
         chain_parameters)
     if parameter_record:
@@ -76,13 +87,13 @@ def get_chain_parameters_id(chain_parameters):
     return pr_id
 
 
-def log_build_info(request, build_time, request_log_id):
+def log_build_info(request, build_time, build_request_id):
     """Saves informations about the build process to the database."""
     build_info = {
         'ip': request.remote_addr,
         'date': datetime.datetime.now(),
         'build_time': build_time.total_seconds(),
-        'parameters_id': request_log_id
+        'build_request_id': build_request_id
     }
     build_info_id = build_log.insert_one(build_info).inserted_id
     return build_info_id
@@ -114,6 +125,7 @@ def create_opt_job_entry(request):
         ID for the submitted optimsation job.
     """
     opt_job = {
+        'helix_type': request['Helix Type'],
         'initial_parameter_ids':
             [get_chain_parameters_id(p) for p in request['Parameters']],
         'oligomeric_state': len(request['Parameters']),
@@ -129,6 +141,7 @@ def create_opt_job_entry(request):
 
 
 class JobStatus(enum.Enum):
+    """Options availble for the status of optimisation jobs."""
     SUBMITTED = 1
     QUEUED = 2
     RUNNING = 3

@@ -57,7 +57,7 @@ def get_and_process_opt_jobs(opt_job_queue):
             opt_job['initial_parameter_ids']))
         update_job_status(job_id, database.JobStatus.RUNNING)
         print("Running opt job {}!".format(job_id), file=sys.stderr)
-        model_id = run_optimisation(job_id, parameters)
+        model_id = run_optimisation(job_id, opt_job['helix_type'], parameters)
         print("Finished opt job {}!".format(job_id), file=sys.stderr)
     return
 
@@ -70,10 +70,16 @@ def update_job_status(opt_job_id, status):
     return
 
 
-def run_optimisation(opt_job_id, parameters):
+def run_optimisation(opt_job_id, helix_type, parameters):
     """"""
-    optimised_parameters, model_and_info = model_building.optimise_coiled_coil(
-        parameters, debug=True)
+    if helix_type == "ALPHA":
+        optimised_parameters, model_and_info = model_building.optimise_coiled_coil(
+            parameters, debug=True)
+    elif helix_type == "COLLAGEN":
+        optimised_parameters, model_and_info = model_building.optimise_collagen(
+            parameters, debug=True)
+    else:
+        raise ValueError('Unknown helix type.')
     model_id = database.store_model(
         opt_job_id, model_and_info['pdb'],
         model_and_info['score'], model_and_info['mean_rpt_value'])

@@ -27,6 +27,7 @@ import Types
         , ModellingResults
         , OptimisationResults
         , Parameter(..)
+        , HelixType(..)
         , BuildMode(..)
         , OptStatus(..)
         , stringToOptStatus
@@ -35,10 +36,14 @@ import Types
         , Representation
         , RepOption(..)
         , optStatusToString
+        , helixTypeToString
+        , stringToHelixType
         , emptyInput
         , emptyParameterRecord
         , parameterRecordWithDefault
         , inputRecordWithDefault
+        , parametersToInput
+        , parametersDictToInputDict
         )
 
 
@@ -90,6 +95,57 @@ update msg model =
                 }
                     ! []
 
+        ChangeHelixType helixType ->
+            let
+                oligomericState =
+                    3
+
+                newHelixType =
+                    case helixType of
+                        "Alpha" ->
+                            Alpha
+
+                        "Collagen" ->
+                            Collagen
+
+                        _ ->
+                            model.helixType
+
+                newParameters =
+                    if newHelixType /= model.helixType then
+                        case newHelixType of
+                            Collagen ->
+                                if model.oligomericState > 3 then
+                                    Dict.toList model.parameters
+                                        |> List.take oligomericState
+                                        |> Dict.fromList
+                                else if model.oligomericState < 3 then
+                                    Dict.values model.parameters
+                                        |> List.head
+                                        |> Maybe.withDefault emptyParameterRecord
+                                        |> List.repeat oligomericState
+                                        |> List.map2 (,)
+                                            (List.range 1 oligomericState)
+                                        |> Dict.fromList
+                                else
+                                    model.parameters
+
+                            Alpha ->
+                                model.parameters
+                    else
+                        model.parameters
+
+                newInput =
+                    parametersDictToInputDict newParameters
+            in
+                { model
+                    | helixType = newHelixType
+                    , oligomericState = oligomericState
+                    , parameters = newParameters
+                    , currentInput = newInput
+                }
+                    ! [ Task.perform NoOp (Process.sleep (10 * Time.millisecond)) ]
+
         ChangeBuildMode buildMode ->
             let
                 newBuildMode =
@@ -102,8 +158,31 @@ update msg model =
 
                         _ ->
                             model.buildMode
+
+                newParameters =
+                    if newBuildMode /= model.buildMode then
+                        case newBuildMode of
+                            Basic ->
+                                Dict.values model.parameters
+                                    |> List.head
+                                    |> Maybe.withDefault emptyParameterRecord
+                                    |> List.repeat model.oligomericState
+                                    |> List.map2 (,) (List.range 1 model.oligomericState)
+                                    |> Dict.fromList
+
+                            Advanced ->
+                                model.parameters
+                    else
+                        model.parameters
+
+                newInput =
+                    parametersDictToInputDict newParameters
             in
-                { model | buildMode = newBuildMode }
+                { model
+                    | buildMode = newBuildMode
+                    , parameters = newParameters
+                    , currentInput = newInput
+                }
                     ! [ Task.perform NoOp (Process.sleep (10 * Time.millisecond)) ]
 
         Build ->
@@ -117,7 +196,13 @@ update msg model =
                         , panelVisibility =
                             PanelVisibility False False False False False
                     }
-                        ! [ sendBuildCmd model.parameters ]
+                        ! [ case model.helixType of
+                                Alpha ->
+                                    sendBuildCmd model.parameters
+
+                                Collagen ->
+                                    sendCollagenBuildCmd model.parameters
+                          ]
                 else
                     model ! []
 
@@ -132,9 +217,10 @@ update msg model =
                             { panelVisibility
                                 | buildPanel = False
                                 , examplesPanel = False
+                                , optimisePanel = False
                             }
                     }
-                        ! [ sendOptimiseCmd model.parameters model.heat ]
+                        ! [ sendOptimiseCmd model.parameters model.helixType model.heat ]
                 else
                     model ! []
 
@@ -181,7 +267,7 @@ update msg model =
             }
                 ! [ retreiveOptimisation optJobId ]
 
-        ProcessModel (Ok { pdbFile, score, residuesPerTurn }) ->
+        ProcessModel (Ok { helixTypeString, pdbFile, score, residuesPerTurn }) ->
             let
                 historyLength =
                     10
@@ -195,15 +281,20 @@ update msg model =
                             |> Dict.fromList
                     else
                         model.modelHistory
+                helixType = Result.withDefault Alpha (stringToHelixType helixTypeString)
             in
                 { model
-                    | currentInput = parametersDictToInputDict model.parameters
+                    | helixType = helixType
+                    , currentInput = parametersDictToInputDict model.parameters
                     , pdbFile = Just pdbFile
                     , score = Just score
                     , residuesPerTurn = Just residuesPerTurn
                     , building = False
                     , modelHistory =
-                        Dict.insert model.nextHistoryID ( model.parameters, False, score ) oldHistory
+                        Dict.insert
+                            model.nextHistoryID
+                            ( model.parameters, False, score, helixType )
+                            oldHistory
                     , nextHistoryID = model.nextHistoryID + 1
                 }
                     ! [ showStructure ( pdbFile, model.currentRepresentation )
@@ -229,6 +320,7 @@ update msg model =
                     , superHelRot = Just 0
                     , zShift = Just 0
                     }
+
                 parametersDict =
                     List.map2 (,)
                         (List.range 1 oligomericState)
@@ -308,12 +400,13 @@ update msg model =
             in
                 model ! [ downloadPdb ( "ccbuilder_model.pdb", pdbFile ) ]
 
-        SetParametersAndBuild parameters ->
+        SetParametersAndBuild parameters helixType ->
             if invalidParameterDict parameters then
                 model ! []
             else
                 { model
-                    | parameters = parameters
+                    | helixType = helixType
+                    , parameters = parameters
                     , currentInput = parametersDictToInputDict parameters
                     , oligomericState = Dict.toList parameters |> List.length
                 }
@@ -348,10 +441,10 @@ update msg model =
                     Dict.get hID model.modelHistory
             in
                 case oldEntry of
-                    Just ( parametersDict, visible, score ) ->
+                    Just ( parametersDict, visible, score, helixType ) ->
                         { model
                             | modelHistory =
-                                Dict.insert hID ( parametersDict, not visible, score ) model.modelHistory
+                                Dict.insert hID ( parametersDict, not visible, score, helixType ) model.modelHistory
                         }
                             ! []
 
@@ -397,11 +490,25 @@ sendBuildCmd parameters =
             modellingResultsDecoder
 
 
+sendCollagenBuildCmd : ParametersDict -> Cmd Msg
+sendCollagenBuildCmd parameters =
+    Http.send ProcessModel <|
+        Http.post
+            "builder/api/v0.1/build/collagen"
+            (Json.Encode.object
+                [ ( "Parameters", parametersDictToListJson parameters )
+                ]
+                |> Http.jsonBody
+            )
+            modellingResultsDecoder
+
+
 modellingResultsDecoder : Json.Decode.Decoder ModellingResults
 modellingResultsDecoder =
-    Json.Decode.map4
+    Json.Decode.map5
         ModellingResults
         (field "model_id" string)
+        (field "helix_type" string)
         (field "pdb" string)
         (field "score" float)
         (field "mean_rpt_value" float)
@@ -422,6 +529,7 @@ parameterRecordJson parameters =
           )
         , ( "Orientation", parameters.antiParallel |> Json.Encode.bool )
         , ( "Z-Shift", parameters.zShift |> Maybe.withDefault 0 |> Json.Encode.float )
+        , ( "Linked SHR", parameters.linkedSuperHelRot |> Json.Encode.bool )
         ]
 
 
@@ -436,20 +544,21 @@ parametersDictToListJson parameters =
 -- Optimisation Cmd
 
 
-optimisationJson : ParametersDict -> Int -> Json.Encode.Value
-optimisationJson parameters heat =
+optimisationJson : ParametersDict -> HelixType -> Int -> Json.Encode.Value
+optimisationJson parameters helixType heat =
     Json.Encode.object
         [ ( "Parameters", parametersDictToListJson parameters )
+        , ( "Helix Type", Json.Encode.string (helixTypeToString helixType) )
         , ( "Heat", Json.Encode.int heat )
         ]
 
 
-sendOptimiseCmd : ParametersDict -> Int -> Cmd Msg
-sendOptimiseCmd parameters heat =
+sendOptimiseCmd : ParametersDict -> HelixType -> Int -> Cmd Msg
+sendOptimiseCmd parameters helixType heat =
     Http.send OptimisationSubmitted <|
         Http.post
-            "builder/api/v0.1/optimise/coiled-coil"
-            (optimisationJson parameters heat
+            "builder/api/v0.1/optimise/model"
+            (optimisationJson parameters helixType heat
                 |> Http.jsonBody
             )
             Json.Decode.string
@@ -511,56 +620,6 @@ basicParametersToRecord radius pitch phiCA sequence register =
     , zShift = Nothing
     , linkedSuperHelRot = True
     }
-
-
-parametersDictToInputDict : ParametersDict -> InputValuesDict
-parametersDictToInputDict parameters =
-    Dict.toList parameters
-        |> List.map (\( k, v ) -> ( k, parametersToInput v ))
-        |> Dict.fromList
-
-
-parametersToInput : ParameterRecord -> InputValues
-parametersToInput parameterRecord =
-    let
-        rad =
-            maybeNumberToString parameterRecord.radius
-
-        pit =
-            maybeNumberToString parameterRecord.pitch
-
-        phi =
-            maybeNumberToString parameterRecord.phiCA
-
-        seq =
-            Maybe.withDefault "" parameterRecord.sequence
-
-        reg =
-            parameterRecord.register
-
-        rot =
-            maybeNumberToString parameterRecord.superHelRot
-
-        ant =
-            toString parameterRecord.antiParallel
-
-        zsh =
-            maybeNumberToString parameterRecord.zShift
-
-        lsh =
-            toString parameterRecord.linkedSuperHelRot
-    in
-        InputValues rad pit phi seq reg rot ant zsh lsh
-
-
-maybeNumberToString : Maybe number -> String
-maybeNumberToString mNum =
-    case mNum of
-        Just num ->
-            toString num
-
-        Nothing ->
-            ""
 
 
 togglePanelVisibility : Panel -> PanelVisibility -> PanelVisibility
