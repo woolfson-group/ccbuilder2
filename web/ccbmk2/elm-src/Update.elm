@@ -293,7 +293,7 @@ update msg model =
                     , modelHistory =
                         Dict.insert
                             model.nextHistoryID
-                            ( model.parameters, False, score, helixType )
+                            ( model.parameters, False, score, helixType, Basic )
                             oldHistory
                     , nextHistoryID = model.nextHistoryID + 1
                 }
@@ -400,12 +400,13 @@ update msg model =
             in
                 model ! [ downloadPdb ( "ccbuilder_model.pdb", pdbFile ) ]
 
-        SetParametersAndBuild parameters helixType ->
+        SetParametersAndBuild parameters helixType buildMode ->
             if invalidParameterDict parameters then
                 model ! []
             else
                 { model
                     | helixType = helixType
+                    , buildMode = buildMode
                     , parameters = parameters
                     , currentInput = parametersDictToInputDict parameters
                     , oligomericState = Dict.toList parameters |> List.length
@@ -441,10 +442,12 @@ update msg model =
                     Dict.get hID model.modelHistory
             in
                 case oldEntry of
-                    Just ( parametersDict, visible, score, helixType ) ->
+                    Just ( parametersDict, visible, score, helixType, buildMode ) ->
                         { model
                             | modelHistory =
-                                Dict.insert hID ( parametersDict, not visible, score, helixType ) model.modelHistory
+                                Dict.insert 
+                                    hID 
+                                    ( parametersDict, not visible, score, helixType, buildMode ) model.modelHistory
                         }
                             ! []
 

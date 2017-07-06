@@ -25,7 +25,7 @@ type Msg
     | SetOligomericState String
     | Clear
     | DownloadPdb
-    | SetParametersAndBuild ParametersDict HelixType
+    | SetParametersAndBuild ParametersDict HelixType BuildMode
     | KeyMsg Keyboard.KeyCode
     | TogglePanel Panel
     | ExpandHistory HistoryID
@@ -158,6 +158,19 @@ type RepOption
     | BallsAndSticks
     | Spheres
     | Points
+
+
+stringToBuildMode : String -> Result String BuildMode
+stringToBuildMode statusString =
+    case statusString of
+        "Basic" ->
+            Ok Basic
+
+        "Advanced" ->
+            Ok Advanced
+
+        _ ->
+            Err "String could not be converted to BuildMode."
 
 
 optStatusToString : OptStatus -> String

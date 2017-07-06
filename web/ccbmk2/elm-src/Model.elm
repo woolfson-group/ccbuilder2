@@ -24,6 +24,7 @@ import Types
         , PanelVisibility
         , Representation
         , RepOption(..)
+        , stringToBuildMode
         , stringToHelixType
         )
 
@@ -45,7 +46,7 @@ type alias Model =
     , building : Bool
     , optJobs : List ( String, OptStatus )
     , heat : Int
-    , modelHistory : Dict.Dict HistoryID ( ParametersDict, Bool, Float, HelixType )
+    , modelHistory : Dict.Dict HistoryID ( ParametersDict, Bool, Float, HelixType, BuildMode )
     , nextHistoryID : HistoryID
     , panelVisibility : PanelVisibility
     , currentRepresentation : Representation
@@ -64,7 +65,7 @@ type alias ExportableModel =
     , optJobs : List ( String, String )
     , heat : Int
     , modelHistory :
-        List ( HistoryID, ( List ( SectionID, ParameterRecord ), Bool, Float, String ) )
+        List ( HistoryID, ( List ( SectionID, ParameterRecord ), Bool, Float, String, String ) )
     , nextHistoryID : HistoryID
     , panelVisibility : PanelVisibility
     , currentRepresentation : Representation
@@ -113,9 +114,9 @@ modelToExportable model =
         model.modelHistory
             |> Dict.toList
             |> List.map
-                (\( hid, ( params, vis, score, hType ) ) ->
+                (\( hid, ( params, vis, score, hType, bMode ) ) ->
                     ( hid
-                    , ( Dict.toList params, vis, score, toString hType )
+                    , ( Dict.toList params, vis, score, toString hType, toString bMode )
                     )
                 )
     , nextHistoryID = model.nextHistoryID
@@ -141,12 +142,13 @@ exportableToModel exportableModel =
     , modelHistory =
         exportableModel.modelHistory
             |> List.map
-                (\( hid, ( params, vis, score, hType ) ) ->
+                (\( hid, ( params, vis, score, hType, bMode ) ) ->
                     ( hid
                     , ( Dict.fromList params
                       , vis
                       , score
                       , Result.withDefault Alpha (stringToHelixType hType)
+                      , Result.withDefault Basic (stringToBuildMode bMode)
                       )
                     )
                 )
