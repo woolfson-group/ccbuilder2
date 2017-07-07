@@ -25207,8 +25207,17 @@ var _user$project$Views$showInfoBox = function (infoBox) {
 								_elm_lang$html$Html$button,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$CloseInfo),
-									_1: {ctor: '[]'}
+									_0: _user$project$Views$class(
+										{
+											ctor: '::',
+											_0: _user$project$BuilderCss$CCBButtonCss,
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$CloseInfo),
+										_1: {ctor: '[]'}
+									}
 								},
 								{
 									ctor: '::',

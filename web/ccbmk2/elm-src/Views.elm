@@ -580,7 +580,11 @@ showInfoBox infoBox =
             |> Markdown.toHtml []
         , div
             []
-            [ button [ onClick CloseInfo ] [ text "Close" ]
+            [ button
+                [ class [ CCBButtonCss ]
+                , onClick CloseInfo
+                ]
+                [ text "Close" ]
             ]
         ]
 
