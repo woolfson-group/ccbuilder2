@@ -195,6 +195,7 @@ update msg model =
                         | building = True
                         , panelVisibility =
                             PanelVisibility False False False False False
+                        , activeInfoBox = Nothing
                     }
                         ! [ case model.helixType of
                                 Alpha ->
@@ -395,7 +396,7 @@ update msg model =
                         |> Dict.fromList
             }
                 ! []
-        
+
         HighlightKnobs ->
             model ! [ highlightKnobs (Maybe.withDefault [] model.knobIDs) ]
 
@@ -435,7 +436,10 @@ update msg model =
                     model ! []
 
         TogglePanel panel ->
-            { model | panelVisibility = togglePanelVisibility panel model.panelVisibility }
+            { model
+                | panelVisibility = togglePanelVisibility panel model.panelVisibility
+                , activeInfoBox = Nothing
+            }
                 {--This task is required to allow the DOM to be rendered
                 if it isn't included then the drop down menus will show thead
                 incorrect option. --}
@@ -479,6 +483,24 @@ update msg model =
 
         StoreModel ->
             model ! [ setStorage <| modelToExportable model ]
+
+        ShowInfo infoBox ->
+            { model
+                | activeInfoBox =
+                    case model.activeInfoBox of
+                        Just currentInfoBox ->
+                            if infoBox == currentInfoBox then
+                                Nothing
+                            else
+                                Just infoBox
+
+                        Nothing ->
+                            Just infoBox
+            }
+                ! []
+
+        CloseInfo ->
+            { model | activeInfoBox = Nothing } ! []
 
         NoOp _ ->
             model ! []

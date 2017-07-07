@@ -13995,6 +13995,146 @@ var _elm_lang$svg$Svg_Attributes$accumulate = _elm_lang$virtual_dom$VirtualDom$a
 var _elm_lang$svg$Svg_Attributes$accelerate = _elm_lang$virtual_dom$VirtualDom$attribute('accelerate');
 var _elm_lang$svg$Svg_Attributes$accentHeight = _elm_lang$virtual_dom$VirtualDom$attribute('accent-height');
 
+var _evancz$elm_markdown$Native_Markdown = function() {
+
+
+// VIRTUAL-DOM WIDGETS
+
+function toHtml(options, factList, rawMarkdown)
+{
+	var model = {
+		options: options,
+		markdown: rawMarkdown
+	};
+	return _elm_lang$virtual_dom$Native_VirtualDom.custom(factList, model, implementation);
+}
+
+
+// WIDGET IMPLEMENTATION
+
+var implementation = {
+	render: render,
+	diff: diff
+};
+
+function render(model)
+{
+	var html = marked(model.markdown, formatOptions(model.options));
+	var div = document.createElement('div');
+	div.innerHTML = html;
+	return div;
+}
+
+function diff(a, b)
+{
+	
+	if (a.model.markdown === b.model.markdown && a.model.options === b.model.options)
+	{
+		return null;
+	}
+
+	return {
+		applyPatch: applyPatch,
+		data: marked(b.model.markdown, formatOptions(b.model.options))
+	};
+}
+
+function applyPatch(domNode, data)
+{
+	domNode.innerHTML = data;
+	return domNode;
+}
+
+
+// ACTUAL MARKDOWN PARSER
+
+var marked = function() {
+	// catch the `marked` object regardless of the outer environment.
+	// (ex. a CommonJS module compatible environment.)
+	// note that this depends on marked's implementation of environment detection.
+	var module = {};
+	var exports = module.exports = {};
+
+	/**
+	 * marked - a markdown parser
+	 * Copyright (c) 2011-2014, Christopher Jeffrey. (MIT Licensed)
+	 * https://github.com/chjj/marked
+	 * commit cd2f6f5b7091154c5526e79b5f3bfb4d15995a51
+	 */
+	(function(){var block={newline:/^\n+/,code:/^( {4}[^\n]+\n*)+/,fences:noop,hr:/^( *[-*_]){3,} *(?:\n+|$)/,heading:/^ *(#{1,6}) *([^\n]+?) *#* *(?:\n+|$)/,nptable:noop,lheading:/^([^\n]+)\n *(=|-){2,} *(?:\n+|$)/,blockquote:/^( *>[^\n]+(\n(?!def)[^\n]+)*\n*)+/,list:/^( *)(bull) [\s\S]+?(?:hr|def|\n{2,}(?! )(?!\1bull )\n*|\s*$)/,html:/^ *(?:comment *(?:\n|\s*$)|closed *(?:\n{2,}|\s*$)|closing *(?:\n{2,}|\s*$))/,def:/^ *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +["(]([^\n]+)[")])? *(?:\n+|$)/,table:noop,paragraph:/^((?:[^\n]+\n?(?!hr|heading|lheading|blockquote|tag|def))+)\n*/,text:/^[^\n]+/};block.bullet=/(?:[*+-]|\d+\.)/;block.item=/^( *)(bull) [^\n]*(?:\n(?!\1bull )[^\n]*)*/;block.item=replace(block.item,"gm")(/bull/g,block.bullet)();block.list=replace(block.list)(/bull/g,block.bullet)("hr","\\n+(?=\\1?(?:[-*_] *){3,}(?:\\n+|$))")("def","\\n+(?="+block.def.source+")")();block.blockquote=replace(block.blockquote)("def",block.def)();block._tag="(?!(?:"+"a|em|strong|small|s|cite|q|dfn|abbr|data|time|code"+"|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo"+"|span|br|wbr|ins|del|img)\\b)\\w+(?!:/|[^\\w\\s@]*@)\\b";block.html=replace(block.html)("comment",/<!--[\s\S]*?-->/)("closed",/<(tag)[\s\S]+?<\/\1>/)("closing",/<tag(?:"[^"]*"|'[^']*'|[^'">])*?>/)(/tag/g,block._tag)();block.paragraph=replace(block.paragraph)("hr",block.hr)("heading",block.heading)("lheading",block.lheading)("blockquote",block.blockquote)("tag","<"+block._tag)("def",block.def)();block.normal=merge({},block);block.gfm=merge({},block.normal,{fences:/^ *(`{3,}|~{3,})[ \.]*(\S+)? *\n([\s\S]*?)\s*\1 *(?:\n+|$)/,paragraph:/^/,heading:/^ *(#{1,6}) +([^\n]+?) *#* *(?:\n+|$)/});block.gfm.paragraph=replace(block.paragraph)("(?!","(?!"+block.gfm.fences.source.replace("\\1","\\2")+"|"+block.list.source.replace("\\1","\\3")+"|")();block.tables=merge({},block.gfm,{nptable:/^ *(\S.*\|.*)\n *([-:]+ *\|[-| :]*)\n((?:.*\|.*(?:\n|$))*)\n*/,table:/^ *\|(.+)\n *\|( *[-:]+[-| :]*)\n((?: *\|.*(?:\n|$))*)\n*/});function Lexer(options){this.tokens=[];this.tokens.links={};this.options=options||marked.defaults;this.rules=block.normal;if(this.options.gfm){if(this.options.tables){this.rules=block.tables}else{this.rules=block.gfm}}}Lexer.rules=block;Lexer.lex=function(src,options){var lexer=new Lexer(options);return lexer.lex(src)};Lexer.prototype.lex=function(src){src=src.replace(/\r\n|\r/g,"\n").replace(/\t/g,"    ").replace(/\u00a0/g," ").replace(/\u2424/g,"\n");return this.token(src,true)};Lexer.prototype.token=function(src,top,bq){var src=src.replace(/^ +$/gm,""),next,loose,cap,bull,b,item,space,i,l;while(src){if(cap=this.rules.newline.exec(src)){src=src.substring(cap[0].length);if(cap[0].length>1){this.tokens.push({type:"space"})}}if(cap=this.rules.code.exec(src)){src=src.substring(cap[0].length);cap=cap[0].replace(/^ {4}/gm,"");this.tokens.push({type:"code",text:!this.options.pedantic?cap.replace(/\n+$/,""):cap});continue}if(cap=this.rules.fences.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"code",lang:cap[2],text:cap[3]||""});continue}if(cap=this.rules.heading.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"heading",depth:cap[1].length,text:cap[2]});continue}if(top&&(cap=this.rules.nptable.exec(src))){src=src.substring(cap[0].length);item={type:"table",header:cap[1].replace(/^ *| *\| *$/g,"").split(/ *\| */),align:cap[2].replace(/^ *|\| *$/g,"").split(/ *\| */),cells:cap[3].replace(/\n$/,"").split("\n")};for(i=0;i<item.align.length;i++){if(/^ *-+: *$/.test(item.align[i])){item.align[i]="right"}else if(/^ *:-+: *$/.test(item.align[i])){item.align[i]="center"}else if(/^ *:-+ *$/.test(item.align[i])){item.align[i]="left"}else{item.align[i]=null}}for(i=0;i<item.cells.length;i++){item.cells[i]=item.cells[i].split(/ *\| */)}this.tokens.push(item);continue}if(cap=this.rules.lheading.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"heading",depth:cap[2]==="="?1:2,text:cap[1]});continue}if(cap=this.rules.hr.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"hr"});continue}if(cap=this.rules.blockquote.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"blockquote_start"});cap=cap[0].replace(/^ *> ?/gm,"");this.token(cap,top,true);this.tokens.push({type:"blockquote_end"});continue}if(cap=this.rules.list.exec(src)){src=src.substring(cap[0].length);bull=cap[2];this.tokens.push({type:"list_start",ordered:bull.length>1});cap=cap[0].match(this.rules.item);next=false;l=cap.length;i=0;for(;i<l;i++){item=cap[i];space=item.length;item=item.replace(/^ *([*+-]|\d+\.) +/,"");if(~item.indexOf("\n ")){space-=item.length;item=!this.options.pedantic?item.replace(new RegExp("^ {1,"+space+"}","gm"),""):item.replace(/^ {1,4}/gm,"")}if(this.options.smartLists&&i!==l-1){b=block.bullet.exec(cap[i+1])[0];if(bull!==b&&!(bull.length>1&&b.length>1)){src=cap.slice(i+1).join("\n")+src;i=l-1}}loose=next||/\n\n(?!\s*$)/.test(item);if(i!==l-1){next=item.charAt(item.length-1)==="\n";if(!loose)loose=next}this.tokens.push({type:loose?"loose_item_start":"list_item_start"});this.token(item,false,bq);this.tokens.push({type:"list_item_end"})}this.tokens.push({type:"list_end"});continue}if(cap=this.rules.html.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:this.options.sanitize?"paragraph":"html",pre:!this.options.sanitizer&&(cap[1]==="pre"||cap[1]==="script"||cap[1]==="style"),text:cap[0]});continue}if(!bq&&top&&(cap=this.rules.def.exec(src))){src=src.substring(cap[0].length);this.tokens.links[cap[1].toLowerCase()]={href:cap[2],title:cap[3]};continue}if(top&&(cap=this.rules.table.exec(src))){src=src.substring(cap[0].length);item={type:"table",header:cap[1].replace(/^ *| *\| *$/g,"").split(/ *\| */),align:cap[2].replace(/^ *|\| *$/g,"").split(/ *\| */),cells:cap[3].replace(/(?: *\| *)?\n$/,"").split("\n")};for(i=0;i<item.align.length;i++){if(/^ *-+: *$/.test(item.align[i])){item.align[i]="right"}else if(/^ *:-+: *$/.test(item.align[i])){item.align[i]="center"}else if(/^ *:-+ *$/.test(item.align[i])){item.align[i]="left"}else{item.align[i]=null}}for(i=0;i<item.cells.length;i++){item.cells[i]=item.cells[i].replace(/^ *\| *| *\| *$/g,"").split(/ *\| */)}this.tokens.push(item);continue}if(top&&(cap=this.rules.paragraph.exec(src))){src=src.substring(cap[0].length);this.tokens.push({type:"paragraph",text:cap[1].charAt(cap[1].length-1)==="\n"?cap[1].slice(0,-1):cap[1]});continue}if(cap=this.rules.text.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"text",text:cap[0]});continue}if(src){throw new Error("Infinite loop on byte: "+src.charCodeAt(0))}}return this.tokens};var inline={escape:/^\\([\\`*{}\[\]()#+\-.!_>])/,autolink:/^<([^ >]+(@|:\/)[^ >]+)>/,url:noop,tag:/^<!--[\s\S]*?-->|^<\/?\w+(?:"[^"]*"|'[^']*'|[^'">])*?>/,link:/^!?\[(inside)\]\(href\)/,reflink:/^!?\[(inside)\]\s*\[([^\]]*)\]/,nolink:/^!?\[((?:\[[^\]]*\]|[^\[\]])*)\]/,strong:/^__([\s\S]+?)__(?!_)|^\*\*([\s\S]+?)\*\*(?!\*)/,em:/^\b_((?:[^_]|__)+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,code:/^(`+)\s*([\s\S]*?[^`])\s*\1(?!`)/,br:/^ {2,}\n(?!\s*$)/,del:noop,text:/^[\s\S]+?(?=[\\<!\[_*`]| {2,}\n|$)/};inline._inside=/(?:\[[^\]]*\]|[^\[\]]|\](?=[^\[]*\]))*/;inline._href=/\s*<?([\s\S]*?)>?(?:\s+['"]([\s\S]*?)['"])?\s*/;inline.link=replace(inline.link)("inside",inline._inside)("href",inline._href)();inline.reflink=replace(inline.reflink)("inside",inline._inside)();inline.normal=merge({},inline);inline.pedantic=merge({},inline.normal,{strong:/^__(?=\S)([\s\S]*?\S)__(?!_)|^\*\*(?=\S)([\s\S]*?\S)\*\*(?!\*)/,em:/^_(?=\S)([\s\S]*?\S)_(?!_)|^\*(?=\S)([\s\S]*?\S)\*(?!\*)/});inline.gfm=merge({},inline.normal,{escape:replace(inline.escape)("])","~|])")(),url:/^(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/,del:/^~~(?=\S)([\s\S]*?\S)~~/,text:replace(inline.text)("]|","~]|")("|","|https?://|")()});inline.breaks=merge({},inline.gfm,{br:replace(inline.br)("{2,}","*")(),text:replace(inline.gfm.text)("{2,}","*")()});function InlineLexer(links,options){this.options=options||marked.defaults;this.links=links;this.rules=inline.normal;this.renderer=this.options.renderer||new Renderer;this.renderer.options=this.options;if(!this.links){throw new Error("Tokens array requires a `links` property.")}if(this.options.gfm){if(this.options.breaks){this.rules=inline.breaks}else{this.rules=inline.gfm}}else if(this.options.pedantic){this.rules=inline.pedantic}}InlineLexer.rules=inline;InlineLexer.output=function(src,links,options){var inline=new InlineLexer(links,options);return inline.output(src)};InlineLexer.prototype.output=function(src){var out="",link,text,href,cap;while(src){if(cap=this.rules.escape.exec(src)){src=src.substring(cap[0].length);out+=cap[1];continue}if(cap=this.rules.autolink.exec(src)){src=src.substring(cap[0].length);if(cap[2]==="@"){text=cap[1].charAt(6)===":"?this.mangle(cap[1].substring(7)):this.mangle(cap[1]);href=this.mangle("mailto:")+text}else{text=escape(cap[1]);href=text}out+=this.renderer.link(href,null,text);continue}if(!this.inLink&&(cap=this.rules.url.exec(src))){src=src.substring(cap[0].length);text=escape(cap[1]);href=text;out+=this.renderer.link(href,null,text);continue}if(cap=this.rules.tag.exec(src)){if(!this.inLink&&/^<a /i.test(cap[0])){this.inLink=true}else if(this.inLink&&/^<\/a>/i.test(cap[0])){this.inLink=false}src=src.substring(cap[0].length);out+=this.options.sanitize?this.options.sanitizer?this.options.sanitizer(cap[0]):escape(cap[0]):cap[0];continue}if(cap=this.rules.link.exec(src)){src=src.substring(cap[0].length);this.inLink=true;out+=this.outputLink(cap,{href:cap[2],title:cap[3]});this.inLink=false;continue}if((cap=this.rules.reflink.exec(src))||(cap=this.rules.nolink.exec(src))){src=src.substring(cap[0].length);link=(cap[2]||cap[1]).replace(/\s+/g," ");link=this.links[link.toLowerCase()];if(!link||!link.href){out+=cap[0].charAt(0);src=cap[0].substring(1)+src;continue}this.inLink=true;out+=this.outputLink(cap,link);this.inLink=false;continue}if(cap=this.rules.strong.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.strong(this.output(cap[2]||cap[1]));continue}if(cap=this.rules.em.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.em(this.output(cap[2]||cap[1]));continue}if(cap=this.rules.code.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.codespan(escape(cap[2],true));continue}if(cap=this.rules.br.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.br();continue}if(cap=this.rules.del.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.del(this.output(cap[1]));continue}if(cap=this.rules.text.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.text(escape(this.smartypants(cap[0])));continue}if(src){throw new Error("Infinite loop on byte: "+src.charCodeAt(0))}}return out};InlineLexer.prototype.outputLink=function(cap,link){var href=escape(link.href),title=link.title?escape(link.title):null;return cap[0].charAt(0)!=="!"?this.renderer.link(href,title,this.output(cap[1])):this.renderer.image(href,title,escape(cap[1]))};InlineLexer.prototype.smartypants=function(text){if(!this.options.smartypants)return text;return text.replace(/---/g,"—").replace(/--/g,"–").replace(/(^|[-\u2014\/(\[{"\s])'/g,"$1‘").replace(/'/g,"’").replace(/(^|[-\u2014\/(\[{\u2018\s])"/g,"$1“").replace(/"/g,"”").replace(/\.{3}/g,"…")};InlineLexer.prototype.mangle=function(text){if(!this.options.mangle)return text;var out="",l=text.length,i=0,ch;for(;i<l;i++){ch=text.charCodeAt(i);if(Math.random()>.5){ch="x"+ch.toString(16)}out+="&#"+ch+";"}return out};function Renderer(options){this.options=options||{}}Renderer.prototype.code=function(code,lang,escaped){if(this.options.highlight){var out=this.options.highlight(code,lang);if(out!=null&&out!==code){escaped=true;code=out}}if(!lang){return"<pre><code>"+(escaped?code:escape(code,true))+"\n</code></pre>"}return'<pre><code class="'+this.options.langPrefix+escape(lang,true)+'">'+(escaped?code:escape(code,true))+"\n</code></pre>\n"};Renderer.prototype.blockquote=function(quote){return"<blockquote>\n"+quote+"</blockquote>\n"};Renderer.prototype.html=function(html){return html};Renderer.prototype.heading=function(text,level,raw){return"<h"+level+' id="'+this.options.headerPrefix+raw.toLowerCase().replace(/[^\w]+/g,"-")+'">'+text+"</h"+level+">\n"};Renderer.prototype.hr=function(){return this.options.xhtml?"<hr/>\n":"<hr>\n"};Renderer.prototype.list=function(body,ordered){var type=ordered?"ol":"ul";return"<"+type+">\n"+body+"</"+type+">\n"};Renderer.prototype.listitem=function(text){return"<li>"+text+"</li>\n"};Renderer.prototype.paragraph=function(text){return"<p>"+text+"</p>\n"};Renderer.prototype.table=function(header,body){return"<table>\n"+"<thead>\n"+header+"</thead>\n"+"<tbody>\n"+body+"</tbody>\n"+"</table>\n"};Renderer.prototype.tablerow=function(content){return"<tr>\n"+content+"</tr>\n"};Renderer.prototype.tablecell=function(content,flags){var type=flags.header?"th":"td";var tag=flags.align?"<"+type+' style="text-align:'+flags.align+'">':"<"+type+">";return tag+content+"</"+type+">\n"};Renderer.prototype.strong=function(text){return"<strong>"+text+"</strong>"};Renderer.prototype.em=function(text){return"<em>"+text+"</em>"};Renderer.prototype.codespan=function(text){return"<code>"+text+"</code>"};Renderer.prototype.br=function(){return this.options.xhtml?"<br/>":"<br>"};Renderer.prototype.del=function(text){return"<del>"+text+"</del>"};Renderer.prototype.link=function(href,title,text){if(this.options.sanitize){try{var prot=decodeURIComponent(unescape(href)).replace(/[^\w:]/g,"").toLowerCase()}catch(e){return""}if(prot.indexOf("javascript:")===0||prot.indexOf("vbscript:")===0||prot.indexOf("data:")===0){return""}}var out='<a href="'+href+'"';if(title){out+=' title="'+title+'"'}out+=">"+text+"</a>";return out};Renderer.prototype.image=function(href,title,text){var out='<img src="'+href+'" alt="'+text+'"';if(title){out+=' title="'+title+'"'}out+=this.options.xhtml?"/>":">";return out};Renderer.prototype.text=function(text){return text};function Parser(options){this.tokens=[];this.token=null;this.options=options||marked.defaults;this.options.renderer=this.options.renderer||new Renderer;this.renderer=this.options.renderer;this.renderer.options=this.options}Parser.parse=function(src,options,renderer){var parser=new Parser(options,renderer);return parser.parse(src)};Parser.prototype.parse=function(src){this.inline=new InlineLexer(src.links,this.options,this.renderer);this.tokens=src.reverse();var out="";while(this.next()){out+=this.tok()}return out};Parser.prototype.next=function(){return this.token=this.tokens.pop()};Parser.prototype.peek=function(){return this.tokens[this.tokens.length-1]||0};Parser.prototype.parseText=function(){var body=this.token.text;while(this.peek().type==="text"){body+="\n"+this.next().text}return this.inline.output(body)};Parser.prototype.tok=function(){switch(this.token.type){case"space":{return""}case"hr":{return this.renderer.hr()}case"heading":{return this.renderer.heading(this.inline.output(this.token.text),this.token.depth,this.token.text)}case"code":{return this.renderer.code(this.token.text,this.token.lang,this.token.escaped)}case"table":{var header="",body="",i,row,cell,flags,j;cell="";for(i=0;i<this.token.header.length;i++){flags={header:true,align:this.token.align[i]};cell+=this.renderer.tablecell(this.inline.output(this.token.header[i]),{header:true,align:this.token.align[i]})}header+=this.renderer.tablerow(cell);for(i=0;i<this.token.cells.length;i++){row=this.token.cells[i];cell="";for(j=0;j<row.length;j++){cell+=this.renderer.tablecell(this.inline.output(row[j]),{header:false,align:this.token.align[j]})}body+=this.renderer.tablerow(cell)}return this.renderer.table(header,body)}case"blockquote_start":{var body="";while(this.next().type!=="blockquote_end"){body+=this.tok()}return this.renderer.blockquote(body)}case"list_start":{var body="",ordered=this.token.ordered;while(this.next().type!=="list_end"){body+=this.tok()}return this.renderer.list(body,ordered)}case"list_item_start":{var body="";while(this.next().type!=="list_item_end"){body+=this.token.type==="text"?this.parseText():this.tok()}return this.renderer.listitem(body)}case"loose_item_start":{var body="";while(this.next().type!=="list_item_end"){body+=this.tok()}return this.renderer.listitem(body)}case"html":{var html=!this.token.pre&&!this.options.pedantic?this.inline.output(this.token.text):this.token.text;return this.renderer.html(html)}case"paragraph":{return this.renderer.paragraph(this.inline.output(this.token.text))}case"text":{return this.renderer.paragraph(this.parseText())}}};function escape(html,encode){return html.replace(!encode?/&(?!#?\w+;)/g:/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}function unescape(html){return html.replace(/&(#(?:\d+)|(?:#x[0-9A-Fa-f]+)|(?:\w+));?/g,function(_,n){n=n.toLowerCase();if(n==="colon")return":";if(n.charAt(0)==="#"){return n.charAt(1)==="x"?String.fromCharCode(parseInt(n.substring(2),16)):String.fromCharCode(+n.substring(1))}return""})}function replace(regex,opt){regex=regex.source;opt=opt||"";return function self(name,val){if(!name)return new RegExp(regex,opt);val=val.source||val;val=val.replace(/(^|[^\[])\^/g,"$1");regex=regex.replace(name,val);return self}}function noop(){}noop.exec=noop;function merge(obj){var i=1,target,key;for(;i<arguments.length;i++){target=arguments[i];for(key in target){if(Object.prototype.hasOwnProperty.call(target,key)){obj[key]=target[key]}}}return obj}function marked(src,opt,callback){if(callback||typeof opt==="function"){if(!callback){callback=opt;opt=null}opt=merge({},marked.defaults,opt||{});var highlight=opt.highlight,tokens,pending,i=0;try{tokens=Lexer.lex(src,opt)}catch(e){return callback(e)}pending=tokens.length;var done=function(err){if(err){opt.highlight=highlight;return callback(err)}var out;try{out=Parser.parse(tokens,opt)}catch(e){err=e}opt.highlight=highlight;return err?callback(err):callback(null,out)};if(!highlight||highlight.length<3){return done()}delete opt.highlight;if(!pending)return done();for(;i<tokens.length;i++){(function(token){if(token.type!=="code"){return--pending||done()}return highlight(token.text,token.lang,function(err,code){if(err)return done(err);if(code==null||code===token.text){return--pending||done()}token.text=code;token.escaped=true;--pending||done()})})(tokens[i])}return}try{if(opt)opt=merge({},marked.defaults,opt);return Parser.parse(Lexer.lex(src,opt),opt)}catch(e){e.message+="\nPlease report this to https://github.com/chjj/marked.";if((opt||marked.defaults).silent){return"<p>An error occured:</p><pre>"+escape(e.message+"",true)+"</pre>"}throw e}}marked.options=marked.setOptions=function(opt){merge(marked.defaults,opt);return marked};marked.defaults={gfm:true,tables:true,breaks:false,pedantic:false,sanitize:false,sanitizer:null,mangle:true,smartLists:false,silent:false,highlight:null,langPrefix:"lang-",smartypants:false,headerPrefix:"",renderer:new Renderer,xhtml:false};marked.Parser=Parser;marked.parser=Parser.parse;marked.Renderer=Renderer;marked.Lexer=Lexer;marked.lexer=Lexer.lex;marked.InlineLexer=InlineLexer;marked.inlineLexer=InlineLexer.output;marked.parse=marked;if(typeof module!=="undefined"&&typeof exports==="object"){module.exports=marked}else if(typeof define==="function"&&define.amd){define(function(){return marked})}else{this.marked=marked}}).call(function(){return this||(typeof window!=="undefined"?window:global)}());
+
+	return module.exports;
+}();
+
+
+// FORMAT OPTIONS FOR MARKED IMPLEMENTATION
+
+function formatOptions(options)
+{
+	function toHighlight(code, lang)
+	{
+		if (!lang && options.defaultHighlighting.ctor === 'Just')
+		{
+			lang = options.defaultHighlighting._0;
+		}
+
+		if (typeof hljs !== 'undefined' && lang && hljs.listLanguages().indexOf(lang) >= 0)
+		{
+			return hljs.highlight(lang, code, true).value;
+		}
+
+		return code;
+	}
+
+	var gfm = options.githubFlavored;
+	if (gfm.ctor === 'Just')
+	{
+		return {
+			highlight: toHighlight,
+			gfm: true,
+			tables: gfm._0.tables,
+			breaks: gfm._0.breaks,
+			sanitize: options.sanitize,
+			smartypants: options.smartypants
+		};
+	}
+
+	return {
+		highlight: toHighlight,
+		gfm: false,
+		tables: false,
+		breaks: false,
+		sanitize: options.sanitize,
+		smartypants: options.smartypants
+	};
+}
+
+
+// EXPORTS
+
+return {
+	toHtml: F3(toHtml)
+};
+
+}();
+
+var _evancz$elm_markdown$Markdown$toHtmlWith = _evancz$elm_markdown$Native_Markdown.toHtml;
+var _evancz$elm_markdown$Markdown$defaultOptions = {
+	githubFlavored: _elm_lang$core$Maybe$Just(
+		{tables: false, breaks: false}),
+	defaultHighlighting: _elm_lang$core$Maybe$Nothing,
+	sanitize: false,
+	smartypants: false
+};
+var _evancz$elm_markdown$Markdown$toHtml = F2(
+	function (attrs, string) {
+		return A3(_evancz$elm_markdown$Native_Markdown.toHtml, _evancz$elm_markdown$Markdown$defaultOptions, attrs, string);
+	});
+var _evancz$elm_markdown$Markdown$Options = F4(
+	function (a, b, c, d) {
+		return {githubFlavored: a, defaultHighlighting: b, sanitize: c, smartypants: d};
+	});
+
 var _rtfeldman$elm_css_util$Css_Helpers$toCssIdentifier = function (identifier) {
 	return A4(
 		_elm_lang$core$Regex$replace,
@@ -19265,6 +19405,10 @@ var _user$project$Types$Representation = F5(
 var _user$project$Types$NoOp = function (a) {
 	return {ctor: 'NoOp', _0: a};
 };
+var _user$project$Types$CloseInfo = {ctor: 'CloseInfo'};
+var _user$project$Types$ShowInfo = function (a) {
+	return {ctor: 'ShowInfo', _0: a};
+};
 var _user$project$Types$StoreModel = {ctor: 'StoreModel'};
 var _user$project$Types$EditRepresentation = function (a) {
 	return {ctor: 'EditRepresentation', _0: a};
@@ -19402,6 +19546,19 @@ var _user$project$Types$Spheres = {ctor: 'Spheres'};
 var _user$project$Types$BallsAndSticks = {ctor: 'BallsAndSticks'};
 var _user$project$Types$Trace = {ctor: 'Trace'};
 var _user$project$Types$Cartoon = {ctor: 'Cartoon'};
+var _user$project$Types$MIInfo = {ctor: 'MIInfo'};
+var _user$project$Types$BuildInfo = {ctor: 'BuildInfo'};
+var _user$project$Types$stringToInfoBoxID = function (infoBoxString) {
+	var _p8 = infoBoxString;
+	switch (_p8) {
+		case 'BuildInfo':
+			return _elm_lang$core$Result$Ok(_user$project$Types$BuildInfo);
+		case 'MIInfo':
+			return _elm_lang$core$Result$Ok(_user$project$Types$MIInfo);
+		default:
+			return _elm_lang$core$Result$Err('String could not be converted to InfoBox.');
+	}
+};
 
 var _user$project$BuilderCss$colorPalette = {
 	c1: _rtfeldman$elm_css$Css$hex('e6e8e6'),
@@ -19425,7 +19582,9 @@ var _user$project$BuilderCss$ColorPalette = F5(
 	function (a, b, c, d, e) {
 		return {c1: a, c2: b, c3: c, c4: d, c5: e};
 	});
+var _user$project$BuilderCss$InfoPanelCss = {ctor: 'InfoPanelCss'};
 var _user$project$BuilderCss$CCBButtonCss = {ctor: 'CCBButtonCss'};
+var _user$project$BuilderCss$FlexCloseCss = {ctor: 'FlexCloseCss'};
 var _user$project$BuilderCss$FlexItemCss = {ctor: 'FlexItemCss'};
 var _user$project$BuilderCss$FlexContainerCss = {ctor: 'FlexContainerCss'};
 var _user$project$BuilderCss$ParameterInputCss = {ctor: 'ParameterInputCss'};
@@ -19770,7 +19929,14 @@ var _user$project$BuilderCss$css = function (_p0) {
 																				_1: {ctor: '[]'}
 																			}
 																		}),
-																	_1: {ctor: '[]'}
+																	_1: {
+																		ctor: '::',
+																		_0: A2(
+																			_rtfeldman$elm_css$Css$class,
+																			_user$project$BuilderCss$FlexCloseCss,
+																			{ctor: '[]'}),
+																		_1: {ctor: '[]'}
+																	}
 																}),
 															_1: {ctor: '[]'}
 														}
@@ -19834,36 +20000,42 @@ var _user$project$BuilderCss$css = function (_p0) {
 												_1: {
 													ctor: '::',
 													_0: A2(
-														_rtfeldman$elm_css$Css$id,
-														_user$project$Types$AppHeaderPanel,
+														_rtfeldman$elm_css$Css$class,
+														_user$project$BuilderCss$InfoPanelCss,
 														{
 															ctor: '::',
-															_0: _rtfeldman$elm_css$Css$fontFamilies(
-																{
-																	ctor: '::',
-																	_0: 'Source Code Pro',
-																	_1: {
-																		ctor: '::',
-																		_0: 'monospace',
-																		_1: {ctor: '[]'}
-																	}
-																}),
+															_0: _rtfeldman$elm_css$Css$overflow(_rtfeldman$elm_css$Css$auto),
 															_1: {
 																ctor: '::',
-																_0: _rtfeldman$elm_css$Css$color(_user$project$BuilderCss$colorPalette.c1),
+																_0: _rtfeldman$elm_css$Css$margin(_rtfeldman$elm_css$Css$auto),
 																_1: {
 																	ctor: '::',
-																	_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c4),
+																	_0: _rtfeldman$elm_css$Css$padding(
+																		_rtfeldman$elm_css$Css$px(10)),
 																	_1: {
 																		ctor: '::',
-																		_0: A5(
-																			_rtfeldman$elm_css$Css$boxShadow5,
-																			_rtfeldman$elm_css$Css$px(0),
-																			_rtfeldman$elm_css$Css$px(0),
-																			_rtfeldman$elm_css$Css$px(10),
-																			_rtfeldman$elm_css$Css$px(2),
-																			A3(_rtfeldman$elm_css$Css$rgb, 100, 100, 100)),
-																		_1: {ctor: '[]'}
+																		_0: _rtfeldman$elm_css$Css$position(_rtfeldman$elm_css$Css$absolute),
+																		_1: {
+																			ctor: '::',
+																			_0: _rtfeldman$elm_css$Css$top(
+																				_rtfeldman$elm_css$Css$px(0)),
+																			_1: {
+																				ctor: '::',
+																				_0: _rtfeldman$elm_css$Css$bottom(
+																					_rtfeldman$elm_css$Css$px(0)),
+																				_1: {
+																					ctor: '::',
+																					_0: _rtfeldman$elm_css$Css$left(
+																						_rtfeldman$elm_css$Css$px(0)),
+																					_1: {
+																						ctor: '::',
+																						_0: _rtfeldman$elm_css$Css$right(
+																							_rtfeldman$elm_css$Css$px(0)),
+																						_1: {ctor: '[]'}
+																					}
+																				}
+																			}
+																		}
 																	}
 																}
 															}
@@ -19872,116 +20044,154 @@ var _user$project$BuilderCss$css = function (_p0) {
 														ctor: '::',
 														_0: A2(
 															_rtfeldman$elm_css$Css$id,
-															_user$project$Types$BuildPanel,
+															_user$project$Types$AppHeaderPanel,
 															{
 																ctor: '::',
-																_0: _rtfeldman$elm_css$Css$paddingRight(
-																	_rtfeldman$elm_css$Css$px(12)),
-																_1: {ctor: '[]'}
+																_0: _rtfeldman$elm_css$Css$fontFamilies(
+																	{
+																		ctor: '::',
+																		_0: 'Source Code Pro',
+																		_1: {
+																			ctor: '::',
+																			_0: 'monospace',
+																			_1: {ctor: '[]'}
+																		}
+																	}),
+																_1: {
+																	ctor: '::',
+																	_0: _rtfeldman$elm_css$Css$color(_user$project$BuilderCss$colorPalette.c1),
+																	_1: {
+																		ctor: '::',
+																		_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c4),
+																		_1: {
+																			ctor: '::',
+																			_0: A5(
+																				_rtfeldman$elm_css$Css$boxShadow5,
+																				_rtfeldman$elm_css$Css$px(0),
+																				_rtfeldman$elm_css$Css$px(0),
+																				_rtfeldman$elm_css$Css$px(10),
+																				_rtfeldman$elm_css$Css$px(2),
+																				A3(_rtfeldman$elm_css$Css$rgb, 100, 100, 100)),
+																			_1: {ctor: '[]'}
+																		}
+																	}
+																}
 															}),
 														_1: {
 															ctor: '::',
 															_0: A2(
 																_rtfeldman$elm_css$Css$id,
-																_user$project$Types$ExamplesPanel,
+																_user$project$Types$BuildPanel,
 																{
 																	ctor: '::',
-																	_0: _rtfeldman$elm_css$Css$textAlign(_rtfeldman$elm_css$Css$center),
+																	_0: _rtfeldman$elm_css$Css$paddingRight(
+																		_rtfeldman$elm_css$Css$px(12)),
 																	_1: {ctor: '[]'}
 																}),
 															_1: {
 																ctor: '::',
 																_0: A2(
 																	_rtfeldman$elm_css$Css$id,
-																	_user$project$Types$BuildingStatusPanel,
+																	_user$project$Types$ExamplesPanel,
 																	{
 																		ctor: '::',
 																		_0: _rtfeldman$elm_css$Css$textAlign(_rtfeldman$elm_css$Css$center),
-																		_1: {
-																			ctor: '::',
-																			_0: _rtfeldman$elm_css$Css$marginTop(
-																				_rtfeldman$elm_css$Css$px(-40)),
-																			_1: {
-																				ctor: '::',
-																				_0: _rtfeldman$elm_css$Css$marginLeft(
-																					_rtfeldman$elm_css$Css$px(-40)),
-																				_1: {ctor: '[]'}
-																			}
-																		}
+																		_1: {ctor: '[]'}
 																	}),
 																_1: {
 																	ctor: '::',
 																	_0: A2(
 																		_rtfeldman$elm_css$Css$id,
-																		_user$project$Types$BuildHistoryPanel,
+																		_user$project$Types$BuildingStatusPanel,
 																		{
 																			ctor: '::',
-																			_0: _rtfeldman$elm_css$Css$children(
-																				{
+																			_0: _rtfeldman$elm_css$Css$textAlign(_rtfeldman$elm_css$Css$center),
+																			_1: {
+																				ctor: '::',
+																				_0: _rtfeldman$elm_css$Css$marginTop(
+																					_rtfeldman$elm_css$Css$px(-40)),
+																				_1: {
 																					ctor: '::',
-																					_0: _rtfeldman$elm_css$Css_Elements$table(
-																						{
-																							ctor: '::',
-																							_0: _rtfeldman$elm_css$Css$fontSize(
-																								_rtfeldman$elm_css$Css$pt(10)),
-																							_1: {ctor: '[]'}
-																						}),
-																					_1: {
+																					_0: _rtfeldman$elm_css$Css$marginLeft(
+																						_rtfeldman$elm_css$Css$px(-40)),
+																					_1: {ctor: '[]'}
+																				}
+																			}
+																		}),
+																	_1: {
+																		ctor: '::',
+																		_0: A2(
+																			_rtfeldman$elm_css$Css$id,
+																			_user$project$Types$BuildHistoryPanel,
+																			{
+																				ctor: '::',
+																				_0: _rtfeldman$elm_css$Css$children(
+																					{
 																						ctor: '::',
 																						_0: _rtfeldman$elm_css$Css_Elements$table(
 																							{
 																								ctor: '::',
-																								_0: _rtfeldman$elm_css$Css$children(
-																									{
-																										ctor: '::',
-																										_0: _rtfeldman$elm_css$Css_Elements$tbody(
-																											{
-																												ctor: '::',
-																												_0: _rtfeldman$elm_css$Css$children(
-																													{
-																														ctor: '::',
-																														_0: _rtfeldman$elm_css$Css_Elements$tr(
-																															{
-																																ctor: '::',
-																																_0: _rtfeldman$elm_css$Css$fontFamilies(
-																																	{
-																																		ctor: '::',
-																																		_0: 'Source Code Pro',
-																																		_1: {
-																																			ctor: '::',
-																																			_0: 'monospace',
-																																			_1: {ctor: '[]'}
-																																		}
-																																	}),
-																																_1: {
+																								_0: _rtfeldman$elm_css$Css$fontSize(
+																									_rtfeldman$elm_css$Css$pt(10)),
+																								_1: {ctor: '[]'}
+																							}),
+																						_1: {
+																							ctor: '::',
+																							_0: _rtfeldman$elm_css$Css_Elements$table(
+																								{
+																									ctor: '::',
+																									_0: _rtfeldman$elm_css$Css$children(
+																										{
+																											ctor: '::',
+																											_0: _rtfeldman$elm_css$Css_Elements$tbody(
+																												{
+																													ctor: '::',
+																													_0: _rtfeldman$elm_css$Css$children(
+																														{
+																															ctor: '::',
+																															_0: _rtfeldman$elm_css$Css_Elements$tr(
+																																{
 																																	ctor: '::',
-																																	_0: _rtfeldman$elm_css$Css$hover(
+																																	_0: _rtfeldman$elm_css$Css$fontFamilies(
 																																		{
 																																			ctor: '::',
-																																			_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c3),
+																																			_0: 'Source Code Pro',
 																																			_1: {
 																																				ctor: '::',
-																																				_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$default),
+																																				_0: 'monospace',
 																																				_1: {ctor: '[]'}
 																																			}
 																																		}),
-																																	_1: {ctor: '[]'}
-																																}
-																															}),
-																														_1: {ctor: '[]'}
-																													}),
-																												_1: {ctor: '[]'}
-																											}),
-																										_1: {ctor: '[]'}
-																									}),
-																								_1: {ctor: '[]'}
-																							}),
-																						_1: {ctor: '[]'}
-																					}
-																				}),
-																			_1: {ctor: '[]'}
-																		}),
-																	_1: {ctor: '[]'}
+																																	_1: {
+																																		ctor: '::',
+																																		_0: _rtfeldman$elm_css$Css$hover(
+																																			{
+																																				ctor: '::',
+																																				_0: _rtfeldman$elm_css$Css$backgroundColor(_user$project$BuilderCss$colorPalette.c3),
+																																				_1: {
+																																					ctor: '::',
+																																					_0: _rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$default),
+																																					_1: {ctor: '[]'}
+																																				}
+																																			}),
+																																		_1: {ctor: '[]'}
+																																	}
+																																}),
+																															_1: {ctor: '[]'}
+																														}),
+																													_1: {ctor: '[]'}
+																												}),
+																											_1: {ctor: '[]'}
+																										}),
+																									_1: {ctor: '[]'}
+																								}),
+																							_1: {ctor: '[]'}
+																						}
+																					}),
+																				_1: {ctor: '[]'}
+																			}),
+																		_1: {ctor: '[]'}
+																	}
 																}
 															}
 														}
@@ -22108,7 +22318,9 @@ var _user$project$Model$exportableToModel = function (exportableModel) {
 				exportableModel.modelHistory)),
 		nextHistoryID: exportableModel.nextHistoryID,
 		panelVisibility: exportableModel.panelVisibility,
-		currentRepresentation: exportableModel.currentRepresentation
+		currentRepresentation: exportableModel.currentRepresentation,
+		activeInfoBox: _elm_lang$core$Result$toMaybe(
+			_user$project$Types$stringToInfoBoxID(exportableModel.activeInfoBox))
 	};
 };
 var _user$project$Model$modelToExportable = function (model) {
@@ -22145,7 +22357,8 @@ var _user$project$Model$modelToExportable = function (model) {
 			_elm_lang$core$Dict$toList(model.modelHistory)),
 		nextHistoryID: model.nextHistoryID,
 		panelVisibility: model.panelVisibility,
-		currentRepresentation: model.currentRepresentation
+		currentRepresentation: model.currentRepresentation,
+		activeInfoBox: _elm_lang$core$Basics$toString(model.activeInfoBox)
 	};
 };
 var _user$project$Model$defaultVisibility = A5(_user$project$Types$PanelVisibility, true, false, false, false, false);
@@ -22184,7 +22397,8 @@ var _user$project$Model$emptyModel = {
 	modelHistory: _elm_lang$core$Dict$empty,
 	nextHistoryID: 1,
 	panelVisibility: _user$project$Model$defaultVisibility,
-	currentRepresentation: A5(_user$project$Types$Representation, false, true, true, false, false)
+	currentRepresentation: A5(_user$project$Types$Representation, false, true, true, false, false),
+	activeInfoBox: _elm_lang$core$Maybe$Nothing
 };
 var _user$project$Model$Model = function (a) {
 	return function (b) {
@@ -22203,7 +22417,9 @@ var _user$project$Model$Model = function (a) {
 														return function (o) {
 															return function (p) {
 																return function (q) {
-																	return {parameters: a, currentInput: b, parameterClipBoard: c, oligomericState: d, helixType: e, buildMode: f, pdbFile: g, score: h, residuesPerTurn: i, knobIDs: j, building: k, optJobs: l, heat: m, modelHistory: n, nextHistoryID: o, panelVisibility: p, currentRepresentation: q};
+																	return function (r) {
+																		return {parameters: a, currentInput: b, parameterClipBoard: c, oligomericState: d, helixType: e, buildMode: f, pdbFile: g, score: h, residuesPerTurn: i, knobIDs: j, building: k, optJobs: l, heat: m, modelHistory: n, nextHistoryID: o, panelVisibility: p, currentRepresentation: q, activeInfoBox: r};
+																	};
 																};
 															};
 														};
@@ -22236,7 +22452,9 @@ var _user$project$Model$ExportableModel = function (a) {
 												return function (m) {
 													return function (n) {
 														return function (o) {
-															return {parameters: a, currentInput: b, parameterClipBoard: c, oligomericState: d, pdbFile: e, score: f, residuesPerTurn: g, knobIDs: h, building: i, optJobs: j, heat: k, modelHistory: l, nextHistoryID: m, panelVisibility: n, currentRepresentation: o};
+															return function (p) {
+																return {parameters: a, currentInput: b, parameterClipBoard: c, oligomericState: d, pdbFile: e, score: f, residuesPerTurn: g, knobIDs: h, building: i, optJobs: j, heat: k, modelHistory: l, nextHistoryID: m, panelVisibility: n, currentRepresentation: o, activeInfoBox: p};
+															};
 														};
 													};
 												};
@@ -22347,7 +22565,8 @@ var _user$project$Ports$setStorage = _elm_lang$core$Native_Platform.outgoingPort
 				}),
 			nextHistoryID: v.nextHistoryID,
 			panelVisibility: {buildPanel: v.panelVisibility.buildPanel, examplesPanel: v.panelVisibility.examplesPanel, optimisePanel: v.panelVisibility.optimisePanel, buildHistoryPanel: v.panelVisibility.buildHistoryPanel, viewerPanel: v.panelVisibility.viewerPanel},
-			currentRepresentation: {cartoon: v.currentRepresentation.cartoon, trace: v.currentRepresentation.trace, ballsAndSticks: v.currentRepresentation.ballsAndSticks, spheres: v.currentRepresentation.spheres, points: v.currentRepresentation.points}
+			currentRepresentation: {cartoon: v.currentRepresentation.cartoon, trace: v.currentRepresentation.trace, ballsAndSticks: v.currentRepresentation.ballsAndSticks, spheres: v.currentRepresentation.spheres, points: v.currentRepresentation.points},
+			activeInfoBox: v.activeInfoBox
 		};
 	});
 var _user$project$Ports$initialiseViewer = _elm_lang$core$Native_Platform.outgoingPort(
@@ -22870,7 +23089,8 @@ var _user$project$Update$update = F2(
 						model,
 						{
 							building: true,
-							panelVisibility: A5(_user$project$Types$PanelVisibility, false, false, false, false, false)
+							panelVisibility: A5(_user$project$Types$PanelVisibility, false, false, false, false, false),
+							activeInfoBox: _elm_lang$core$Maybe$Nothing
 						}),
 					{
 						ctor: '::',
@@ -23270,7 +23490,8 @@ var _user$project$Update$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							panelVisibility: A2(_user$project$Update$togglePanelVisibility, _p2._0, model.panelVisibility)
+							panelVisibility: A2(_user$project$Update$togglePanelVisibility, _p2._0, model.panelVisibility),
+							activeInfoBox: _elm_lang$core$Maybe$Nothing
 						}),
 					{
 						ctor: '::',
@@ -23335,6 +23556,30 @@ var _user$project$Update$update = F2(
 							_user$project$Model$modelToExportable(model)),
 						_1: {ctor: '[]'}
 					});
+			case 'ShowInfo':
+				var _p26 = _p2._0;
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							activeInfoBox: function () {
+								var _p25 = model.activeInfoBox;
+								if (_p25.ctor === 'Just') {
+									return _elm_lang$core$Native_Utils.eq(_p26, _p25._0) ? _elm_lang$core$Maybe$Nothing : _elm_lang$core$Maybe$Just(_p26);
+								} else {
+									return _elm_lang$core$Maybe$Just(_p26);
+								}
+							}()
+						}),
+					{ctor: '[]'});
+			case 'CloseInfo':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{activeInfoBox: _elm_lang$core$Maybe$Nothing}),
+					{ctor: '[]'});
 			default:
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
@@ -23383,6 +23628,31 @@ var _user$project$Views$buildingStatusStyling = {
 					_rtfeldman$elm_css$Css$px(80)),
 				_1: {ctor: '[]'}
 			}
+		}
+	}
+};
+var _user$project$Views$mIText = 'This panel displays infromation regarding the currently visible model.\n\n* **BUDE Energy** - The interaction energy as calculated by the BUDE force field implemented in the BUFF module of ISAMBARD\n* **Residues per Turn** - A measure of backbone strain in the model, extreme pitch values can deform the backbone, making an unrealistic model.\n* **Highlight Knobs** - Colours the structure to show knobs-into-holes interactions. Knob residues are highlighted red while all other residues are blue.\n* **Download PDB** - Download a PDB file of the model.';
+var _user$project$Views$getInformationText = function (infoBox) {
+	var _p0 = infoBox;
+	if (_p0.ctor === 'MIInfo') {
+		return _user$project$Views$mIText;
+	} else {
+		return 'BLAH!';
+	}
+};
+var _user$project$Views$showInfoBoxStyling = {
+	ctor: '::',
+	_0: _rtfeldman$elm_css$Css$minWidth(
+		_rtfeldman$elm_css$Css$px(200)),
+	_1: {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css$maxWidth(
+			_rtfeldman$elm_css$Css$px(500)),
+		_1: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css$maxHeight(
+				_rtfeldman$elm_css$Css$px(300)),
+			_1: {ctor: '[]'}
 		}
 	}
 };
@@ -23618,9 +23888,9 @@ var _user$project$Views$viewerStyling = {
 		}
 	}
 };
-var _user$project$Views$styles = function (_p0) {
+var _user$project$Views$styles = function (_p1) {
 	return _elm_lang$html$Html_Attributes$style(
-		_rtfeldman$elm_css$Css$asPairs(_p0));
+		_rtfeldman$elm_css$Css$asPairs(_p1));
 };
 var _user$project$Views$modelDetailTableHeader = A2(
 	_elm_lang$html$Html$thead,
@@ -23795,10 +24065,10 @@ var _user$project$Views$modelDetailTableHeader = A2(
 			}),
 		_1: {ctor: '[]'}
 	});
-var _user$project$Views$_p1 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace(_user$project$BuilderCss$cssNamespace);
-var _user$project$Views$class = _user$project$Views$_p1.$class;
-var _user$project$Views$classList = _user$project$Views$_p1.classList;
-var _user$project$Views$id = _user$project$Views$_p1.id;
+var _user$project$Views$_p2 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace(_user$project$BuilderCss$cssNamespace);
+var _user$project$Views$class = _user$project$Views$_p2.$class;
+var _user$project$Views$classList = _user$project$Views$_p2.classList;
+var _user$project$Views$id = _user$project$Views$_p2.id;
 var _user$project$Views$siteHeader = A2(
 	_elm_lang$html$Html$div,
 	{
@@ -23962,8 +24232,8 @@ var _user$project$Views$optimisePanel = F4(
 			_elm_lang$core$List$length(optJobs),
 			0) > 0) ? true : false;
 		var advancedBuild = function () {
-			var _p2 = buildMode;
-			if (_p2.ctor === 'Basic') {
+			var _p3 = buildMode;
+			if (_p3.ctor === 'Basic') {
 				return false;
 			} else {
 				return true;
@@ -24115,6 +24385,40 @@ var _user$project$Views$topLeftToggles = A2(
 			}
 		}
 	});
+var _user$project$Views$informationButton = function (infoBoxID) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _user$project$Views$class(
+				{
+					ctor: '::',
+					_0: _user$project$BuilderCss$FlexCloseCss,
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _user$project$Views$styles(
+					{
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Css$marginLeft(
+							_rtfeldman$elm_css$Css$px(8)),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(
+						_user$project$Types$ShowInfo(infoBoxID)),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text('�'),
+			_1: {ctor: '[]'}
+		});
+};
 var _user$project$Views$downloadStructureButton = function (pdbFile) {
 	var deactivated = _elm_lang$core$Native_Utils.eq(pdbFile, _elm_lang$core$Maybe$Nothing) ? true : false;
 	return A2(
@@ -24173,12 +24477,48 @@ var _user$project$Views$modelInfoPanel = function (model) {
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$h3,
-				{ctor: '[]'},
+				_elm_lang$html$Html$div,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html$text('Model Information'),
+					_0: _user$project$Views$class(
+						{
+							ctor: '::',
+							_0: _user$project$BuilderCss$FlexContainerCss,
+							_1: {ctor: '[]'}
+						}),
 					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _user$project$Views$class(
+								{
+									ctor: '::',
+									_0: _user$project$BuilderCss$FlexCloseCss,
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$h3,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Model Information'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: _user$project$Views$informationButton(_user$project$Types$MIInfo),
+						_1: {ctor: '[]'}
+					}
 				}),
 			_1: {
 				ctor: '::',
@@ -24375,29 +24715,29 @@ var _user$project$Views$modelHistoryTopRow = F7(
 					})));
 	});
 var _user$project$Views$modelParametersAsRow = F2(
-	function (_p3, building) {
-		var _p4 = _p3;
-		var _p10 = _p4._1._1;
-		var _p9 = _p4._1._2;
-		var _p8 = _p4._1._0;
-		var _p7 = _p4._1._3;
-		var _p6 = _p4._0;
-		var _p5 = _p4._1._4;
+	function (_p4, building) {
+		var _p5 = _p4;
+		var _p11 = _p5._1._1;
+		var _p10 = _p5._1._2;
+		var _p9 = _p5._1._0;
+		var _p8 = _p5._1._3;
+		var _p7 = _p5._0;
+		var _p6 = _p5._1._4;
 		var foldedRows = A2(
 			_elm_lang$core$List$map,
-			_user$project$Views$modelFoldedRow(_p9),
+			_user$project$Views$modelFoldedRow(_p10),
 			A2(
 				_elm_lang$core$Maybe$withDefault,
 				{ctor: '[]'},
 				_elm_lang$core$List$tail(
-					_elm_lang$core$Dict$values(_p8))));
-		return (!_p10) ? {
+					_elm_lang$core$Dict$values(_p9))));
+		return (!_p11) ? {
 			ctor: '::',
-			_0: A7(_user$project$Views$modelHistoryTopRow, _p6, _p8, building, _p10, _p9, _p7, _p5),
+			_0: A7(_user$project$Views$modelHistoryTopRow, _p7, _p9, building, _p11, _p10, _p8, _p6),
 			_1: {ctor: '[]'}
 		} : {
 			ctor: '::',
-			_0: A7(_user$project$Views$modelHistoryTopRow, _p6, _p8, building, _p10, _p9, _p7, _p5),
+			_0: A7(_user$project$Views$modelHistoryTopRow, _p7, _p9, building, _p11, _p10, _p8, _p6),
 			_1: foldedRows
 		};
 	});
@@ -24818,6 +25158,70 @@ var _user$project$Views$topRightToggles = A2(
 			_1: {ctor: '[]'}
 		}
 	});
+var _user$project$Views$showInfoBox = function (infoBox) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _user$project$Views$class(
+				{
+					ctor: '::',
+					_0: _user$project$BuilderCss$OverlayPanelCss,
+					_1: {
+						ctor: '::',
+						_0: _user$project$BuilderCss$InfoPanelCss,
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _user$project$Views$styles(
+					A2(_elm_lang$core$Basics_ops['++'], _user$project$Views$showInfoBoxStyling, _user$project$BuilderCss$panelStyling)),
+				_1: {ctor: '[]'}
+			}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h2,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Information'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_evancz$elm_markdown$Markdown$toHtml,
+					{ctor: '[]'},
+					_user$project$Views$getInformationText(infoBox)),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$button,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$CloseInfo),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Close'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+};
 var _user$project$Views$buildingStatusPanel = function (building) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -24875,9 +25279,9 @@ var _user$project$Views$buildingStatusPanel = function (building) {
 		});
 };
 var _user$project$Views$optJobStatus = F2(
-	function (_p11, position) {
-		var _p12 = _p11;
-		var _p14 = _p12._1;
+	function (_p12, position) {
+		var _p13 = _p12;
+		var _p15 = _p13._1;
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -24917,15 +25321,15 @@ var _user$project$Views$optJobStatus = F2(
 									'(',
 									A2(
 										_elm_lang$core$Basics_ops['++'],
-										_elm_lang$core$Basics$toString(_p14),
+										_elm_lang$core$Basics$toString(_p15),
 										')'))),
 							_1: {ctor: '[]'}
 						}
 					}
 				},
 				function () {
-					var _p13 = _p14;
-					if (_p13.ctor === 'Complete') {
+					var _p14 = _p15;
+					if (_p14.ctor === 'Complete') {
 						return {
 							ctor: '::',
 							_0: A2(
@@ -24933,7 +25337,7 @@ var _user$project$Views$optJobStatus = F2(
 								{
 									ctor: '::',
 									_0: _elm_lang$html$Html_Events$onClick(
-										_user$project$Types$RetrieveOptimisation(_p12._0)),
+										_user$project$Types$RetrieveOptimisation(_p13._0)),
 									_1: {ctor: '[]'}
 								},
 								{
@@ -25011,14 +25415,28 @@ var _user$project$Views$overlayPanels = function (model) {
 				}
 			}
 		},
-		A3(
-			_elm_lang$core$List$map2,
-			_user$project$Views$optJobStatus,
-			model.optJobs,
-			A2(
-				_elm_lang$core$List$range,
-				1,
-				_elm_lang$core$List$length(model.optJobs))));
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			function () {
+				var _p16 = model.activeInfoBox;
+				if (_p16.ctor === 'Just') {
+					return {
+						ctor: '::',
+						_0: _user$project$Views$showInfoBox(_p16._0),
+						_1: {ctor: '[]'}
+					};
+				} else {
+					return {ctor: '[]'};
+				}
+			}(),
+			A3(
+				_elm_lang$core$List$map2,
+				_user$project$Views$optJobStatus,
+				model.optJobs,
+				A2(
+					_elm_lang$core$List$range,
+					1,
+					_elm_lang$core$List$length(model.optJobs)))));
 	return A2(
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
@@ -25101,55 +25519,72 @@ var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
 					_elm_lang$core$Maybe$Just,
 					A2(
 						_elm_lang$core$Json_Decode$andThen,
-						function (building) {
+						function (activeInfoBox) {
 							return A2(
 								_elm_lang$core$Json_Decode$andThen,
-								function (currentInput) {
+								function (building) {
 									return A2(
 										_elm_lang$core$Json_Decode$andThen,
-										function (currentRepresentation) {
+										function (currentInput) {
 											return A2(
 												_elm_lang$core$Json_Decode$andThen,
-												function (heat) {
+												function (currentRepresentation) {
 													return A2(
 														_elm_lang$core$Json_Decode$andThen,
-														function (knobIDs) {
+														function (heat) {
 															return A2(
 																_elm_lang$core$Json_Decode$andThen,
-																function (modelHistory) {
+																function (knobIDs) {
 																	return A2(
 																		_elm_lang$core$Json_Decode$andThen,
-																		function (nextHistoryID) {
+																		function (modelHistory) {
 																			return A2(
 																				_elm_lang$core$Json_Decode$andThen,
-																				function (oligomericState) {
+																				function (nextHistoryID) {
 																					return A2(
 																						_elm_lang$core$Json_Decode$andThen,
-																						function (optJobs) {
+																						function (oligomericState) {
 																							return A2(
 																								_elm_lang$core$Json_Decode$andThen,
-																								function (panelVisibility) {
+																								function (optJobs) {
 																									return A2(
 																										_elm_lang$core$Json_Decode$andThen,
-																										function (parameterClipBoard) {
+																										function (panelVisibility) {
 																											return A2(
 																												_elm_lang$core$Json_Decode$andThen,
-																												function (parameters) {
+																												function (parameterClipBoard) {
 																													return A2(
 																														_elm_lang$core$Json_Decode$andThen,
-																														function (pdbFile) {
+																														function (parameters) {
 																															return A2(
 																																_elm_lang$core$Json_Decode$andThen,
-																																function (residuesPerTurn) {
+																																function (pdbFile) {
 																																	return A2(
 																																		_elm_lang$core$Json_Decode$andThen,
-																																		function (score) {
-																																			return _elm_lang$core$Json_Decode$succeed(
-																																				{building: building, currentInput: currentInput, currentRepresentation: currentRepresentation, heat: heat, knobIDs: knobIDs, modelHistory: modelHistory, nextHistoryID: nextHistoryID, oligomericState: oligomericState, optJobs: optJobs, panelVisibility: panelVisibility, parameterClipBoard: parameterClipBoard, parameters: parameters, pdbFile: pdbFile, residuesPerTurn: residuesPerTurn, score: score});
+																																		function (residuesPerTurn) {
+																																			return A2(
+																																				_elm_lang$core$Json_Decode$andThen,
+																																				function (score) {
+																																					return _elm_lang$core$Json_Decode$succeed(
+																																						{activeInfoBox: activeInfoBox, building: building, currentInput: currentInput, currentRepresentation: currentRepresentation, heat: heat, knobIDs: knobIDs, modelHistory: modelHistory, nextHistoryID: nextHistoryID, oligomericState: oligomericState, optJobs: optJobs, panelVisibility: panelVisibility, parameterClipBoard: parameterClipBoard, parameters: parameters, pdbFile: pdbFile, residuesPerTurn: residuesPerTurn, score: score});
+																																				},
+																																				A2(
+																																					_elm_lang$core$Json_Decode$field,
+																																					'score',
+																																					_elm_lang$core$Json_Decode$oneOf(
+																																						{
+																																							ctor: '::',
+																																							_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
+																																							_1: {
+																																								ctor: '::',
+																																								_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
+																																								_1: {ctor: '[]'}
+																																							}
+																																						})));
 																																		},
 																																		A2(
 																																			_elm_lang$core$Json_Decode$field,
-																																			'score',
+																																			'residuesPerTurn',
 																																			_elm_lang$core$Json_Decode$oneOf(
 																																				{
 																																					ctor: '::',
@@ -25163,81 +25598,81 @@ var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
 																																},
 																																A2(
 																																	_elm_lang$core$Json_Decode$field,
-																																	'residuesPerTurn',
+																																	'pdbFile',
 																																	_elm_lang$core$Json_Decode$oneOf(
 																																		{
 																																			ctor: '::',
 																																			_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
 																																			_1: {
 																																				ctor: '::',
-																																				_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
+																																				_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$string),
 																																				_1: {ctor: '[]'}
 																																			}
 																																		})));
 																														},
 																														A2(
 																															_elm_lang$core$Json_Decode$field,
-																															'pdbFile',
-																															_elm_lang$core$Json_Decode$oneOf(
-																																{
-																																	ctor: '::',
-																																	_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
-																																	_1: {
-																																		ctor: '::',
-																																		_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$string),
-																																		_1: {ctor: '[]'}
-																																	}
-																																})));
-																												},
-																												A2(
-																													_elm_lang$core$Json_Decode$field,
-																													'parameters',
-																													_elm_lang$core$Json_Decode$list(
-																														A2(
-																															_elm_lang$core$Json_Decode$andThen,
-																															function (x0) {
-																																return A2(
+																															'parameters',
+																															_elm_lang$core$Json_Decode$list(
+																																A2(
 																																	_elm_lang$core$Json_Decode$andThen,
-																																	function (x1) {
-																																		return _elm_lang$core$Json_Decode$succeed(
-																																			{ctor: '_Tuple2', _0: x0, _1: x1});
-																																	},
-																																	A2(
-																																		_elm_lang$core$Json_Decode$index,
-																																		1,
-																																		A2(
+																																	function (x0) {
+																																		return A2(
 																																			_elm_lang$core$Json_Decode$andThen,
-																																			function (antiParallel) {
-																																				return A2(
+																																			function (x1) {
+																																				return _elm_lang$core$Json_Decode$succeed(
+																																					{ctor: '_Tuple2', _0: x0, _1: x1});
+																																			},
+																																			A2(
+																																				_elm_lang$core$Json_Decode$index,
+																																				1,
+																																				A2(
 																																					_elm_lang$core$Json_Decode$andThen,
-																																					function (linkedSuperHelRot) {
+																																					function (antiParallel) {
 																																						return A2(
 																																							_elm_lang$core$Json_Decode$andThen,
-																																							function (phiCA) {
+																																							function (linkedSuperHelRot) {
 																																								return A2(
 																																									_elm_lang$core$Json_Decode$andThen,
-																																									function (pitch) {
+																																									function (phiCA) {
 																																										return A2(
 																																											_elm_lang$core$Json_Decode$andThen,
-																																											function (radius) {
+																																											function (pitch) {
 																																												return A2(
 																																													_elm_lang$core$Json_Decode$andThen,
-																																													function (register) {
+																																													function (radius) {
 																																														return A2(
 																																															_elm_lang$core$Json_Decode$andThen,
-																																															function (sequence) {
+																																															function (register) {
 																																																return A2(
 																																																	_elm_lang$core$Json_Decode$andThen,
-																																																	function (superHelRot) {
+																																																	function (sequence) {
 																																																		return A2(
 																																																			_elm_lang$core$Json_Decode$andThen,
-																																																			function (zShift) {
-																																																				return _elm_lang$core$Json_Decode$succeed(
-																																																					{antiParallel: antiParallel, linkedSuperHelRot: linkedSuperHelRot, phiCA: phiCA, pitch: pitch, radius: radius, register: register, sequence: sequence, superHelRot: superHelRot, zShift: zShift});
+																																																			function (superHelRot) {
+																																																				return A2(
+																																																					_elm_lang$core$Json_Decode$andThen,
+																																																					function (zShift) {
+																																																						return _elm_lang$core$Json_Decode$succeed(
+																																																							{antiParallel: antiParallel, linkedSuperHelRot: linkedSuperHelRot, phiCA: phiCA, pitch: pitch, radius: radius, register: register, sequence: sequence, superHelRot: superHelRot, zShift: zShift});
+																																																					},
+																																																					A2(
+																																																						_elm_lang$core$Json_Decode$field,
+																																																						'zShift',
+																																																						_elm_lang$core$Json_Decode$oneOf(
+																																																							{
+																																																								ctor: '::',
+																																																								_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
+																																																								_1: {
+																																																									ctor: '::',
+																																																									_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
+																																																									_1: {ctor: '[]'}
+																																																								}
+																																																							})));
 																																																			},
 																																																			A2(
 																																																				_elm_lang$core$Json_Decode$field,
-																																																				'zShift',
+																																																				'superHelRot',
 																																																				_elm_lang$core$Json_Decode$oneOf(
 																																																					{
 																																																						ctor: '::',
@@ -25251,37 +25686,37 @@ var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
 																																																	},
 																																																	A2(
 																																																		_elm_lang$core$Json_Decode$field,
-																																																		'superHelRot',
+																																																		'sequence',
 																																																		_elm_lang$core$Json_Decode$oneOf(
 																																																			{
 																																																				ctor: '::',
 																																																				_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
 																																																				_1: {
 																																																					ctor: '::',
-																																																					_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
+																																																					_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$string),
 																																																					_1: {ctor: '[]'}
 																																																				}
 																																																			})));
 																																															},
-																																															A2(
-																																																_elm_lang$core$Json_Decode$field,
-																																																'sequence',
-																																																_elm_lang$core$Json_Decode$oneOf(
-																																																	{
-																																																		ctor: '::',
-																																																		_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
-																																																		_1: {
-																																																			ctor: '::',
-																																																			_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$string),
-																																																			_1: {ctor: '[]'}
-																																																		}
-																																																	})));
+																																															A2(_elm_lang$core$Json_Decode$field, 'register', _elm_lang$core$Json_Decode$string));
 																																													},
-																																													A2(_elm_lang$core$Json_Decode$field, 'register', _elm_lang$core$Json_Decode$string));
+																																													A2(
+																																														_elm_lang$core$Json_Decode$field,
+																																														'radius',
+																																														_elm_lang$core$Json_Decode$oneOf(
+																																															{
+																																																ctor: '::',
+																																																_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
+																																																_1: {
+																																																	ctor: '::',
+																																																	_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
+																																																	_1: {ctor: '[]'}
+																																																}
+																																															})));
 																																											},
 																																											A2(
 																																												_elm_lang$core$Json_Decode$field,
-																																												'radius',
+																																												'pitch',
 																																												_elm_lang$core$Json_Decode$oneOf(
 																																													{
 																																														ctor: '::',
@@ -25295,7 +25730,7 @@ var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
 																																									},
 																																									A2(
 																																										_elm_lang$core$Json_Decode$field,
-																																										'pitch',
+																																										'phiCA',
 																																										_elm_lang$core$Json_Decode$oneOf(
 																																											{
 																																												ctor: '::',
@@ -25307,38 +25742,266 @@ var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
 																																												}
 																																											})));
 																																							},
-																																							A2(
-																																								_elm_lang$core$Json_Decode$field,
-																																								'phiCA',
-																																								_elm_lang$core$Json_Decode$oneOf(
-																																									{
-																																										ctor: '::',
-																																										_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
-																																										_1: {
-																																											ctor: '::',
-																																											_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
-																																											_1: {ctor: '[]'}
-																																										}
-																																									})));
+																																							A2(_elm_lang$core$Json_Decode$field, 'linkedSuperHelRot', _elm_lang$core$Json_Decode$bool));
 																																					},
-																																					A2(_elm_lang$core$Json_Decode$field, 'linkedSuperHelRot', _elm_lang$core$Json_Decode$bool));
-																																			},
-																																			A2(_elm_lang$core$Json_Decode$field, 'antiParallel', _elm_lang$core$Json_Decode$bool))));
-																															},
-																															A2(_elm_lang$core$Json_Decode$index, 0, _elm_lang$core$Json_Decode$int)))));
+																																					A2(_elm_lang$core$Json_Decode$field, 'antiParallel', _elm_lang$core$Json_Decode$bool))));
+																																	},
+																																	A2(_elm_lang$core$Json_Decode$index, 0, _elm_lang$core$Json_Decode$int)))));
+																												},
+																												A2(
+																													_elm_lang$core$Json_Decode$field,
+																													'parameterClipBoard',
+																													_elm_lang$core$Json_Decode$oneOf(
+																														{
+																															ctor: '::',
+																															_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
+																															_1: {
+																																ctor: '::',
+																																_0: A2(
+																																	_elm_lang$core$Json_Decode$map,
+																																	_elm_lang$core$Maybe$Just,
+																																	A2(
+																																		_elm_lang$core$Json_Decode$andThen,
+																																		function (antiParallel) {
+																																			return A2(
+																																				_elm_lang$core$Json_Decode$andThen,
+																																				function (linkedSuperHelRot) {
+																																					return A2(
+																																						_elm_lang$core$Json_Decode$andThen,
+																																						function (phiCA) {
+																																							return A2(
+																																								_elm_lang$core$Json_Decode$andThen,
+																																								function (pitch) {
+																																									return A2(
+																																										_elm_lang$core$Json_Decode$andThen,
+																																										function (radius) {
+																																											return A2(
+																																												_elm_lang$core$Json_Decode$andThen,
+																																												function (register) {
+																																													return A2(
+																																														_elm_lang$core$Json_Decode$andThen,
+																																														function (sequence) {
+																																															return A2(
+																																																_elm_lang$core$Json_Decode$andThen,
+																																																function (superHelRot) {
+																																																	return A2(
+																																																		_elm_lang$core$Json_Decode$andThen,
+																																																		function (zShift) {
+																																																			return _elm_lang$core$Json_Decode$succeed(
+																																																				{antiParallel: antiParallel, linkedSuperHelRot: linkedSuperHelRot, phiCA: phiCA, pitch: pitch, radius: radius, register: register, sequence: sequence, superHelRot: superHelRot, zShift: zShift});
+																																																		},
+																																																		A2(
+																																																			_elm_lang$core$Json_Decode$field,
+																																																			'zShift',
+																																																			_elm_lang$core$Json_Decode$oneOf(
+																																																				{
+																																																					ctor: '::',
+																																																					_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
+																																																					_1: {
+																																																						ctor: '::',
+																																																						_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
+																																																						_1: {ctor: '[]'}
+																																																					}
+																																																				})));
+																																																},
+																																																A2(
+																																																	_elm_lang$core$Json_Decode$field,
+																																																	'superHelRot',
+																																																	_elm_lang$core$Json_Decode$oneOf(
+																																																		{
+																																																			ctor: '::',
+																																																			_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
+																																																			_1: {
+																																																				ctor: '::',
+																																																				_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
+																																																				_1: {ctor: '[]'}
+																																																			}
+																																																		})));
+																																														},
+																																														A2(
+																																															_elm_lang$core$Json_Decode$field,
+																																															'sequence',
+																																															_elm_lang$core$Json_Decode$oneOf(
+																																																{
+																																																	ctor: '::',
+																																																	_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
+																																																	_1: {
+																																																		ctor: '::',
+																																																		_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$string),
+																																																		_1: {ctor: '[]'}
+																																																	}
+																																																})));
+																																												},
+																																												A2(_elm_lang$core$Json_Decode$field, 'register', _elm_lang$core$Json_Decode$string));
+																																										},
+																																										A2(
+																																											_elm_lang$core$Json_Decode$field,
+																																											'radius',
+																																											_elm_lang$core$Json_Decode$oneOf(
+																																												{
+																																													ctor: '::',
+																																													_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
+																																													_1: {
+																																														ctor: '::',
+																																														_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
+																																														_1: {ctor: '[]'}
+																																													}
+																																												})));
+																																								},
+																																								A2(
+																																									_elm_lang$core$Json_Decode$field,
+																																									'pitch',
+																																									_elm_lang$core$Json_Decode$oneOf(
+																																										{
+																																											ctor: '::',
+																																											_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
+																																											_1: {
+																																												ctor: '::',
+																																												_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
+																																												_1: {ctor: '[]'}
+																																											}
+																																										})));
+																																						},
+																																						A2(
+																																							_elm_lang$core$Json_Decode$field,
+																																							'phiCA',
+																																							_elm_lang$core$Json_Decode$oneOf(
+																																								{
+																																									ctor: '::',
+																																									_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
+																																									_1: {
+																																										ctor: '::',
+																																										_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
+																																										_1: {ctor: '[]'}
+																																									}
+																																								})));
+																																				},
+																																				A2(_elm_lang$core$Json_Decode$field, 'linkedSuperHelRot', _elm_lang$core$Json_Decode$bool));
+																																		},
+																																		A2(_elm_lang$core$Json_Decode$field, 'antiParallel', _elm_lang$core$Json_Decode$bool))),
+																																_1: {ctor: '[]'}
+																															}
+																														})));
 																										},
 																										A2(
 																											_elm_lang$core$Json_Decode$field,
-																											'parameterClipBoard',
-																											_elm_lang$core$Json_Decode$oneOf(
-																												{
-																													ctor: '::',
-																													_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
-																													_1: {
-																														ctor: '::',
-																														_0: A2(
-																															_elm_lang$core$Json_Decode$map,
-																															_elm_lang$core$Maybe$Just,
+																											'panelVisibility',
+																											A2(
+																												_elm_lang$core$Json_Decode$andThen,
+																												function (buildHistoryPanel) {
+																													return A2(
+																														_elm_lang$core$Json_Decode$andThen,
+																														function (buildPanel) {
+																															return A2(
+																																_elm_lang$core$Json_Decode$andThen,
+																																function (examplesPanel) {
+																																	return A2(
+																																		_elm_lang$core$Json_Decode$andThen,
+																																		function (optimisePanel) {
+																																			return A2(
+																																				_elm_lang$core$Json_Decode$andThen,
+																																				function (viewerPanel) {
+																																					return _elm_lang$core$Json_Decode$succeed(
+																																						{buildHistoryPanel: buildHistoryPanel, buildPanel: buildPanel, examplesPanel: examplesPanel, optimisePanel: optimisePanel, viewerPanel: viewerPanel});
+																																				},
+																																				A2(_elm_lang$core$Json_Decode$field, 'viewerPanel', _elm_lang$core$Json_Decode$bool));
+																																		},
+																																		A2(_elm_lang$core$Json_Decode$field, 'optimisePanel', _elm_lang$core$Json_Decode$bool));
+																																},
+																																A2(_elm_lang$core$Json_Decode$field, 'examplesPanel', _elm_lang$core$Json_Decode$bool));
+																														},
+																														A2(_elm_lang$core$Json_Decode$field, 'buildPanel', _elm_lang$core$Json_Decode$bool));
+																												},
+																												A2(_elm_lang$core$Json_Decode$field, 'buildHistoryPanel', _elm_lang$core$Json_Decode$bool))));
+																								},
+																								A2(
+																									_elm_lang$core$Json_Decode$field,
+																									'optJobs',
+																									_elm_lang$core$Json_Decode$list(
+																										A2(
+																											_elm_lang$core$Json_Decode$andThen,
+																											function (x0) {
+																												return A2(
+																													_elm_lang$core$Json_Decode$andThen,
+																													function (x1) {
+																														return _elm_lang$core$Json_Decode$succeed(
+																															{ctor: '_Tuple2', _0: x0, _1: x1});
+																													},
+																													A2(_elm_lang$core$Json_Decode$index, 1, _elm_lang$core$Json_Decode$string));
+																											},
+																											A2(_elm_lang$core$Json_Decode$index, 0, _elm_lang$core$Json_Decode$string)))));
+																						},
+																						A2(_elm_lang$core$Json_Decode$field, 'oligomericState', _elm_lang$core$Json_Decode$int));
+																				},
+																				A2(_elm_lang$core$Json_Decode$field, 'nextHistoryID', _elm_lang$core$Json_Decode$int));
+																		},
+																		A2(
+																			_elm_lang$core$Json_Decode$field,
+																			'modelHistory',
+																			_elm_lang$core$Json_Decode$list(
+																				A2(
+																					_elm_lang$core$Json_Decode$andThen,
+																					function (x0) {
+																						return A2(
+																							_elm_lang$core$Json_Decode$andThen,
+																							function (x1) {
+																								return _elm_lang$core$Json_Decode$succeed(
+																									{ctor: '_Tuple2', _0: x0, _1: x1});
+																							},
+																							A2(
+																								_elm_lang$core$Json_Decode$index,
+																								1,
+																								A2(
+																									_elm_lang$core$Json_Decode$andThen,
+																									function (x0) {
+																										return A2(
+																											_elm_lang$core$Json_Decode$andThen,
+																											function (x1) {
+																												return A2(
+																													_elm_lang$core$Json_Decode$andThen,
+																													function (x2) {
+																														return A2(
+																															_elm_lang$core$Json_Decode$andThen,
+																															function (x3) {
+																																return A2(
+																																	_elm_lang$core$Json_Decode$andThen,
+																																	function (x4) {
+																																		return A2(
+																																			_elm_lang$core$Json_Decode$andThen,
+																																			function (x5) {
+																																				return _elm_lang$core$Json_Decode$succeed(
+																																					{ctor: '_Tuple6', _0: x0, _1: x1, _2: x2, _3: x3, _4: x4, _5: x5});
+																																			},
+																																			A2(
+																																				_elm_lang$core$Json_Decode$index,
+																																				5,
+																																				_elm_lang$core$Json_Decode$list(
+																																					_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string))));
+																																	},
+																																	A2(_elm_lang$core$Json_Decode$index, 4, _elm_lang$core$Json_Decode$string));
+																															},
+																															A2(_elm_lang$core$Json_Decode$index, 3, _elm_lang$core$Json_Decode$string));
+																													},
+																													A2(_elm_lang$core$Json_Decode$index, 2, _elm_lang$core$Json_Decode$float));
+																											},
+																											A2(_elm_lang$core$Json_Decode$index, 1, _elm_lang$core$Json_Decode$bool));
+																									},
+																									A2(
+																										_elm_lang$core$Json_Decode$index,
+																										0,
+																										_elm_lang$core$Json_Decode$list(
+																											A2(
+																												_elm_lang$core$Json_Decode$andThen,
+																												function (x0) {
+																													return A2(
+																														_elm_lang$core$Json_Decode$andThen,
+																														function (x1) {
+																															return _elm_lang$core$Json_Decode$succeed(
+																																{ctor: '_Tuple2', _0: x0, _1: x1});
+																														},
+																														A2(
+																															_elm_lang$core$Json_Decode$index,
+																															1,
 																															A2(
 																																_elm_lang$core$Json_Decode$andThen,
 																																function (antiParallel) {
@@ -25457,372 +26120,132 @@ var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
 																																		},
 																																		A2(_elm_lang$core$Json_Decode$field, 'linkedSuperHelRot', _elm_lang$core$Json_Decode$bool));
 																																},
-																																A2(_elm_lang$core$Json_Decode$field, 'antiParallel', _elm_lang$core$Json_Decode$bool))),
-																														_1: {ctor: '[]'}
-																													}
-																												})));
-																								},
-																								A2(
-																									_elm_lang$core$Json_Decode$field,
-																									'panelVisibility',
-																									A2(
-																										_elm_lang$core$Json_Decode$andThen,
-																										function (buildHistoryPanel) {
-																											return A2(
-																												_elm_lang$core$Json_Decode$andThen,
-																												function (buildPanel) {
-																													return A2(
-																														_elm_lang$core$Json_Decode$andThen,
-																														function (examplesPanel) {
-																															return A2(
-																																_elm_lang$core$Json_Decode$andThen,
-																																function (optimisePanel) {
-																																	return A2(
-																																		_elm_lang$core$Json_Decode$andThen,
-																																		function (viewerPanel) {
-																																			return _elm_lang$core$Json_Decode$succeed(
-																																				{buildHistoryPanel: buildHistoryPanel, buildPanel: buildPanel, examplesPanel: examplesPanel, optimisePanel: optimisePanel, viewerPanel: viewerPanel});
-																																		},
-																																		A2(_elm_lang$core$Json_Decode$field, 'viewerPanel', _elm_lang$core$Json_Decode$bool));
-																																},
-																																A2(_elm_lang$core$Json_Decode$field, 'optimisePanel', _elm_lang$core$Json_Decode$bool));
-																														},
-																														A2(_elm_lang$core$Json_Decode$field, 'examplesPanel', _elm_lang$core$Json_Decode$bool));
+																																A2(_elm_lang$core$Json_Decode$field, 'antiParallel', _elm_lang$core$Json_Decode$bool))));
 																												},
-																												A2(_elm_lang$core$Json_Decode$field, 'buildPanel', _elm_lang$core$Json_Decode$bool));
-																										},
-																										A2(_elm_lang$core$Json_Decode$field, 'buildHistoryPanel', _elm_lang$core$Json_Decode$bool))));
-																						},
-																						A2(
-																							_elm_lang$core$Json_Decode$field,
-																							'optJobs',
-																							_elm_lang$core$Json_Decode$list(
-																								A2(
-																									_elm_lang$core$Json_Decode$andThen,
-																									function (x0) {
-																										return A2(
-																											_elm_lang$core$Json_Decode$andThen,
-																											function (x1) {
-																												return _elm_lang$core$Json_Decode$succeed(
-																													{ctor: '_Tuple2', _0: x0, _1: x1});
-																											},
-																											A2(_elm_lang$core$Json_Decode$index, 1, _elm_lang$core$Json_Decode$string));
-																									},
-																									A2(_elm_lang$core$Json_Decode$index, 0, _elm_lang$core$Json_Decode$string)))));
-																				},
-																				A2(_elm_lang$core$Json_Decode$field, 'oligomericState', _elm_lang$core$Json_Decode$int));
-																		},
-																		A2(_elm_lang$core$Json_Decode$field, 'nextHistoryID', _elm_lang$core$Json_Decode$int));
+																												A2(_elm_lang$core$Json_Decode$index, 0, _elm_lang$core$Json_Decode$int)))))));
+																					},
+																					A2(_elm_lang$core$Json_Decode$index, 0, _elm_lang$core$Json_Decode$int)))));
 																},
 																A2(
 																	_elm_lang$core$Json_Decode$field,
-																	'modelHistory',
-																	_elm_lang$core$Json_Decode$list(
-																		A2(
-																			_elm_lang$core$Json_Decode$andThen,
-																			function (x0) {
-																				return A2(
-																					_elm_lang$core$Json_Decode$andThen,
-																					function (x1) {
-																						return _elm_lang$core$Json_Decode$succeed(
-																							{ctor: '_Tuple2', _0: x0, _1: x1});
-																					},
-																					A2(
-																						_elm_lang$core$Json_Decode$index,
-																						1,
-																						A2(
-																							_elm_lang$core$Json_Decode$andThen,
-																							function (x0) {
-																								return A2(
-																									_elm_lang$core$Json_Decode$andThen,
-																									function (x1) {
-																										return A2(
-																											_elm_lang$core$Json_Decode$andThen,
-																											function (x2) {
-																												return A2(
-																													_elm_lang$core$Json_Decode$andThen,
-																													function (x3) {
-																														return A2(
-																															_elm_lang$core$Json_Decode$andThen,
-																															function (x4) {
-																																return A2(
-																																	_elm_lang$core$Json_Decode$andThen,
-																																	function (x5) {
-																																		return _elm_lang$core$Json_Decode$succeed(
-																																			{ctor: '_Tuple6', _0: x0, _1: x1, _2: x2, _3: x3, _4: x4, _5: x5});
-																																	},
-																																	A2(
-																																		_elm_lang$core$Json_Decode$index,
-																																		5,
-																																		_elm_lang$core$Json_Decode$list(
-																																			_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string))));
-																															},
-																															A2(_elm_lang$core$Json_Decode$index, 4, _elm_lang$core$Json_Decode$string));
-																													},
-																													A2(_elm_lang$core$Json_Decode$index, 3, _elm_lang$core$Json_Decode$string));
-																											},
-																											A2(_elm_lang$core$Json_Decode$index, 2, _elm_lang$core$Json_Decode$float));
-																									},
-																									A2(_elm_lang$core$Json_Decode$index, 1, _elm_lang$core$Json_Decode$bool));
-																							},
-																							A2(
-																								_elm_lang$core$Json_Decode$index,
-																								0,
-																								_elm_lang$core$Json_Decode$list(
-																									A2(
-																										_elm_lang$core$Json_Decode$andThen,
-																										function (x0) {
-																											return A2(
-																												_elm_lang$core$Json_Decode$andThen,
-																												function (x1) {
-																													return _elm_lang$core$Json_Decode$succeed(
-																														{ctor: '_Tuple2', _0: x0, _1: x1});
-																												},
-																												A2(
-																													_elm_lang$core$Json_Decode$index,
-																													1,
-																													A2(
-																														_elm_lang$core$Json_Decode$andThen,
-																														function (antiParallel) {
-																															return A2(
-																																_elm_lang$core$Json_Decode$andThen,
-																																function (linkedSuperHelRot) {
-																																	return A2(
-																																		_elm_lang$core$Json_Decode$andThen,
-																																		function (phiCA) {
-																																			return A2(
-																																				_elm_lang$core$Json_Decode$andThen,
-																																				function (pitch) {
-																																					return A2(
-																																						_elm_lang$core$Json_Decode$andThen,
-																																						function (radius) {
-																																							return A2(
-																																								_elm_lang$core$Json_Decode$andThen,
-																																								function (register) {
-																																									return A2(
-																																										_elm_lang$core$Json_Decode$andThen,
-																																										function (sequence) {
-																																											return A2(
-																																												_elm_lang$core$Json_Decode$andThen,
-																																												function (superHelRot) {
-																																													return A2(
-																																														_elm_lang$core$Json_Decode$andThen,
-																																														function (zShift) {
-																																															return _elm_lang$core$Json_Decode$succeed(
-																																																{antiParallel: antiParallel, linkedSuperHelRot: linkedSuperHelRot, phiCA: phiCA, pitch: pitch, radius: radius, register: register, sequence: sequence, superHelRot: superHelRot, zShift: zShift});
-																																														},
-																																														A2(
-																																															_elm_lang$core$Json_Decode$field,
-																																															'zShift',
-																																															_elm_lang$core$Json_Decode$oneOf(
-																																																{
-																																																	ctor: '::',
-																																																	_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
-																																																	_1: {
-																																																		ctor: '::',
-																																																		_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
-																																																		_1: {ctor: '[]'}
-																																																	}
-																																																})));
-																																												},
-																																												A2(
-																																													_elm_lang$core$Json_Decode$field,
-																																													'superHelRot',
-																																													_elm_lang$core$Json_Decode$oneOf(
-																																														{
-																																															ctor: '::',
-																																															_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
-																																															_1: {
-																																																ctor: '::',
-																																																_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
-																																																_1: {ctor: '[]'}
-																																															}
-																																														})));
-																																										},
-																																										A2(
-																																											_elm_lang$core$Json_Decode$field,
-																																											'sequence',
-																																											_elm_lang$core$Json_Decode$oneOf(
-																																												{
-																																													ctor: '::',
-																																													_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
-																																													_1: {
-																																														ctor: '::',
-																																														_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$string),
-																																														_1: {ctor: '[]'}
-																																													}
-																																												})));
-																																								},
-																																								A2(_elm_lang$core$Json_Decode$field, 'register', _elm_lang$core$Json_Decode$string));
-																																						},
-																																						A2(
-																																							_elm_lang$core$Json_Decode$field,
-																																							'radius',
-																																							_elm_lang$core$Json_Decode$oneOf(
-																																								{
-																																									ctor: '::',
-																																									_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
-																																									_1: {
-																																										ctor: '::',
-																																										_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
-																																										_1: {ctor: '[]'}
-																																									}
-																																								})));
-																																				},
-																																				A2(
-																																					_elm_lang$core$Json_Decode$field,
-																																					'pitch',
-																																					_elm_lang$core$Json_Decode$oneOf(
-																																						{
-																																							ctor: '::',
-																																							_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
-																																							_1: {
-																																								ctor: '::',
-																																								_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
-																																								_1: {ctor: '[]'}
-																																							}
-																																						})));
-																																		},
-																																		A2(
-																																			_elm_lang$core$Json_Decode$field,
-																																			'phiCA',
-																																			_elm_lang$core$Json_Decode$oneOf(
-																																				{
-																																					ctor: '::',
-																																					_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
-																																					_1: {
-																																						ctor: '::',
-																																						_0: A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, _elm_lang$core$Json_Decode$float),
-																																						_1: {ctor: '[]'}
-																																					}
-																																				})));
-																																},
-																																A2(_elm_lang$core$Json_Decode$field, 'linkedSuperHelRot', _elm_lang$core$Json_Decode$bool));
-																														},
-																														A2(_elm_lang$core$Json_Decode$field, 'antiParallel', _elm_lang$core$Json_Decode$bool))));
-																										},
-																										A2(_elm_lang$core$Json_Decode$index, 0, _elm_lang$core$Json_Decode$int)))))));
-																			},
-																			A2(_elm_lang$core$Json_Decode$index, 0, _elm_lang$core$Json_Decode$int)))));
+																	'knobIDs',
+																	_elm_lang$core$Json_Decode$oneOf(
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
+																			_1: {
+																				ctor: '::',
+																				_0: A2(
+																					_elm_lang$core$Json_Decode$map,
+																					_elm_lang$core$Maybe$Just,
+																					_elm_lang$core$Json_Decode$list(
+																						_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string))),
+																				_1: {ctor: '[]'}
+																			}
+																		})));
 														},
-														A2(
-															_elm_lang$core$Json_Decode$field,
-															'knobIDs',
-															_elm_lang$core$Json_Decode$oneOf(
-																{
-																	ctor: '::',
-																	_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
-																	_1: {
-																		ctor: '::',
-																		_0: A2(
-																			_elm_lang$core$Json_Decode$map,
-																			_elm_lang$core$Maybe$Just,
-																			_elm_lang$core$Json_Decode$list(
-																				_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string))),
-																		_1: {ctor: '[]'}
-																	}
-																})));
+														A2(_elm_lang$core$Json_Decode$field, 'heat', _elm_lang$core$Json_Decode$int));
 												},
-												A2(_elm_lang$core$Json_Decode$field, 'heat', _elm_lang$core$Json_Decode$int));
+												A2(
+													_elm_lang$core$Json_Decode$field,
+													'currentRepresentation',
+													A2(
+														_elm_lang$core$Json_Decode$andThen,
+														function (ballsAndSticks) {
+															return A2(
+																_elm_lang$core$Json_Decode$andThen,
+																function (cartoon) {
+																	return A2(
+																		_elm_lang$core$Json_Decode$andThen,
+																		function (points) {
+																			return A2(
+																				_elm_lang$core$Json_Decode$andThen,
+																				function (spheres) {
+																					return A2(
+																						_elm_lang$core$Json_Decode$andThen,
+																						function (trace) {
+																							return _elm_lang$core$Json_Decode$succeed(
+																								{ballsAndSticks: ballsAndSticks, cartoon: cartoon, points: points, spheres: spheres, trace: trace});
+																						},
+																						A2(_elm_lang$core$Json_Decode$field, 'trace', _elm_lang$core$Json_Decode$bool));
+																				},
+																				A2(_elm_lang$core$Json_Decode$field, 'spheres', _elm_lang$core$Json_Decode$bool));
+																		},
+																		A2(_elm_lang$core$Json_Decode$field, 'points', _elm_lang$core$Json_Decode$bool));
+																},
+																A2(_elm_lang$core$Json_Decode$field, 'cartoon', _elm_lang$core$Json_Decode$bool));
+														},
+														A2(_elm_lang$core$Json_Decode$field, 'ballsAndSticks', _elm_lang$core$Json_Decode$bool))));
 										},
 										A2(
 											_elm_lang$core$Json_Decode$field,
-											'currentRepresentation',
-											A2(
-												_elm_lang$core$Json_Decode$andThen,
-												function (ballsAndSticks) {
-													return A2(
-														_elm_lang$core$Json_Decode$andThen,
-														function (cartoon) {
-															return A2(
-																_elm_lang$core$Json_Decode$andThen,
-																function (points) {
-																	return A2(
-																		_elm_lang$core$Json_Decode$andThen,
-																		function (spheres) {
-																			return A2(
-																				_elm_lang$core$Json_Decode$andThen,
-																				function (trace) {
-																					return _elm_lang$core$Json_Decode$succeed(
-																						{ballsAndSticks: ballsAndSticks, cartoon: cartoon, points: points, spheres: spheres, trace: trace});
-																				},
-																				A2(_elm_lang$core$Json_Decode$field, 'trace', _elm_lang$core$Json_Decode$bool));
-																		},
-																		A2(_elm_lang$core$Json_Decode$field, 'spheres', _elm_lang$core$Json_Decode$bool));
-																},
-																A2(_elm_lang$core$Json_Decode$field, 'points', _elm_lang$core$Json_Decode$bool));
-														},
-														A2(_elm_lang$core$Json_Decode$field, 'cartoon', _elm_lang$core$Json_Decode$bool));
-												},
-												A2(_elm_lang$core$Json_Decode$field, 'ballsAndSticks', _elm_lang$core$Json_Decode$bool))));
-								},
-								A2(
-									_elm_lang$core$Json_Decode$field,
-									'currentInput',
-									_elm_lang$core$Json_Decode$list(
-										A2(
-											_elm_lang$core$Json_Decode$andThen,
-											function (x0) {
-												return A2(
+											'currentInput',
+											_elm_lang$core$Json_Decode$list(
+												A2(
 													_elm_lang$core$Json_Decode$andThen,
-													function (x1) {
-														return _elm_lang$core$Json_Decode$succeed(
-															{ctor: '_Tuple2', _0: x0, _1: x1});
-													},
-													A2(
-														_elm_lang$core$Json_Decode$index,
-														1,
-														A2(
+													function (x0) {
+														return A2(
 															_elm_lang$core$Json_Decode$andThen,
-															function (antiParallel) {
-																return A2(
+															function (x1) {
+																return _elm_lang$core$Json_Decode$succeed(
+																	{ctor: '_Tuple2', _0: x0, _1: x1});
+															},
+															A2(
+																_elm_lang$core$Json_Decode$index,
+																1,
+																A2(
 																	_elm_lang$core$Json_Decode$andThen,
-																	function (linkedSuperHelRot) {
+																	function (antiParallel) {
 																		return A2(
 																			_elm_lang$core$Json_Decode$andThen,
-																			function (phiCA) {
+																			function (linkedSuperHelRot) {
 																				return A2(
 																					_elm_lang$core$Json_Decode$andThen,
-																					function (pitch) {
+																					function (phiCA) {
 																						return A2(
 																							_elm_lang$core$Json_Decode$andThen,
-																							function (radius) {
+																							function (pitch) {
 																								return A2(
 																									_elm_lang$core$Json_Decode$andThen,
-																									function (register) {
+																									function (radius) {
 																										return A2(
 																											_elm_lang$core$Json_Decode$andThen,
-																											function (sequence) {
+																											function (register) {
 																												return A2(
 																													_elm_lang$core$Json_Decode$andThen,
-																													function (superHelRot) {
+																													function (sequence) {
 																														return A2(
 																															_elm_lang$core$Json_Decode$andThen,
-																															function (zShift) {
-																																return _elm_lang$core$Json_Decode$succeed(
-																																	{antiParallel: antiParallel, linkedSuperHelRot: linkedSuperHelRot, phiCA: phiCA, pitch: pitch, radius: radius, register: register, sequence: sequence, superHelRot: superHelRot, zShift: zShift});
+																															function (superHelRot) {
+																																return A2(
+																																	_elm_lang$core$Json_Decode$andThen,
+																																	function (zShift) {
+																																		return _elm_lang$core$Json_Decode$succeed(
+																																			{antiParallel: antiParallel, linkedSuperHelRot: linkedSuperHelRot, phiCA: phiCA, pitch: pitch, radius: radius, register: register, sequence: sequence, superHelRot: superHelRot, zShift: zShift});
+																																	},
+																																	A2(_elm_lang$core$Json_Decode$field, 'zShift', _elm_lang$core$Json_Decode$string));
 																															},
-																															A2(_elm_lang$core$Json_Decode$field, 'zShift', _elm_lang$core$Json_Decode$string));
+																															A2(_elm_lang$core$Json_Decode$field, 'superHelRot', _elm_lang$core$Json_Decode$string));
 																													},
-																													A2(_elm_lang$core$Json_Decode$field, 'superHelRot', _elm_lang$core$Json_Decode$string));
+																													A2(_elm_lang$core$Json_Decode$field, 'sequence', _elm_lang$core$Json_Decode$string));
 																											},
-																											A2(_elm_lang$core$Json_Decode$field, 'sequence', _elm_lang$core$Json_Decode$string));
+																											A2(_elm_lang$core$Json_Decode$field, 'register', _elm_lang$core$Json_Decode$string));
 																									},
-																									A2(_elm_lang$core$Json_Decode$field, 'register', _elm_lang$core$Json_Decode$string));
+																									A2(_elm_lang$core$Json_Decode$field, 'radius', _elm_lang$core$Json_Decode$string));
 																							},
-																							A2(_elm_lang$core$Json_Decode$field, 'radius', _elm_lang$core$Json_Decode$string));
+																							A2(_elm_lang$core$Json_Decode$field, 'pitch', _elm_lang$core$Json_Decode$string));
 																					},
-																					A2(_elm_lang$core$Json_Decode$field, 'pitch', _elm_lang$core$Json_Decode$string));
+																					A2(_elm_lang$core$Json_Decode$field, 'phiCA', _elm_lang$core$Json_Decode$string));
 																			},
-																			A2(_elm_lang$core$Json_Decode$field, 'phiCA', _elm_lang$core$Json_Decode$string));
+																			A2(_elm_lang$core$Json_Decode$field, 'linkedSuperHelRot', _elm_lang$core$Json_Decode$string));
 																	},
-																	A2(_elm_lang$core$Json_Decode$field, 'linkedSuperHelRot', _elm_lang$core$Json_Decode$string));
-															},
-															A2(_elm_lang$core$Json_Decode$field, 'antiParallel', _elm_lang$core$Json_Decode$string))));
-											},
-											A2(_elm_lang$core$Json_Decode$index, 0, _elm_lang$core$Json_Decode$int)))));
+																	A2(_elm_lang$core$Json_Decode$field, 'antiParallel', _elm_lang$core$Json_Decode$string))));
+													},
+													A2(_elm_lang$core$Json_Decode$index, 0, _elm_lang$core$Json_Decode$int)))));
+								},
+								A2(_elm_lang$core$Json_Decode$field, 'building', _elm_lang$core$Json_Decode$bool));
 						},
-						A2(_elm_lang$core$Json_Decode$field, 'building', _elm_lang$core$Json_Decode$bool))),
+						A2(_elm_lang$core$Json_Decode$field, 'activeInfoBox', _elm_lang$core$Json_Decode$string))),
 				_1: {ctor: '[]'}
 			}
 		}));
@@ -25830,7 +26253,7 @@ var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Types.HelixType":{"args":[],"tags":{"Alpha":[],"Collagen":[]}},"Types.BuildMode":{"args":[],"tags":{"Basic":[],"Advanced":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"SetHeat":["String"],"OptJobStatus":["Result.Result Http.Error ( String, String )"],"ChangeBuildMode":["String"],"HighlightKnobs":[],"RetrieveOptimisation":["String"],"Build":[],"OptimisationSubmitted":["Result.Result Http.Error String"],"CheckOptJobs":["Time.Time"],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"SetParametersAndBuild":["Types.ParametersDict","Types.HelixType","Types.BuildMode"],"StoreModel":[],"Optimise":[],"ProcessOptimisation":["Result.Result Http.Error Types.OptimisationResults"],"ChangeHelixType":["String"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ModelInfoPanel":[],"ExamplesPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ model_id : String , helixTypeString : String , pdbFile : String , score : Float , residuesPerTurn : Float , knobIDs : List (List String) }"},"Types.OptimisationResults":{"args":[],"type":"{ parameters : Types.ParameterRecord , modellingResults : Types.ModellingResults , oligomericState : Int }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Types.HelixType":{"args":[],"tags":{"Alpha":[],"Collagen":[]}},"Types.BuildMode":{"args":[],"tags":{"Basic":[],"Advanced":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.InfoBox":{"args":[],"tags":{"MIInfo":[],"BuildInfo":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"SetHeat":["String"],"OptJobStatus":["Result.Result Http.Error ( String, String )"],"ChangeBuildMode":["String"],"HighlightKnobs":[],"RetrieveOptimisation":["String"],"Build":[],"OptimisationSubmitted":["Result.Result Http.Error String"],"CheckOptJobs":["Time.Time"],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"ShowInfo":["Types.InfoBox"],"SetParametersAndBuild":["Types.ParametersDict","Types.HelixType","Types.BuildMode"],"StoreModel":[],"Optimise":[],"CloseInfo":[],"ProcessOptimisation":["Result.Result Http.Error Types.OptimisationResults"],"ChangeHelixType":["String"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ModelInfoPanel":[],"ExamplesPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ model_id : String , helixTypeString : String , pdbFile : String , score : Float , residuesPerTurn : Float , knobIDs : List (List String) }"},"Types.OptimisationResults":{"args":[],"type":"{ parameters : Types.ParameterRecord , modellingResults : Types.ModellingResults , oligomericState : Int }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

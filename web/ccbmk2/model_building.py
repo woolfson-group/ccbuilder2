@@ -105,7 +105,7 @@ def build_collagen(parameters, debug=False):
     collagen.pack_new_sequences(sequences)
     mean_rpt_value = calculate_average_rpt(collagen)
     score = collagen.buff_interaction_energy.total_energy
-    knob_ids = [] # Collagen can't have KIHs
+    knob_ids = []  # Collagen can't have KIHs
     return collagen.pdb, score, mean_rpt_value, knob_ids
 
 
@@ -214,6 +214,7 @@ def calculate_average_rpt(ampal):
 
 
 class OptCollagen(isambard.specifications.CoiledCoil):
+    """A wrapper class for building collagens with simple parameters."""
     def __init__(self, aas, major_radius, major_pitch, interface_angle):
         n = 3
         super().__init__(n, auto_build=False)
@@ -234,5 +235,6 @@ class OptCollagen(isambard.specifications.CoiledCoil):
 
 
 class HelixType(enum.Enum):
+    """Possible helix types that can be encountered."""
     ALPHA = 1
     COLLAGEN = 2

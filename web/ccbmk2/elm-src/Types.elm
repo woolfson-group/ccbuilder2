@@ -33,6 +33,8 @@ type Msg
     | ShowAxes
     | EditRepresentation RepOption
     | StoreModel
+    | ShowInfo InfoBox
+    | CloseInfo
     | NoOp ()
 
 
@@ -174,6 +176,11 @@ type RepOption
     | Points
 
 
+type InfoBox
+    = BuildInfo
+    | MIInfo
+
+
 stringToBuildMode : String -> Result String BuildMode
 stringToBuildMode statusString =
     case statusString of
@@ -226,6 +233,19 @@ stringToOptStatus statusString =
 
         _ ->
             Err "String could not be converted to OptStatus."
+
+
+stringToInfoBoxID : String -> Result String InfoBox
+stringToInfoBoxID infoBoxString =
+    case infoBoxString of
+        "BuildInfo" ->
+            Ok BuildInfo
+
+        "MIInfo" ->
+            Ok MIInfo
+
+        _ ->
+            Err "String could not be converted to InfoBox."
 
 
 helixTypeToString : HelixType -> String

@@ -10,6 +10,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Html.CssHelpers
 import Model exposing (..)
+import Markdown
 import Types
     exposing
         ( Msg(..)
@@ -24,6 +25,7 @@ import Types
         , Panel(..)
         , Representation
         , RepOption(..)
+        , InfoBox(..)
         , optStatusToString
         , emptyParameterRecord
         )
@@ -82,6 +84,13 @@ overlayPanels model =
             , viewerPanel model.panelVisibility.viewerPanel
             , modelInfoPanel model
             ]
+                ++ (case model.activeInfoBox of
+                        Just infoBox ->
+                            [ showInfoBox infoBox ]
+
+                        Nothing ->
+                            []
+                   )
                 ++ (List.length model.optJobs
                         |> List.range 1
                         |> List.map2 optJobStatus model.optJobs
@@ -250,7 +259,11 @@ modelInfoPanel model =
         , id [ ModelInfoPanel ]
         , styles <| panelStyling ++ modelInfoPanelStyling
         ]
-        [ h3 [] [ text "Model Information" ]
+        [ div [ class [ FlexContainerCss ] ]
+            [ div [ class [ FlexCloseCss ] ]
+                [ h3 [] [ text "Model Information" ] ]
+            , informationButton MIInfo
+            ]
         , text "BUDE Energy"
         , br [] []
         , Maybe.map (roundToXDecPlaces 1) model.score
@@ -273,6 +286,16 @@ modelInfoPanel model =
         , br [] []
         , downloadStructureButton model.pdbFile
         ]
+
+
+informationButton : InfoBox -> Html Msg
+informationButton infoBoxID =
+    div
+        [ class [ FlexCloseCss ]
+        , styles [ Css.marginLeft (Css.px 8) ]
+        , onClick (ShowInfo infoBoxID)
+        ]
+        [ text "�" ]
 
 
 modelInfoPanelStyling : List Css.Mixin
@@ -540,6 +563,54 @@ toggleViewerPanel =
         , onClick (TogglePanel ViewerPanel)
         ]
         [ text "Viewer" ]
+
+
+
+-- Info Box
+
+
+showInfoBox : InfoBox -> Html Msg
+showInfoBox infoBox =
+    div
+        [ class [ OverlayPanelCss, InfoPanelCss ]
+        , styles <| showInfoBoxStyling ++ panelStyling
+        ]
+        [ h2 [] [ text "Information" ]
+        , getInformationText infoBox
+            |> Markdown.toHtml []
+        , div
+            []
+            [ button [ onClick CloseInfo ] [ text "Close" ]
+            ]
+        ]
+
+
+showInfoBoxStyling : List Css.Mixin
+showInfoBoxStyling =
+    [ Css.minWidth (Css.px 200)
+    , Css.maxWidth (Css.px 500)
+    , Css.maxHeight (Css.px 300)
+    ]
+
+
+getInformationText : InfoBox -> String
+getInformationText infoBox =
+    case infoBox of
+        MIInfo ->
+            mIText
+
+        _ ->
+            "BLAH!"
+
+
+mIText : String
+mIText =
+    """This panel displays infromation regarding the currently visible model.
+
+* **BUDE Energy** - The interaction energy as calculated by the BUDE force field implemented in the BUFF module of ISAMBARD
+* **Residues per Turn** - A measure of backbone strain in the model, extreme pitch values can deform the backbone, making an unrealistic model.
+* **Highlight Knobs** - Colours the structure to show knobs-into-holes interactions. Knob residues are highlighted red while all other residues are blue.
+* **Download PDB** - Download a PDB file of the model."""
 
 
 
