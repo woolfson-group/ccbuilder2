@@ -62,7 +62,11 @@ update msg model =
                     inputRecordWithDefault sectionID model.currentInput
 
                 ( p, i ) =
-                    editParameterValue params input parameter newValue
+                    editParameterValue params
+                        input
+                        parameter
+                        newValue
+                        model.helixType
             in
                 { model
                     | parameters = Dict.insert sectionID p model.parameters
@@ -443,8 +447,7 @@ update msg model =
                 {--This task is required to allow the DOM to be rendered
                 if it isn't included then the drop down menus will show thead
                 incorrect option. --}
-                !
-                    [ Task.perform NoOp (Process.sleep (10 * Time.millisecond)) ]
+                ! [ Task.perform NoOp (Process.sleep (10 * Time.millisecond)) ]
 
         ExpandHistory hID ->
             let

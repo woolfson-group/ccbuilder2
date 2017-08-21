@@ -13,6 +13,7 @@ import Types
         , ParametersDict
         , InputValues
         , Parameter(..)
+        , HelixType(..)
         )
 
 
@@ -52,8 +53,9 @@ editParameterValue :
     -> InputValues
     -> Parameter
     -> String
+    -> HelixType
     -> ( ParameterRecord, InputValues )
-editParameterValue parameters currentInput parameter newValue =
+editParameterValue parameters currentInput parameter newValue helixType =
     case parameter of
         Radius ->
             let
@@ -103,7 +105,7 @@ editParameterValue parameters currentInput parameter newValue =
         Sequence ->
             let
                 validatedSequence =
-                    validateSequence newValue
+                    validateSequence newValue helixType
 
                 newParameters =
                     { parameters | sequence = validatedSequence }
@@ -202,8 +204,8 @@ validatePhiCA phica =
         Nothing
 
 
-validateSequence : String -> Maybe String
-validateSequence sequence =
+validateSequence : String -> HelixType -> Maybe String
+validateSequence sequence helixType =
     let
         processedSequence =
             sequence
@@ -215,7 +217,12 @@ validateSequence sequence =
         allValidChars =
             processedSequence
                 |> String.toList
-                |> List.all isAllowedSeqChar
+                |> List.all
+                    (if helixType == Collagen then
+                        isAllowedSeqCharCol
+                     else
+                        isAllowedSeqChar
+                    )
     in
         if allValidChars && (String.length processedSequence > 0) then
             Just (processedSequence)
@@ -255,6 +262,36 @@ isAllowedSeqChar char =
             , 'L'
             , 'M'
             , 'N'
+            , 'P'
+            , 'Q'
+            , 'R'
+            , 'S'
+            , 'T'
+            , 'V'
+            , 'W'
+            , 'Y'
+            ]
+    in
+        List.member char allowed
+
+
+isAllowedSeqCharCol : Char -> Bool
+isAllowedSeqCharCol char =
+    let
+        allowed =
+            [ 'A'
+            , 'C'
+            , 'D'
+            , 'E'
+            , 'F'
+            , 'G'
+            , 'H'
+            , 'I'
+            , 'K'
+            , 'L'
+            , 'M'
+            , 'N'
+            , 'O'
             , 'P'
             , 'Q'
             , 'R'
