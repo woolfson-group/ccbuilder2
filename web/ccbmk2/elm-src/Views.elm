@@ -25,7 +25,7 @@ import Types
         , Panel(..)
         , Representation
         , RepOption(..)
-        , InfoBox(..)
+        , InfoBoxID(..)
         , optStatusToString
         , emptyParameterRecord
         )
@@ -82,15 +82,8 @@ overlayPanels model =
                 model.building
                 model.panelVisibility.buildHistoryPanel
             , viewerPanel model.panelVisibility.viewerPanel
-            , modelInfoPanel model
+            , modelInfoGroup model
             ]
-                ++ (case model.activeInfoBox of
-                        Just infoBox ->
-                            [ showInfoBox infoBox ]
-
-                        Nothing ->
-                            []
-                   )
                 ++ (List.length model.optJobs
                         |> List.range 1
                         |> List.map2 optJobStatus model.optJobs
@@ -252,27 +245,40 @@ toggleOptimisePanel =
 -- Model Info
 
 
+modelInfoGroup : Model -> Html Msg
+modelInfoGroup model =
+    div
+        [ class [ FlexContainerCss ]
+        , styles <| modelInfoGroupPanelStyling ++ panelStyling
+        ]
+        ([ modelInfoPanel model
+         ]
+            ++ (if List.member MIBudeEnergy model.activeInfoBoxes then
+                    [ budeEnergyInfo ]
+                else if List.member MIRPT model.activeInfoBoxes then
+                    [ rptInfo ]
+                else if List.member MIHLKnobs model.activeInfoBoxes then
+                    [ highlightKIHInfo ]
+                else
+                    []
+               )
+        )
+
+
 modelInfoPanel : Model -> Html Msg
 modelInfoPanel model =
     div
-        [ class [ OverlayPanelCss ]
-        , id [ ModelInfoPanel ]
-        , styles <| panelStyling ++ modelInfoPanelStyling
+        [ class [ OverlayPanelCss, FlexItemCss ]
+        , styles [ Css.bottom (Css.px 0) ]
         ]
-        [ div [ class [ FlexContainerCss ] ]
-            [ div [ class [ FlexCloseCss ] ]
-                [ h3 [] [ text "Model Information" ] ]
-            , informationButton MIInfo
-            ]
-        , text "BUDE Energy"
-        , br [] []
+        [ h3 [] [ text "Model Information" ]
+        , infoText MIBudeEnergy "BUDE Energy �"
         , Maybe.map (roundToXDecPlaces 1) model.score
             |> Maybe.map toString
             |> Maybe.withDefault ""
             |> \val -> input [ value val, readonly True ] []
         , br [] []
-        , text "Residues per Turn"
-        , br [] []
+        , infoText MIRPT "Residues per Turn �"
         , Maybe.map (roundToXDecPlaces 2) model.residuesPerTurn
             |> Maybe.map toString
             |> Maybe.withDefault ""
@@ -280,28 +286,75 @@ modelInfoPanel model =
         , br [] []
         , button
             [ class [ CCBButtonCss ]
+            , styles [ Css.float Css.left ]
             , onClick HighlightKnobs
             ]
             [ text "Highlight Knobs" ]
-        , br [] []
+        , infoText MIHLKnobs "�"
         , downloadStructureButton model.pdbFile
         ]
 
 
-informationButton : InfoBox -> Html Msg
-informationButton infoBoxID =
+budeEnergyInfo : Html msg
+budeEnergyInfo =
     div
-        [ class [ FlexCloseCss ]
-        , styles [ Css.marginLeft (Css.px 8) ]
-        , onClick (ShowInfo infoBoxID)
+        [ class [ OverlayPanelCss, FlexItemCss ]
+        , styles infoBoxStyling
         ]
-        [ text "�" ]
+        [ h3 [] [ text "BUDE Energy" ]
+        , text mIBudeEnergyText
+        ]
 
 
-modelInfoPanelStyling : List Css.Mixin
-modelInfoPanelStyling =
+mIBudeEnergyText : String
+mIBudeEnergyText =
+    """The interaction energy between helices as calculated by the BUDE force field implemented in the BUFF module of ISAMBARD."""
+
+
+rptInfo : Html msg
+rptInfo =
+    div
+        [ class [ OverlayPanelCss, FlexItemCss ]
+        , styles infoBoxStyling
+        ]
+        [ h3 [] [ text "Residues Per Turn" ]
+        , text mIRPTText
+        ]
+
+
+mIRPTText : String
+mIRPTText =
+    """Residues per turn of the alpha helix, can be used as a proxy for backbone strain."""
+
+
+highlightKIHInfo : Html msg
+highlightKIHInfo =
+    div
+        [ class [ OverlayPanelCss, FlexItemCss ]
+        , styles infoBoxStyling
+        ]
+        [ h3 [] [ text "Highlight Knobs" ]
+        , text highlightKIHText
+        ]
+
+
+highlightKIHText : String
+highlightKIHText =
+    """Highlights knob residues red, all other residues are coloured blue."""
+
+
+modelInfoGroupPanelStyling : List Css.Mixin
+modelInfoGroupPanelStyling =
     [ Css.bottom (Css.px 20)
     , Css.left (Css.px 35)
+    ]
+
+
+infoBoxStyling : List Css.Mixin
+infoBoxStyling =
+    [ Css.maxWidth (Css.pct 40)
+    , Css.maxHeight (Css.em 8)
+    , Css.lineHeight (Css.em 1)
     ]
 
 
@@ -569,24 +622,33 @@ toggleViewerPanel =
 -- Info Box
 
 
-showInfoBox : InfoBox -> Html Msg
-showInfoBox infoBox =
+infoText : InfoBoxID -> String -> Html Msg
+infoText infoBoxID contentText =
+    div
+        [ onMouseEnter (ShowInfo infoBoxID)
+        , onMouseLeave (CloseInfo infoBoxID)
+        ]
+        [ text contentText ]
+
+
+informationButton : InfoBoxID -> Html Msg
+informationButton infoBoxID =
+    div
+        [ class [ FlexCloseCss ]
+        , styles [ Css.marginLeft (Css.px 8) ]
+        , onMouseEnter (ShowInfo infoBoxID)
+        , onMouseLeave (CloseInfo infoBoxID)
+        ]
+        [ text "�" ]
+
+
+showInfoBox : String -> Html Msg
+showInfoBox content =
     div
         [ class [ OverlayPanelCss, InfoPanelCss ]
-        , styles <| showInfoBoxStyling ++ panelStyling
+        , styles panelStyling
         ]
-        [ h2 [] [ text "Information" ]
-        , getInformationText infoBox
-            |> Markdown.toHtml []
-        , div
-            []
-            [ button
-                [ class [ CCBButtonCss ]
-                , onClick CloseInfo
-                ]
-                [ text "Close" ]
-            ]
-        ]
+        [ Markdown.toHtml [] content ]
 
 
 showInfoBoxStyling : List Css.Mixin
@@ -595,16 +657,6 @@ showInfoBoxStyling =
     , Css.maxWidth (Css.px 500)
     , Css.maxHeight (Css.px 300)
     ]
-
-
-getInformationText : InfoBox -> String
-getInformationText infoBox =
-    case infoBox of
-        MIInfo ->
-            mIText
-
-        _ ->
-            "BLAH!"
 
 
 mIText : String

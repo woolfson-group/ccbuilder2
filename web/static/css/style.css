@@ -78,6 +78,7 @@ table {
 
 .builderFlexContainerCss {
     display: flex;
+    align-items: flex-start;
     flex-direction: row;
 }
 
@@ -103,12 +104,6 @@ table {
 .builderInfoPanelCss {
     overflow: auto;
     margin: auto;
-    padding: 10px;
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
 }
 
 #AppHeaderPanel {

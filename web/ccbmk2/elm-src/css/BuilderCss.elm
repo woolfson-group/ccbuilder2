@@ -107,6 +107,7 @@ css =
             ]
         , class FlexContainerCss
             [ displayFlex
+            , alignItems flexStart
             , flexDirection row
             , children
                 [ class FlexItemCss
@@ -132,12 +133,6 @@ css =
         , class InfoPanelCss
             [ overflow auto
             , margin auto
-            , padding (Css.px 10)
-            , position absolute
-            , top (Css.px 0)
-            , bottom (Css.px 0)
-            , left (Css.px 0)
-            , right (Css.px 0)
             ]
         , id AppHeaderPanel
             [ fontFamilies [ "Source Code Pro", "monospace" ]
