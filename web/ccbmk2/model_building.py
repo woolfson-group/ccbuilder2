@@ -88,7 +88,8 @@ def build_collagen(parameters, debug=False):
     collagen.major_radii = [p['Radius'] for p in parameters]
     collagen.major_pitches = [p['Pitch'] for p in parameters]
     collagen.phi_c_alphas = [p['Interface Angle'] for p in parameters]
-    sequences = [p['Sequence'] for p in parameters]
+    original_sequences = [p['Sequence'] for p in parameters]
+    proline_sequences = [seq.replace('O', 'P') for seq in original_sequences]
     collagen.z_shifts = [
         d + p['Z-Shift'] for d, p in zip(
             collagen.z_shifts, parameters)]
@@ -102,9 +103,13 @@ def build_collagen(parameters, debug=False):
     collagen.orientations = [-1 if p['Orientation']
                              else 1 for p in parameters]
     collagen.build()
-    collagen.pack_new_sequences(sequences)
-    mean_rpt_value = calculate_average_rpt(collagen)
+    collagen.pack_new_sequences(proline_sequences)
     score = collagen.buff_interaction_energy.total_energy
+    mean_rpt_value = calculate_average_rpt(collagen)
+    print("isambard path = {}".format(isambard.ampal.non_canonical.FILE_PATH), file=sys.stderr)
+    for res, ml in zip(collagen.get_monomers(), ''.join(original_sequences)):
+        if ml == 'O':
+            isambard.ampal.non_canonical.convert_pro_to_hyp(res)
     knob_ids = []  # Collagen can't have KIHs
     return collagen.pdb, score, mean_rpt_value, knob_ids
 
