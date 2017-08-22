@@ -23689,23 +23689,6 @@ var _user$project$Views$buildingStatusStyling = {
 		}
 	}
 };
-var _user$project$Views$mIText = 'This panel displays infromation regarding the currently visible model.\n\n* **BUDE Energy** - The interaction energy as calculated by the BUDE force field implemented in the BUFF module of ISAMBARD\n* **Residues per Turn** - A measure of backbone strain in the model, extreme pitch values can deform the backbone, making an unrealistic model.\n* **Highlight Knobs** - Colours the structure to show knobs-into-holes interactions. Knob residues are highlighted red while all other residues are blue.\n* **Download PDB** - Download a PDB file of the model.';
-var _user$project$Views$showInfoBoxStyling = {
-	ctor: '::',
-	_0: _rtfeldman$elm_css$Css$minWidth(
-		_rtfeldman$elm_css$Css$px(200)),
-	_1: {
-		ctor: '::',
-		_0: _rtfeldman$elm_css$Css$maxWidth(
-			_rtfeldman$elm_css$Css$px(500)),
-		_1: {
-			ctor: '::',
-			_0: _rtfeldman$elm_css$Css$maxHeight(
-				_rtfeldman$elm_css$Css$px(300)),
-			_1: {ctor: '[]'}
-		}
-	}
-};
 var _user$project$Views$infoText = F2(
 	function (infoBoxID, contentText) {
 		return A2(
@@ -25317,75 +25300,6 @@ var _user$project$Views$topRightToggles = A2(
 			_1: {ctor: '[]'}
 		}
 	});
-var _user$project$Views$informationButton = function (infoBoxID) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _user$project$Views$class(
-				{
-					ctor: '::',
-					_0: _user$project$BuilderCss$FlexCloseCss,
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: _user$project$Views$styles(
-					{
-						ctor: '::',
-						_0: _rtfeldman$elm_css$Css$marginLeft(
-							_rtfeldman$elm_css$Css$px(8)),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$html$Html_Events$onMouseEnter(
-						_user$project$Types$ShowInfo(infoBoxID)),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Events$onMouseLeave(
-							_user$project$Types$CloseInfo(infoBoxID)),
-						_1: {ctor: '[]'}
-					}
-				}
-			}
-		},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text('�'),
-			_1: {ctor: '[]'}
-		});
-};
-var _user$project$Views$showInfoBox = function (content) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _user$project$Views$class(
-				{
-					ctor: '::',
-					_0: _user$project$BuilderCss$OverlayPanelCss,
-					_1: {
-						ctor: '::',
-						_0: _user$project$BuilderCss$InfoPanelCss,
-						_1: {ctor: '[]'}
-					}
-				}),
-			_1: {
-				ctor: '::',
-				_0: _user$project$Views$styles(_user$project$BuilderCss$panelStyling),
-				_1: {ctor: '[]'}
-			}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_evancz$elm_markdown$Markdown$toHtml,
-				{ctor: '[]'},
-				content),
-			_1: {ctor: '[]'}
-		});
-};
 var _user$project$Views$buildingStatusPanel = function (building) {
 	return A2(
 		_elm_lang$html$Html$div,

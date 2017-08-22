@@ -631,44 +631,6 @@ infoText infoBoxID contentText =
         [ text contentText ]
 
 
-informationButton : InfoBoxID -> Html Msg
-informationButton infoBoxID =
-    div
-        [ class [ FlexCloseCss ]
-        , styles [ Css.marginLeft (Css.px 8) ]
-        , onMouseEnter (ShowInfo infoBoxID)
-        , onMouseLeave (CloseInfo infoBoxID)
-        ]
-        [ text "�" ]
-
-
-showInfoBox : String -> Html Msg
-showInfoBox content =
-    div
-        [ class [ OverlayPanelCss, InfoPanelCss ]
-        , styles panelStyling
-        ]
-        [ Markdown.toHtml [] content ]
-
-
-showInfoBoxStyling : List Css.Mixin
-showInfoBoxStyling =
-    [ Css.minWidth (Css.px 200)
-    , Css.maxWidth (Css.px 500)
-    , Css.maxHeight (Css.px 300)
-    ]
-
-
-mIText : String
-mIText =
-    """This panel displays infromation regarding the currently visible model.
-
-* **BUDE Energy** - The interaction energy as calculated by the BUDE force field implemented in the BUFF module of ISAMBARD
-* **Residues per Turn** - A measure of backbone strain in the model, extreme pitch values can deform the backbone, making an unrealistic model.
-* **Highlight Knobs** - Colours the structure to show knobs-into-holes interactions. Knob residues are highlighted red while all other residues are blue.
-* **Download PDB** - Download a PDB file of the model."""
-
-
 
 -- Building Status
 
