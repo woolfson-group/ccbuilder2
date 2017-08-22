@@ -208,6 +208,7 @@ optimisePanel buildMode optJobs visible heat =
             , hidden <| not visible
             ]
             [ h3 [] [ text "Optimise Parameters" ]
+            , hr [] []
             , text "Heat"
             , br [] []
             , input
@@ -272,18 +273,19 @@ modelInfoPanel model =
         , styles [ Css.bottom (Css.px 0) ]
         ]
         [ h3 [] [ text "Model Information" ]
+        , hr [] []
         , infoText MIBudeEnergy "BUDE Energy �"
         , Maybe.map (roundToXDecPlaces 1) model.score
             |> Maybe.map toString
             |> Maybe.withDefault ""
             |> \val -> input [ value val, readonly True ] []
-        , br [] []
+        , hr [] []
         , infoText MIRPT "Residues per Turn �"
         , Maybe.map (roundToXDecPlaces 2) model.residuesPerTurn
             |> Maybe.map toString
             |> Maybe.withDefault ""
             |> \val -> input [ value val, readonly True ] []
-        , br [] []
+        , hr [] []
         , button
             [ class [ CCBButtonCss ]
             , styles [ Css.float Css.left ]
@@ -291,6 +293,7 @@ modelInfoPanel model =
             ]
             [ text "Highlight Knobs" ]
         , infoText MIHLKnobs "�"
+        , hr [] []
         , downloadStructureButton model.pdbFile
         ]
 
@@ -345,8 +348,8 @@ highlightKIHText =
 
 modelInfoGroupPanelStyling : List Css.Mixin
 modelInfoGroupPanelStyling =
-    [ Css.bottom (Css.px 20)
-    , Css.left (Css.px 35)
+    [ Css.bottom (Css.px 0)
+    , Css.left (Css.px 0)
     ]
 
 
@@ -398,7 +401,8 @@ buildHistoryPanel modelHistory building visible =
         , styles <| panelStyling ++ buildHistoryPanelStyling
         , hidden <| not visible
         ]
-        [ h3 [] [ text "Build History" ]
+        [ h2 [] [ text "Build History" ]
+        , hr [] []
         , table []
             [ modelDetailTableHeader
             , List.map2 modelParametersAsRow

@@ -65,20 +65,20 @@ buildPanel helixType buildMode parametersDict currentInputDict building visible 
             , hidden <| not visible
             ]
             ([ h2 [] [ text "Build" ]
+             , hr [] []
              , selectHelixType helixType
              , selectBuildMode buildMode
              , br [] []
              ]
                 -- Collagen does not require access to the oligomeric state
-                ++
-                    (if helixType == Alpha then
+                ++ (if helixType == Alpha then
                         [ h3 [] [ text "Oligomeric State" ]
                         , selectOligomericState
                             (Dict.toList parametersDict |> List.length)
                         ]
-                     else
+                    else
                         []
-                    )
+                   )
                 ++ [ panelView parametersDict currentInputDict
                    , parameterSubmit building parametersDict
                    , button

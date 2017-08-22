@@ -21475,17 +21475,24 @@ var _user$project$BuildPanel$buildPanel = F6(
 						}),
 					_1: {
 						ctor: '::',
-						_0: _user$project$BuildPanel$selectHelixType(helixType),
+						_0: A2(
+							_elm_lang$html$Html$hr,
+							{ctor: '[]'},
+							{ctor: '[]'}),
 						_1: {
 							ctor: '::',
-							_0: _user$project$BuildPanel$selectBuildMode(buildMode),
+							_0: _user$project$BuildPanel$selectHelixType(helixType),
 							_1: {
 								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$br,
-									{ctor: '[]'},
-									{ctor: '[]'}),
-								_1: {ctor: '[]'}
+								_0: _user$project$BuildPanel$selectBuildMode(buildMode),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$br,
+										{ctor: '[]'},
+										{ctor: '[]'}),
+									_1: {ctor: '[]'}
+								}
 							}
 						}
 					}
@@ -22259,17 +22266,24 @@ var _user$project$ExamplesPanel$examplesPanel = F2(
 					}),
 				_1: {
 					ctor: '::',
-					_0: _user$project$ExamplesPanel$examplesBlock(
-						_user$project$ExamplesPanel$basisSet(building)),
+					_0: A2(
+						_elm_lang$html$Html$hr,
+						{ctor: '[]'},
+						{ctor: '[]'}),
 					_1: {
 						ctor: '::',
 						_0: _user$project$ExamplesPanel$examplesBlock(
-							_user$project$ExamplesPanel$barrels(building)),
+							_user$project$ExamplesPanel$basisSet(building)),
 						_1: {
 							ctor: '::',
 							_0: _user$project$ExamplesPanel$examplesBlock(
-								_user$project$ExamplesPanel$collagens(building)),
-							_1: {ctor: '[]'}
+								_user$project$ExamplesPanel$barrels(building)),
+							_1: {
+								ctor: '::',
+								_0: _user$project$ExamplesPanel$examplesBlock(
+									_user$project$ExamplesPanel$collagens(building)),
+								_1: {ctor: '[]'}
+							}
 						}
 					}
 				}
@@ -23844,11 +23858,11 @@ var _user$project$Views$infoBoxStyling = {
 var _user$project$Views$modelInfoGroupPanelStyling = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$bottom(
-		_rtfeldman$elm_css$Css$px(20)),
+		_rtfeldman$elm_css$Css$px(0)),
 	_1: {
 		ctor: '::',
 		_0: _rtfeldman$elm_css$Css$left(
-			_rtfeldman$elm_css$Css$px(35)),
+			_rtfeldman$elm_css$Css$px(0)),
 		_1: {ctor: '[]'}
 	}
 };
@@ -24346,65 +24360,72 @@ var _user$project$Views$optimisePanel = F4(
 					}),
 				_1: {
 					ctor: '::',
-					_0: _elm_lang$html$Html$text('Heat'),
+					_0: A2(
+						_elm_lang$html$Html$hr,
+						{ctor: '[]'},
+						{ctor: '[]'}),
 					_1: {
 						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$br,
-							{ctor: '[]'},
-							{ctor: '[]'}),
+						_0: _elm_lang$html$Html$text('Heat'),
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$input,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$type_('range'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$min('0'),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$max('2000'),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$value(
-													_elm_lang$core$Basics$toString(heat)),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$html$Html_Events$onInput(_user$project$Types$SetHeat),
-													_1: {ctor: '[]'}
-												}
-											}
-										}
-									}
-								},
+								_elm_lang$html$Html$br,
+								{ctor: '[]'},
 								{ctor: '[]'}),
 							_1: {
 								ctor: '::',
 								_0: A2(
-									_elm_lang$html$Html$br,
-									{ctor: '[]'},
+									_elm_lang$html$Html$input,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$type_('range'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$min('0'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$max('2000'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$value(
+														_elm_lang$core$Basics$toString(heat)),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onInput(_user$project$Types$SetHeat),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									},
 									{ctor: '[]'}),
 								_1: {
 									ctor: '::',
 									_0: A2(
-										_elm_lang$html$Html$button,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$Optimise),
-											_1: {
+										_elm_lang$html$Html$br,
+										{ctor: '[]'},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$button,
+											{
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$disabled(disabledOpt),
+												_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$Optimise),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$disabled(disabledOpt),
+													_1: {ctor: '[]'}
+												}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Optimise Model'),
 												_1: {ctor: '[]'}
-											}
-										},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Optimise Model'),
-											_1: {ctor: '[]'}
-										}),
-									_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
 								}
 							}
 						}
@@ -24633,113 +24654,127 @@ var _user$project$Views$modelInfoPanel = function (model) {
 				}),
 			_1: {
 				ctor: '::',
-				_0: A2(_user$project$Views$infoText, _user$project$Types$MIBudeEnergy, 'BUDE Energy �'),
+				_0: A2(
+					_elm_lang$html$Html$hr,
+					{ctor: '[]'},
+					{ctor: '[]'}),
 				_1: {
 					ctor: '::',
-					_0: function (val) {
-						return A2(
-							_elm_lang$html$Html$input,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$value(val),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$readonly(true),
-									_1: {ctor: '[]'}
-								}
-							},
-							{ctor: '[]'});
-					}(
-						A2(
-							_elm_lang$core$Maybe$withDefault,
-							'',
-							A2(
-								_elm_lang$core$Maybe$map,
-								_elm_lang$core$Basics$toString,
-								A2(
-									_elm_lang$core$Maybe$map,
-									_user$project$Views$roundToXDecPlaces(1),
-									model.score)))),
+					_0: A2(_user$project$Views$infoText, _user$project$Types$MIBudeEnergy, 'BUDE Energy �'),
 					_1: {
 						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$br,
-							{ctor: '[]'},
-							{ctor: '[]'}),
+						_0: function (val) {
+							return A2(
+								_elm_lang$html$Html$input,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$value(val),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$readonly(true),
+										_1: {ctor: '[]'}
+									}
+								},
+								{ctor: '[]'});
+						}(
+							A2(
+								_elm_lang$core$Maybe$withDefault,
+								'',
+								A2(
+									_elm_lang$core$Maybe$map,
+									_elm_lang$core$Basics$toString,
+									A2(
+										_elm_lang$core$Maybe$map,
+										_user$project$Views$roundToXDecPlaces(1),
+										model.score)))),
 						_1: {
 							ctor: '::',
-							_0: A2(_user$project$Views$infoText, _user$project$Types$MIRPT, 'Residues per Turn �'),
+							_0: A2(
+								_elm_lang$html$Html$hr,
+								{ctor: '[]'},
+								{ctor: '[]'}),
 							_1: {
 								ctor: '::',
-								_0: function (val) {
-									return A2(
-										_elm_lang$html$Html$input,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$value(val),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$readonly(true),
-												_1: {ctor: '[]'}
-											}
-										},
-										{ctor: '[]'});
-								}(
-									A2(
-										_elm_lang$core$Maybe$withDefault,
-										'',
-										A2(
-											_elm_lang$core$Maybe$map,
-											_elm_lang$core$Basics$toString,
-											A2(
-												_elm_lang$core$Maybe$map,
-												_user$project$Views$roundToXDecPlaces(2),
-												model.residuesPerTurn)))),
+								_0: A2(_user$project$Views$infoText, _user$project$Types$MIRPT, 'Residues per Turn �'),
 								_1: {
 									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$br,
-										{ctor: '[]'},
-										{ctor: '[]'}),
+									_0: function (val) {
+										return A2(
+											_elm_lang$html$Html$input,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$value(val),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$readonly(true),
+													_1: {ctor: '[]'}
+												}
+											},
+											{ctor: '[]'});
+									}(
+										A2(
+											_elm_lang$core$Maybe$withDefault,
+											'',
+											A2(
+												_elm_lang$core$Maybe$map,
+												_elm_lang$core$Basics$toString,
+												A2(
+													_elm_lang$core$Maybe$map,
+													_user$project$Views$roundToXDecPlaces(2),
+													model.residuesPerTurn)))),
 									_1: {
 										ctor: '::',
 										_0: A2(
-											_elm_lang$html$Html$button,
-											{
-												ctor: '::',
-												_0: _user$project$Views$class(
-													{
-														ctor: '::',
-														_0: _user$project$BuilderCss$CCBButtonCss,
-														_1: {ctor: '[]'}
-													}),
-												_1: {
+											_elm_lang$html$Html$hr,
+											{ctor: '[]'},
+											{ctor: '[]'}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$button,
+												{
 													ctor: '::',
-													_0: _user$project$Views$styles(
+													_0: _user$project$Views$class(
 														{
 															ctor: '::',
-															_0: _rtfeldman$elm_css$Css$float(_rtfeldman$elm_css$Css$left),
+															_0: _user$project$BuilderCss$CCBButtonCss,
 															_1: {ctor: '[]'}
 														}),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$HighlightKnobs),
+														_0: _user$project$Views$styles(
+															{
+																ctor: '::',
+																_0: _rtfeldman$elm_css$Css$float(_rtfeldman$elm_css$Css$left),
+																_1: {ctor: '[]'}
+															}),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$HighlightKnobs),
+															_1: {ctor: '[]'}
+														}
+													}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Highlight Knobs'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(_user$project$Views$infoText, _user$project$Types$MIHLKnobs, '�'),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$hr,
+														{ctor: '[]'},
+														{ctor: '[]'}),
+													_1: {
+														ctor: '::',
+														_0: _user$project$Views$downloadStructureButton(model.pdbFile),
 														_1: {ctor: '[]'}
 													}
 												}
-											},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text('Highlight Knobs'),
-												_1: {ctor: '[]'}
-											}),
-										_1: {
-											ctor: '::',
-											_0: A2(_user$project$Views$infoText, _user$project$Types$MIHLKnobs, '�'),
-											_1: {
-												ctor: '::',
-												_0: _user$project$Views$downloadStructureButton(model.pdbFile),
-												_1: {ctor: '[]'}
 											}
 										}
 									}
@@ -24918,7 +24953,7 @@ var _user$project$Views$buildHistoryPanel = F3(
 			{
 				ctor: '::',
 				_0: A2(
-					_elm_lang$html$Html$h3,
+					_elm_lang$html$Html$h2,
 					{ctor: '[]'},
 					{
 						ctor: '::',
@@ -24928,31 +24963,38 @@ var _user$project$Views$buildHistoryPanel = F3(
 				_1: {
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$table,
+						_elm_lang$html$Html$hr,
 						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: _user$project$Views$modelDetailTableHeader,
-							_1: {
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$table,
+							{ctor: '[]'},
+							{
 								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$tbody,
-									{ctor: '[]'},
-									_elm_lang$core$List$concat(
-										A3(
-											_elm_lang$core$List$map2,
-											_user$project$Views$modelParametersAsRow,
-											_elm_lang$core$List$reverse(
-												_elm_lang$core$Dict$toList(modelHistory)),
-											A2(
-												_elm_lang$core$List$repeat,
-												_elm_lang$core$List$length(
+								_0: _user$project$Views$modelDetailTableHeader,
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$tbody,
+										{ctor: '[]'},
+										_elm_lang$core$List$concat(
+											A3(
+												_elm_lang$core$List$map2,
+												_user$project$Views$modelParametersAsRow,
+												_elm_lang$core$List$reverse(
 													_elm_lang$core$Dict$toList(modelHistory)),
-												building)))),
-								_1: {ctor: '[]'}
-							}
-						}),
-					_1: {ctor: '[]'}
+												A2(
+													_elm_lang$core$List$repeat,
+													_elm_lang$core$List$length(
+														_elm_lang$core$Dict$toList(modelHistory)),
+													building)))),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}
 				}
 			});
 	});

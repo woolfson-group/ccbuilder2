@@ -41,6 +41,7 @@ examplesPanel building visible =
         , hidden <| not visible
         ]
         [ h2 [] [ text "Examples" ]
+        , hr [] []
         , basisSet building |> examplesBlock
         , barrels building |> examplesBlock
         , collagens building |> examplesBlock
