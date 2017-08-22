@@ -209,7 +209,7 @@ update msg model =
                         | building = True
                         , panelVisibility =
                             PanelVisibility False False False False False
-                        , activeInfoBox = Nothing
+                        , activeInfoBoxes = []
                     }
                         ! [ case model.helixType of
                                 Alpha ->
@@ -452,7 +452,7 @@ update msg model =
         TogglePanel panel ->
             { model
                 | panelVisibility = togglePanelVisibility panel model.panelVisibility
-                , activeInfoBox = Nothing
+                , activeInfoBoxes = []
             }
                 {--This task is required to allow the DOM to be rendered
                 if it isn't included then the drop down menus will show thead
@@ -497,23 +497,19 @@ update msg model =
         StoreModel ->
             model ! [ setStorage <| modelToExportable model ]
 
-        ShowInfo infoBox ->
+        ShowInfo infoBoxID ->
             { model
-                | activeInfoBox =
-                    case model.activeInfoBox of
-                        Just currentInfoBox ->
-                            if infoBox == currentInfoBox then
-                                Nothing
-                            else
-                                Just infoBox
-
-                        Nothing ->
-                            Just infoBox
+                | activeInfoBoxes =
+                    infoBoxID :: model.activeInfoBoxes
             }
                 ! []
 
-        CloseInfo ->
-            { model | activeInfoBox = Nothing } ! []
+        CloseInfo infoBoxID ->
+            { model
+                | activeInfoBoxes =
+                    List.filter (\x -> x /= infoBoxID) model.activeInfoBoxes
+            }
+                ! []
 
         NoOp _ ->
             model ! []

@@ -2,6 +2,7 @@ module Types exposing (..)
 
 import Dict
 import Keyboard
+import Html exposing (..)
 import Http
 import Time
 
@@ -33,8 +34,8 @@ type Msg
     | ShowAxes
     | EditRepresentation RepOption
     | StoreModel
-    | ShowInfo InfoBox
-    | CloseInfo
+    | ShowInfo InfoBoxID
+    | CloseInfo InfoBoxID
     | NoOp ()
 
 
@@ -176,9 +177,10 @@ type RepOption
     | Points
 
 
-type InfoBox
-    = BuildInfo
-    | MIInfo
+type InfoBoxID
+    = MIBudeEnergy
+    | MIRPT
+    | MIHLKnobs
 
 
 stringToBuildMode : String -> Result String BuildMode
@@ -233,19 +235,6 @@ stringToOptStatus statusString =
 
         _ ->
             Err "String could not be converted to OptStatus."
-
-
-stringToInfoBoxID : String -> Result String InfoBox
-stringToInfoBoxID infoBoxString =
-    case infoBoxString of
-        "BuildInfo" ->
-            Ok BuildInfo
-
-        "MIInfo" ->
-            Ok MIInfo
-
-        _ ->
-            Err "String could not be converted to InfoBox."
 
 
 helixTypeToString : HelixType -> String
