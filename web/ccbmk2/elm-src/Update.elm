@@ -148,7 +148,17 @@ update msg model =
                     , parameters = newParameters
                     , currentInput = newInput
                 }
-                    ! [ Task.perform NoOp (Process.sleep (10 * Time.millisecond)) ]
+                    {- We need to validate the sequences as O isn't allowed for
+                       Alpha type helices.
+                    -}
+                    ! (Dict.toList newInput
+                        |> List.map (\( sid, i ) -> ( sid, i.sequence ))
+                        |> List.map
+                            (\( sid, seq ) ->
+                                EditSingleParameter Sequence sid seq
+                            )
+                        |> List.map toCommand
+                      )
 
         ChangeBuildMode buildMode ->
             let
