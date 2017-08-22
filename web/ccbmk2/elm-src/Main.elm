@@ -55,6 +55,9 @@ init storedModel =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ Time.every (5 * Time.second) CheckOptJobs
-        , Keyboard.presses KeyMsg
-        ]
+        ([ Keyboard.presses KeyMsg ]
+            ++ if not (List.isEmpty model.optJobs) then
+                [ Time.every (5 * Time.second) CheckOptJobs ]
+               else
+                []
+        )

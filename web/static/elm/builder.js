@@ -25569,15 +25569,18 @@ var _user$project$Views$view = function (model) {
 
 var _user$project$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$batch(
-		{
-			ctor: '::',
-			_0: A2(_elm_lang$core$Time$every, 5 * _elm_lang$core$Time$second, _user$project$Types$CheckOptJobs),
-			_1: {
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			{
 				ctor: '::',
 				_0: _elm_lang$keyboard$Keyboard$presses(_user$project$Types$KeyMsg),
 				_1: {ctor: '[]'}
-			}
-		});
+			},
+			(!_elm_lang$core$List$isEmpty(model.optJobs)) ? {
+				ctor: '::',
+				_0: A2(_elm_lang$core$Time$every, 5 * _elm_lang$core$Time$second, _user$project$Types$CheckOptJobs),
+				_1: {ctor: '[]'}
+			} : {ctor: '[]'}));
 };
 var _user$project$Main$init = function (storedModel) {
 	var model = A2(
