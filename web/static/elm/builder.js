@@ -19394,9 +19394,9 @@ var _user$project$Types$OptimisationResults = F3(
 	function (a, b, c) {
 		return {parameters: a, modellingResults: b, oligomericState: c};
 	});
-var _user$project$Types$PanelVisibility = F5(
-	function (a, b, c, d, e) {
-		return {buildPanel: a, examplesPanel: b, optimisePanel: c, buildHistoryPanel: d, viewerPanel: e};
+var _user$project$Types$PanelVisibility = F6(
+	function (a, b, c, d, e, f) {
+		return {buildPanel: a, examplesPanel: b, optimisePanel: c, buildHistoryPanel: d, viewerPanel: e, aboutPanel: f};
 	});
 var _user$project$Types$Representation = F5(
 	function (a, b, c, d, e) {
@@ -19513,6 +19513,7 @@ var _user$project$Types$stringToBuildMode = function (statusString) {
 			return _elm_lang$core$Result$Err('String could not be converted to BuildMode.');
 	}
 };
+var _user$project$Types$AboutPanel = {ctor: 'AboutPanel'};
 var _user$project$Types$ViewerPanel = {ctor: 'ViewerPanel'};
 var _user$project$Types$BuildHistoryPanel = {ctor: 'BuildHistoryPanel'};
 var _user$project$Types$BuildingStatusPanel = {ctor: 'BuildingStatusPanel'};
@@ -22429,7 +22430,7 @@ var _user$project$Model$modelToExportable = function (model) {
 		currentRepresentation: model.currentRepresentation
 	};
 };
-var _user$project$Model$defaultVisibility = A5(_user$project$Types$PanelVisibility, true, false, false, false, false);
+var _user$project$Model$defaultVisibility = A6(_user$project$Types$PanelVisibility, true, false, false, false, false, false);
 var _user$project$Model$emptyModel = {
 	parameters: _elm_lang$core$Dict$fromList(
 		{
@@ -22630,7 +22631,7 @@ var _user$project$Ports$setStorage = _elm_lang$core$Native_Platform.outgoingPort
 					];
 				}),
 			nextHistoryID: v.nextHistoryID,
-			panelVisibility: {buildPanel: v.panelVisibility.buildPanel, examplesPanel: v.panelVisibility.examplesPanel, optimisePanel: v.panelVisibility.optimisePanel, buildHistoryPanel: v.panelVisibility.buildHistoryPanel, viewerPanel: v.panelVisibility.viewerPanel},
+			panelVisibility: {buildPanel: v.panelVisibility.buildPanel, examplesPanel: v.panelVisibility.examplesPanel, optimisePanel: v.panelVisibility.optimisePanel, buildHistoryPanel: v.panelVisibility.buildHistoryPanel, viewerPanel: v.panelVisibility.viewerPanel, aboutPanel: v.panelVisibility.aboutPanel},
 			currentRepresentation: {cartoon: v.currentRepresentation.cartoon, trace: v.currentRepresentation.trace, ballsAndSticks: v.currentRepresentation.ballsAndSticks, spheres: v.currentRepresentation.spheres, points: v.currentRepresentation.points}
 		};
 	});
@@ -22724,6 +22725,10 @@ var _user$project$Update$togglePanelVisibility = F2(
 				return _elm_lang$core$Native_Utils.update(
 					currentVisibility,
 					{buildHistoryPanel: false, viewerPanel: !currentVisibility.viewerPanel});
+			case 'AboutPanel':
+				return _elm_lang$core$Native_Utils.update(
+					currentVisibility,
+					{aboutPanel: !currentVisibility.aboutPanel});
 			default:
 				return currentVisibility;
 		}
@@ -23162,7 +23167,7 @@ var _user$project$Update$update = F2(
 						model,
 						{
 							building: true,
-							panelVisibility: A5(_user$project$Types$PanelVisibility, false, false, false, false, false),
+							panelVisibility: A6(_user$project$Types$PanelVisibility, false, false, false, false, false, false),
 							activeInfoBoxes: {ctor: '[]'}
 						}),
 					{
@@ -23660,6 +23665,23 @@ var _user$project$Update$update = F2(
 		}
 	});
 
+var _user$project$Views$aboutPanelStyling = {
+	ctor: '::',
+	_0: _rtfeldman$elm_css$Css$bottom(
+		_rtfeldman$elm_css$Css$px(20)),
+	_1: {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css$right(
+			_rtfeldman$elm_css$Css$px(35)),
+		_1: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css$maxWidth(
+				_rtfeldman$elm_css$Css$pct(40)),
+			_1: {ctor: '[]'}
+		}
+	}
+};
+var _user$project$Views$aboutText = 'CCBuilder is developed and maintained by the [Woolfson Group, University\nof Bristol](http://www.chm.bris.ac.uk/org/woolfson/). If you\'re having any\nissues with CCBuilder 2.0, please either report them on [GitHub](\nhttps://github.com/woolfson-group/ccbuilder2/issues) or contact\nchris.wood@bris.ac.uk.\n\n### Citation\n\nPlease cite:\n\nWood CW and Woolfson DN (2017) CCBuilder 2.0: : Powerful and accessible\ncoiled-coil modelling, _Protein Science_.\n\n### Useful References\n\n[Wood CW _et al_ (2017) ISAMBARD: an open-source computational environment\nfor biomolecular analysis, modelling and design. Bioinformatics 2017 btx352.\ndoi: 10.1093/bioinformatics/btx352](\nhttps://doi.org/10.1093/bioinformatics/btx352)\n';
 var _user$project$Views$optJobStatusStyling = function (position) {
 	return {
 		ctor: '::',
@@ -23878,6 +23900,31 @@ var _user$project$Views$optimisePanelStyling = {
 		_0: _rtfeldman$elm_css$Css$left(
 			_rtfeldman$elm_css$Css$px(35)),
 		_1: {ctor: '[]'}
+	}
+};
+var _user$project$Views$bottomRightTogglesStyling = {
+	ctor: '::',
+	_0: _rtfeldman$elm_css$Css$bottom(
+		_rtfeldman$elm_css$Css$px(20)),
+	_1: {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css$right(
+			_rtfeldman$elm_css$Css$px(0)),
+		_1: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css$zIndex(
+				_rtfeldman$elm_css$Css$int(2)),
+			_1: {
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Css$position(_rtfeldman$elm_css$Css$absolute),
+				_1: {
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Css$width(
+						_rtfeldman$elm_css$Css$px(30)),
+					_1: {ctor: '[]'}
+				}
+			}
+		}
 	}
 };
 var _user$project$Views$topRightTogglesStyling = {
@@ -25491,6 +25538,93 @@ var _user$project$Views$optJobStatus = F2(
 					}
 				}()));
 	});
+var _user$project$Views$aboutPanel = function (visible) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _user$project$Views$class(
+				{
+					ctor: '::',
+					_0: _user$project$BuilderCss$OverlayPanelCss,
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _user$project$Views$styles(
+					A2(_elm_lang$core$Basics_ops['++'], _user$project$BuilderCss$panelStyling, _user$project$Views$aboutPanelStyling)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$hidden(!visible),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h2,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('About'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$hr,
+					{ctor: '[]'},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_evancz$elm_markdown$Markdown$toHtml,
+						{ctor: '[]'},
+						_user$project$Views$aboutText),
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+};
+var _user$project$Views$toggleAboutPanel = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _user$project$Views$class(
+			{
+				ctor: '::',
+				_0: _user$project$BuilderCss$OverlayPanelCss,
+				_1: {
+					ctor: '::',
+					_0: _user$project$BuilderCss$RightPanelToggleCss,
+					_1: {ctor: '[]'}
+				}
+			}),
+		_1: {
+			ctor: '::',
+			_0: _elm_lang$html$Html_Events$onClick(
+				_user$project$Types$TogglePanel(_user$project$Types$AboutPanel)),
+			_1: {ctor: '[]'}
+		}
+	},
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html$text('About'),
+		_1: {ctor: '[]'}
+	});
+var _user$project$Views$bottomRightToggles = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _user$project$Views$styles(_user$project$Views$bottomRightTogglesStyling),
+		_1: {ctor: '[]'}
+	},
+	{
+		ctor: '::',
+		_0: _user$project$Views$toggleAboutPanel,
+		_1: {ctor: '[]'}
+	});
 var _user$project$Views$overlayPanels = function (model) {
 	var panelDivs = A2(
 		_elm_lang$core$Basics_ops['++'],
@@ -25505,26 +25639,34 @@ var _user$project$Views$overlayPanels = function (model) {
 					_0: _user$project$Views$topRightToggles,
 					_1: {
 						ctor: '::',
-						_0: A6(_user$project$BuildPanel$buildPanel, model.helixType, model.buildMode, model.parameters, model.currentInput, model.building, model.panelVisibility.buildPanel),
+						_0: _user$project$Views$bottomRightToggles,
 						_1: {
 							ctor: '::',
-							_0: A4(_user$project$Views$optimisePanel, model.buildMode, model.optJobs, model.panelVisibility.optimisePanel, model.heat),
+							_0: A6(_user$project$BuildPanel$buildPanel, model.helixType, model.buildMode, model.parameters, model.currentInput, model.building, model.panelVisibility.buildPanel),
 							_1: {
 								ctor: '::',
-								_0: A2(_user$project$ExamplesPanel$examplesPanel, model.building, model.panelVisibility.examplesPanel),
+								_0: A4(_user$project$Views$optimisePanel, model.buildMode, model.optJobs, model.panelVisibility.optimisePanel, model.heat),
 								_1: {
 									ctor: '::',
-									_0: _user$project$Views$buildingStatusPanel(model.building),
+									_0: A2(_user$project$ExamplesPanel$examplesPanel, model.building, model.panelVisibility.examplesPanel),
 									_1: {
 										ctor: '::',
-										_0: A3(_user$project$Views$buildHistoryPanel, model.modelHistory, model.building, model.panelVisibility.buildHistoryPanel),
+										_0: _user$project$Views$buildingStatusPanel(model.building),
 										_1: {
 											ctor: '::',
-											_0: _user$project$Views$viewerPanel(model.panelVisibility.viewerPanel),
+											_0: A3(_user$project$Views$buildHistoryPanel, model.modelHistory, model.building, model.panelVisibility.buildHistoryPanel),
 											_1: {
 												ctor: '::',
-												_0: _user$project$Views$modelInfoGroup(model),
-												_1: {ctor: '[]'}
+												_0: _user$project$Views$viewerPanel(model.panelVisibility.viewerPanel),
+												_1: {
+													ctor: '::',
+													_0: _user$project$Views$modelInfoGroup(model),
+													_1: {
+														ctor: '::',
+														_0: _user$project$Views$aboutPanel(model.panelVisibility.aboutPanel),
+														_1: {ctor: '[]'}
+													}
+												}
 											}
 										}
 									}
@@ -25994,31 +26136,36 @@ var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
 																									'panelVisibility',
 																									A2(
 																										_elm_lang$core$Json_Decode$andThen,
-																										function (buildHistoryPanel) {
+																										function (aboutPanel) {
 																											return A2(
 																												_elm_lang$core$Json_Decode$andThen,
-																												function (buildPanel) {
+																												function (buildHistoryPanel) {
 																													return A2(
 																														_elm_lang$core$Json_Decode$andThen,
-																														function (examplesPanel) {
+																														function (buildPanel) {
 																															return A2(
 																																_elm_lang$core$Json_Decode$andThen,
-																																function (optimisePanel) {
+																																function (examplesPanel) {
 																																	return A2(
 																																		_elm_lang$core$Json_Decode$andThen,
-																																		function (viewerPanel) {
-																																			return _elm_lang$core$Json_Decode$succeed(
-																																				{buildHistoryPanel: buildHistoryPanel, buildPanel: buildPanel, examplesPanel: examplesPanel, optimisePanel: optimisePanel, viewerPanel: viewerPanel});
+																																		function (optimisePanel) {
+																																			return A2(
+																																				_elm_lang$core$Json_Decode$andThen,
+																																				function (viewerPanel) {
+																																					return _elm_lang$core$Json_Decode$succeed(
+																																						{aboutPanel: aboutPanel, buildHistoryPanel: buildHistoryPanel, buildPanel: buildPanel, examplesPanel: examplesPanel, optimisePanel: optimisePanel, viewerPanel: viewerPanel});
+																																				},
+																																				A2(_elm_lang$core$Json_Decode$field, 'viewerPanel', _elm_lang$core$Json_Decode$bool));
 																																		},
-																																		A2(_elm_lang$core$Json_Decode$field, 'viewerPanel', _elm_lang$core$Json_Decode$bool));
+																																		A2(_elm_lang$core$Json_Decode$field, 'optimisePanel', _elm_lang$core$Json_Decode$bool));
 																																},
-																																A2(_elm_lang$core$Json_Decode$field, 'optimisePanel', _elm_lang$core$Json_Decode$bool));
+																																A2(_elm_lang$core$Json_Decode$field, 'examplesPanel', _elm_lang$core$Json_Decode$bool));
 																														},
-																														A2(_elm_lang$core$Json_Decode$field, 'examplesPanel', _elm_lang$core$Json_Decode$bool));
+																														A2(_elm_lang$core$Json_Decode$field, 'buildPanel', _elm_lang$core$Json_Decode$bool));
 																												},
-																												A2(_elm_lang$core$Json_Decode$field, 'buildPanel', _elm_lang$core$Json_Decode$bool));
+																												A2(_elm_lang$core$Json_Decode$field, 'buildHistoryPanel', _elm_lang$core$Json_Decode$bool));
 																										},
-																										A2(_elm_lang$core$Json_Decode$field, 'buildHistoryPanel', _elm_lang$core$Json_Decode$bool))));
+																										A2(_elm_lang$core$Json_Decode$field, 'aboutPanel', _elm_lang$core$Json_Decode$bool))));
 																						},
 																						A2(
 																							_elm_lang$core$Json_Decode$field,
@@ -26357,7 +26504,7 @@ var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Types.HelixType":{"args":[],"tags":{"Alpha":[],"Collagen":[]}},"Types.BuildMode":{"args":[],"tags":{"Basic":[],"Advanced":[]}},"Types.InfoBoxID":{"args":[],"tags":{"MIRPT":[],"MIBudeEnergy":[],"MIHLKnobs":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"SetHeat":["String"],"OptJobStatus":["Result.Result Http.Error ( String, String )"],"ChangeBuildMode":["String"],"HighlightKnobs":[],"RetrieveOptimisation":["String"],"Build":[],"OptimisationSubmitted":["Result.Result Http.Error String"],"CheckOptJobs":["Time.Time"],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"ShowInfo":["Types.InfoBoxID"],"SetParametersAndBuild":["Types.ParametersDict","Types.HelixType","Types.BuildMode"],"StoreModel":[],"Optimise":[],"CloseInfo":["Types.InfoBoxID"],"ProcessOptimisation":["Result.Result Http.Error Types.OptimisationResults"],"ChangeHelixType":["String"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ModelInfoPanel":[],"ExamplesPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ model_id : String , helixTypeString : String , pdbFile : String , score : Float , residuesPerTurn : Float , knobIDs : List (List String) }"},"Types.OptimisationResults":{"args":[],"type":"{ parameters : Types.ParameterRecord , modellingResults : Types.ModellingResults , oligomericState : Int }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Types.HelixType":{"args":[],"tags":{"Alpha":[],"Collagen":[]}},"Types.BuildMode":{"args":[],"tags":{"Basic":[],"Advanced":[]}},"Types.InfoBoxID":{"args":[],"tags":{"MIRPT":[],"MIBudeEnergy":[],"MIHLKnobs":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"SetHeat":["String"],"OptJobStatus":["Result.Result Http.Error ( String, String )"],"ChangeBuildMode":["String"],"HighlightKnobs":[],"RetrieveOptimisation":["String"],"Build":[],"OptimisationSubmitted":["Result.Result Http.Error String"],"CheckOptJobs":["Time.Time"],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"ShowInfo":["Types.InfoBoxID"],"SetParametersAndBuild":["Types.ParametersDict","Types.HelixType","Types.BuildMode"],"StoreModel":[],"Optimise":[],"CloseInfo":["Types.InfoBoxID"],"ProcessOptimisation":["Result.Result Http.Error Types.OptimisationResults"],"ChangeHelixType":["String"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ModelInfoPanel":[],"ExamplesPanel":[],"AboutPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ model_id : String , helixTypeString : String , pdbFile : String , score : Float , residuesPerTurn : Float , knobIDs : List (List String) }"},"Types.OptimisationResults":{"args":[],"type":"{ parameters : Types.ParameterRecord , modellingResults : Types.ModellingResults , oligomericState : Int }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

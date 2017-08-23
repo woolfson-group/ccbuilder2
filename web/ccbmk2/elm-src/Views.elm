@@ -62,6 +62,7 @@ overlayPanels model =
             [ siteHeader
             , topLeftToggles
             , topRightToggles
+            , bottomRightToggles
             , BuildPanel.buildPanel
                 model.helixType
                 model.buildMode
@@ -83,6 +84,7 @@ overlayPanels model =
                 model.panelVisibility.buildHistoryPanel
             , viewerPanel model.panelVisibility.viewerPanel
             , modelInfoGroup model
+            , aboutPanel model.panelVisibility.aboutPanel
             ]
                 ++ (List.length model.optJobs
                         |> List.range 1
@@ -171,6 +173,23 @@ topRightToggles =
 topRightTogglesStyling : List Css.Mixin
 topRightTogglesStyling =
     [ Css.top (Css.px 60)
+    , Css.right (Css.px 0)
+    , Css.zIndex (Css.int 2)
+    , Css.position Css.absolute
+    , Css.width (Css.px 30)
+    ]
+
+
+bottomRightToggles : Html Msg
+bottomRightToggles =
+    div [ styles bottomRightTogglesStyling ]
+        [ toggleAboutPanel
+        ]
+
+
+bottomRightTogglesStyling : List Css.Mixin
+bottomRightTogglesStyling =
+    [ Css.bottom (Css.px 20)
     , Css.right (Css.px 0)
     , Css.zIndex (Css.int 2)
     , Css.position Css.absolute
@@ -698,3 +717,61 @@ optJobStatusStyling position =
     , Css.right (Css.px 35)
     , Css.width (Css.px 90)
     ]
+
+
+
+-- About Panel
+
+
+aboutPanel : Bool -> Html Msg
+aboutPanel visible =
+    div
+        [ class [ OverlayPanelCss ]
+        , styles <| panelStyling ++ aboutPanelStyling
+        , hidden <| not visible
+        ]
+        [ h2 [] [ text "About" ]
+        , hr [] []
+        , Markdown.toHtml [] aboutText
+        ]
+
+
+aboutText : String
+aboutText =
+    """CCBuilder is developed and maintained by the [Woolfson Group, University
+of Bristol](http://www.chm.bris.ac.uk/org/woolfson/). If you're having any
+issues with CCBuilder 2.0, please either report them on [GitHub](
+https://github.com/woolfson-group/ccbuilder2/issues) or contact
+chris.wood@bris.ac.uk.
+
+### Citation
+
+Please cite:
+
+Wood CW and Woolfson DN (2017) CCBuilder 2.0: : Powerful and accessible
+coiled-coil modelling, _Protein Science_.
+
+### Useful References
+
+[Wood CW _et al_ (2017) ISAMBARD: an open-source computational environment
+for biomolecular analysis, modelling and design. Bioinformatics 2017 btx352.
+doi: 10.1093/bioinformatics/btx352](
+https://doi.org/10.1093/bioinformatics/btx352)
+"""
+
+
+aboutPanelStyling : List Css.Mixin
+aboutPanelStyling =
+    [ Css.bottom (Css.px 20)
+    , Css.right (Css.px 35)
+    , Css.maxWidth (Css.pct 40)
+    ]
+
+
+toggleAboutPanel : Html Msg
+toggleAboutPanel =
+    div
+        [ class [ OverlayPanelCss, RightPanelToggleCss ]
+        , onClick (TogglePanel AboutPanel)
+        ]
+        [ text "About" ]
