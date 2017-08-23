@@ -208,7 +208,7 @@ update msg model =
                     { model
                         | building = True
                         , panelVisibility =
-                            PanelVisibility False False False False False
+                            PanelVisibility False False False False False False
                         , activeInfoBoxes = []
                     }
                         ! [ case model.helixType of
@@ -323,7 +323,8 @@ update msg model =
             { model | building = False } ! []
 
         SetHeat heat ->
-            { model | heat = String.toInt heat |> Result.withDefault 298 } ! []
+            { model | heat = String.toInt heat |> Result.withDefault 298 }
+                ! []
 
         ProcessOptimisation (Ok { parameters, modellingResults, oligomericState }) ->
             let
@@ -704,6 +705,11 @@ togglePanelVisibility panel currentVisibility =
             { currentVisibility
                 | buildHistoryPanel = False
                 , viewerPanel = not currentVisibility.viewerPanel
+            }
+
+        AboutPanel ->
+            { currentVisibility
+                | aboutPanel = not currentVisibility.aboutPanel
             }
 
         _ ->

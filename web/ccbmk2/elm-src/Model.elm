@@ -105,7 +105,7 @@ emptyModel =
 
 defaultVisibility : PanelVisibility
 defaultVisibility =
-    PanelVisibility True False False False False
+    PanelVisibility True False False False False False
 
 
 modelToExportable : Model -> ExportableModel

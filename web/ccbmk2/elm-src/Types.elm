@@ -141,6 +141,7 @@ type Panel
     | BuildingStatusPanel
     | BuildHistoryPanel
     | ViewerPanel
+    | AboutPanel
 
 
 type alias PanelVisibility =
@@ -149,6 +150,7 @@ type alias PanelVisibility =
     , optimisePanel : Bool
     , buildHistoryPanel : Bool
     , viewerPanel : Bool
+    , aboutPanel : Bool
     }
 
 
