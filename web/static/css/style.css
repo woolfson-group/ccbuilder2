@@ -78,6 +78,7 @@ table {
 
 .builderFlexContainerCss {
     display: flex;
+    align-items: flex-start;
     flex-direction: row;
 }
 
@@ -98,6 +99,11 @@ table {
 .builderCCBButtonCss:hover {
     background-color: #9fb8ad;
     text-decoration: none;
+}
+
+.builderInfoPanelCss {
+    overflow: auto;
+    margin: auto;
 }
 
 #AppHeaderPanel {

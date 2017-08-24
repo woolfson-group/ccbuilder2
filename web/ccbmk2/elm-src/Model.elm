@@ -27,6 +27,7 @@ import Types
         , PanelVisibility
         , Representation
         , RepOption(..)
+        , InfoBoxID
         , stringToBuildMode
         , stringToHelixType
         )
@@ -55,6 +56,7 @@ type alias Model =
     , nextHistoryID : HistoryID
     , panelVisibility : PanelVisibility
     , currentRepresentation : Representation
+    , activeInfoBoxes : List InfoBoxID
     }
 
 
@@ -97,12 +99,13 @@ emptyModel =
     , nextHistoryID = 1
     , panelVisibility = defaultVisibility
     , currentRepresentation = Representation False True True False False
+    , activeInfoBoxes = []
     }
 
 
 defaultVisibility : PanelVisibility
 defaultVisibility =
-    PanelVisibility True False False False False
+    PanelVisibility True False False False False False
 
 
 modelToExportable : Model -> ExportableModel
@@ -166,6 +169,7 @@ exportableToModel exportableModel =
     , nextHistoryID = exportableModel.nextHistoryID
     , panelVisibility = exportableModel.panelVisibility
     , currentRepresentation = exportableModel.currentRepresentation
+    , activeInfoBoxes = []
     }
 
 

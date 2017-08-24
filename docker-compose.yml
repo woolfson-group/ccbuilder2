@@ -12,6 +12,7 @@ services:
       - ./web:/app
     depends_on:
       - db
+    restart: on-failure
   optimisation:
     build:
       context: .

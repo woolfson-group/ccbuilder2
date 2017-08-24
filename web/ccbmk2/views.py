@@ -5,9 +5,7 @@ import datetime
 from flask import jsonify, redirect, render_template, request
 from bson.objectid import ObjectId
 
-from ccbmk2 import app
-from ccbmk2 import database
-from ccbmk2 import model_building
+from ccbmk2 import app, database, model_building
 
 
 @app.route('/')
@@ -78,7 +76,6 @@ def build_and_record_model(request, helix_type):
 @app.route('/builder/api/v0.1/optimise/model', methods=['POST'])
 def optimise_model():
     """Runs a parameter optimisation for a supplied model."""
-    build_start_time = datetime.datetime.now()
     opt_id = database.create_opt_job_entry(request.json)
     return jsonify(str(opt_id))
 

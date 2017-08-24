@@ -2,6 +2,7 @@ module Types exposing (..)
 
 import Dict
 import Keyboard
+import Html exposing (..)
 import Http
 import Time
 
@@ -33,6 +34,8 @@ type Msg
     | ShowAxes
     | EditRepresentation RepOption
     | StoreModel
+    | ShowInfo InfoBoxID
+    | CloseInfo InfoBoxID
     | NoOp ()
 
 
@@ -138,6 +141,7 @@ type Panel
     | BuildingStatusPanel
     | BuildHistoryPanel
     | ViewerPanel
+    | AboutPanel
 
 
 type alias PanelVisibility =
@@ -146,6 +150,7 @@ type alias PanelVisibility =
     , optimisePanel : Bool
     , buildHistoryPanel : Bool
     , viewerPanel : Bool
+    , aboutPanel : Bool
     }
 
 
@@ -172,6 +177,12 @@ type RepOption
     | BallsAndSticks
     | Spheres
     | Points
+
+
+type InfoBoxID
+    = MIBudeEnergy
+    | MIRPT
+    | MIHLKnobs
 
 
 stringToBuildMode : String -> Result String BuildMode

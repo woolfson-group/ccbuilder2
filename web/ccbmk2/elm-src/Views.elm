@@ -10,6 +10,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Html.CssHelpers
 import Model exposing (..)
+import Markdown
 import Types
     exposing
         ( Msg(..)
@@ -24,6 +25,7 @@ import Types
         , Panel(..)
         , Representation
         , RepOption(..)
+        , InfoBoxID(..)
         , optStatusToString
         , emptyParameterRecord
         )
@@ -60,6 +62,7 @@ overlayPanels model =
             [ siteHeader
             , topLeftToggles
             , topRightToggles
+            , bottomRightToggles
             , BuildPanel.buildPanel
                 model.helixType
                 model.buildMode
@@ -80,7 +83,8 @@ overlayPanels model =
                 model.building
                 model.panelVisibility.buildHistoryPanel
             , viewerPanel model.panelVisibility.viewerPanel
-            , modelInfoPanel model
+            , modelInfoGroup model
+            , aboutPanel model.panelVisibility.aboutPanel
             ]
                 ++ (List.length model.optJobs
                         |> List.range 1
@@ -176,6 +180,23 @@ topRightTogglesStyling =
     ]
 
 
+bottomRightToggles : Html Msg
+bottomRightToggles =
+    div [ styles bottomRightTogglesStyling ]
+        [ toggleAboutPanel
+        ]
+
+
+bottomRightTogglesStyling : List Css.Mixin
+bottomRightTogglesStyling =
+    [ Css.bottom (Css.px 20)
+    , Css.right (Css.px 0)
+    , Css.zIndex (Css.int 2)
+    , Css.position Css.absolute
+    , Css.width (Css.px 30)
+    ]
+
+
 
 -- Optimise Panel
 
@@ -206,6 +227,7 @@ optimisePanel buildMode optJobs visible heat =
             , hidden <| not visible
             ]
             [ h3 [] [ text "Optimise Parameters" ]
+            , hr [] []
             , text "Heat"
             , br [] []
             , input
@@ -243,42 +265,118 @@ toggleOptimisePanel =
 -- Model Info
 
 
+modelInfoGroup : Model -> Html Msg
+modelInfoGroup model =
+    div
+        [ class [ FlexContainerCss ]
+        , styles <| modelInfoGroupPanelStyling ++ panelStyling
+        ]
+        ([ modelInfoPanel model
+         ]
+            ++ (if List.member MIBudeEnergy model.activeInfoBoxes then
+                    [ budeEnergyInfo ]
+                else if List.member MIRPT model.activeInfoBoxes then
+                    [ rptInfo ]
+                else if List.member MIHLKnobs model.activeInfoBoxes then
+                    [ highlightKIHInfo ]
+                else
+                    []
+               )
+        )
+
+
 modelInfoPanel : Model -> Html Msg
 modelInfoPanel model =
     div
-        [ class [ OverlayPanelCss ]
-        , id [ ModelInfoPanel ]
-        , styles <| panelStyling ++ modelInfoPanelStyling
+        [ class [ OverlayPanelCss, FlexItemCss ]
+        , styles [ Css.bottom (Css.px 0) ]
         ]
         [ h3 [] [ text "Model Information" ]
-        , text "BUDE Energy"
-        , br [] []
+        , hr [] []
+        , infoText MIBudeEnergy "BUDE Energy �"
         , Maybe.map (roundToXDecPlaces 1) model.score
             |> Maybe.map toString
             |> Maybe.withDefault ""
             |> \val -> input [ value val, readonly True ] []
-        , br [] []
-        , text "Residues per Turn"
-        , br [] []
+        , hr [] []
+        , infoText MIRPT "Residues per Turn �"
         , Maybe.map (roundToXDecPlaces 2) model.residuesPerTurn
             |> Maybe.map toString
             |> Maybe.withDefault ""
             |> \val -> input [ value val, readonly True ] []
-        , br [] []
+        , hr [] []
         , button
             [ class [ CCBButtonCss ]
+            , styles [ Css.float Css.left ]
             , onClick HighlightKnobs
             ]
             [ text "Highlight Knobs" ]
-        , br [] []
+        , infoText MIHLKnobs "�"
+        , hr [] []
         , downloadStructureButton model.pdbFile
         ]
 
 
-modelInfoPanelStyling : List Css.Mixin
-modelInfoPanelStyling =
-    [ Css.bottom (Css.px 20)
-    , Css.left (Css.px 35)
+budeEnergyInfo : Html msg
+budeEnergyInfo =
+    div
+        [ class [ OverlayPanelCss, FlexItemCss ]
+        , styles infoBoxStyling
+        ]
+        [ h3 [] [ text "BUDE Energy" ]
+        , text mIBudeEnergyText
+        ]
+
+
+mIBudeEnergyText : String
+mIBudeEnergyText =
+    """The interaction energy between helices as calculated by the BUDE force field implemented in the BUFF module of ISAMBARD."""
+
+
+rptInfo : Html msg
+rptInfo =
+    div
+        [ class [ OverlayPanelCss, FlexItemCss ]
+        , styles infoBoxStyling
+        ]
+        [ h3 [] [ text "Residues Per Turn" ]
+        , text mIRPTText
+        ]
+
+
+mIRPTText : String
+mIRPTText =
+    """Residues per turn of the alpha helix, can be used as a proxy for backbone strain."""
+
+
+highlightKIHInfo : Html msg
+highlightKIHInfo =
+    div
+        [ class [ OverlayPanelCss, FlexItemCss ]
+        , styles infoBoxStyling
+        ]
+        [ h3 [] [ text "Highlight Knobs" ]
+        , text highlightKIHText
+        ]
+
+
+highlightKIHText : String
+highlightKIHText =
+    """Highlights knob residues red, all other residues are coloured blue."""
+
+
+modelInfoGroupPanelStyling : List Css.Mixin
+modelInfoGroupPanelStyling =
+    [ Css.bottom (Css.px 0)
+    , Css.left (Css.px 0)
+    ]
+
+
+infoBoxStyling : List Css.Mixin
+infoBoxStyling =
+    [ Css.maxWidth (Css.pct 40)
+    , Css.maxHeight (Css.em 8)
+    , Css.lineHeight (Css.em 1)
     ]
 
 
@@ -322,7 +420,8 @@ buildHistoryPanel modelHistory building visible =
         , styles <| panelStyling ++ buildHistoryPanelStyling
         , hidden <| not visible
         ]
-        [ h3 [] [ text "Build History" ]
+        [ h2 [] [ text "Build History" ]
+        , hr [] []
         , table []
             [ modelDetailTableHeader
             , List.map2 modelParametersAsRow
@@ -543,6 +642,19 @@ toggleViewerPanel =
 
 
 
+-- Info Box
+
+
+infoText : InfoBoxID -> String -> Html Msg
+infoText infoBoxID contentText =
+    div
+        [ onMouseEnter (ShowInfo infoBoxID)
+        , onMouseLeave (CloseInfo infoBoxID)
+        ]
+        [ text contentText ]
+
+
+
 -- Building Status
 
 
@@ -605,3 +717,61 @@ optJobStatusStyling position =
     , Css.right (Css.px 35)
     , Css.width (Css.px 90)
     ]
+
+
+
+-- About Panel
+
+
+aboutPanel : Bool -> Html Msg
+aboutPanel visible =
+    div
+        [ class [ OverlayPanelCss ]
+        , styles <| panelStyling ++ aboutPanelStyling
+        , hidden <| not visible
+        ]
+        [ h2 [] [ text "About" ]
+        , hr [] []
+        , Markdown.toHtml [] aboutText
+        ]
+
+
+aboutText : String
+aboutText =
+    """CCBuilder is developed and maintained by the [Woolfson Group, University
+of Bristol](http://www.chm.bris.ac.uk/org/woolfson/). If you're having any
+issues with CCBuilder 2.0, please either report them on [GitHub](
+https://github.com/woolfson-group/ccbuilder2/issues) or contact
+chris.wood@bris.ac.uk.
+
+### Citation
+
+Please cite:
+
+Wood CW and Woolfson DN (2017) CCBuilder 2.0: : Powerful and accessible
+coiled-coil modelling, _Protein Science_.
+
+### Useful References
+
+[Wood CW _et al_ (2017) ISAMBARD: an open-source computational environment
+for biomolecular analysis, modelling and design. Bioinformatics 2017 btx352.
+doi: 10.1093/bioinformatics/btx352](
+https://doi.org/10.1093/bioinformatics/btx352)
+"""
+
+
+aboutPanelStyling : List Css.Mixin
+aboutPanelStyling =
+    [ Css.bottom (Css.px 20)
+    , Css.right (Css.px 35)
+    , Css.maxWidth (Css.pct 40)
+    ]
+
+
+toggleAboutPanel : Html Msg
+toggleAboutPanel =
+    div
+        [ class [ OverlayPanelCss, RightPanelToggleCss ]
+        , onClick (TogglePanel AboutPanel)
+        ]
+        [ text "About" ]

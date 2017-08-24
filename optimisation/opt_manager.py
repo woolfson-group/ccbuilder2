@@ -71,7 +71,7 @@ def update_job_status(opt_job_id, status):
 
 
 def run_optimisation(opt_job_id, helix_type, parameters):
-    """"""
+    """Runs the optimisation job."""
     if helix_type == "ALPHA":
         optimised_parameters, model_and_info = model_building.optimise_coiled_coil(
             parameters, debug=True)

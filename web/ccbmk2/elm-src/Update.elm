@@ -62,7 +62,11 @@ update msg model =
                     inputRecordWithDefault sectionID model.currentInput
 
                 ( p, i ) =
-                    editParameterValue params input parameter newValue
+                    editParameterValue params
+                        input
+                        parameter
+                        newValue
+                        model.helixType
             in
                 { model
                     | parameters = Dict.insert sectionID p model.parameters
@@ -144,7 +148,17 @@ update msg model =
                     , parameters = newParameters
                     , currentInput = newInput
                 }
-                    ! [ Task.perform NoOp (Process.sleep (10 * Time.millisecond)) ]
+                    {- We need to validate the sequences as O isn't allowed for
+                       Alpha type helices.
+                    -}
+                    ! (Dict.toList newInput
+                        |> List.map (\( sid, i ) -> ( sid, i.sequence ))
+                        |> List.map
+                            (\( sid, seq ) ->
+                                EditSingleParameter Sequence sid seq
+                            )
+                        |> List.map toCommand
+                      )
 
         ChangeBuildMode buildMode ->
             let
@@ -194,7 +208,8 @@ update msg model =
                     { model
                         | building = True
                         , panelVisibility =
-                            PanelVisibility False False False False False
+                            PanelVisibility False False False False False False
+                        , activeInfoBoxes = []
                     }
                         ! [ case model.helixType of
                                 Alpha ->
@@ -308,7 +323,8 @@ update msg model =
             { model | building = False } ! []
 
         SetHeat heat ->
-            { model | heat = String.toInt heat |> Result.withDefault 298 } ! []
+            { model | heat = String.toInt heat |> Result.withDefault 298 }
+                ! []
 
         ProcessOptimisation (Ok { parameters, modellingResults, oligomericState }) ->
             let
@@ -395,7 +411,7 @@ update msg model =
                         |> Dict.fromList
             }
                 ! []
-        
+
         HighlightKnobs ->
             model ! [ highlightKnobs (Maybe.withDefault [] model.knobIDs) ]
 
@@ -435,12 +451,14 @@ update msg model =
                     model ! []
 
         TogglePanel panel ->
-            { model | panelVisibility = togglePanelVisibility panel model.panelVisibility }
+            { model
+                | panelVisibility = togglePanelVisibility panel model.panelVisibility
+                , activeInfoBoxes = []
+            }
                 {--This task is required to allow the DOM to be rendered
                 if it isn't included then the drop down menus will show thead
                 incorrect option. --}
-                !
-                    [ Task.perform NoOp (Process.sleep (10 * Time.millisecond)) ]
+                ! [ Task.perform NoOp (Process.sleep (10 * Time.millisecond)) ]
 
         ExpandHistory hID ->
             let
@@ -479,6 +497,20 @@ update msg model =
 
         StoreModel ->
             model ! [ setStorage <| modelToExportable model ]
+
+        ShowInfo infoBoxID ->
+            { model
+                | activeInfoBoxes =
+                    infoBoxID :: model.activeInfoBoxes
+            }
+                ! []
+
+        CloseInfo infoBoxID ->
+            { model
+                | activeInfoBoxes =
+                    List.filter (\x -> x /= infoBoxID) model.activeInfoBoxes
+            }
+                ! []
 
         NoOp _ ->
             model ! []
@@ -673,6 +705,11 @@ togglePanelVisibility panel currentVisibility =
             { currentVisibility
                 | buildHistoryPanel = False
                 , viewerPanel = not currentVisibility.viewerPanel
+            }
+
+        AboutPanel ->
+            { currentVisibility
+                | aboutPanel = not currentVisibility.aboutPanel
             }
 
         _ ->
