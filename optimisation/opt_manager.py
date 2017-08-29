@@ -24,7 +24,6 @@ def main():
         ]
         for listener in listeners:
             listener.start()
-
         while True:
             submitted_jobs = database.opt_jobs.find(
                 {'status': database.JobStatus.SUBMITTED.name})
@@ -36,9 +35,20 @@ def main():
                     {'$set': {'status': database.JobStatus.QUEUED.name}})
             running_jobs = database.opt_jobs.find(
                 {'status': database.JobStatus.RUNNING.name})
+            # This block check that all running jobs in the db are actually
+            # running.
             for job in running_jobs:
                 if job['_id'] not in assigned_jobs:
                     update_job_status(job['_id'], database.JobStatus.FAILED)
+            # This block restarts any dead listeners
+            for (i, proc) in enumerate(listeners):
+                if not proc.is_alive():
+                    proc.terminate()
+                    assigned_jobs[i] = None
+                    listeners[i] = mp.Process(
+                        target=get_and_process_opt_jobs,
+                        args=(queue, assigned_jobs, i))
+                    listeners[i].start()
             time.sleep(10)
     return
 
@@ -52,6 +62,12 @@ def get_and_process_opt_jobs(opt_job_queue, assigned_jobs, proc_i):
     ----------
     opt_job_queue : multiprocessing.Queue
         Optimisation job queue.
+    assigned_jobs : list
+        A list of jobs ids currently being processed by the
+        listeners.
+    proc_i : int
+        The index of the processor in the listener list and th
+        assigned_jobs list.
     """
     # The module is reloaded to establish a new connection
     # to the database for the process fork
