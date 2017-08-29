@@ -14,28 +14,46 @@ import model_building
 def main():
     """Establishes the manager and listener subprocesses"""
     processes = int(os.getenv(key='OPT_PROCS', default='1'))
-    queue = mp.Queue()
-    listeners = [
-        mp.Process(target=get_and_process_opt_jobs,
-                   args=(queue, ))
-        for _ in range(processes)
-    ]
-    for listener in listeners:
-        listener.start()
-
-    while True:
-        jobs = database.opt_jobs.find(
-            {'status': database.JobStatus.SUBMITTED.name})
-        for job in sorted(jobs, key=lambda x: x['time_submitted']):
-            queue.put(job['_id'])
-            database.opt_jobs.update_one(
-                {'_id': job['_id']},
-                {'$set': {'status': database.JobStatus.QUEUED.name}})
-        time.sleep(10)
+    with mp.Manager() as manager:
+        queue = manager.Queue()
+        assigned_jobs = manager.list([None] * processes)
+        listeners = [
+            mp.Process(target=get_and_process_opt_jobs,
+                       args=(queue, assigned_jobs, proc_i))
+            for proc_i in range(processes)
+        ]
+        for listener in listeners:
+            listener.start()
+        while True:
+            submitted_jobs = database.opt_jobs.find(
+                {'status': database.JobStatus.SUBMITTED.name})
+            for job in sorted(submitted_jobs,
+                              key=lambda x: x['time_submitted']):
+                queue.put(job['_id'])
+                database.opt_jobs.update_one(
+                    {'_id': job['_id']},
+                    {'$set': {'status': database.JobStatus.QUEUED.name}})
+            running_jobs = database.opt_jobs.find(
+                {'status': database.JobStatus.RUNNING.name})
+            # This block check that all running jobs in the db are actually
+            # running.
+            for job in running_jobs:
+                if job['_id'] not in assigned_jobs:
+                    update_job_status(job['_id'], database.JobStatus.FAILED)
+            # This block restarts any dead listeners
+            for (i, proc) in enumerate(listeners):
+                if not proc.is_alive():
+                    proc.terminate()
+                    assigned_jobs[i] = None
+                    listeners[i] = mp.Process(
+                        target=get_and_process_opt_jobs,
+                        args=(queue, assigned_jobs, i))
+                    listeners[i].start()
+            time.sleep(10)
     return
 
 
-def get_and_process_opt_jobs(opt_job_queue):
+def get_and_process_opt_jobs(opt_job_queue, assigned_jobs, proc_i):
     """Collect and run optimisation jobs from queue.
 
     Used by the the OptimizationManager to initialise Processes.
@@ -44,6 +62,12 @@ def get_and_process_opt_jobs(opt_job_queue):
     ----------
     opt_job_queue : multiprocessing.Queue
         Optimisation job queue.
+    assigned_jobs : list
+        A list of jobs ids currently being processed by the
+        listeners.
+    proc_i : int
+        The index of the processor in the listener list and th
+        assigned_jobs list.
     """
     # The module is reloaded to establish a new connection
     # to the database for the process fork
@@ -56,9 +80,12 @@ def get_and_process_opt_jobs(opt_job_queue):
             database.parameters_store.find_one,
             opt_job['initial_parameter_ids']))
         update_job_status(job_id, database.JobStatus.RUNNING)
+        assigned_jobs[proc_i] = job_id
         print("Running opt job {}!".format(job_id), file=sys.stderr)
-        model_id = run_optimisation(job_id, opt_job['helix_type'], parameters)
+        run_optimisation(job_id, opt_job['helix_type'],
+                         parameters)
         print("Finished opt job {}!".format(job_id), file=sys.stderr)
+        assigned_jobs[proc_i] = None
     return
 
 

@@ -106,7 +106,6 @@ def build_collagen(parameters, debug=False):
     collagen.pack_new_sequences(proline_sequences)
     score = collagen.buff_interaction_energy.total_energy
     mean_rpt_value = calculate_average_rpt(collagen)
-    print("isambard path = {}".format(isambard.ampal.non_canonical.FILE_PATH), file=sys.stderr)
     for res, ml in zip(collagen.get_monomers(), ''.join(original_sequences)):
         if ml == 'O':
             isambard.ampal.non_canonical.convert_pro_to_hyp(res)
