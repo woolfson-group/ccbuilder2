@@ -754,13 +754,14 @@ chris.wood@bris.ac.uk.
 
 Please cite:
 
-Wood CW and Woolfson DN (2017) CCBuilder 2.0: : Powerful and accessible
-coiled-coil modelling, _Protein Science_.
+[Wood CW and Woolfson DN (2017) CCBuilder 2.0: Powerful and accessible
+coiled-coil modelling,
+_Protein Science_. doi: 10.1002/pro.3279](http://dx.doi.org/10.1002/pro.3279)
 
 ### Useful References
 
 [Wood CW _et al_ (2017) ISAMBARD: an open-source computational environment
-for biomolecular analysis, modelling and design. Bioinformatics 2017 btx352.
+for biomolecular analysis, modelling and design, Bioinformatics.
 doi: 10.1093/bioinformatics/btx352](
 https://doi.org/10.1093/bioinformatics/btx352)
 """

@@ -23708,7 +23708,7 @@ var _user$project$Views$aboutPanelStyling = {
 		}
 	}
 };
-var _user$project$Views$aboutText = 'CCBuilder is developed and maintained by the [Woolfson Group, University\nof Bristol](http://www.chm.bris.ac.uk/org/woolfson/). If you\'re having any\nissues with CCBuilder 2.0, please either report them on [GitHub](\nhttps://github.com/woolfson-group/ccbuilder2/issues) or contact\nchris.wood@bris.ac.uk.\n\n### Citation\n\nPlease cite:\n\nWood CW and Woolfson DN (2017) CCBuilder 2.0: : Powerful and accessible\ncoiled-coil modelling, _Protein Science_.\n\n### Useful References\n\n[Wood CW _et al_ (2017) ISAMBARD: an open-source computational environment\nfor biomolecular analysis, modelling and design. Bioinformatics 2017 btx352.\ndoi: 10.1093/bioinformatics/btx352](\nhttps://doi.org/10.1093/bioinformatics/btx352)\n';
+var _user$project$Views$aboutText = 'CCBuilder is developed and maintained by the [Woolfson Group, University\nof Bristol](http://www.chm.bris.ac.uk/org/woolfson/). If you\'re having any\nissues with CCBuilder 2.0, please either report them on [GitHub](\nhttps://github.com/woolfson-group/ccbuilder2/issues) or contact\nchris.wood@bris.ac.uk.\n\n### Citation\n\nPlease cite:\n\n[Wood CW and Woolfson DN (2017) CCBuilder 2.0: Powerful and accessible\ncoiled-coil modelling,\n_Protein Science_. doi: 10.1002/pro.3279](http://dx.doi.org/10.1002/pro.3279)\n\n### Useful References\n\n[Wood CW _et al_ (2017) ISAMBARD: an open-source computational environment\nfor biomolecular analysis, modelling and design, Bioinformatics.\ndoi: 10.1093/bioinformatics/btx352](\nhttps://doi.org/10.1093/bioinformatics/btx352)\n';
 var _user$project$Views$optJobStatusStyling = function (position) {
 	return {
 		ctor: '::',
