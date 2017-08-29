@@ -1,37 +1,8 @@
-# CCBuilder Mk. 2
+# CCBuilder 2
+### Version 2.0.0 - 29th Aug 2017
 
-This is the source code for a web application for building models of coiled coils and other parameterisable protein folds.
+This is the source code for CCBuilder 2, a web application for modelling coiled coils and collagens.
 
-## Notes
+## Website
 
-* `docker-compose up`
-* Could I use a type to define the field and then have a single update message for all of the input fields?
-* When rebuilding the image, you need to:
-    * Rebuild the images using `docker build -t ccbmk2 .`
-    * Delete the old `docker-compose` image using `docker-compose rm`
-* `docker exec -i -t ccbmk2_web_1 /bin/bash`
-* `docker stop $(docker ps -a -q)` to stop all containers
-* `docker rm $(docker ps -a -q)` to remove all containers
-* `docker rmi $(docker images -f dangling=true -q)` remove dangling
-* Coolors
-    * https://coolors.co/e6e8e6-ced0ce-9fb8ad-475841-3f403f
-* `List.map (\v -> (toFloat v) * delta) (List.range 0 (n-1))`
-* chrome://settings/cookies#cont
-
-## Style Guide
-
-* All CSS that manipulates the *position* of elements should be defined in Elm, all formating (fonts, colours) should be defined in the style sheet.
-
-## TODO
-
-* Add oligomeric state and score to history
-* Put limit on size of model to be optimised
-* Make a Monte Carlo based optimisation algorithm
-* Add BUFF score to build history
-* Add error messages for failed builds
-* Warning for long build time
-* Try horizontal model info
-* Convert advanced build to a table
-* Add additional camera and representation controls
-* Make empty model autofill parameters input and sectionid to avoid impossible states
-* Make standalone version with Electron and Miniconda?
+The live version is available [here](http://coiledcoils.chm.bris.ac.uk/ccbuilder2).
