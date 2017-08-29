@@ -20,8 +20,9 @@ type Msg
     | SetHeat String
     | OptimisationSubmitted (Result Http.Error String)
     | CheckOptJobs Time.Time
-    | OptJobStatus (Result Http.Error ( String, String ))
+    | OptJobStatus String (Result Http.Error ( String, String ))
     | RetrieveOptimisation String
+    | ClearOptimisation String
     | ProcessOptimisation (Result Http.Error OptimisationResults)
     | SetOligomericState String
     | Clear

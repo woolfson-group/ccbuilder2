@@ -701,6 +701,12 @@ optJobStatus ( optID, status ) position =
                             [ text "Retrieve" ]
                         ]
 
+                    Failed ->
+                        [ button
+                            [ onClick (ClearOptimisation optID) ]
+                            [ text "Clear" ]
+                        ]
+
                     _ ->
                         [ img
                             [ src "static/css/infinity.gif", width 80, height 80 ]

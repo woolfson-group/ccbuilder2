@@ -261,19 +261,25 @@ update msg model =
                     |> List.map checkJobStatus
                   )
 
-        OptJobStatus (Ok ( ojid, status )) ->
+        OptJobStatus in_id (Ok ( out_id, status )) ->
             let
                 newOptJobs =
                     Dict.fromList model.optJobs
                         |> Dict.insert
-                            ojid
+                            out_id
                             (Result.withDefault Failed (stringToOptStatus status))
                         |> Dict.toList
             in
                 { model | optJobs = newOptJobs } ! []
 
-        OptJobStatus (Err _) ->
-            model ! []
+        OptJobStatus in_id (Err _) ->
+            let
+                newOptJobs =
+                    Dict.fromList model.optJobs
+                        |> Dict.insert in_id Failed
+                        |> Dict.toList
+            in
+                { model | optJobs = newOptJobs } ! []
 
         RetrieveOptimisation optJobId ->
             { model
@@ -281,6 +287,13 @@ update msg model =
                     List.filter (\( ojid, _ ) -> ojid /= optJobId) model.optJobs
             }
                 ! [ retreiveOptimisation optJobId ]
+
+        ClearOptimisation optJobId ->
+            { model
+                | optJobs =
+                    List.filter (\( ojid, _ ) -> ojid /= optJobId) model.optJobs
+            }
+                ! []
 
         ProcessModel (Ok { helixTypeString, pdbFile, score, residuesPerTurn, knobIDs }) ->
             let
@@ -615,7 +628,7 @@ sendOptimiseCmd parameters helixType heat =
 
 checkJobStatus : String -> Cmd Msg
 checkJobStatus optJobId =
-    Http.send OptJobStatus <|
+    Http.send (OptJobStatus optJobId) <|
         Http.get
             ("builder/api/v0.1/optimise/check-job-status?opt-job-id=" ++ optJobId)
             jobStatusDecoder

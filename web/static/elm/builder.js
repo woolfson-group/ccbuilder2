@@ -19438,12 +19438,16 @@ var _user$project$Types$SetOligomericState = function (a) {
 var _user$project$Types$ProcessOptimisation = function (a) {
 	return {ctor: 'ProcessOptimisation', _0: a};
 };
+var _user$project$Types$ClearOptimisation = function (a) {
+	return {ctor: 'ClearOptimisation', _0: a};
+};
 var _user$project$Types$RetrieveOptimisation = function (a) {
 	return {ctor: 'RetrieveOptimisation', _0: a};
 };
-var _user$project$Types$OptJobStatus = function (a) {
-	return {ctor: 'OptJobStatus', _0: a};
-};
+var _user$project$Types$OptJobStatus = F2(
+	function (a, b) {
+		return {ctor: 'OptJobStatus', _0: a, _1: b};
+	});
 var _user$project$Types$CheckOptJobs = function (a) {
 	return {ctor: 'CheckOptJobs', _0: a};
 };
@@ -22766,7 +22770,7 @@ var _user$project$Update$jobStatusDecoder = A3(
 var _user$project$Update$checkJobStatus = function (optJobId) {
 	return A2(
 		_elm_lang$http$Http$send,
-		_user$project$Types$OptJobStatus,
+		_user$project$Types$OptJobStatus(optJobId),
 		A2(
 			_elm_lang$http$Http$get,
 			A2(_elm_lang$core$Basics_ops['++'], 'builder/api/v0.1/optimise/check-job-status?opt-job-id=', optJobId),
@@ -23246,15 +23250,15 @@ var _user$project$Update$update = F2(
 								},
 								model.optJobs))));
 			case 'OptJobStatus':
-				if (_p2._0.ctor === 'Ok') {
+				if (_p2._1.ctor === 'Ok') {
 					var newOptJobs = _elm_lang$core$Dict$toList(
 						A3(
 							_elm_lang$core$Dict$insert,
-							_p2._0._0._0,
+							_p2._1._0._0,
 							A2(
 								_elm_lang$core$Result$withDefault,
 								_user$project$Types$Failed,
-								_user$project$Types$stringToOptStatus(_p2._0._0._1)),
+								_user$project$Types$stringToOptStatus(_p2._1._0._1)),
 							_elm_lang$core$Dict$fromList(model.optJobs)));
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
@@ -23263,9 +23267,17 @@ var _user$project$Update$update = F2(
 							{optJobs: newOptJobs}),
 						{ctor: '[]'});
 				} else {
+					var newOptJobs = _elm_lang$core$Dict$toList(
+						A3(
+							_elm_lang$core$Dict$insert,
+							_p2._0,
+							_user$project$Types$Failed,
+							_elm_lang$core$Dict$fromList(model.optJobs)));
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
-						model,
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{optJobs: newOptJobs}),
 						{ctor: '[]'});
 				}
 			case 'RetrieveOptimisation':
@@ -23288,11 +23300,26 @@ var _user$project$Update$update = F2(
 						_0: _user$project$Update$retreiveOptimisation(_p19),
 						_1: {ctor: '[]'}
 					});
+			case 'ClearOptimisation':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							optJobs: A2(
+								_elm_lang$core$List$filter,
+								function (_p20) {
+									var _p21 = _p20;
+									return !_elm_lang$core$Native_Utils.eq(_p21._0, _p2._0);
+								},
+								model.optJobs)
+						}),
+					{ctor: '[]'});
 			case 'ProcessModel':
 				if (_p2._0.ctor === 'Ok') {
-					var _p22 = _p2._0._0.score;
-					var _p21 = _p2._0._0.pdbFile;
-					var _p20 = _p2._0._0.knobIDs;
+					var _p24 = _p2._0._0.score;
+					var _p23 = _p2._0._0.pdbFile;
+					var _p22 = _p2._0._0.knobIDs;
 					var helixType = A2(
 						_elm_lang$core$Result$withDefault,
 						_user$project$Types$Alpha,
@@ -23315,22 +23342,22 @@ var _user$project$Update$update = F2(
 							{
 								helixType: helixType,
 								currentInput: _user$project$Types$parametersDictToInputDict(model.parameters),
-								pdbFile: _elm_lang$core$Maybe$Just(_p21),
-								score: _elm_lang$core$Maybe$Just(_p22),
+								pdbFile: _elm_lang$core$Maybe$Just(_p23),
+								score: _elm_lang$core$Maybe$Just(_p24),
 								residuesPerTurn: _elm_lang$core$Maybe$Just(_p2._0._0.residuesPerTurn),
-								knobIDs: _elm_lang$core$Maybe$Just(_p20),
+								knobIDs: _elm_lang$core$Maybe$Just(_p22),
 								building: false,
 								modelHistory: A3(
 									_elm_lang$core$Dict$insert,
 									model.nextHistoryID,
-									{ctor: '_Tuple6', _0: model.parameters, _1: false, _2: _p22, _3: helixType, _4: _user$project$Types$Basic, _5: _p20},
+									{ctor: '_Tuple6', _0: model.parameters, _1: false, _2: _p24, _3: helixType, _4: _user$project$Types$Basic, _5: _p22},
 									oldHistory),
 								nextHistoryID: model.nextHistoryID + 1
 							}),
 						{
 							ctor: '::',
 							_0: _user$project$Ports$showStructure(
-								{ctor: '_Tuple2', _0: _p21, _1: model.currentRepresentation}),
+								{ctor: '_Tuple2', _0: _p23, _1: model.currentRepresentation}),
 							_1: {
 								ctor: '::',
 								_0: _user$project$Update$toCommand(_user$project$Types$StoreModel),
@@ -23359,14 +23386,14 @@ var _user$project$Update$update = F2(
 					{ctor: '[]'});
 			case 'ProcessOptimisation':
 				if (_p2._0.ctor === 'Ok') {
-					var _p24 = _p2._0._0.parameters;
-					var _p23 = _p2._0._0.oligomericState;
+					var _p26 = _p2._0._0.parameters;
+					var _p25 = _p2._0._0.oligomericState;
 					var fullParameters = {
-						radius: _p24.radius,
-						pitch: _p24.pitch,
-						phiCA: _p24.phiCA,
-						sequence: _p24.sequence,
-						register: _p24.register,
+						radius: _p26.radius,
+						pitch: _p26.pitch,
+						phiCA: _p26.phiCA,
+						sequence: _p26.sequence,
+						register: _p26.register,
 						antiParallel: false,
 						linkedSuperHelRot: true,
 						superHelRot: _elm_lang$core$Maybe$Just(0),
@@ -23379,8 +23406,8 @@ var _user$project$Update$update = F2(
 								function (v0, v1) {
 									return {ctor: '_Tuple2', _0: v0, _1: v1};
 								}),
-							A2(_elm_lang$core$List$range, 1, _p23),
-							A2(_elm_lang$core$List$repeat, _p23, fullParameters)));
+							A2(_elm_lang$core$List$range, 1, _p25),
+							A2(_elm_lang$core$List$repeat, _p25, fullParameters)));
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
@@ -23514,8 +23541,8 @@ var _user$project$Update$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'SetParametersAndBuild':
-				var _p25 = _p2._0;
-				return _user$project$ParameterValidation$invalidParameterDict(_p25) ? A2(
+				var _p27 = _p2._0;
+				return _user$project$ParameterValidation$invalidParameterDict(_p27) ? A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
 					{ctor: '[]'}) : A2(
@@ -23525,10 +23552,10 @@ var _user$project$Update$update = F2(
 						{
 							helixType: _p2._1,
 							buildMode: _p2._2,
-							parameters: _p25,
-							currentInput: _user$project$Types$parametersDictToInputDict(_p25),
+							parameters: _p27,
+							currentInput: _user$project$Types$parametersDictToInputDict(_p27),
 							oligomericState: _elm_lang$core$List$length(
-								_elm_lang$core$Dict$toList(_p25))
+								_elm_lang$core$Dict$toList(_p27))
 						}),
 					{
 						ctor: '::',
@@ -23536,8 +23563,8 @@ var _user$project$Update$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'KeyMsg':
-				var _p26 = _p2._0;
-				if (_p26 === 13) {
+				var _p28 = _p2._0;
+				if (_p28 === 13) {
 					return _user$project$ParameterValidation$invalidParameterDict(model.parameters) ? A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						model,
@@ -23580,10 +23607,10 @@ var _user$project$Update$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'ExpandHistory':
-				var _p28 = _p2._0;
-				var oldEntry = A2(_elm_lang$core$Dict$get, _p28, model.modelHistory);
-				var _p27 = oldEntry;
-				if (_p27.ctor === 'Just') {
+				var _p30 = _p2._0;
+				var oldEntry = A2(_elm_lang$core$Dict$get, _p30, model.modelHistory);
+				var _p29 = oldEntry;
+				if (_p29.ctor === 'Just') {
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
@@ -23591,8 +23618,8 @@ var _user$project$Update$update = F2(
 							{
 								modelHistory: A3(
 									_elm_lang$core$Dict$insert,
-									_p28,
-									{ctor: '_Tuple6', _0: _p27._0._0, _1: !_p27._0._1, _2: _p27._0._2, _3: _p27._0._3, _4: _p27._0._4, _5: _p27._0._5},
+									_p30,
+									{ctor: '_Tuple6', _0: _p29._0._0, _1: !_p29._0._1, _2: _p29._0._2, _3: _p29._0._3, _4: _p29._0._4, _5: _p29._0._5},
 									model.modelHistory)
 							}),
 						{ctor: '[]'});
@@ -25448,7 +25475,8 @@ var _user$project$Views$buildingStatusPanel = function (building) {
 var _user$project$Views$optJobStatus = F2(
 	function (_p11, position) {
 		var _p12 = _p11;
-		var _p14 = _p12._1;
+		var _p15 = _p12._1;
+		var _p14 = _p12._0;
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -25488,53 +25516,72 @@ var _user$project$Views$optJobStatus = F2(
 									'(',
 									A2(
 										_elm_lang$core$Basics_ops['++'],
-										_elm_lang$core$Basics$toString(_p14),
+										_elm_lang$core$Basics$toString(_p15),
 										')'))),
 							_1: {ctor: '[]'}
 						}
 					}
 				},
 				function () {
-					var _p13 = _p14;
-					if (_p13.ctor === 'Complete') {
-						return {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$button,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onClick(
-										_user$project$Types$RetrieveOptimisation(_p12._0)),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('Retrieve'),
-									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
-						};
-					} else {
-						return {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$img,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$src('static/css/infinity.gif'),
-									_1: {
+					var _p13 = _p15;
+					switch (_p13.ctor) {
+						case 'Complete':
+							return {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$button,
+									{
 										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$width(80),
+										_0: _elm_lang$html$Html_Events$onClick(
+											_user$project$Types$RetrieveOptimisation(_p14)),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Retrieve'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							};
+						case 'Failed':
+							return {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$button,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(
+											_user$project$Types$ClearOptimisation(_p14)),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Clear'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							};
+						default:
+							return {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$img,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$src('static/css/infinity.gif'),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$height(80),
-											_1: {ctor: '[]'}
+											_0: _elm_lang$html$Html_Attributes$width(80),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$height(80),
+												_1: {ctor: '[]'}
+											}
 										}
-									}
-								},
-								{ctor: '[]'}),
-							_1: {ctor: '[]'}
-						};
+									},
+									{ctor: '[]'}),
+								_1: {ctor: '[]'}
+							};
 					}
 				}()));
 	});
@@ -26504,7 +26551,7 @@ var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Types.HelixType":{"args":[],"tags":{"Alpha":[],"Collagen":[]}},"Types.BuildMode":{"args":[],"tags":{"Basic":[],"Advanced":[]}},"Types.InfoBoxID":{"args":[],"tags":{"MIRPT":[],"MIBudeEnergy":[],"MIHLKnobs":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"SetHeat":["String"],"OptJobStatus":["Result.Result Http.Error ( String, String )"],"ChangeBuildMode":["String"],"HighlightKnobs":[],"RetrieveOptimisation":["String"],"Build":[],"OptimisationSubmitted":["Result.Result Http.Error String"],"CheckOptJobs":["Time.Time"],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"ShowInfo":["Types.InfoBoxID"],"SetParametersAndBuild":["Types.ParametersDict","Types.HelixType","Types.BuildMode"],"StoreModel":[],"Optimise":[],"CloseInfo":["Types.InfoBoxID"],"ProcessOptimisation":["Result.Result Http.Error Types.OptimisationResults"],"ChangeHelixType":["String"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ModelInfoPanel":[],"ExamplesPanel":[],"AboutPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ model_id : String , helixTypeString : String , pdbFile : String , score : Float , residuesPerTurn : Float , knobIDs : List (List String) }"},"Types.OptimisationResults":{"args":[],"type":"{ parameters : Types.ParameterRecord , modellingResults : Types.ModellingResults , oligomericState : Int }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Types.Parameter":{"args":[],"tags":{"ZShift":[],"LinkedSuperHelRot":[],"Radius":[],"SuperHelicalRotation":[],"PhiCA":[],"Register":[],"Sequence":[],"Pitch":[],"Orientation":[]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Types.HelixType":{"args":[],"tags":{"Alpha":[],"Collagen":[]}},"Types.BuildMode":{"args":[],"tags":{"Basic":[],"Advanced":[]}},"Types.InfoBoxID":{"args":[],"tags":{"MIRPT":[],"MIBudeEnergy":[],"MIHLKnobs":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Types.Msg":{"args":[],"tags":{"ProcessModel":["Result.Result Http.Error Types.ModellingResults"],"ShowAxes":[],"TogglePanel":["Types.Panel"],"SetOligomericState":["String"],"EditSingleParameter":["Types.Parameter","Types.SectionID","String"],"SetHeat":["String"],"OptJobStatus":["String","Result.Result Http.Error ( String, String )"],"ChangeBuildMode":["String"],"HighlightKnobs":[],"RetrieveOptimisation":["String"],"Build":[],"OptimisationSubmitted":["Result.Result Http.Error String"],"CheckOptJobs":["Time.Time"],"Clear":[],"ExpandHistory":["Types.HistoryID"],"CopyParameters":["Types.SectionID"],"EditAllParameters":["Types.Parameter","String"],"DownloadPdb":[],"EditRepresentation":["Types.RepOption"],"ShowInfo":["Types.InfoBoxID"],"SetParametersAndBuild":["Types.ParametersDict","Types.HelixType","Types.BuildMode"],"StoreModel":[],"Optimise":[],"CloseInfo":["Types.InfoBoxID"],"ProcessOptimisation":["Result.Result Http.Error Types.OptimisationResults"],"ChangeHelixType":["String"],"NoOp":["()"],"KeyMsg":["Keyboard.KeyCode"],"ClearOptimisation":["String"],"PasteParameters":["Types.SectionID"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Types.Panel":{"args":[],"tags":{"ViewerPanel":[],"ModelInfoPanel":[],"ExamplesPanel":[],"AboutPanel":[],"OptimisePanel":[],"BuildingStatusPanel":[],"BuildHistoryPanel":[],"AppHeaderPanel":[],"BuildPanel":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"Types.RepOption":{"args":[],"tags":{"Points":[],"Cartoon":[],"Spheres":[],"BallsAndSticks":[],"Trace":[]}}},"aliases":{"Types.ModellingResults":{"args":[],"type":"{ model_id : String , helixTypeString : String , pdbFile : String , score : Float , residuesPerTurn : Float , knobIDs : List (List String) }"},"Types.OptimisationResults":{"args":[],"type":"{ parameters : Types.ParameterRecord , modellingResults : Types.ModellingResults , oligomericState : Int }"},"Types.HistoryID":{"args":[],"type":"Int"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Types.ParametersDict":{"args":[],"type":"Dict.Dict Types.SectionID Types.ParameterRecord"},"Keyboard.KeyCode":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"},"Types.SectionID":{"args":[],"type":"Int"},"Types.ParameterRecord":{"args":[],"type":"{ radius : Maybe.Maybe Float , pitch : Maybe.Maybe Float , phiCA : Maybe.Maybe Float , sequence : Maybe.Maybe String , register : String , superHelRot : Maybe.Maybe Float , antiParallel : Bool , zShift : Maybe.Maybe Float , linkedSuperHelRot : Bool }"}},"message":"Types.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])
