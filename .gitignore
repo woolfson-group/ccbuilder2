@@ -104,5 +104,3 @@ elm-stuff/
 .vscode
 
 dependencies_for_isambard/*
-web/static/css/style.css
-web/static/elm/builder.js
