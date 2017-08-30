@@ -21,9 +21,10 @@ Contributions of any sort would be greatly appreciated. If you've found a bug or
 #### Building and Running the Application Locally
 To run the application locally all you need is [Docker](https://www.docker.com/), the [Elm language toolchain](http://elm-lang.org/) and [Scwrl4](http://dunbrack.fccc.edu/scwrl4/) (a dependency of ISAMBARD).
 
-1. Download Scwrl4 and place the source inside the `dependencies_for_isambard` folder, make sure the folder is called `scwrl4`. The file structure should look like this: `ccbuilder2/dependencies_for_isambard/scwrl4`.
-2. Make sure you're in the `ccbuilder2` folder and type `docker-compose up --build`.
-3. If everything ran sucessfully, the application should now be available in your browser [localhost:1801/ccbuilder2](localhost:1801/ccbuilder2).
+1. Download Scwrl4. You'll need the Linux version, regardless of which operating system you plan to run the application on, as the application is ran in a Docker container running Alpine Linux.
+1. Place the Scwrl4 source folder inside the `dependencies_for_isambard` folder, make sure the folder is called `scwrl4`. The file structure should look like this: `ccbuilder2/dependencies_for_isambard/scwrl4`.
+1. Make sure you're in the `ccbuilder2` folder and type `docker-compose up --build`.
+1. If everything ran sucessfully, the application should now be available in your browser [localhost:1801/ccbuilder2](localhost:1801/ccbuilder2).
 
 If you make changes to the Elm source code, you need to recompile it using `elm make`. See [here](https://guide.elm-lang.org/install.html) for more details. There is a helper script for building the Elm portion of the web app in `ccbuilder2/web/tools`, run them from inside the web folder.
 
