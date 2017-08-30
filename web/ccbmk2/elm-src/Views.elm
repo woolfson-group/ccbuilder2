@@ -3,6 +3,7 @@ module Views exposing (..)
 import BuilderCss exposing (CssClasses(..), cssNamespace, panelStyling)
 import BuildPanel
 import Css
+import Css.Colors
 import Dict
 import ExamplesPanel
 import Html exposing (..)
@@ -70,10 +71,7 @@ overlayPanels model =
                 model.currentInput
                 model.building
                 model.panelVisibility.buildPanel
-            , optimisePanel model.buildMode
-                model.optJobs
-                model.panelVisibility.optimisePanel
-                model.heat
+            , optimisePanel model
             , ExamplesPanel.examplesPanel
                 model.building
                 model.panelVisibility.examplesPanel
@@ -201,11 +199,14 @@ bottomRightTogglesStyling =
 -- Optimise Panel
 
 
-optimisePanel : BuildMode -> List ( String, OptStatus ) -> Bool -> Int -> Html Msg
-optimisePanel buildMode optJobs visible heat =
+optimisePanel : Model -> Html Msg
+optimisePanel model =
     let
+        visible =
+            model.panelVisibility.optimisePanel
+
         advancedBuild =
-            case buildMode of
+            case model.buildMode of
                 Basic ->
                     False
 
@@ -213,42 +214,74 @@ optimisePanel buildMode optJobs visible heat =
                     True
 
         optimising =
-            if List.length optJobs > 0 then
+            if List.length model.optJobs > 0 then
+                True
+            else
+                False
+
+        totalResidueCount =
+            Dict.values model.parameters
+                |> List.map .sequence
+                |> List.map (Maybe.withDefault "")
+                |> List.map String.length
+                |> List.sum
+
+        aboveResLimit =
+            if totalResidueCount > 120 then
                 True
             else
                 False
 
         disabledOpt =
-            advancedBuild || optimising
+            advancedBuild || optimising || aboveResLimit
     in
         div
             [ class [ OverlayPanelCss ]
             , styles <| panelStyling ++ optimisePanelStyling
             , hidden <| not visible
             ]
-            [ h3 [] [ text "Optimise Parameters" ]
-            , hr [] []
-            , text "Heat"
-            , br [] []
-            , input
+            ([ h3 [] [ text "Optimise Parameters" ]
+             , hr [] []
+             , text "Heat"
+             , br [] []
+             , input
                 [ type_ "range"
                 , Html.Attributes.min "0"
                 , Html.Attributes.max "2000"
-                , value (toString heat)
+                , value (toString model.heat)
                 , onInput SetHeat
                 ]
                 []
-            , br [] []
-            , button
-                [ onClick Optimise, disabled disabledOpt ]
-                [ text "Optimise Model" ]
-            ]
+             , br [] []
+             ]
+                ++ [ button
+                        [ onClick Optimise, disabled disabledOpt ]
+                        [ text "Optimise Model" ]
+                   ]
+                ++ (if aboveResLimit then
+                        [ hr [] []
+                        , h3 [] [ text "Warning" ]
+                        , Markdown.toHtml
+                            [ styles [ Css.color (Css.Colors.red) ]
+                            ]
+                            ("Due to available compute, only models with 120 "
+                                ++ "or less residues can be optimised. If you'd"
+                                ++ " like to run larger optimisations, please "
+                                ++ "consider using [ISAMBARD](https://github."
+                                ++ "com/woolfson-group/isambard)."
+                            )
+                        ]
+                    else
+                        []
+                   )
+            )
 
 
 optimisePanelStyling : List Css.Mixin
 optimisePanelStyling =
     [ Css.top (Css.px 60)
     , Css.left (Css.px 35)
+    , Css.maxWidth (Css.pct 30)
     ]
 
 
