@@ -16,7 +16,7 @@ Any publication arising from use of the ISAMBARD software package should cite th
 [Wood CW and Woolfson DN (2017) CCBuilder 2.0: Powerful and accessible coiled-coil modelling, _Protein Science_. doi: 10.1002/pro.3279](http://dx.doi.org/10.1002/pro.3279)
 
 ### Contributing
-Contributions of any sort would be greatly appreciated. If you've found a bug or have a feature request, please post an issue here in GitHub. Even better, if you fancy fixing the bug or adding the feature yourself, fork the repository then make a pull request!
+Contributions of any sort would be greatly appreciated. If you've found a bug or have a feature request, please post an issue here on GitHub. Even better, if you fancy fixing the bug or adding the feature yourself, fork the repository then make a pull request!
 
 #### Building and Running the Application Locally
 To run the application locally all you need is [Docker](https://www.docker.com/), the [Elm language toolchain](http://elm-lang.org/) and [Scwrl4](http://dunbrack.fccc.edu/scwrl4/) (a dependency of ISAMBARD).
