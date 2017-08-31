@@ -22,5 +22,5 @@ RUN pip install -r ./requirements.txt
 COPY ./dependencies_for_isambard/ /dependencies_for_isambard/
 COPY ./dependencies_for_isambard/.isambard_settings /root/
 COPY ./web/ /app/
-RUN elm-css ./ccbmk2/elm-src/css/Stylesheets.elm --output=./static/css/
-RUN elm-make ./ccbmk2/elm-src/Main.elm --output=./static/elm/builder.js
+RUN elm-css /app/ccbmk2/elm-src/css/Stylesheets.elm --output=/app/static/css/
+RUN elm-make /app/ccbmk2/elm-src/Main.elm --output=/app/static/elm/builder.js
