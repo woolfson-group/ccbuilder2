@@ -778,14 +778,13 @@ aboutPanel visible =
 aboutText : String
 aboutText =
     """CCBuilder is developed and maintained by the [Woolfson Group, University
-of Bristol](http://www.chm.bris.ac.uk/org/woolfson/). If you're having any
-issues with CCBuilder 2.0, please either report them on [GitHub](
-https://github.com/woolfson-group/ccbuilder2/issues) or contact
-chris.wood@bris.ac.uk.
+of Bristol](http://www.chm.bris.ac.uk/org/woolfson/). The project is open
+source with code available on
+[GitHub](https://github.com/woolfson-group/ccbuilder2). If you
+encounter any bugs or have ideas for enhancements to CCBuilder 2.0, please
+either create an issue on GitHub or contact chris.wood@bris.ac.uk.
 
 ### Citation
-
-Please cite:
 
 [Wood CW and Woolfson DN (2017) CCBuilder 2.0: Powerful and accessible
 coiled-coil modelling,
