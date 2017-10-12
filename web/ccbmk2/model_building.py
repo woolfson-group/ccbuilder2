@@ -134,12 +134,12 @@ def optimise_coiled_coil(parameters, debug=False):
     radius_centre = parameters[0]['Radius']
     phi_centre = parameters[0]['Interface Angle'] + \
         REGISTER_ADJUST[parameters[0]['Register']]
-    opt = isambard.optimisation.GA_Opt(
+    opt = isambard.optimisation.optimizer.GA_Opt_Internal(
         isambard.specifications.CoiledCoil.from_parameters)
     opt.parameters(
         [parameters[0]['Sequence']] * oligomer_state,
-        [radius_centre, 200, phi_centre],
-        [2, 100, 20],
+        [radius_centre, 300, phi_centre],
+        [2, 150, 20],
         [oligomer_state, len(parameters[0]['Sequence']),
          'var0', 'var1', 'var2']
     )
@@ -182,7 +182,7 @@ def optimise_collagen(parameters, debug=False):
         print(parameters, file=sys.stderr)
     radius_centre = parameters[0]['Radius']
     phi_centre = parameters[0]['Interface Angle']
-    opt = isambard.optimisation.GA_Opt(OptCollagen)
+    opt = isambard.optimisation.optimizer.GA_Opt_Internal(OptCollagen)
     opt.parameters(
         [parameters[0]['Sequence']] * 3,
         [radius_centre, 150, phi_centre],
