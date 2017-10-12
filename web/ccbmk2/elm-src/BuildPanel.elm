@@ -193,7 +193,7 @@ allSequenceInput helixType ( parameterLabel, parameter, currentSequence, current
             ++ (case helixType of
                     Alpha ->
                         [ text " (Register: "
-                        , registerSelection 1 currentRegister
+                        , allRegisterSelection 1 currentRegister
                         , text ")"
                         ]
 
@@ -335,7 +335,7 @@ singleSequenceInput helixType sectionID ( parameterLabel, parameter, currentSequ
             ++ (case helixType of
                     Alpha ->
                         [ text " (Register: "
-                        , registerSelection sectionID currentRegister
+                        , singleRegisterSelection sectionID currentRegister
                         , text ")"
                         ]
 
@@ -372,10 +372,17 @@ parameterSubmit building parameters =
         [ text "Submit" ]
 
 
-registerSelection : SectionID -> String -> Html Msg
-registerSelection sectionID currentRegister =
+singleRegisterSelection : SectionID -> String -> Html Msg
+singleRegisterSelection sectionID currentRegister =
     select
         [ value currentRegister, onInput (EditSingleParameter Register sectionID) ]
+        (List.map simpleOption [ "a", "b", "c", "d", "e", "f", "g" ])
+
+
+allRegisterSelection : SectionID -> String -> Html Msg
+allRegisterSelection sectionID currentRegister =
+    select
+        [ value currentRegister, onInput (EditAllParameters Register) ]
         (List.map simpleOption [ "a", "b", "c", "d", "e", "f", "g" ])
 
 
