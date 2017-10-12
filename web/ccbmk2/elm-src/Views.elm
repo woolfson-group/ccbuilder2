@@ -227,7 +227,7 @@ optimisePanel model =
                 |> List.sum
 
         aboveResLimit =
-            if totalResidueCount > 120 then
+            if totalResidueCount > 240 then
                 True
             else
                 False
@@ -258,13 +258,26 @@ optimisePanel model =
                         [ onClick Optimise, disabled disabledOpt ]
                         [ text "Optimise Model" ]
                    ]
-                ++ (if aboveResLimit then
+                ++ (if advancedBuild then
                         [ hr [] []
                         , h3 [] [ text "Warning" ]
                         , Markdown.toHtml
                             [ styles [ Css.color (Css.Colors.red) ]
                             ]
-                            ("Due to available compute, only models with 120 "
+                            ("Optimisation cannot be performed in advanced mode"
+                                ++ ". If you'd like to run larger more complex"
+                                ++ " optimisations, please "
+                                ++ "consider using [ISAMBARD](https://github."
+                                ++ "com/woolfson-group/isambard)."
+                            )
+                        ]
+                   else if aboveResLimit then
+                        [ hr [] []
+                        , h3 [] [ text "Warning" ]
+                        , Markdown.toHtml
+                            [ styles [ Css.color (Css.Colors.red) ]
+                            ]
+                            ("Due to available compute, only models with 240 "
                                 ++ "or less residues can be optimised. If you'd"
                                 ++ " like to run larger optimisations, please "
                                 ++ "consider using [ISAMBARD](https://github."
