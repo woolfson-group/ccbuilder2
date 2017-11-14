@@ -150,7 +150,8 @@ def optimise_coiled_coil(parameters, debug=False):
     optimised_parameters = {
         'radius': top_model.major_radii[0],
         'pitch': top_model.major_pitches[0],
-        'phiCA': top_model.phi_c_alphas[0],
+        'phiCA': top_model.phi_c_alphas[0] - \
+            REGISTER_ADJUST[parameters[0]['Register']],
         'sequence': top_model[0].sequence,
         'register': parameters[0]['Register']
     }
