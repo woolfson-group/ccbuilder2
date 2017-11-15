@@ -242,17 +242,20 @@ optimisePanel model =
             ]
             ([ h3 [] [ text "Optimise Parameters" ]
              , hr [] []
-             , text "Heat"
-             , br [] []
-             , input
-                [ type_ "range"
-                , Html.Attributes.min "0"
-                , Html.Attributes.max "2000"
-                , value (toString model.heat)
-                , onInput SetHeat
-                ]
-                []
-             , br [] []
+
+             {- Removing until fix
+                , text "Heat"
+                , br [] []
+                , input
+                   [ type_ "range"
+                   , Html.Attributes.min "0"
+                   , Html.Attributes.max "2000"
+                   , value (toString model.heat)
+                   , onInput SetHeat
+                   ]
+                   []
+                , br [] []
+             -}
              ]
                 ++ [ button
                         [ onClick Optimise, disabled disabledOpt ]
@@ -271,7 +274,7 @@ optimisePanel model =
                                 ++ "com/woolfson-group/isambard)."
                             )
                         ]
-                   else if aboveResLimit then
+                    else if aboveResLimit then
                         [ hr [] []
                         , h3 [] [ text "Warning" ]
                         , Markdown.toHtml
@@ -782,7 +785,7 @@ aboutPanel visible =
         , styles <| panelStyling ++ aboutPanelStyling
         , hidden <| not visible
         ]
-        [ h2 [] [ text "About (Ver 2.0.2)" ]
+        [ h2 [] [ text "About (Ver 2.0.3)" ]
         , hr [] []
         , Markdown.toHtml [] aboutText
         ]

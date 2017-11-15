@@ -665,7 +665,7 @@ basicParameterJsonDecoder =
         basicParametersToRecord
         (field "radius" float)
         (field "pitch" float)
-        (field "radius" float)
+        (field "phiCA" float)
         (field "sequence" string)
         (field "register" string)
 
