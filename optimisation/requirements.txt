@@ -1,4 +1,4 @@
 pypandoc
 scipy
-isambard
+isambard==2017.3.0
 pymongo
