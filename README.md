@@ -1,6 +1,6 @@
 # CCBuilder 2
 ### An interactive web app for atomistic modelling of coiled coils and collagens
-### Version 2.0.3 (14th Oct, 2017), Woolfson Group, University of Bristol
+### Version 2.0.4 (2nd May, 2018), Woolfson Group, University of Bristol
 
 [![Python Version](https://img.shields.io/badge/python-3.5%2C%203.6-lightgrey.svg)](https://woolfson-group.github.io/isambard/)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/woolfson-group/isambard/blob/master/LICENSE.md)

@@ -17,6 +17,7 @@ RUN pip install -r ./requirements.txt
 RUN python setup.py install
 # Setup CCBMK2
 WORKDIR /app
+COPY ./web/nginx.conf /etc/nginx/nginx.conf
 COPY ./web/requirements.txt ./
 RUN pip install -r ./requirements.txt
 COPY ./dependencies_for_isambard/ /dependencies_for_isambard/

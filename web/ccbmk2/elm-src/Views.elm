@@ -785,7 +785,7 @@ aboutPanel visible =
         , styles <| panelStyling ++ aboutPanelStyling
         , hidden <| not visible
         ]
-        [ h2 [] [ text "About (Ver 2.0.3)" ]
+        [ h2 [] [ text "About (Ver 2.0.4)" ]
         , hr [] []
         , Markdown.toHtml [] aboutText
         ]
