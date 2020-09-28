@@ -16,7 +16,7 @@ Any publication arising from use of the ISAMBARD software package should cite th
 [Wood CW and Woolfson DN (2017) CCBuilder 2.0: Powerful and accessible coiled-coil modelling, _Protein Science_. doi: 10.1002/pro.3279](http://dx.doi.org/10.1002/pro.3279)
 
 ### Contact Information
-If you have any queries about the application, please contact me:
+I am no longer a member of the Woolfson group, but I do still actively maintain CCBuilder 2. If you have any queries about the application, please contact me:
 
-- email: chris.wood@bristol.ac.uk
+- email: chris.wood@ed.ac.uk
 - twitter: [@ChrisWellsWood](https://twitter.com/chriswellswood)
