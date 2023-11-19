@@ -1,0 +1,5 @@
+FROM node:10
+RUN mkdir /npm-global
+RUN npm config set prefix /npm-global
+ENV PATH /npm-global/bin:$PATH
+RUN npm install -g --unsafe-perm=true --allow-root elm@0.18.0-exp5 elm-css@0.6.1
