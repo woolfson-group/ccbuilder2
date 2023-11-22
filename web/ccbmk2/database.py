@@ -5,7 +5,7 @@ import enum
 
 import pymongo
 
-client = pymongo.MongoClient('db', 27017)
+client = pymongo.MongoClient('ccbuilder2-db', 27017)
 parameters_store = client.ccbuilder.chain_parameters
 build_requests = client.ccbuilder.build_requests
 build_log = client.ccbuilder.build_log

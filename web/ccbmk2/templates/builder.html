@@ -57,8 +57,10 @@
             var pdbString = pdbString_repOpts[0];
             var repOpts = pdbString_repOpts[1];
             currentStructure = pv.io.pdb(pdbString);
-            viewer.fitTo(currentStructure);
-            showRepresentation(repOpts);
+            if (typeof currentStructure !== undefined) {
+                viewer.fitTo(currentStructure);
+                showRepresentation(repOpts);
+            }
         }
     );
 

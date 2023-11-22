@@ -71,7 +71,8 @@ overlayPanels model =
                 model.currentInput
                 model.building
                 model.panelVisibility.buildPanel
-            , optimisePanel model
+            -- , optimisePanel model
+            -- removed to make it easier to host
             , ExamplesPanel.examplesPanel
                 model.building
                 model.panelVisibility.examplesPanel
@@ -115,7 +116,7 @@ siteHeader =
                 ]
                 [ text "Powered by" ]
             , a
-                [ href "https://github.com/woolfson-group/isambard" ]
+                [ href "https://github.com/isambard-uob/isambard" ]
                 [ img
                     [ styles
                         [ Css.height (Css.pct 80)
@@ -147,7 +148,8 @@ topLeftToggles =
     div [ styles topLeftTogglesStyling ]
         [ BuildPanel.toggleBuildPanel
         , ExamplesPanel.toggleExamplesPanel
-        , toggleOptimisePanel
+        -- , toggleOptimisePanel
+        -- removed to make it easier to host
         ]
 
 
@@ -271,7 +273,7 @@ optimisePanel model =
                                 ++ ". If you'd like to run larger more complex"
                                 ++ " optimisations, please "
                                 ++ "consider using [ISAMBARD](https://github."
-                                ++ "com/woolfson-group/isambard)."
+                                ++ "com/isambard-uob/isambard)."
                             )
                         ]
                     else if aboveResLimit then
@@ -284,7 +286,7 @@ optimisePanel model =
                                 ++ "or less residues can be optimised. If you'd"
                                 ++ " like to run larger optimisations, please "
                                 ++ "consider using [ISAMBARD](https://github."
-                                ++ "com/woolfson-group/isambard)."
+                                ++ "com/isambard-uob/isambard)."
                             )
                         ]
                     else
@@ -785,7 +787,7 @@ aboutPanel visible =
         , styles <| panelStyling ++ aboutPanelStyling
         , hidden <| not visible
         ]
-        [ h2 [] [ text "About (Ver 2.0.4)" ]
+        [ h2 [] [ text "About (Ver 2.0.5)" ]
         , hr [] []
         , Markdown.toHtml [] aboutText
         ]
@@ -793,12 +795,14 @@ aboutPanel visible =
 
 aboutText : String
 aboutText =
-    """CCBuilder is developed and maintained by the [Woolfson Group, University
-of Bristol](http://www.chm.bris.ac.uk/org/woolfson/). The project is open
-source with code available on
-[GitHub](https://github.com/woolfson-group/ccbuilder2). If you
+    """CCBuilder was originally developed by the [Woolfson Group, University
+of Bristol](http://www.chm.bris.ac.uk/org/woolfson/), but is now developed and
+maintained primarily by the 
+[Wells Wood Lab, University of Edinburgh](https://www.wellswoodresearchgroup.com/).
+The project is open source with code available on
+[GitHub](https://github.com/wells-wood-research/ccbuilder2). If you
 encounter any bugs or have ideas for enhancements to CCBuilder 2.0, please
-either create an issue on GitHub or contact chris.wood@bris.ac.uk.
+either create an issue on GitHub or contact chris.wood@ed.ac.uk.
 
 ### Citation
 

@@ -542,7 +542,7 @@ sendBuildCmd : ParametersDict -> Cmd Msg
 sendBuildCmd parameters =
     Http.send ProcessModel <|
         Http.post
-            "builder/api/v0.1/build/coiled-coil"
+            "api/v0.1/build/coiled-coil"
             (Json.Encode.object
                 [ ( "Parameters", parametersDictToListJson parameters )
                 ]
@@ -555,7 +555,7 @@ sendCollagenBuildCmd : ParametersDict -> Cmd Msg
 sendCollagenBuildCmd parameters =
     Http.send ProcessModel <|
         Http.post
-            "builder/api/v0.1/build/collagen"
+            "api/v0.1/build/collagen"
             (Json.Encode.object
                 [ ( "Parameters", parametersDictToListJson parameters )
                 ]
@@ -619,7 +619,7 @@ sendOptimiseCmd : ParametersDict -> HelixType -> Int -> Cmd Msg
 sendOptimiseCmd parameters helixType heat =
     Http.send OptimisationSubmitted <|
         Http.post
-            "builder/api/v0.1/optimise/model"
+            "api/v0.1/optimise/model"
             (optimisationJson parameters helixType heat
                 |> Http.jsonBody
             )
@@ -630,7 +630,7 @@ checkJobStatus : String -> Cmd Msg
 checkJobStatus optJobId =
     Http.send (OptJobStatus optJobId) <|
         Http.get
-            ("builder/api/v0.1/optimise/check-job-status?opt-job-id=" ++ optJobId)
+            ("api/v0.1/optimise/check-job-status?opt-job-id=" ++ optJobId)
             jobStatusDecoder
 
 
@@ -646,7 +646,7 @@ retreiveOptimisation : String -> Cmd Msg
 retreiveOptimisation optJobId =
     Http.send ProcessOptimisation <|
         Http.get
-            ("builder/api/v0.1/optimise/retrieve-opt-job?opt-job-id=" ++ optJobId)
+            ("api/v0.1/optimise/retrieve-opt-job?opt-job-id=" ++ optJobId)
             optimisationResultsDecoder
 
 

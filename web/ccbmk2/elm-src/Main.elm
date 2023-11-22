@@ -22,30 +22,11 @@ main =
 
 
 init : Maybe ExportableModel -> ( Model, Cmd Msg )
-init storedModel =
-    let
-        showDefaultModel =
-            if storedModel == Nothing then
-                True
-            else
-                False
-
-        model =
-            storedModel
-                |> Maybe.map exportableToModel
-                |> Maybe.withDefault emptyModel
-    in
-        model
-            ! ([ initialiseViewer () ]
-                ++ if showDefaultModel then
-                    [ toCommand (SetParametersAndBuild ExamplesPanel.basisSetDimer Alpha Basic) ]
-                   else
-                    [ showStructure
-                        ( Maybe.withDefault "" model.pdbFile
-                        , model.currentRepresentation
-                        )
-                    ]
-              )
+init _ =
+    emptyModel
+        ! [ initialiseViewer ()
+          , toCommand (SetParametersAndBuild ExamplesPanel.basisSetDimer Alpha Basic)
+          ]
 
 
 

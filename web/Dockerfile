@@ -7,6 +7,7 @@ RUN git clone https://github.com/woolfson-group/isambard.git
 WORKDIR /isambard
 RUN pip install ipython
 RUN pip install jupyter
+RUN pip install jinja2==3.0.1
 RUN pip install -r ./requirements.txt
 RUN python setup.py install
 # Setup CCBMK2
