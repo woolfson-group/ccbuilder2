@@ -1,28 +1,28 @@
 version: '2'
 services:
-  web:
+  ccbuilder2-web:
     build:
-      context: .
+      context: ./ccbuilder2/
       dockerfile: ./web/Dockerfile
     environment:
-      - CCBMK2_CONFIG=development
-    ports:
-      - "1801:80"
-    volumes:
-      - ./web:/app
+      - CCBMK2_CONFIG=production
+    # ports:
+    #   - "1801:80"
+    # volumes:
+    #   - ./web:/app
     depends_on:
-      - db
+      - ccbuilder2-db
     restart: on-failure
-  optimisation:
-    build:
-      context: .
-      dockerfile: ./optimisation/Dockerfile
-    environment:
-      - PYTHONUNBUFFERED=0
-      - OPT_PROCS=2
-    volumes:
-      - ./optimisation:/app
-    depends_on:
-      - db
-  db:
+  # ccbuilder2-optimisation:
+  #   build:
+  #     context: ./ccbuilder2/
+  #     dockerfile: ./optimisation/Dockerfile
+  #   environment:
+  #     - PYTHONUNBUFFERED=0
+  #     - OPT_PROCS=6
+  #   volumes:
+  #     - ./optimisation:/app
+  #   depends_on:
+  #     - ccbuilder2-db
+  ccbuilder2-db:
     image: mongo

@@ -9,18 +9,12 @@ from ccbmk2 import app, database, model_building
 
 
 @app.route('/')
-def welcome():
-    """Welcome to CCBuilder splash screen."""
-    return redirect('/builder')
-
-
-@app.route('/builder')
 def builder():
     """Main view for the builder interface."""
     return render_template('builder.html')
 
 
-@app.route('/builder/api/v0.1/build/coiled-coil', methods=['POST'])
+@app.route('/api/v0.1/build/coiled-coil', methods=['POST'])
 def build_coiled_coil_model():
     """Generates and returns a coiled-coil model."""
     model_and_info = build_and_record_model(
@@ -28,7 +22,7 @@ def build_coiled_coil_model():
     return jsonify(model_and_info)
 
 
-@app.route('/builder/api/v0.1/build/collagen', methods=['POST'])
+@app.route('/api/v0.1/build/collagen', methods=['POST'])
 def build_collagen_model():
     """Generates and returns a collagen model."""
     model_and_info = build_and_record_model(
@@ -73,14 +67,14 @@ def build_and_record_model(request, helix_type):
     return model_record
 
 
-@app.route('/builder/api/v0.1/optimise/model', methods=['POST'])
+@app.route('/api/v0.1/optimise/model', methods=['POST'])
 def optimise_model():
     """Runs a parameter optimisation for a supplied model."""
     opt_id = database.create_opt_job_entry(request.json)
     return jsonify(str(opt_id))
 
 
-@app.route('/builder/api/v0.1/optimise/check-job-status', methods=['GET'])
+@app.route('/api/v0.1/optimise/check-job-status', methods=['GET'])
 def get_optimisation_status():
     """Get the status of an optimisation job."""
     opt_job_id = request.args.get('opt-job-id')
@@ -88,7 +82,7 @@ def get_optimisation_status():
     return jsonify({'_id': opt_job_id, 'status': opt_job['status']})
 
 
-@app.route('/builder/api/v0.1/optimise/retrieve-opt-job', methods=['GET'])
+@app.route('/api/v0.1/optimise/retrieve-opt-job', methods=['GET'])
 def get_optimisation_result():
     """Get the status of an optimisation job."""
     opt_job_id = request.args.get('opt-job-id')

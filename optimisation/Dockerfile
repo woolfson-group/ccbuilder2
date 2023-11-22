@@ -1,4 +1,4 @@
-FROM python:3.5
+FROM python:3.6
 RUN wget https://github.com/jgm/pandoc/releases/download/1.19.1/pandoc-1.19.1-1-amd64.deb
 RUN dpkg -i pandoc-1.19.1-1-amd64.deb
 RUN git clone https://github.com/woolfson-group/isambard.git
