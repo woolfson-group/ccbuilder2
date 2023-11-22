@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: ./web/Dockerfile
     environment:
-      - CCBMK2_CONFIG=development
+      - CCBMK2_CONFIG=production
     ports:
       - "1801:80"
     volumes:
@@ -19,7 +19,7 @@ services:
       dockerfile: ./optimisation/Dockerfile
     environment:
       - PYTHONUNBUFFERED=0
-      - OPT_PROCS=2
+      - OPT_PROCS=6
     volumes:
       - ./optimisation:/app
     depends_on:
